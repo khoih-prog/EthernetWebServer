@@ -1,0 +1,11 @@
+Note: Fixing BlynkEthernet_WM => error
+
+A. Change EthernetServer.h/cpp
+
+1. Use dynamic server
+
+//EthernetWebServer server;
+    EthernetWebServer *server;
+
+
+

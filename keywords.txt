@@ -1,0 +1,87 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+EthernetWebServer	KEYWORD1
+HTTPMethod	KEYWORD1
+HTTPUploadStatus  KEYWORD1
+HTTPClientStatus  KEYWORD1
+HTTPUpload  KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+#######################
+# EthernetWebServer
+#######################
+
+begin	KEYWORD2
+handleClient	KEYWORD2
+close KEYWORD2
+stop  KEYWORD2
+authenticate  KEYWORD2
+requestAuthentication KEYWORD2
+on	KEYWORD2
+addHandler	KEYWORD2
+onNotFound  KEYWORD2
+onFileUpload  KEYWORD2
+uri	KEYWORD2
+method	KEYWORD2
+client	KEYWORD2
+upload  KEYWORD2
+arg	KEYWORD2
+argName	KEYWORD2
+args	KEYWORD2
+hasArg	KEYWORD2
+collectHeaders  KEYWORD2
+header  KEYWORD2
+headerName  KEYWORD2
+headers KEYWORD2
+hasHeader KEYWORD2
+hostHeader  KEYWORD2
+send	KEYWORD2
+send_P  KEYWORD2
+setContentLength  KEYWORD2
+sendHeader  KEYWORD2
+sendContent KEYWORD2
+urlDecode KEYWORD2
+streamFile  KEYWORD2
+
+#######################
+# Parsing-impl
+#######################
+readBytesWithTimeout  KEYWORD2
+_parseRequest KEYWORD2
+_collectHeader  KEYWORD2
+_parseArguments KEYWORD2
+_uploadWriteByte  KEYWORD2
+_uploadReadByte KEYWORD2
+_parseForm  KEYWORD2
+urlDecode KEYWORD2
+_parseFormUploadAborted KEYWORD2
+
+#######################
+# RequestHandler
+#######################
+canHandle KEYWORD2
+canUpload KEYWORD2
+handle  KEYWORD2
+upload  KEYWORD2
+next  KEYWORD2
+getContentType  KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+HTTP_DOWNLOAD_UNIT_SIZE LITERAL1
+HTTP_UPLOAD_BUFLEN  LITERAL1
+HTTP_MAX_DATA_WAIT  LITERAL1
+HTTP_MAX_POST_WAIT  LITERAL1
+HTTP_MAX_SEND_WAIT  LITERAL1
+HTTP_MAX_CLOSE_WAIT LITERAL1
+AUTHORIZATION_HEADER  LITERAL1
+_ETHERNET_WEBSERVER_LOGLEVEL_ LITERAL1
+
+
+
