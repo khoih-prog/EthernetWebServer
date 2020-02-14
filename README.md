@@ -268,6 +268,8 @@ void setup(void)
   });
 
   server.onNotFound(handleNotFound);
+  
+  server.begin();
 
   Serial.print(F("HTTP EthernetWebServer is @ IP : "));
   Serial.println(Ethernet.localIP());
