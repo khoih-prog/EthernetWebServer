@@ -20,7 +20,7 @@ The EthernetWebServer class found in `EthernetWebServer.h` header, is a simple w
    - [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500
    - [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2) for W5500 (Deprecated, use Arduino Ethernet library)
    - [`Ethernet_Shield_W5200 library`](https://github.com/khoih-prog/Ethernet_Shield_W5200) for W5200
-4. [`Functional-VLPP library`](https://github.com/khoih-prog/functional-vlpp) to use lambda funcion
+4. [`Functional-VLPP library`](https://github.com/khoih-prog/functional-vlpp) to use lambda function
 
 ## Installation
 
