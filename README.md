@@ -331,6 +331,19 @@ HTTP EthernetWebServer is @ IP : 192.168.2.100
 </svg>
 ```
 
+### Version v1.0.1
+
+1. Add support to Server's lambda function calls
+
+### Version v1.0.0
+
+This is simple yet complete WebServer library for AVR, Teensy, etc. boards running Ethernet shields. ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
+
+The library supports
+
+1. HTTP Server and Client
+2. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
+
 ## TO DO
 1. Bug Searching and Killing
 2. Add SSL/TLS Client and Server support
