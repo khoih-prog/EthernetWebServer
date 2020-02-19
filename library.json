@@ -8,6 +8,6 @@
     "url": "https://github.com/khoih-prog/EthernetWebServer"
   },
   "frameworks": "arduino",
-  "platforms": "avr, teensy",
+  "platforms": "*",
   "version": "1.0.1"
 }
