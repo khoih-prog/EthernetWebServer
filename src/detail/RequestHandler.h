@@ -7,7 +7,7 @@
  * Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/ESP8266_AT_WebServer
  * Licensed under MIT license
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * Original author:
  * @file       Esp8266WebServer.h
@@ -16,7 +16,8 @@
  * Version Modified By   Date      Comments
  * ------- -----------  ---------- -----------
  *  1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
- *  1.0.1   K Hoang      20/02/2020 Add support to UIPEthernet library
+ *  1.0.1   K Hoang      20/02/2020 Add support to lambda functions
+ *  1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
  *****************************************************************************************************************************/
 
 #ifndef RequestHandler_h
