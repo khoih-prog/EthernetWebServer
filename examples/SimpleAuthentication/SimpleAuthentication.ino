@@ -6,7 +6,7 @@
  * Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/ESP8266_AT_WebServer
  * Licensed under MIT license
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Original author:
  * @file       Esp8266WebServer.h
@@ -14,11 +14,22 @@
  *
  * Version Modified By   Date      Comments
  * ------- -----------  ---------- -----------
- *  1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc
+ *  1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
+ *  1.0.1   K Hoang      20/02/2020 Add support to lambda functions
+ *  1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
  *****************************************************************************************************************************/
+/*
+  * The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno 
+  * and pins 50, 51, and 52 on the Mega. On both boards, pin 10 is used as SS. On the Mega, the hardware SS pin, 53, 
+  * is not used to select the Ethernet controller chip, but it must be kept as an output or the SPI interface won't work.
+  */
 
 #include <SPI.h>
-#include <Ethernet.h>
+
+// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+#define USE_UIP_ETHERNET   true
+
 #include <EthernetWebServer.h>
 
 #ifdef CORE_TEENSY

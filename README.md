@@ -2,7 +2,9 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer)
 
-This is simple yet complete WebServer library for `AVR, Teensy, etc.` boards running Ethernet shields. The functions are similar and compatible to ESP8266/ESP32 WebServer libraries to make life much easier to port sketches from ESP8266/ESP32.
+From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel SAM3X8E ARM Cortex-M3, STM32F series, ESP8266, Intel ARC32(Genuino101), Nordic nRF51(RFduino), Teensy boards, Realtek Ameba(RTL8195A,RTL8710)) using Wiznet W5x00 or ENC28J60 EThernet shields by using [UIPEthernet](https://github.com/UIPEthernet/UIPEthernet) library besides standard [Ethernet library](https://www.arduino.cc/en/Reference/Ethernet).
+
+This is simple yet complete WebServer library for `AVR, Teensy,SAM, STM32F, Intel, etc.` boards running Ethernet shields. The functions are similar and compatible to ESP8266/ESP32 WebServer libraries to make life much easier to port sketches from ESP8266/ESP32.
 
 The library supports 
 1. HTTP Server and Client
@@ -17,15 +19,14 @@ The EthernetWebServer class found in `EthernetWebServer.h` header, is a simple w
 1. [`Arduino IDE 1.8.11 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
 2. `Arduino AVR core 1.8.2 or later` for Arduino (Use Arduino Board Manager)
 3. Depending on which Ethernet card you're using:
-   - [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500
-   - [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2) for W5500 (Deprecated, use Arduino Ethernet library)
-   - [`Ethernet_Shield_W5200 library`](https://github.com/khoih-prog/Ethernet_Shield_W5200) for W5200
+   - [Ethernet library](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500
+   - [UIPEthernet](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60
 4. [`Functional-VLPP library`](https://github.com/khoih-prog/functional-vlpp) to use lambda function
 
 ## Installation
 
 ### Use Arduino Library Manager
-Another way is to use `Arduino Library Manager`. Search for `EthernetWebServer`, then select / install the latest version.
+Another way is to use `Arduino Library Manager` or [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer). Search for `EthernetWebServer`, then select / install the latest version.
 
 ### Manual Install
 
@@ -199,7 +200,11 @@ Please take a look at examples, as well.
 
 ```cpp
 #include <SPI.h>
-#include <Ethernet.h>
+
+// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+#define USE_UIP_ETHERNET   true
+
 #include <EthernetWebServer.h>
 
 #ifdef CORE_TEENSY
@@ -331,6 +336,11 @@ HTTP EthernetWebServer is @ IP : 192.168.2.100
 </svg>
 ```
 
+### Version v1.0.2
+
+1. From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel SAM3X8E ARM Cortex-M3, STM32F series, ESP8266, Intel ARC32(Genuino101), Nordic nRF51(RFduino), Teensy boards, Realtek Ameba(RTL8195A,RTL8710))
+2. Support Wiznet W5x00 or ENC28J60 EThernet shields by using [UIPEthernet](https://github.com/UIPEthernet/UIPEthernet) library besides standard Ethernet, Ethernet2, Ethernet3 libraries.
+
 ### Version v1.0.1
 
 1. Add support to Server's lambda function calls
@@ -352,6 +362,7 @@ The library supports
 
 ### Contributions and thanks
 1. Forked from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
+2. [jandrassy](https://github.com/jandrassy) for [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
 
 ## Contributing
 

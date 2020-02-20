@@ -7,7 +7,7 @@
  * Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/ESP8266_AT_WebServer
  * Licensed under MIT license
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Original author:
  * @file       Esp8266WebServer.h
@@ -15,14 +15,27 @@
  *
  * Version Modified By   Date      Comments
  * ------- -----------  ---------- -----------
- *  1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc
+ *  1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
+ *  1.0.1   K Hoang      20/02/2020 Add support to UIPEthernet library
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_h
 #define EthernetWebServer_h
 
 #include <functional-vlpp.h>
+
+#ifndef USE_UIP_ETHERNET
+// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+#define USE_UIP_ETHERNET   false
+#endif
+
+#if USE_UIP_ETHERNET
+#include <UIPEthernet.h>
+#include <utility/logging.h>
+#else
 #include <Ethernet.h>
+#endif
 
 enum HTTPMethod { HTTP_ANY, HTTP_GET, HTTP_POST, HTTP_PUT, HTTP_PATCH, HTTP_DELETE, HTTP_OPTIONS };
 enum HTTPUploadStatus { UPLOAD_FILE_START, UPLOAD_FILE_WRITE, UPLOAD_FILE_END,
