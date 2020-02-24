@@ -6,7 +6,7 @@
  *  Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
  *  Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
  *  Licensed under MIT license
- *  Version: 1.0.2
+ *  Version: 1.0.3
  *
  *  Copyright (c) 2015, Majenko Technologies
  *  All rights reserved.
@@ -36,11 +36,12 @@
  *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  Version Modified By   Date      Comments
- *  ------- -----------  ---------- -----------
+ * Version Modified By   Date      Comments
+ * ------- -----------  ---------- -----------
  *  1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
  *  1.0.1   K Hoang      20/02/2020 Add support to lambda functions
  *  1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
+ *  1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD boards
  *****************************************************************************************************************************/
  /*
   * The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno 
@@ -48,15 +49,48 @@
   * is not used to select the Ethernet controller chip, but it must be kept as an output or the SPI interface won't work.
   */
 
-#include <SPI.h>
+#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )      
+  #if defined(ESP8266_AT_USE_SAMD)
+    #undef ESP8266_AT_USE_SAMD
+  #endif
+  #define ESP8266_AT_USE_SAMD      true
+#endif
 
-// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
-// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
-#define USE_UIP_ETHERNET   true
-
-#include <EthernetWebServer.h>
-
-#ifdef CORE_TEENSY
+#if defined(ESP8266_AT_USE_SAMD) 
+// For SAMD
+  #define EspSerial Serial1
+  
+  #if defined(ARDUINO_SAMD_ZERO)
+    #define BOARD_TYPE      "SAMD Zero"
+  #elif defined(ARDUINO_SAMD_MKR1000)
+    #define BOARD_TYPE      "SAMD MKR1000"    
+  #elif defined(ARDUINO_SAMD_MKRWIFI1010)
+    #define BOARD_TYPE      "SAMD MKRWIFI1010"
+  #elif defined(ARDUINO_SAMD_NANO_33_IOT)
+    #define BOARD_TYPE      "SAMD NANO_33_IOT"  
+  #elif defined(ARDUINO_SAMD_MKRFox1200)
+    #define BOARD_TYPE      "SAMD MKRFox1200"
+  #elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
+    #define BOARD_TYPE      "SAMD MKRWAN13X0"
+  #elif defined(ARDUINO_SAMD_MKRGSM1400)
+    #define BOARD_TYPE      "SAMD MKRGSM1400"
+  #elif defined(ARDUINO_SAMD_MKRNB1500)
+    #define BOARD_TYPE      "SAMD MKRNB1500"
+  #elif defined(ARDUINO_SAMD_MKRVIDOR4000)
+    #define BOARD_TYPE      "SAMD MKRVIDOR4000"
+  #elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
+    #define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
+  #elif ( defined(ARDUINO_SAM_DUE) || (__SAM3X8E__) )
+    #define BOARD_TYPE      "SAM DUE"
+  #elif ( defined(__SAMD21G18A__) || (__CPU_ARC__) )
+    #define BOARD_TYPE      "SAMD Board"
+  #else
+    #define BOARD_TYPE      "SAMD Unknown"
+  #endif
+#elif ( defined(CORE_TEENSY) )
   // For Teensy 4.0
   #if defined(__IMXRT1062__)
   #define BOARD_TYPE      "TEENSY 4.0"
@@ -66,9 +100,17 @@
   #define BOARD_TYPE      "TEENSY 3.X"
   #endif
 #else
-// For Mega
-#define BOARD_TYPE      "AVR Mega"
+  // For Mega
+  #define BOARD_TYPE      "AVR Mega"
 #endif
+
+#include <SPI.h>
+
+// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+//#define USE_UIP_ETHERNET   true
+
+#include <EthernetWebServer.h>
 
 // Enter a MAC address and IP address for your controller below.
 
@@ -77,7 +119,7 @@ byte mac[] = {
 };
 
 // Select the IP address according to your local network
-IPAddress ip(192, 168, 2, 100);
+IPAddress ip(192, 168, 2, 200);
 
 EthernetWebServer server(80);
 

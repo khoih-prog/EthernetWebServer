@@ -7,7 +7,7 @@
  * Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/ESP8266_AT_WebServer
  * Licensed under MIT license
- * Version: 1.0.2
+ * Version: 1.0.3
  *
  * Original author:
  * @file       Esp8266WebServer.h
@@ -18,12 +18,23 @@
  *  1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
  *  1.0.1   K Hoang      20/02/2020 Add support to lambda functions
  *  1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
+ *  1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD boards
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_h
 #define EthernetWebServer_h
 
 #include <functional-vlpp.h>
+
+#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )      
+  #if defined(ESP8266_AT_USE_SAMD)
+    #undef ETHERNET_USE_SAMD
+  #endif
+  #define ETHERNET_USE_SAMD      true
+#endif
 
 #ifndef USE_UIP_ETHERNET
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
@@ -124,7 +135,7 @@ public:
   //KH
   void send(int code, char*  content_type, const String& content, size_t contentLength);
   
-  #ifndef CORE_TEENSY
+  #if !( defined(CORE_TEENSY) || ETHERNET_USE_SAMD )
   void send_P(int code, PGM_P content_type, PGM_P content);
   void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
   #endif

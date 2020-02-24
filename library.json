@@ -1,13 +1,13 @@
 {
   "name": "EthernetWebServer",
   "keywords": "WebServer, Ethernet, Arduino, Teensy, Ethernet shield",
-  "description": "Simple EthernetWebServer library for AVR, Teensy, SAM, ESP boards running Ethernet shields",
+  "description": "Simple EthernetWebServer library for AVR, Teensy, SAM, SAMD, ESP boards running Ethernet shields",
   "repository":
   {
     "type": "git",
     "url": "https://github.com/khoih-prog/EthernetWebServer"
   },
   "frameworks": "arduino",
-  "platforms": "avr, teensy",
-  "version": "1.0.2"
+  "platforms": "*",
+  "version": "1.0.3"
 }

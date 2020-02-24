@@ -2,6 +2,8 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer)
 
+From v1.0.3+, the library supports more Arduino boards ( SAM DUE, SAMD: ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
+
 From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel SAM3X8E ARM Cortex-M3, STM32F series, ESP8266, Intel ARC32(Genuino101), Nordic nRF51(RFduino), Teensy boards, Realtek Ameba(RTL8195A,RTL8710)) using Wiznet W5x00 or ENC28J60 EThernet shields by using [UIPEthernet](https://github.com/UIPEthernet/UIPEthernet) library besides standard [Ethernet library](https://www.arduino.cc/en/Reference/Ethernet).
 
 This is simple yet complete WebServer library for `AVR, Teensy,SAM, STM32F, Intel, etc.` boards running Ethernet shields. The functions are similar and compatible to ESP8266/ESP32 WebServer libraries to make life much easier to port sketches from ESP8266/ESP32.
@@ -199,15 +201,48 @@ Also see examples:
 Please take a look at examples, as well.
 
 ```cpp
-#include <SPI.h>
+#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
+  #if defined(ESP8266_AT_USE_SAMD)
+    #undef ESP8266_AT_USE_SAMD
+  #endif
+  #define ESP8266_AT_USE_SAMD      true
+#endif
 
-// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
-// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
-#define USE_UIP_ETHERNET   true
-
-#include <EthernetWebServer.h>
-
-#ifdef CORE_TEENSY
+#if defined(ESP8266_AT_USE_SAMD) 
+// For SAMD
+  #define EspSerial Serial1
+  
+  #if defined(ARDUINO_SAMD_ZERO)
+    #define BOARD_TYPE      "SAMD Zero"
+  #elif defined(ARDUINO_SAMD_MKR1000)
+    #define BOARD_TYPE      "SAMD MKR1000"
+  #elif defined(ARDUINO_SAMD_MKRWIFI1010)
+    #define BOARD_TYPE      "SAMD MKRWIFI1010"
+  #elif defined(ARDUINO_SAMD_NANO_33_IOT)
+    #define BOARD_TYPE      "SAMD NANO_33_IOT"
+  #elif defined(ARDUINO_SAMD_MKRFox1200)
+    #define BOARD_TYPE      "SAMD MKRFox1200"
+  #elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
+    #define BOARD_TYPE      "SAMD MKRWAN13X0"
+  #elif defined(ARDUINO_SAMD_MKRGSM1400)
+    #define BOARD_TYPE      "SAMD MKRGSM1400"
+  #elif defined(ARDUINO_SAMD_MKRNB1500)
+    #define BOARD_TYPE      "SAMD MKRNB1500"
+  #elif defined(ARDUINO_SAMD_MKRVIDOR4000)
+    #define BOARD_TYPE      "SAMD MKRVIDOR4000"
+  #elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
+    #define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
+  #elif ( defined(ARDUINO_SAM_DUE) || (__SAM3X8E__) )
+    #define BOARD_TYPE      "SAM DUE"
+  #elif ( defined(__SAMD21G18A__) || (__CPU_ARC__) )
+    #define BOARD_TYPE      "SAMD Board"
+  #else
+    #define BOARD_TYPE      "SAMD Unknown"
+  #endif
+#elif ( defined(CORE_TEENSY) )
   // For Teensy 4.0
   #if defined(__IMXRT1062__)
   #define BOARD_TYPE      "TEENSY 4.0"
@@ -217,9 +252,16 @@ Please take a look at examples, as well.
   #define BOARD_TYPE      "TEENSY 3.X"
   #endif
 #else
-// For Mega
-#define BOARD_TYPE      "AVR Mega"
+  // For Mega
+  #define BOARD_TYPE      "AVR Mega"
 #endif
+#include <SPI.h>
+
+// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+#define USE_UIP_ETHERNET   true
+
+#include <EthernetWebServer.h>
 
 // Enter a MAC address and IP address for your controller below.
 
@@ -228,7 +270,7 @@ byte mac[] = {
 };
 
 // Select the IP address according to your local network
-IPAddress ip(192, 168, 2, 100);
+IPAddress ip(192, 168, 2, 200);
 
 EthernetWebServer server(80);
 
@@ -335,6 +377,10 @@ HTTP EthernetWebServer is @ IP : 192.168.2.100
 </g>
 </svg>
 ```
+
+### Version v1.0.3
+
+1. From v1.0.3+, the library supports many more Arduino boards ( SAM DUE, SAMD: ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
 
 ### Version v1.0.2
 
