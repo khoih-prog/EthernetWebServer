@@ -8,6 +8,7 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
 
 ### Note for STM32 board usage
 Please see the [***Supported STM Boards and how to use***](https://github.com/khoih-prog/EthernetWebServer/issues/1)
+It's better for STM32 boards to use the new [EthernetWebServer_STM32 library for STM32](https://github.com/khoih-prog/EthernetWebServer_STM32).
 
 This is simple yet complete WebServer library for `AVR, Teensy,SAM, STM32F, Intel, etc.` boards running Ethernet shields. The functions are similar and compatible to ESP8266/ESP32 WebServer libraries to make life much easier to port sketches from ESP8266/ESP32.
 
