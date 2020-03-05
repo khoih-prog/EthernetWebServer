@@ -1,26 +1,26 @@
 /****************************************************************************************************************************
- * EthernetWebServer-impl.h - Dead simple web-server.
- * For Ethernet shields
- *
- * EthernetWebServer is a library for the Ethernet shields to run WebServer
- *
- * Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
- * Built by Khoi Hoang https://github.com/khoih-prog/ESP8266_AT_WebServer
- * Licensed under MIT license
- * Version: 1.0.3
- *
- * Original author:
- * @file       Esp8266WebServer.h
- * @author     Ivan Grokhotkov
- *
- * Version Modified By   Date      Comments
- * ------- -----------  ---------- -----------
- *  1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
- *  1.0.1   K Hoang      20/02/2020 Add support to lambda functions
- *  1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
- *  1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD boards
+   EthernetWebServer-impl.h - Dead simple web-server.
+   For Ethernet shields
+
+   EthernetWebServer is a library for the Ethernet shields to run WebServer
+
+   Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
+   Built by Khoi Hoang https://github.com/khoih-prog/ESP8266_AT_WebServer
+   Licensed under MIT license
+   Version: 1.0.3
+
+   Original author:
+   @file       Esp8266WebServer.h
+   @author     Ivan Grokhotkov
+
+   Version Modified By   Date      Comments
+   ------- -----------  ---------- -----------
+    1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
+    1.0.1   K Hoang      20/02/2020 Add support to lambda functions
+    1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
+    1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD boards
  *****************************************************************************************************************************/
- 
+
 #ifndef EthernetWebServer_impl_h
 #define EthernetWebServer_impl_h
 
@@ -33,18 +33,18 @@
 const char * AUTHORIZATION_HEADER = "Authorization";
 
 EthernetWebServer::EthernetWebServer(int port)
-: _server(port)
-, _currentMethod(HTTP_ANY)
-, _currentVersion(0)
-, _currentHandler(0)
-, _firstHandler(0)
-, _lastHandler(0)
-, _currentArgCount(0)
-, _currentArgs(0)
-, _headerKeysCount(0)
-, _currentHeaders(0)
-, _contentLength(0)
-, _chunked(false)
+  : _server(port)
+  , _currentMethod(HTTP_ANY)
+  , _currentVersion(0)
+  , _currentHandler(0)
+  , _firstHandler(0)
+  , _lastHandler(0)
+  , _currentArgCount(0)
+  , _currentArgs(0)
+  , _headerKeysCount(0)
+  , _currentHeaders(0)
+  , _contentLength(0)
+  , _chunked(false)
 {
 }
 
@@ -64,30 +64,30 @@ EthernetWebServer::~EthernetWebServer() {
 void EthernetWebServer::begin() {
   _currentStatus = HC_NONE;
   _server.begin();
-  if(!_headerKeysCount)
+  if (!_headerKeysCount)
     collectHeaders(0, 0);
 }
 
-bool EthernetWebServer::authenticate(const char * username, const char * password){
-  if(hasHeader(AUTHORIZATION_HEADER)){
+bool EthernetWebServer::authenticate(const char * username, const char * password) {
+  if (hasHeader(AUTHORIZATION_HEADER)) {
     String authReq = header(AUTHORIZATION_HEADER);
-    if(authReq.startsWith("Basic")){
+    if (authReq.startsWith("Basic")) {
       authReq = authReq.substring(6);
       authReq.trim();
-      char toencodeLen = strlen(username)+strlen(password)+1;
+      char toencodeLen = strlen(username) + strlen(password) + 1;
       char *toencode = new char[toencodeLen + 1];
-      if(toencode == NULL){
+      if (toencode == NULL) {
         authReq = String();
         return false;
       }
-      char *encoded = new char[base64_encode_expected_len(toencodeLen)+1];
-      if(encoded == NULL){
+      char *encoded = new char[base64_encode_expected_len(toencodeLen) + 1];
+      if (encoded == NULL) {
         authReq = String();
         delete[] toencode;
         return false;
       }
       sprintf(toencode, "%s:%s", username, password);
-      if(base64_encode_chars(toencode, toencodeLen, encoded) > 0 && authReq.equals(encoded)){
+      if (base64_encode_chars(toencode, toencodeLen, encoded) > 0 && authReq.equals(encoded)) {
         authReq = String();
         delete[] toencode;
         delete[] encoded;
@@ -101,7 +101,7 @@ bool EthernetWebServer::authenticate(const char * username, const char * passwor
   return false;
 }
 
-void EthernetWebServer::requestAuthentication(){
+void EthernetWebServer::requestAuthentication() {
   sendHeader("WWW-Authenticate", "Basic realm=\"Login Required\"");
   send(401);
 }
@@ -119,18 +119,18 @@ void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServ
 }
 
 void EthernetWebServer::addHandler(RequestHandler* handler) {
-    _addRequestHandler(handler);
+  _addRequestHandler(handler);
 }
 
 void EthernetWebServer::_addRequestHandler(RequestHandler* handler) {
-    if (!_lastHandler) {
-      _firstHandler = handler;
-      _lastHandler = handler;
-    }
-    else {
-      _lastHandler->next(handler);
-      _lastHandler = handler;
-    }
+  if (!_lastHandler) {
+    _firstHandler = handler;
+    _lastHandler = handler;
+  }
+  else {
+    _lastHandler->next(handler);
+    _lastHandler = handler;
+  }
 }
 
 void EthernetWebServer::handleClient() {
@@ -224,75 +224,75 @@ void EthernetWebServer::sendHeader(const String& name, const String& value, bool
 }
 
 void EthernetWebServer::setContentLength(size_t contentLength) {
-    _contentLength = contentLength;
+  _contentLength = contentLength;
 }
 
 void EthernetWebServer::_prepareHeader(String& response, int code, const char* content_type, size_t contentLength) {
-    response = "HTTP/1."+String(_currentVersion)+" ";
-    response += String(code);
-    response += " ";
-    response += _responseCodeToString(code);
-    response += "\r\n";
+  response = "HTTP/1." + String(_currentVersion) + " ";
+  response += String(code);
+  response += " ";
+  response += _responseCodeToString(code);
+  response += "\r\n";
 
-    if (!content_type)
-        content_type = "text/html";
+  if (!content_type)
+    content_type = "text/html";
 
-    sendHeader("Content-Type", content_type, true);
-    if (_contentLength == CONTENT_LENGTH_NOT_SET) {
-        sendHeader("Content-Length", String(contentLength));
-    } else if (_contentLength != CONTENT_LENGTH_UNKNOWN) {
-        sendHeader("Content-Length", String(_contentLength));
-    } else if(_contentLength == CONTENT_LENGTH_UNKNOWN && _currentVersion){ //HTTP/1.1 or above client
-      //let's do chunked
-      _chunked = true;
-      sendHeader("Accept-Ranges","none");
-      sendHeader("Transfer-Encoding","chunked");
-    }
-    sendHeader("Connection", "close");
+  sendHeader("Content-Type", content_type, true);
+  if (_contentLength == CONTENT_LENGTH_NOT_SET) {
+    sendHeader("Content-Length", String(contentLength));
+  } else if (_contentLength != CONTENT_LENGTH_UNKNOWN) {
+    sendHeader("Content-Length", String(_contentLength));
+  } else if (_contentLength == CONTENT_LENGTH_UNKNOWN && _currentVersion) { //HTTP/1.1 or above client
+    //let's do chunked
+    _chunked = true;
+    sendHeader("Accept-Ranges", "none");
+    sendHeader("Transfer-Encoding", "chunked");
+  }
+  sendHeader("Connection", "close");
 
-    response += _responseHeaders;
-    response += "\r\n";
-    _responseHeaders = String();
+  response += _responseHeaders;
+  response += "\r\n";
+  _responseHeaders = String();
 }
 
 void EthernetWebServer::send(int code, const char* content_type, const String& content) {
-    String header;
-    // Can we asume the following?
-    //if(code == 200 && content.length() == 0 && _contentLength == CONTENT_LENGTH_NOT_SET)
-    //  _contentLength = CONTENT_LENGTH_UNKNOWN;
-    
-    LOGDEBUG1(F("send1: len = "), content.length());
-    LOGDEBUG1(F("content = "), content);  
-    
-    _prepareHeader(header, code, content_type, content.length());
+  String header;
+  // Can we asume the following?
+  //if(code == 200 && content.length() == 0 && _contentLength == CONTENT_LENGTH_NOT_SET)
+  //  _contentLength = CONTENT_LENGTH_UNKNOWN;
 
-    _currentClient.write((const uint8_t *)header.c_str(), header.length());
-    if(content.length())
-    {
-      //sendContent(content);
-      sendContent(content, content.length());
-    }
+  LOGDEBUG1(F("send1: len = "), content.length());
+  LOGDEBUG1(F("content = "), content);
+
+  _prepareHeader(header, code, content_type, content.length());
+
+  _currentClient.write((const uint8_t *)header.c_str(), header.length());
+  if (content.length())
+  {
+    //sendContent(content);
+    sendContent(content, content.length());
+  }
 }
 
 void EthernetWebServer::send(int code, char* content_type, const String& content, size_t contentLength)
 {
-    String header;
+  String header;
 
-    LOGDEBUG1(F("send2: len = "), contentLength);
-    LOGDEBUG1(F("content = "), content); 
-         
-    char type[64];
-    memccpy((void*)type, content_type, 0, sizeof(type));
-    _prepareHeader(header, code, (const char* )type, contentLength);    
-     
-    LOGDEBUG1(F("send2: hdrlen = "), header.length());
-    LOGDEBUG1(F("header = "), header);  
-    
-    _currentClient.write((const uint8_t *) header.c_str(), header.length());
-    if (contentLength) 
-    {
-      sendContent(content, contentLength);
-    }
+  LOGDEBUG1(F("send2: len = "), contentLength);
+  LOGDEBUG1(F("content = "), content);
+
+  char type[64];
+  memccpy((void*)type, content_type, 0, sizeof(type));
+  _prepareHeader(header, code, (const char* )type, contentLength);
+
+  LOGDEBUG1(F("send2: hdrlen = "), header.length());
+  LOGDEBUG1(F("header = "), header);
+
+  _currentClient.write((const uint8_t *) header.c_str(), header.length());
+  if (contentLength)
+  {
+    sendContent(content, contentLength);
+  }
 }
 
 void EthernetWebServer::send(int code, char* content_type, const String& content) {
@@ -305,27 +305,27 @@ void EthernetWebServer::send(int code, const String& content_type, const String&
 
 #if !( defined(CORE_TEENSY) || ETHERNET_USE_SAMD )
 void EthernetWebServer::send_P(int code, PGM_P content_type, PGM_P content) {
-    size_t contentLength = 0;
+  size_t contentLength = 0;
 
-    if (content != NULL) {
-        contentLength = strlen_P(content);
-    }
+  if (content != NULL) {
+    contentLength = strlen_P(content);
+  }
 
-    String header;
-    char type[64];
-    memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
-    _prepareHeader(header, code, (const char* )type, contentLength);
-    _currentClient.write(header.c_str(), header.length());
-    sendContent_P(content);
+  String header;
+  char type[64];
+  memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
+  _prepareHeader(header, code, (const char* )type, contentLength);
+  _currentClient.write(header.c_str(), header.length());
+  sendContent_P(content);
 }
 
 void EthernetWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength) {
-    String header;
-    char type[64];
-    memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
-    _prepareHeader(header, code, (const char* )type, contentLength);
-    sendContent(header);
-    sendContent_P(content, contentLength);
+  String header;
+  char type[64];
+  memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
+  _prepareHeader(header, code, (const char* )type, contentLength);
+  sendContent(header);
+  sendContent_P(content, contentLength);
 }
 
 void EthernetWebServer::sendContent_P(PGM_P content) {
@@ -334,16 +334,16 @@ void EthernetWebServer::sendContent_P(PGM_P content) {
 
 void EthernetWebServer::sendContent_P(PGM_P content, size_t size) {
   const char * footer = "\r\n";
-  if(_chunked) {
+  if (_chunked) {
     char * chunkSize = (char *)malloc(11);
-    if(chunkSize){
+    if (chunkSize) {
       sprintf(chunkSize, "%x%s", size, footer);
       _currentClient.write(chunkSize, strlen(chunkSize));
       free(chunkSize);
     }
   }
   _currentClient.write(content, size);
-  if(_chunked){
+  if (_chunked) {
     _currentClient.write(footer, 2);
   }
 }
@@ -352,33 +352,33 @@ void EthernetWebServer::sendContent_P(PGM_P content, size_t size) {
 void EthernetWebServer::sendContent(const String& content) {
   const char * footer = "\r\n";
   size_t len = content.length();
-  if(_chunked) {
+  if (_chunked) {
     char * chunkSize = (char *)malloc(11);
-    if(chunkSize){
+    if (chunkSize) {
       sprintf(chunkSize, "%x%s", len, footer);
       _currentClient.write(chunkSize, strlen(chunkSize));
       free(chunkSize);
     }
   }
   _currentClient.write(content.c_str(), len);
-  if(_chunked){
+  if (_chunked) {
     _currentClient.write(footer, 2);
   }
 }
 
-void EthernetWebServer::sendContent(const String& content, size_t size) 
+void EthernetWebServer::sendContent(const String& content, size_t size)
 {
   const char * footer = "\r\n";
-  if(_chunked) {
+  if (_chunked) {
     char * chunkSize = (char *)malloc(11);
-    if(chunkSize){
+    if (chunkSize) {
       sprintf(chunkSize, "%x%s", size, footer);
       _currentClient.write(chunkSize, strlen(chunkSize));
       free(chunkSize);
     }
   }
   _currentClient.write(content.c_str(), size);
-  if(_chunked){
+  if (_chunked) {
     _currentClient.write(footer, 2);
   }
 }
@@ -427,11 +427,11 @@ String EthernetWebServer::header(String name) {
 void EthernetWebServer::collectHeaders(const char* headerKeys[], const size_t headerKeysCount) {
   _headerKeysCount = headerKeysCount + 1;
   if (_currentHeaders)
-     delete[]_currentHeaders;
+    delete[]_currentHeaders;
   _currentHeaders = new RequestArgument[_headerKeysCount];
   _currentHeaders[0].key = AUTHORIZATION_HEADER;
-  for (int i = 1; i < _headerKeysCount; i++){
-    _currentHeaders[i].key = headerKeys[i-1];
+  for (int i = 1; i < _headerKeysCount; i++) {
+    _currentHeaders[i].key = headerKeys[i - 1];
   }
 }
 
@@ -473,18 +473,18 @@ void EthernetWebServer::onNotFound(THandlerFunction fn) {
 
 void EthernetWebServer::_handleRequest() {
   bool handled = false;
-  if (!_currentHandler){
+  if (!_currentHandler) {
     LOGWARN(F("request handler not found"));
   }
   else {
     handled = _currentHandler->handle(*this, _currentMethod, _currentUri);
     if (!handled) {
-     LOGWARN(F("_handleRequest failed"));
+      LOGWARN(F("_handleRequest failed"));
     }
   }
 
   if (!handled) {
-    if(_notFoundHandler) {
+    if (_notFoundHandler) {
       _notFoundHandler();
     }
     else {
