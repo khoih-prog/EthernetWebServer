@@ -5,9 +5,9 @@
    EthernetWebServer is a library for the Ethernet shields to run WebServer
 
    Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
-   Built by Khoi Hoang https://github.com/khoih-prog/ESP8266_AT_WebServer
+   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.3
+   Version: 1.0.4
 
    Original author:
    @file       Esp8266WebServer.h
@@ -18,7 +18,8 @@
     1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
     1.0.1   K Hoang      20/02/2020 Add support to lambda functions
     1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
-    1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD boards
+    1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD21 boards
+    1.0.4   K Hoang      16/04/2020 Add support to SAMD51 boards
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_h
@@ -26,11 +27,12 @@
 
 #include <functional-vlpp.h>
 
-#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
-#if defined(ESP8266_AT_USE_SAMD)
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
+      || defined(__SAMD51G19A__) || defined(__SAMD21G18A__) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
+#if defined(ETHERNET_USE_SAMD)
 #undef ETHERNET_USE_SAMD
 #endif
 #define ETHERNET_USE_SAMD      true
@@ -57,7 +59,11 @@ enum HTTPClientStatus { HC_NONE, HC_WAIT_READ, HC_WAIT_CLOSE };
 
 #define HTTP_DOWNLOAD_UNIT_SIZE 1460
 
-#define HTTP_UPLOAD_BUFLEN 2048
+// Permit user to increase HTTP_UPLOAD_BUFLEN larger than default 2K
+//#define HTTP_UPLOAD_BUFLEN 2048
+#if !defined(HTTP_UPLOAD_BUFLEN)
+#define HTTP_UPLOAD_BUFLEN 4096   //2048
+#endif
 
 #define HTTP_MAX_DATA_WAIT 1000 //ms to wait for the client to send the request
 #define HTTP_MAX_POST_WAIT 1000 //ms to wait for POST data to arrive

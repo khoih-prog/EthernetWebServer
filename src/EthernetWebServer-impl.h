@@ -5,9 +5,9 @@
    EthernetWebServer is a library for the Ethernet shields to run WebServer
 
    Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
-   Built by Khoi Hoang https://github.com/khoih-prog/ESP8266_AT_WebServer
+   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.3
+   Version: 1.0.4
 
    Original author:
    @file       Esp8266WebServer.h
@@ -18,7 +18,8 @@
     1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
     1.0.1   K Hoang      20/02/2020 Add support to lambda functions
     1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
-    1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD boards
+    1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD21 boards
+    1.0.4   K Hoang      16/04/2020 Add support to SAMD51 boards
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_impl_h
@@ -134,29 +135,39 @@ void EthernetWebServer::_addRequestHandler(RequestHandler* handler) {
 }
 
 void EthernetWebServer::handleClient() {
-  if (_currentStatus == HC_NONE) {
+  if (_currentStatus == HC_NONE) 
+  {
     EthernetClient client = _server.available();
-    if (!client) {
+    if (!client) 
+    {
+      //LOGINFO(F("handleClient:No client"));
       return;
     }
 
-    LOGINFO(F("New client"));
+    LOGINFO(F("handleClient:New client"));
 
     _currentClient = client;
     _currentStatus = HC_WAIT_READ;
     _statusChange = millis();
   }
 
-  if (!_currentClient.connected()) {
+  if (!_currentClient.connected()) 
+  {
     _currentClient = EthernetClient();
+    LOGINFO(F("handleClient:Client connected"));
     _currentStatus = HC_NONE;
     return;
   }
 
   // Wait for data from client to become available
-  if (_currentStatus == HC_WAIT_READ) {
-    if (!_currentClient.available()) {
-      if (millis() - _statusChange > HTTP_MAX_DATA_WAIT) {
+  if (_currentStatus == HC_WAIT_READ) 
+  {
+    LOGINFO(F("handleClient:_currentStatus = HC_WAIT_READ"));
+    if (!_currentClient.available()) 
+    {
+      LOGINFO(F("handleClient:Client not available"));
+      if (millis() - _statusChange > HTTP_MAX_DATA_WAIT) 
+      {
         LOGINFO(F("HTTP_MAX_DATA_WAIT Timeout"));
         _currentClient = EthernetClient();
         _currentStatus = HC_NONE;
@@ -165,7 +176,8 @@ void EthernetWebServer::handleClient() {
       return;
     }
 
-    if (!_parseRequest(_currentClient)) {
+    if (!_parseRequest(_currentClient)) 
+    {
       LOGINFO(F("Unable to parse request"));
       _currentClient = EthernetClient();
       _currentStatus = HC_NONE;
@@ -175,25 +187,33 @@ void EthernetWebServer::handleClient() {
     _contentLength = CONTENT_LENGTH_NOT_SET;
     _handleRequest();
 
-    if (!_currentClient.connected()) {
+    if (!_currentClient.connected()) 
+    {
       LOGINFO(F("Connection closed"));
       _currentClient = EthernetClient();
       _currentStatus = HC_NONE;
       return;
-    } else {
+    } 
+    else 
+    {
       _currentStatus = HC_WAIT_CLOSE;
       _statusChange = millis();
       return;
     }
   }
 
-  if (_currentStatus == HC_WAIT_CLOSE) {
-    if (millis() - _statusChange > HTTP_MAX_CLOSE_WAIT) {
+  if (_currentStatus == HC_WAIT_CLOSE) 
+  {
+    if (millis() - _statusChange > HTTP_MAX_CLOSE_WAIT) 
+    //if (millis() - _statusChange > HTTP_MAX_CLOSE_WAIT * 10) 
+    {
       _currentClient = EthernetClient();
       _currentStatus = HC_NONE;
       LOGINFO(F("HTTP_MAX_CLOSE_WAIT Timeout"));
       yield();
-    } else {
+    } 
+    else 
+    {
       yield();
       return;
     }
@@ -471,23 +491,30 @@ void EthernetWebServer::onNotFound(THandlerFunction fn) {
   _notFoundHandler = fn;
 }
 
-void EthernetWebServer::_handleRequest() {
+void EthernetWebServer::_handleRequest() 
+{
   bool handled = false;
-  if (!_currentHandler) {
+  if (!_currentHandler) 
+  {
     LOGWARN(F("request handler not found"));
   }
-  else {
+  else 
+  {
     handled = _currentHandler->handle(*this, _currentMethod, _currentUri);
-    if (!handled) {
+    if (!handled) 
+    {
       LOGWARN(F("_handleRequest failed"));
     }
   }
 
-  if (!handled) {
-    if (_notFoundHandler) {
+  if (!handled) 
+  {
+    if (_notFoundHandler) 
+    {
       _notFoundHandler();
     }
-    else {
+    else 
+    {
       send(404, "text/plain", String("Not found: ") + _currentUri);
     }
   }
@@ -495,7 +522,8 @@ void EthernetWebServer::_handleRequest() {
   _currentUri = String();
 }
 
-String EthernetWebServer::_responseCodeToString(int code) {
+String EthernetWebServer::_responseCodeToString(int code) 
+{
   switch (code) {
     case 100: return F("Continue");
     case 101: return F("Switching Protocols");

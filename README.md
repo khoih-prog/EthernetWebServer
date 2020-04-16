@@ -2,13 +2,13 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer)
 
-From v1.0.3+, the library supports more Arduino boards ( SAM DUE, SAMD: ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
+#### New in v1.0.4
+
+1. Add support to ***SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)***.
+
+From v1.0.3+, the library supports more Arduino boards ( SAM DUE, SAMD21: ZERO, MKR, ***NANO_33_IOT***, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
 
 From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel SAM3X8E ARM Cortex-M3, STM32F series, ESP8266, Intel ARC32(Genuino101), Nordic nRF51(RFduino), Teensy boards, Realtek Ameba(RTL8195A,RTL8710)) using Wiznet W5x00 or ENC28J60 EThernet shields by using [UIPEthernet](https://github.com/UIPEthernet/UIPEthernet) library besides standard [Ethernet library](https://www.arduino.cc/en/Reference/Ethernet).
-
-### Note for STM32 board usage
-Please see the [***Supported STM Boards and how to use***](https://github.com/khoih-prog/EthernetWebServer/issues/1)
-It's better for STM32 boards to use the new [EthernetWebServer_STM32 library for STM32](https://github.com/khoih-prog/EthernetWebServer_STM32).
 
 This is simple yet complete WebServer library for `AVR, Teensy,SAM, STM32F, Intel, etc.` boards running Ethernet shields. The functions are similar and compatible to ESP8266/ESP32 WebServer libraries to make life much easier to port sketches from ESP8266/ESP32.
 
@@ -42,6 +42,13 @@ Another way is to use `Arduino Library Manager` or [![arduino-library-badge](htt
 4. Copy whole 
   - `EthernetWebServer-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
+### Important note
+
+1. If your application requires 2K+ HTML page, the current [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) must be modified if you are using W5200/W5500 Ethernet shields. W5100 is not supported for 2K+ buffer.
+2. To fix [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet), just copy these following files into the [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) directory to overwrite the old files:
+- [Ethernet.h](Ethernet/src/Ethernet.h)
+- [EthernetServer.cpp](Ethernet/src/EthernetServer.cpp)
+- [w5100.cpp](Ethernet/src/utility/w5100.cpp)
 
 #### Usage
 
@@ -201,71 +208,90 @@ Also see examples:
  5. [PostServer](examples/PostServer)
  6. [SimpleAuthentication](examples/SimpleAuthentication)
 
-## Example
-Please take a look at examples, as well.
+## Example [HelloServer](examples/HelloServer)
+
+Please take a look at other examples as well.
 
 ```cpp
-#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
-  #if defined(ESP8266_AT_USE_SAMD)
-    #undef ESP8266_AT_USE_SAMD
-  #endif
-  #define ESP8266_AT_USE_SAMD      true
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
+      || defined(__SAMD51G19A__) || defined(__SAMD21G18A__) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
+#if defined(ETHERNET_USE_SAMD)
+#undef ETHERNET_USE_SAMD
+#endif
+#define ETHERNET_USE_SAMD      true
 #endif
 
-#if defined(ESP8266_AT_USE_SAMD) 
+#if defined(ETHERNET_USE_SAMD)
 // For SAMD
-  #define EspSerial Serial1
-  
-  #if defined(ARDUINO_SAMD_ZERO)
-    #define BOARD_TYPE      "SAMD Zero"
-  #elif defined(ARDUINO_SAMD_MKR1000)
-    #define BOARD_TYPE      "SAMD MKR1000"
-  #elif defined(ARDUINO_SAMD_MKRWIFI1010)
-    #define BOARD_TYPE      "SAMD MKRWIFI1010"
-  #elif defined(ARDUINO_SAMD_NANO_33_IOT)
-    #define BOARD_TYPE      "SAMD NANO_33_IOT"
-  #elif defined(ARDUINO_SAMD_MKRFox1200)
-    #define BOARD_TYPE      "SAMD MKRFox1200"
-  #elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
-    #define BOARD_TYPE      "SAMD MKRWAN13X0"
-  #elif defined(ARDUINO_SAMD_MKRGSM1400)
-    #define BOARD_TYPE      "SAMD MKRGSM1400"
-  #elif defined(ARDUINO_SAMD_MKRNB1500)
-    #define BOARD_TYPE      "SAMD MKRNB1500"
-  #elif defined(ARDUINO_SAMD_MKRVIDOR4000)
-    #define BOARD_TYPE      "SAMD MKRVIDOR4000"
-  #elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
-    #define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
-  #elif ( defined(ARDUINO_SAM_DUE) || (__SAM3X8E__) )
-    #define BOARD_TYPE      "SAM DUE"
-  #elif ( defined(__SAMD21G18A__) || (__CPU_ARC__) )
-    #define BOARD_TYPE      "SAMD Board"
-  #else
-    #define BOARD_TYPE      "SAMD Unknown"
-  #endif
-#elif ( defined(CORE_TEENSY) )
-  // For Teensy 4.0
-  #if defined(__IMXRT1062__)
-  #define BOARD_TYPE      "TEENSY 4.0"
-  #elif ( defined(__MKL26Z64__) || defined(ARDUINO_ARCH_AVR) )
-  #define BOARD_TYPE      "TEENSY LC or 2.0"
-  #else
-  #define BOARD_TYPE      "TEENSY 3.X"
-  #endif
+
+#if defined(ARDUINO_SAMD_ZERO)
+#define BOARD_TYPE      "SAMD Zero"
+#elif defined(ARDUINO_SAMD_MKR1000)
+#define BOARD_TYPE      "SAMD MKR1000"
+#elif defined(ARDUINO_SAMD_MKRWIFI1010)
+#define BOARD_TYPE      "SAMD MKRWIFI1010"
+#elif defined(ARDUINO_SAMD_NANO_33_IOT)
+#define BOARD_TYPE      "SAMD NANO_33_IOT"
+#elif defined(ARDUINO_SAMD_MKRFox1200)
+#define BOARD_TYPE      "SAMD MKRFox1200"
+#elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
+#define BOARD_TYPE      "SAMD MKRWAN13X0"
+#elif defined(ARDUINO_SAMD_MKRGSM1400)
+#define BOARD_TYPE      "SAMD MKRGSM1400"
+#elif defined(ARDUINO_SAMD_MKRNB1500)
+#define BOARD_TYPE      "SAMD MKRNB1500"
+#elif defined(ARDUINO_SAMD_MKRVIDOR4000)
+#define BOARD_TYPE      "SAMD MKRVIDOR4000"
+#elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
+#define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
+#elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD ADAFRUIT_ITSYBITSY_M4_EXPRESS"
+#elif defined(__SAMD21E18A__)
+#define BOARD_TYPE      "SAMD21E18A"
+#elif defined(__SAMD21G18A__)
+#define BOARD_TYPE      "SAMD21G18A"
+#elif defined(__SAMD51G19A__)
+#define BOARD_TYPE      "SAMD51G19A"
+#elif defined(__SAMD51J19A__)
+#define BOARD_TYPE      "SAMD51J19A"
+#elif defined(__SAMD51J20A__)
+#define BOARD_TYPE      "SAMD51J20A"
+#elif defined(__SAM3X8E__)
+#define BOARD_TYPE      "SAM3X8E"
+#elif defined(__CPU_ARC__)
+#define BOARD_TYPE      "CPU_ARC"
+#elif defined(__SAMD51__)
+#define BOARD_TYPE      "SAMD51"
 #else
-  // For Mega
-  #define BOARD_TYPE      "AVR Mega"
+#define BOARD_TYPE      "SAMD Unknown"
 #endif
+
+#elif ( defined(CORE_TEENSY) )
+// For Teensy 4.0
+#if defined(__IMXRT1062__)
+#define BOARD_TYPE      "TEENSY 4.0"
+#elif ( defined(__MKL26Z64__) || defined(ARDUINO_ARCH_AVR) )
+#define BOARD_TYPE      "TEENSY LC or 2.0"
+#else
+#define BOARD_TYPE      "TEENSY 3.X"
+#endif
+#else
+// For Mega
+#define BOARD_TYPE      "AVR Mega"
+#endif
+
 #include <SPI.h>
 
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
-#define USE_UIP_ETHERNET   true
+//#define USE_UIP_ETHERNET   true
 
 #include <EthernetWebServer.h>
+
+
 
 // Enter a MAC address and IP address for your controller below.
 
@@ -280,7 +306,7 @@ EthernetWebServer server(80);
 
 const int led = 13;
 
-void handleRoot() 
+void handleRoot()
 {
   server.send(200, "text/plain", "Hello from EthernetWebServer");
 }
@@ -291,11 +317,11 @@ void handleNotFound()
   message += "URI: ";
   message += server.uri();
   message += "\nMethod: ";
-  message += (server.method() == HTTP_GET)?"GET":"POST";
+  message += (server.method() == HTTP_GET) ? "GET" : "POST";
   message += "\nArguments: ";
   message += server.args();
   message += "\n";
-  for (uint8_t i=0; i<server.args(); i++)
+  for (uint8_t i = 0; i < server.args(); i++)
   {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
@@ -307,20 +333,25 @@ void setup(void)
 {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
-  delay(1000);
+  while (!Serial);
+
+  //delay(1000);
   Serial.println("\nStarting HelloServer on " + String(BOARD_TYPE));
 
   // start the ethernet connection and the server:
-  Ethernet.begin(mac, ip);
+  // Use Static IP
+  //Ethernet.begin(mac, ip);
+  // Use DHCP dynamic IP
+  Ethernet.begin(mac);
 
   server.on("/", handleRoot);
 
-  server.on("/inline", [](){
+  server.on("/inline", []() {
     server.send(200, "text/plain", "This works as well");
   });
 
   server.onNotFound(handleNotFound);
-  
+
   server.begin();
 
   Serial.print(F("HTTP EthernetWebServer is @ IP : "));
@@ -381,6 +412,9 @@ HTTP EthernetWebServer is @ IP : 192.168.2.100
 </g>
 </svg>
 ```
+#### New in v1.0.4
+
+1. Add support to ***SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)***.
 
 ### Version v1.0.3
 

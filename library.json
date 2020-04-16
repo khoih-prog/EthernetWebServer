@@ -1,13 +1,28 @@
 {
   "name": "EthernetWebServer",
-  "keywords": "WebServer, Ethernet, Arduino, Teensy, Ethernet shield",
-  "description": "Simple EthernetWebServer library for AVR, Teensy, SAM, SAMD, ESP boards running Ethernet shields",
+  "version": "1.0.4",
+  "keywords": "WebServer, Ethernet, Arduino, Teensy, SAMD, SAM DUE, AVR, Mega, Ethernet shield",
+  "description": "Simple EthernetWebServer library for AVR, Teensy, SAM DUE, SAMD, ESP boards running Ethernet shields",
+  "authors":
+  {
+    "name":  "Khoi Hoang",
+    "url":   "https://github.com/khoih-prog",
+    "maintainer": true
+  },  
   "repository":
   {
     "type": "git",
     "url": "https://github.com/khoih-prog/EthernetWebServer"
   },
-  "frameworks": "arduino",
+  "homepage": "https://github.com/khoih-prog/WiFiManager_NINA_Lite",
+  "export": {
+    "exclude": [
+      "linux",
+      "extras",
+      "tests"
+    ]
+  },  
+  "frameworks": "*",
   "platforms": "*",
-  "version": "1.0.3"
+  "examples": "examples/*/*/*.ino"
 }
