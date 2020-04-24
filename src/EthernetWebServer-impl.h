@@ -4,10 +4,10 @@
 
    EthernetWebServer is a library for the Ethernet shields to run WebServer
 
-   Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
+   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.4
+   Version: 1.0.5
 
    Original author:
    @file       Esp8266WebServer.h
@@ -20,6 +20,9 @@
     1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
     1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD21 boards
     1.0.4   K Hoang      16/04/2020 Add support to SAMD51 boards
+    1.0.5   K Hoang      24/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.
+                                    More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_impl_h
@@ -323,7 +326,7 @@ void EthernetWebServer::send(int code, const String& content_type, const String&
   send(code, (const char*)content_type.c_str(), content);
 }
 
-#if !( defined(CORE_TEENSY) || ETHERNET_USE_SAMD )
+#if !( defined(CORE_TEENSY) || (ETHERNET_USE_SAMD) || ETHERNET_USE_SAM_DUE || ETHERNET_USE_NRF528XX )
 void EthernetWebServer::send_P(int code, PGM_P content_type, PGM_P content) {
   size_t contentLength = 0;
 
