@@ -6,7 +6,7 @@
     Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
     Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
     Licensed under MIT license
-    Version: 1.0.5
+    Version: 1.0.6
 
     Copyright (c) 2015, Majenko Technologies
     All rights reserved.
@@ -43,9 +43,10 @@
     1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
     1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD21 boards
     1.0.4   K Hoang      16/04/2020 Add support to SAMD51 boards
-    1.0.5   K Hoang      24/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
-                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
+    1.0.5   K Hoang      24/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense,
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
+    1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards                                
  *****************************************************************************************************************************/
 /*
    The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
@@ -168,6 +169,14 @@
 #define ETHERNET_USE_ESP8266
 #define BOARD_TYPE      "ESP8266"
 
+#elif ( defined(ESP32) )
+// For ESP32
+#warning Use ESP32architecture
+#define ETHERNET_USE_ESP32
+#define BOARD_TYPE      "ESP32"
+
+#define W5500_RST_PORT   21
+
 #else
 // For Mega
 #define BOARD_TYPE      "AVR Mega"
@@ -214,7 +223,7 @@ void handleRoot()
   int hr = min / 60;
 
   snprintf(temp, 400,
-           "<html>\
+"<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
 <title>ESP8266 Demo</title>\
@@ -288,6 +297,19 @@ void setup(void)
   //delay(1000);
 
   Serial.println("\nStarting AdvancedServer on " + String(BOARD_TYPE));
+
+  // Just info to know how to connect correctly
+  Serial.println("=========================");
+  Serial.println("Used/default SPI pinout:");
+  Serial.print("MOSI:");
+  Serial.println(MOSI);
+  Serial.print("MISO:");
+  Serial.println(MISO);
+  Serial.print("SCK:");
+  Serial.println(SCK);
+  Serial.print("SS:");
+  Serial.println(SS);
+  Serial.println("=========================");
 
   // start the ethernet connection and the server:
   // Use Static IP

@@ -6,10 +6,14 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/EthernetWebServer.svg)](http://github.com/khoih-prog/EthernetWebServer/issues)
 
+#### New in v1.0.6
+
+1. Add support to ***ESP32 and ESP8266*** boards.
+
 #### New in v1.0.5
 
 1. Add support to ***nRF52*** boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.***
-2. Support any future custom Ethernet library that meets the no-compiling-error requirements. Currently ***Ethernet2, EThernet3, EthernetLarge*** libraries are supported. ***Ethernet_Shield_W5200, EtherCard, EtherSia*** libraries are not supported.
+2. Support any future custom Ethernet library that meets the no-compiling-error requirements. Currently ***Ethernet2, EThernet3, EthernetLarge*** libraries are supported. ***Ethernet_Shield_W5200, EtherCard, EtherSia*** libraries are not supported now.
 
 #### New in v1.0.4
 
@@ -110,7 +114,7 @@ For example, Ethernet_XYZ library uses ***Ethernet_XYZ.h***
 
 #### Important:
 
-- The ***Ethernet_Shield_W5200, EtherCar, EtherSia  libraries are not supported***. Don't use unless you know how to modify those libraries.
+- The ***Ethernet_Shield_W5200, EtherCard, EtherSia  libraries are not supported***. Don't use unless you know how to modify those libraries.
 - Requests to support for any future custom Ethernet library will be ignored. ***Use at your own risk***.
 
 
@@ -295,6 +299,13 @@ Please take a look at other examples as well.
 #undef ETHERNET_USE_NRF528XX
 #endif
 #define ETHERNET_USE_NRF528XX      true
+
+//This is workaround for NINA_B302_ublox
+// Change the pin
+#define ENC28J60_CONTROL_CS         10
+#define ENC28J60_USE_SPILIB         true
+#warning Use nRF52 with SPI pins defined
+
 #endif
 
 #if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
@@ -392,6 +403,14 @@ Please take a look at other examples as well.
 #define ETHERNET_USE_ESP8266
 #define BOARD_TYPE      "ESP8266"
 
+#elif ( defined(ESP32) )
+// For ESP32
+#warning Use ESP32 architecture
+#define ETHERNET_USE_ESP32
+#define BOARD_TYPE      "ESP32"
+
+#define W5500_RST_PORT   21
+
 #else
 // For Mega
 #define BOARD_TYPE      "AVR Mega"
@@ -402,9 +421,9 @@ Please take a look at other examples as well.
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 
-//#define USE_UIP_ETHERNET   true
+#define USE_UIP_ETHERNET   false  //true
 
-// Ethernet_Shield_W5200, EtherCar, EtherSia not supported
+// Ethernet_Shield_W5200, EtherCard, EtherSia not supported
 // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
 // Otherwise, standard Ethernet library will be used for W5x00
 //#define USE_CUSTOM_ETHERNET     true
@@ -429,7 +448,9 @@ const int led = 13;
 
 void handleRoot()
 {
-  server.send(200, "text/plain", "Hello from EthernetWebServer");
+  String html = "Hello from EthernetWebServer running on " + String(BOARD_TYPE); 
+
+  server.send(200, "text/plain", html);
 }
 
 void handleNotFound()
@@ -459,11 +480,24 @@ void setup(void)
   //delay(1000);
   Serial.println("\nStarting HelloServer on " + String(BOARD_TYPE));
 
+  // Just info to know how to connect correctly
+  Serial.println("=========================");
+  Serial.println("Used/default SPI pinout:");
+  Serial.print("MOSI:");
+  Serial.println(MOSI);
+  Serial.print("MISO:");
+  Serial.println(MISO);
+  Serial.print("SCK:");
+  Serial.println(SCK);
+  Serial.print("SS:");
+  Serial.println(SS);
+  Serial.println("=========================");
+
   // start the ethernet connection and the server:
   // Use Static IP
-  //Ethernet.begin(mac, ip);
+  Ethernet.begin(mac, ip);
   // Use DHCP dynamic IP
-  Ethernet.begin(mac);
+  //Ethernet.begin(mac);
 
   server.on("/", handleRoot);
 
@@ -533,6 +567,9 @@ HTTP EthernetWebServer is @ IP : 192.168.2.100
 </g>
 </svg>
 ```
+#### New in v1.0.6
+
+1. Add support to ***ESP32 and ESP8266*** boards.
 
 #### New in v1.0.5
 
@@ -569,12 +606,14 @@ The library supports
 1. Bug Searching and Killing
 2. Add SSL/TLS Client and Server support
 3. Support more types of boards using Ethernet shields.
+4. Support more non-compatible Ethernet Libraries such as Ethernet_Shield_W5200, EtherCard, EtherSia
 
 
 ### Contributions and thanks
 1. Forked from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 2. [jandrassy](https://github.com/jandrassy) for [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
 3. Thanks to [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Box B302 running as nRF52840***, has never been started and finished.
+4. Thanks to [Vladimir](https://github.com/workpage2) to initiate the work on ESP32 in [Spiffs not work Issue #2](https://github.com/khoih-prog/EthernetWebServer/issues/2)
 
 ## Contributing
 

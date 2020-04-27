@@ -138,11 +138,17 @@
 #define BOARD_TYPE      "TEENSY 3.X"
 #endif
 
-#elif ( defined(ESP8266) )
+#elif ( defined(ESP8266) ) 
 // For ESP8266
 #warning Use ESP8266 architecture
 #define ETHERNET_USE_ESP8266
 #define BOARD_TYPE      "ESP8266"
+
+#elif ( defined(ESP32) )
+// For ESP32
+#warning Use ESP32architecture
+#define ETHERNET_USE_ESP32
+#define BOARD_TYPE      "ESP32"
 
 #else
 // For Mega
@@ -188,6 +194,20 @@ void setup()
   //delay(1000);
   Serial.println("\nStarting HTTPBasicAuth on " + String(BOARD_TYPE));
 
+#if ( defined(ESP32) ||  defined(ESP8266)  )
+  Serial.println("Used/default ESP32/ESP8266 pinout:");
+  Serial.print("MOSI:");
+  Serial.println(MOSI);
+  Serial.print("MISO:");
+  Serial.println(MISO);
+  Serial.print("SCK:");
+  Serial.println(SCK);
+  Serial.print("SS:");
+  Serial.println(SS);
+#endif
+
+  Serial.println("Starting ethernet");
+  
   // start the ethernet connection and the server:
   // Use Static IP
   Ethernet.begin(mac, ip);
@@ -211,6 +231,10 @@ void setup()
   Serial.print(F("Open http://"));
   Serial.print(Ethernet.localIP());
   Serial.println(F("/ in your browser to see it working"));
+  Serial.print(F("Using username : "));
+  Serial.print(www_username);
+  Serial.print(F(" and password : "));
+  Serial.println(www_password);
 }
 
 void loop()

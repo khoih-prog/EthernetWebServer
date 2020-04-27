@@ -6,7 +6,7 @@
    Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.4
+   Version: 1.0.6
 
    Original author:
    @file       Esp8266WebServer.h
@@ -22,6 +22,7 @@
     1.0.5   K Hoang      24/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
+    1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards                                
  *****************************************************************************************************************************/
 /*
     The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
@@ -144,6 +145,12 @@
 #define ETHERNET_USE_ESP8266
 #define BOARD_TYPE      "ESP8266"
 
+#elif ( defined(ESP32) )
+// For ESP32
+#warning Use ESP32 architecture
+#define ETHERNET_USE_ESP32
+#define BOARD_TYPE      "ESP32"
+
 #else
 // For Mega
 #define BOARD_TYPE      "AVR Mega"
@@ -233,7 +240,7 @@ void handleLogin()
     Serial.println(F("Log in Failed"));
   }
 
-  String content = "<html><body><form action='/login' method='POST'>To log in, please use : admin/admin<br>";
+  String content = "<html><body><form action='/login' method='POST'>To log in, please use : admin/password<br>";
   content += "User:<input type='text' name='USERNAME' placeholder='user name'><br>";
   content += "Password:<input type='password' name='PASSWORD' placeholder='password'><br>";
   content += "<input type='submit' name='SUBMIT' value='Submit'></form>" + msg + "<br>";
@@ -256,7 +263,7 @@ void handleRoot()
     return;
   }
 
-  String content = "<html><body><H2>Hello, you're connected to EthernetWebServer!</H2><br>";
+  String content = "<html><body><H2>Hello, you're connected to EthernetWebServer running on " + String(BOARD_TYPE) + "!</H2><br>";
 
   if (server.hasHeader("User-Agent"))
   {
@@ -296,6 +303,19 @@ void setup(void)
   //delay(1000);
   Serial.println("\nStarting SimpleAuthentication on " + String(BOARD_TYPE));
 
+  // Just info to know how to connect correctly
+  Serial.println("=========================");
+  Serial.println("Used/default SPI pinout:");
+  Serial.print("MOSI:");
+  Serial.println(MOSI);
+  Serial.print("MISO:");
+  Serial.println(MISO);
+  Serial.print("SCK:");
+  Serial.println(SCK);
+  Serial.print("SS:");
+  Serial.println(SS);
+  Serial.println("=========================");
+  
   // start the ethernet connection and the server:
   // Use Static IP
   Ethernet.begin(mac, ip);

@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.5
+   Version: 1.0.6
 
    Original author:
    @file       Esp8266WebServer.h
@@ -21,8 +21,9 @@
     1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD21 boards
     1.0.4   K Hoang      16/04/2020 Add support to SAMD51 boards
     1.0.5   K Hoang      24/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
-                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
+    1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards    
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_Debug_H

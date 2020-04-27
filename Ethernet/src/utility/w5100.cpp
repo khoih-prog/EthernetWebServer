@@ -1,12 +1,33 @@
-/*
- * Copyright 2018 Paul Stoffregen
- * Copyright (c) 2010 by Cristian Maglie <c.maglie@bug.st>
- *
- * This file is free software; you can redistribute it and/or modify
- * it under the terms of either the GNU General Public License version 2
- * or the GNU Lesser General Public License version 2.1, both as
- * published by the Free Software Foundation.
- */
+/****************************************************************************************************************************
+   w5100.cpp - Driver for W5x00
+
+   EthernetWebServer is a library for the Ethernet shields to run WebServer
+
+   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
+   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
+   Licensed under MIT license
+   Version: 1.0.6
+
+   Copyright 2018 Paul Stoffregen
+   Copyright (c) 2010 by Cristian Maglie <c.maglie@bug.st>
+ 
+   This file is free software; you can redistribute it and/or modify
+   it under the terms of either the GNU General Public License version 2
+   or the GNU Lesser General Public License version 2.1, both as
+   published by the Free Software Foundation.
+
+   Version Modified By   Date      Comments
+   ------- -----------  ---------- -----------
+    1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
+    1.0.1   K Hoang      20/02/2020 Add support to lambda functions
+    1.0.2   K Hoang      20/02/2020 Add support to UIPEthernet library for ENC28J60
+    1.0.3   K Hoang      23/02/2020 Add support to SAM DUE / SAMD21 boards
+    1.0.4   K Hoang      16/04/2020 Add support to SAMD51 boards
+    1.0.5   K Hoang      24/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
+                                    More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
+    1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards    
+ *****************************************************************************************************************************/
 
 #include <Arduino.h>
 #include "Ethernet.h"
@@ -20,12 +41,21 @@
 // If variant.h or other headers specifically define the
 // default SS pin for ethernet, use it.
 #if defined(PIN_SPI_SS_ETHERNET_LIB)
+
+
 #define SS_PIN_DEFAULT  PIN_SPI_SS_ETHERNET_LIB
+
+//KH
+#warning w5100.cpp Use PIN_SPI_SS_ETHERNET_LIB defined, change SS_PIN_DEFAULT to PIN_SPI_SS_ETHERNET_LIB
+
 
 // MKR boards default to pin 5 for MKR ETH
 // Pins 8-10 are MOSI/SCK/MISO on MRK, so don't use pin 10
 #elif defined(USE_ARDUINO_MKR_PIN_LAYOUT) || defined(ARDUINO_SAMD_MKRZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRWAN1300)
 #define SS_PIN_DEFAULT  5
+
+//KH
+#warning w5100.cpp Use MKR, change SS_PIN_DEFAULT to 5
 
 // For boards using AVR, assume shields with SS on pin 10
 // will be used.  This allows for Arduino Mega (where
@@ -34,16 +64,59 @@
 #elif defined(__AVR__)
 #define SS_PIN_DEFAULT  10
 
+//KH
+#warning w5100.cpp Use __AVR__, change SS_PIN_DEFAULT to 10
+
 // If variant.h or other headers define these names
 // use them if none of the other cases match
 #elif defined(PIN_SPI_SS)
+
+#if defined(__SAMD21G18A__)
+//10 - 4 all not OK for Nano 33 IoT !!!
+#warning w5100.cpp Use __SAMD21G18A__, change SS_PIN_DEFAULT to 10
+#define SS_PIN_DEFAULT  10
+#else
 #define SS_PIN_DEFAULT  PIN_SPI_SS
+
+//KH
+#warning w5100.cpp Use PIN_SPI_SS defined, change SS_PIN_DEFAULT to PIN_SPI_SS
+#endif
+
 #elif defined(CORE_SS0_PIN)
 #define SS_PIN_DEFAULT  CORE_SS0_PIN
+
+//KH
+#warning w5100.cpp Use CORE_SS0_PIN defined, change SS_PIN_DEFAULT to CORE_SS0_PIN
+
+//KH for Nano33 IoT
+#elif defined(__SAMD21G18A__)
+//10, 9 not OK
+#warning w5100.cpp Use __SAMD21G18A__, change SS_PIN_DEFAULT to 8
+#define SS_PIN_DEFAULT  8
+///////
+
+//KH for ESP32
+#elif defined(ESP32)
+//pin SS already defined in ESP32 as pin 5
+#warning w5100.cpp Use ESP32, change SS_PIN_DEFAULT to SS(5), MOSI(23), MISO(19), SCK(18)
+#define SS_PIN_DEFAULT  SS
+///////
+
+//KH for ESP8266
+#elif defined(ESP8266)
+//pin SS already defined in ESP8266 as pin 15
+#warning w5100.cpp Use ESP8266, change SS_PIN_DEFAULT to SS(15), MOSI(13), MISO(12), SCK(14)
+#define SS_PIN_DEFAULT  SS
+
+///////
 
 // As a final fallback, use pin 10
 #else
 #define SS_PIN_DEFAULT  10
+
+//KH
+#warning w5100.cpp Use fallback, change SS_PIN_DEFAULT to 10
+
 #endif
 
 // W5100 controller instance
@@ -80,6 +153,7 @@ W5100Class W5100;
 #elif defined(__SAMD21G18A__)
   volatile uint32_t * W5100Class::ss_pin_reg;
   uint32_t W5100Class::ss_pin_mask;
+  #warning w5100.cpp Use __SAMD21G18A__
 #endif
 
 
@@ -99,7 +173,10 @@ uint8_t W5100Class::init(void)
 	// until the reset pulse is ended.  If your hardware has a shorter
 	// reset time, this can be edited or removed.
 	delay(560);
-	//Serial.println("w5100 init");
+	
+	//KH
+	Serial.print("w5100 init, using SS_PIN_DEFAULT = ");
+	Serial.println(SS_PIN_DEFAULT);
 
 	SPI.begin();
 	initSS();
@@ -174,17 +251,20 @@ uint8_t W5100Class::init(void)
 		CH_BASE_MSB = 0x04;
 
 #ifdef ETHERNET_LARGE_BUFFERS
-#if MAX_SOCK_NUM <= 1
-		SSIZE = 8192;
-		writeTMSR(0x03);
-		writeRMSR(0x03);
-#else
-		SSIZE = 4096;
-		writeTMSR(0x0A);
-		writeRMSR(0x0A);
-#endif
+
+  #if MAX_SOCK_NUM <= 1
+		  SSIZE = 8192;
+		  writeTMSR(0x03);
+		  writeRMSR(0x03);
+  #else
+		  SSIZE = 4096;
+		  writeTMSR(0x0A);
+		  writeRMSR(0x0A);
+  #endif
+
 		SMASK = SSIZE - 1;
 #else
+    
 		writeTMSR(0x55);
 		writeRMSR(0x55);
 #endif

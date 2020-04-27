@@ -1,8 +1,8 @@
 {
   "name": "EthernetWebServer",
-  "version": "1.0.5",
-  "keywords": "WebServer, Ethernet, Arduino, Teensy, SAMD, SAM DUE, AVR, Mega, nRF52, Ethernet shield",
-  "description": "Simple EthernetWebServer library for AVR, Teensy, SAM DUE, SAMD, ESP, nRF52 boards running Ethernet shields",
+  "version": "1.0.6",
+  "keywords": "WebServer, Ethernet, Arduino, Teensy, SAMD, SAM DUE, AVR, Mega, nRF52, ESP32, ESP8266, Ethernet shield",
+  "description": "Simple EthernetWebServer library for AVR, Teensy, SAM DUE, SAMD, ESP, nRF52, ESP32, ESP8266 boards running Ethernet shields",
   "authors":
   {
     "name":  "Khoi Hoang",
