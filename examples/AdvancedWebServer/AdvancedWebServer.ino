@@ -6,7 +6,7 @@
     Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
     Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
     Licensed under MIT license
-    Version: 1.0.6
+    Version: 1.0.7
 
     Copyright (c) 2015, Majenko Technologies
     All rights reserved.
@@ -46,7 +46,8 @@
     1.0.5   K Hoang      24/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense,
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
-    1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards                                
+    1.0.6   K Hoang      27/04/2020 Add W5x00 support to ESP32/ESP8266 boards
+    1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards.                            
  *****************************************************************************************************************************/
 /*
    The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
@@ -187,7 +188,7 @@
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 
-//#define USE_UIP_ETHERNET   true
+#define USE_UIP_ETHERNET   true
 
 // Ethernet_Shield_W5200, EtherCar, EtherSia not supported
 // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
@@ -196,6 +197,7 @@
 //#include <Ethernet2.h>
 //#include <Ethernet3.h>
 //#include <EthernetLarge.h>
+//#include <Ethernet_ESP8266.h>
 
 #include <EthernetWebServer.h>
 

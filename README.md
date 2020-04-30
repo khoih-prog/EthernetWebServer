@@ -6,9 +6,13 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/EthernetWebServer.svg)](http://github.com/khoih-prog/EthernetWebServer/issues)
 
+#### New in v1.0.7
+
+1. Add ENC28J60 support to ***ESP32 and ESP8266*** boards.
+
 #### New in v1.0.6
 
-1. Add support to ***ESP32 and ESP8266*** boards.
+1. Add W5x00 nsupport to ***ESP32 and ESP8266*** boards.
 
 #### New in v1.0.5
 
@@ -58,13 +62,20 @@ Another way is to use `Arduino Library Manager` or [![arduino-library-badge](htt
 ### Important notes
 
 1. If your application requires 2K+ HTML page, the current [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) must be modified if you are using W5200/W5500 Ethernet shields. W5100 is not supported for 2K+ buffer.
+
 2. To fix [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet), just copy these following files into the [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) directory to overwrite the old files:
-- [Ethernet.h](Ethernet/src/Ethernet.h)
-- [EthernetServer.cpp](Ethernet/src/EthernetServer.cpp)
-- [w5100.cpp](Ethernet/src/utility/w5100.cpp)
+- [Ethernet.h](LibraryPatches/Ethernet/src/Ethernet.h)
+- [EthernetServer.cpp](LibraryPatches/Ethernet/src/EthernetServer.cpp)
+- [w5100.cpp](LibraryPatches/Ethernet/src/utility/w5100.cpp)
 
+3. To fix [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet), just copy these following files into the [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) directory to overwrite the old files:
+- [Enc28J60Network.h](LibraryPatches/utility/Enc28J60Network.h)
+- [Enc28J60Network.cpp](LibraryPatches/utility/Enc28J60Network.cpp)
 
-3. ***How to select which built-in Ethernet or shield to use***
+4. To fix [`ESP32`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.12/hardware/espressif/cores/esp32) to overwrite the old file:
+- [Server.h](LibraryPatches/esp32/cores/esp32/Server.h)
+
+5. ***How to select which built-in Ethernet or shield to use***
 
 - Standard Ethernet library is used by default, just check in the sketch these line are commented out
 
@@ -567,9 +578,14 @@ HTTP EthernetWebServer is @ IP : 192.168.2.100
 </g>
 </svg>
 ```
+
+#### New in v1.0.7
+
+1. Add ENC28J60 support to ***ESP32 and ESP8266*** boards.
+
 #### New in v1.0.6
 
-1. Add support to ***ESP32 and ESP8266*** boards.
+1. Add W5x00 support to ***ESP32 and ESP8266*** boards.
 
 #### New in v1.0.5
 
@@ -614,6 +630,7 @@ The library supports
 2. [jandrassy](https://github.com/jandrassy) for [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
 3. Thanks to [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Box B302 running as nRF52840***, has never been started and finished.
 4. Thanks to [Vladimir](https://github.com/workpage2) to initiate the work on ESP32 in [Spiffs not work Issue #2](https://github.com/khoih-prog/EthernetWebServer/issues/2)
+5. Thanks to the collaboration of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for working with, developing, debugging and testing. See [U-BLOX NINA W102 running ENC28J60](https://u-blox-ethernet-ninaw.blogspot.com/)
 
 ## Contributing
 
