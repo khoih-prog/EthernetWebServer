@@ -662,9 +662,8 @@ The library supports
 ### Contributions and thanks
 1. Forked from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 2. [jandrassy](https://github.com/jandrassy) for [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
-3. Thanks to [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Box B302 running as nRF52840***, has never been started and finished.
+3. Thanks to [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Box B302 running as nRF52840***, has never been started and finished. Also see [ESP32-based U-BLOX NINA W102 running ENC28J60](https://u-blox-ethernet-ninaw.blogspot.com/).
 4. Thanks to [Vladimir](https://github.com/workpage2) to initiate the work on ESP32 in [Spiffs not work Issue #2](https://github.com/khoih-prog/EthernetWebServer/issues/2)
-5. Thanks to the collaboration of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for working with, developing, debugging and testing. See [U-BLOX NINA W102 running ENC28J60](https://u-blox-ethernet-ninaw.blogspot.com/)
 
 ## Contributing
 
