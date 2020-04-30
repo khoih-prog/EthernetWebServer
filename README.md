@@ -69,8 +69,8 @@ Another way is to use `Arduino Library Manager` or [![arduino-library-badge](htt
 - [w5100.cpp](LibraryPatches/Ethernet/src/utility/w5100.cpp)
 
 3. To fix [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet), just copy these following files into the [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) directory to overwrite the old files:
-- [Enc28J60Network.h](LibraryPatches/utility/Enc28J60Network.h)
-- [Enc28J60Network.cpp](LibraryPatches/utility/Enc28J60Network.cpp)
+- [Enc28J60Network.h](LibraryPatches/UIPEthernet/utility/Enc28J60Network.h)
+- [Enc28J60Network.cpp](LibraryPatches/UIPEthernet/utility/Enc28J60Network.cpp)
 
 4. To fix [`ESP32`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.12/hardware/espressif/cores/esp32) to overwrite the old file:
 - [Server.h](LibraryPatches/esp32/cores/esp32/Server.h)
@@ -537,7 +537,6 @@ The following are debug terminal output and screen shot when running example [Ad
 </p>
 
 ```
-
 Starting AdvancedServer on TEENSY 4.0
 HTTP EthernetWebServer is @ IP : 192.168.2.100
 [ETHERNET_WEBSERVER] send1: len =  289
@@ -577,6 +576,41 @@ HTTP EthernetWebServer is @ IP : 192.168.2.100
 <line x1="290" y1="76" x2="300" y2="121" stroke-width="1" />
 </g>
 </svg>
+```
+
+and the terminal output of ESP32 running a [ENC28J60_WM_Config example](https://github.com/khoih-prog/BlynkEthernet_WM/tree/master/examples/ENC28J60_WM_Config) of [BlynkEthernet_WM Library](https://github.com/khoih-prog/BlynkEthernet_WM)
+
+```cpp
+Start ENC28J60_WM_Config on ESP32
+[38] EEPROMsz:1024
+[38] CCSum=0x29f2,RCSum=0x29f2
+[38] CrCCsum=0,CrRCsum=0
+[38] Hdr=ENC28J60,BName=ESP32-ENC28J60-WM
+[38] Svr=account.duckdns.org,Tok=token
+[45] Svr1=account.ddns.net,Tok1=token1
+[51] Prt=8080,SIP=blank
+[53] MAC:FE-80-D6-B4-FC-EE
+ENC28J60_CONTROL_CS =13
+SS =5
+SPI_MOSI =23
+SPI_MISO =19
+SPI_SCK =18
+[5332] IP:192.168.2.103
+[5332] bg:ECon.TryB
+[5332] 
+    ___  __          __
+   / _ )/ /_ _____  / /__
+  / _  / / // / _ \/  '_/
+ /____/_/\_, /_//_/_/\_\
+        /___/ v0.6.1 on ESP32
+
+[5343] BlynkArduinoClient.connect: Connecting to account.duckdns.org:8080
+[6454] Ready (ping: 37ms).
+[6522] Connected to Blynk Server = account.duckdns.org, Token = token
+[6522] bg:EBCon
+Conn2Blynk: server = account.duckdns.org, port = 8080
+Token = token, IP = 192.168.2.103
+BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 ```
 
 #### New in v1.0.7
