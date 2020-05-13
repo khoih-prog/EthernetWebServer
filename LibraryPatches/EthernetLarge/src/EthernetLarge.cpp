@@ -146,7 +146,10 @@ void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress g
 
 void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet)
 {
-	if (W5100.init() == 0) return;
+	//if (W5100.init() == 0) return;
+	// KH
+	if (W5100.init(MAX_SOCK_NUM, _pinCS) == 0) 
+	
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5100.setMACAddress(mac);
 #ifdef ESP8266
