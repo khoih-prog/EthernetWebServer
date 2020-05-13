@@ -8,7 +8,7 @@
 
 #### New in v1.0.8
 
-1. Fix W5x00 support for ESP8266 boards.
+1. Fix W5x00 support for ESP8266 and many more boards.
 
 #### New in v1.0.7
 
