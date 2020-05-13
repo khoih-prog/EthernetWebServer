@@ -32,7 +32,7 @@
  *****************************************************************************************************************************/
 
 #include <Arduino.h>
-#include "Ethernet.h"
+#include "EthernetLarge.h"
 #include "w5100.h"
 
 #define W5100_DEBUG   1
@@ -153,6 +153,7 @@ W5100Class W5100;
 // KH
 uint8_t W5100Class::init(uint8_t socketNumbers, uint8_t new_ss_pin)
 {
+  // KH
 	uint8_t i;
 
 	if (initialized) return 1;
@@ -168,7 +169,7 @@ uint8_t W5100Class::init(uint8_t socketNumbers, uint8_t new_ss_pin)
 	delay(560);
 	
 	W5100Class::ss_pin = new_ss_pin;
-
+	
 #if ( W5100_DEBUG	> 0 )
 	//KH
 	Serial.print("\nW5100 init, using SS_PIN_DEFAULT = ");
@@ -216,16 +217,17 @@ uint8_t W5100Class::init(uint8_t socketNumbers, uint8_t new_ss_pin)
 			writeSnRX_SIZE(i, 0);
 			writeSnTX_SIZE(i, 0);
 		}
-
+		
 #if ( W5100_DEBUG	> 0 )		
 		Serial.print("W5100::init: W5200, SSIZE =");
     Serial.println(SSIZE);
 #endif
-    
+		
 	// Try W5500 next.  Wiznet finally seems to have implemented
 	// SPI well with this chip.  It appears to be very resilient,
 	// so try it after the fragile W5200
-	} else if (isW5500()) 
+	} 
+	else if (isW5500()) 
 	{
 		CH_BASE_MSB = 0x10;
 #ifdef ETHERNET_LARGE_BUFFERS
@@ -250,12 +252,13 @@ uint8_t W5100Class::init(uint8_t socketNumbers, uint8_t new_ss_pin)
 			writeSnTX_SIZE(i, 0);
 		}
 #endif
-
+		
 #if ( W5100_DEBUG	> 0 )
     Serial.print("W5100::init: W5500, SSIZE =");
     Serial.println(SSIZE);
 #endif
-  
+		
+
 	// Try W5100 last.  This simple chip uses fixed 4 byte frames
 	// for every 8 bit access.  Terribly inefficient, but so simple
 	// it recovers from "hearing" unsuccessful W5100 or W5200
@@ -264,22 +267,22 @@ uint8_t W5100Class::init(uint8_t socketNumbers, uint8_t new_ss_pin)
 	} else if (isW5100()) 
 	{
 		CH_BASE_MSB = 0x04;
-
 #ifdef ETHERNET_LARGE_BUFFERS
-
-  #if MAX_SOCK_NUM <= 1
-		  SSIZE = 8192;
-		  writeTMSR(0x03);
-		  writeRMSR(0x03);
-  #else
-		  SSIZE = 4096;
-		  writeTMSR(0x0A);
-		  writeRMSR(0x0A);
-  #endif
-
+#if MAX_SOCK_NUM <= 1
+		SSIZE = 8192;
+		writeTMSR(0x03);
+		writeRMSR(0x03);
+#elif MAX_SOCK_NUM <= 2
+		SSIZE = 4096;
+		writeTMSR(0x0A);
+		writeRMSR(0x0A);
+#else
+		SSIZE = 2048;
+		writeTMSR(0x55);
+		writeRMSR(0x55);
+#endif
 		SMASK = SSIZE - 1;
 #else
-    
 		writeTMSR(0x55);
 		writeRMSR(0x55);
 #endif
@@ -288,7 +291,7 @@ uint8_t W5100Class::init(uint8_t socketNumbers, uint8_t new_ss_pin)
   Serial.print("W5100::init: W5100, SSIZE =");
   Serial.println(SSIZE);
 #endif
-  
+
 	// No hardware seems to be present.  Or it could be a W5200
 	// that's heard other SPI communication if its chip select
 	// pin wasn't high when a SD card or other SPI chip was used.
@@ -303,7 +306,6 @@ uint8_t W5100Class::init(uint8_t socketNumbers, uint8_t new_ss_pin)
 		SPI.endTransaction();
 		return 0; // no known chip is responding :-(
 	}
-	
 	SPI.endTransaction();
 	initialized = true;
 	return 1; // successful init
@@ -337,6 +339,7 @@ uint8_t W5100Class::softReset(void)
 	} while (++count < 20);
 	return 0;
 }
+
 
 uint8_t W5100Class::isW5100(void)
 {

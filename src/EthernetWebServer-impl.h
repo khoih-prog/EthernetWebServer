@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.7
+   Version: 1.0.8
 
    Original author:
    @file       Esp8266WebServer.h
@@ -24,7 +24,8 @@
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
     1.0.6   K Hoang      27/04/2020 Add W5x00 support to ESP32/ESP8266 boards
-    1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards       
+    1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards  
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards. 
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_impl_h

@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-   Ethernet.h
+   EthernetLarge.h
 
    EthernetWebServer is a library for the Ethernet shields to run WebServer
 
@@ -41,7 +41,7 @@
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
     1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards. Sync with ESP8266 core 2.7.1. 
  *****************************************************************************************************************************/
- 
+
 #ifndef ethernet_h_
 #define ethernet_h_
 
@@ -57,11 +57,7 @@
 // up to 4 sockets.  W5200 & W5500 can have up to 8 sockets.  Several bytes
 // of RAM are used for each socket.  Reducing the maximum can save RAM, but
 // you are limited to fewer simultaneous connections.
-#if defined(RAMEND) && defined(RAMSTART) && ((RAMEND - RAMSTART) <= 2048)
-#define MAX_SOCK_NUM 2      //Reduce MAX_SOCK_NUM to 2 from 4, to increase buffer from 2k to 4K
-#else
-#define MAX_SOCK_NUM 4      //Reduce MAX_SOCK_NUM to 4 from 8, to increase buffer from 2k to 4K
-#endif
+#define MAX_SOCK_NUM 2
 
 // By default, each socket uses 2K buffers inside the Wiznet chip.  If
 // MAX_SOCK_NUM is set to fewer than the chip's maximum, uncommenting
@@ -69,8 +65,6 @@
 // can really help with UDP protocols like Artnet.  In theory larger
 // buffers should allow faster TCP over high-latency links, but this
 // does not always seem to work in practice (maybe Wiznet bugs?)
-//
-//KH, to increase buffer size for W5x00 to min 4K
 #define ETHERNET_LARGE_BUFFERS
 
 
@@ -120,7 +114,7 @@ public:
 
   uint8_t softreset(); // can set only after Ethernet.begin
   void hardreset(); // You need to set the Rst pin
-  
+
 	// Initialise the Ethernet shield to use the provided MAC address and
 	// gain the rest of the configuration through DHCP.
 	// Returns 0 if the DHCP configuration failed, and 1 if it succeeded
@@ -129,18 +123,18 @@ public:
 	EthernetLinkStatus linkStatus();
 	EthernetHardwareStatus hardwareStatus();
 
-	// Manual configuration
-	 void begin(uint8_t *mac, IPAddress ip);
-	 void begin(uint8_t *mac, IPAddress ip, IPAddress dns);
-	 void begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway);
-	 void begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet);
-	 void init(uint8_t sspin = 10);
+	// Manaul configuration
+	void begin(uint8_t *mac, IPAddress ip);
+	void begin(uint8_t *mac, IPAddress ip, IPAddress dns);
+	void begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway);
+	void begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet);
+	void init(uint8_t sspin = 10);
 
-	 void MACAddress(uint8_t *mac_address);
-	 IPAddress localIP();
-	 IPAddress subnetMask();
-	 IPAddress gatewayIP();
-	 IPAddress dnsServerIP() { return _dnsServerAddress; }
+	void MACAddress(uint8_t *mac_address);
+	IPAddress localIP();
+	IPAddress subnetMask();
+	IPAddress gatewayIP();
+	IPAddress dnsServerIP() { return _dnsServerAddress; }
 
 	void setMACAddress(const uint8_t *mac_address);
 	void setLocalIP(const IPAddress local_ip);
@@ -155,38 +149,38 @@ public:
 	friend class EthernetUDP;
 private:
 	// Opens a socket(TCP or UDP or IP_RAW mode)
-	 uint8_t socketBegin(uint8_t protocol, uint16_t port);
-	 uint8_t socketBeginMulticast(uint8_t protocol, IPAddress ip,uint16_t port);
-	 uint8_t socketStatus(uint8_t s);
+	uint8_t socketBegin(uint8_t protocol, uint16_t port);
+	uint8_t socketBeginMulticast(uint8_t protocol, IPAddress ip,uint16_t port);
+	uint8_t socketStatus(uint8_t s);
 	// Close socket
-	 void socketClose(uint8_t s);
+	void socketClose(uint8_t s);
 	// Establish TCP connection (Active connection)
-	 void socketConnect(uint8_t s, uint8_t * addr, uint16_t port);
+	void socketConnect(uint8_t s, uint8_t * addr, uint16_t port);
 	// disconnect the connection
-	 void socketDisconnect(uint8_t s);
+	void socketDisconnect(uint8_t s);
 	// Establish TCP connection (Passive connection)
-	 uint8_t socketListen(uint8_t s);
+	uint8_t socketListen(uint8_t s);
 	// Send data (TCP)
-	 uint16_t socketSend(uint8_t s, const uint8_t * buf, uint16_t len);
-	 uint16_t socketSendAvailable(uint8_t s);
+	uint16_t socketSend(uint8_t s, const uint8_t * buf, uint16_t len);
+	uint16_t socketSendAvailable(uint8_t s);
 	// Receive data (TCP)
-	 int socketRecv(uint8_t s, uint8_t * buf, int16_t len);
-	 uint16_t socketRecvAvailable(uint8_t s);
-	 uint8_t socketPeek(uint8_t s);
+	int socketRecv(uint8_t s, uint8_t * buf, int16_t len);
+	uint16_t socketRecvAvailable(uint8_t s);
+	uint8_t socketPeek(uint8_t s);
 	// sets up a UDP datagram, the data for which will be provided by one
 	// or more calls to bufferData and then finally sent with sendUDP.
 	// return true if the datagram was successfully set up, or false if there was an error
-	 bool socketStartUDP(uint8_t s, uint8_t* addr, uint16_t port);
+	bool socketStartUDP(uint8_t s, uint8_t* addr, uint16_t port);
 	// copy up to len bytes of data from buf into a UDP datagram to be
 	// sent later by sendUDP.  Allows datagrams to be built up from a series of bufferData calls.
 	// return Number of bytes successfully buffered
-	 uint16_t socketBufferData(uint8_t s, uint16_t offset, const uint8_t* buf, uint16_t len);
+	uint16_t socketBufferData(uint8_t s, uint16_t offset, const uint8_t* buf, uint16_t len);
 	// Send a UDP datagram built up from a sequence of startUDP followed by one or more
 	// calls to bufferData.
 	// return true if the datagram was successfully sent, or false if there was an error
-	 bool socketSendUDP(uint8_t s);
+	bool socketSendUDP(uint8_t s);
 	// Initialize the "random" source port number
-	 void socketPortRand(uint16_t n);
+	void socketPortRand(uint16_t n);
 };
 
 extern EthernetClass Ethernet;
@@ -258,17 +252,15 @@ public:
 
 class EthernetClient : public Client {
 public:
+	EthernetClient() : sockindex(MAX_SOCK_NUM), _timeout(1000) { }
+	EthernetClient(uint8_t s) : sockindex(s), _timeout(1000) { }
 
-	EthernetClient() : sockindex(MAX_SOCK_NUM), _timeout(5000) { }
-	EthernetClient(uint8_t s) : sockindex(s), _timeout(5000) { }
-  
 	uint8_t status();
 	virtual int connect(IPAddress ip, uint16_t port);
 	virtual int connect(const char *host, uint16_t port);
 	virtual int availableForWrite(void);
 	virtual size_t write(uint8_t);
 	virtual size_t write(const uint8_t *buf, size_t size);
-	
 	virtual int available();
 	virtual int read();
 	virtual int read(uint8_t *buf, size_t size);
@@ -361,5 +353,9 @@ public:
 	int beginWithDHCP(uint8_t *, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
 	int checkLease();
 };
+
+
+
+
 
 #endif

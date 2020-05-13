@@ -6,7 +6,7 @@
     Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
     Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
     Licensed under MIT license
-    Version: 1.0.7
+    Version: 1.0.8
 
     Copyright (c) 2015, Majenko Technologies
     All rights reserved.
@@ -47,7 +47,8 @@
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
     1.0.6   K Hoang      27/04/2020 Add W5x00 support to ESP32/ESP8266 boards
-    1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards.                            
+    1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
  *****************************************************************************************************************************/
 /*
    The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
@@ -167,6 +168,7 @@
 #elif ( defined(ESP8266) )
 // For ESP8266
 #warning Use ESP8266 architecture
+#include <ESP8266mDNS.h>
 #define ETHERNET_USE_ESP8266
 #define BOARD_TYPE      "ESP8266"
 
@@ -188,23 +190,73 @@
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 
-#define USE_UIP_ETHERNET   true
+//#define USE_UIP_ETHERNET   true
+//#define USE_UIP_ETHERNET   false
 
-// Ethernet_Shield_W5200, EtherCar, EtherSia not supported
+// Note: To rename ESP628266 Ethernet lib files to Ethernet_ESP8266.h and Ethernet_ESP8266.cpp
+#if ( !defined(USE_UIP_ETHERNET) || !USE_UIP_ETHERNET )
+
+// Only one if the following to be true
+#define USE_ETHERNET2         false
+#define USE_ETHERNET3         true
+#define USE_ETHERNET_LARGE    false //true
+#define USE_ETHERNET_ESP8266  false
+
+#if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 )
+#define USE_CUSTOM_ETHERNET   true
+#endif
+
+#if USE_ETHERNET3
+#include "Ethernet3.h"
+#warning Use Ethernet3 lib
+#elif USE_ETHERNET2
+#include "Ethernet2.h"
+#warning Use Ethernet2 lib
+#elif USE_ETHERNET_LARGE
+#include "EthernetLarge.h"
+#warning Use EthernetLarge lib
+#elif USE_ETHERNET_ESP8266
+#include "Ethernet_ESP8266.h"
+#warning Use Ethernet_ESP8266 lib
+#else
+#define USE_ETHERNET          true
+#include "Ethernet.h"
+#warning Use Ethernet lib
+#endif
+
+// Ethernet_Shield_W5200, EtherCard, EtherSia not supported
 // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
 // Otherwise, standard Ethernet library will be used for W5x00
-//#define USE_CUSTOM_ETHERNET     true
-//#include <Ethernet2.h>
-//#include <Ethernet3.h>
-//#include <EthernetLarge.h>
-//#include <Ethernet_ESP8266.h>
+
+#endif    //#if !USE_UIP_ETHERNET
 
 #include <EthernetWebServer.h>
 
 // Enter a MAC address and IP address for your controller below.
+#define NUMBER_OF_MAC      20
 
-byte mac[] = {
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xCD
+byte mac[][NUMBER_OF_MAC] =
+{
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x01 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x02 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x03 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x04 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x05 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x06 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x07 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x08 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x09 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x0A },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x0B },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x0C },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x0D },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x0E },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x0F },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x10 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x11 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x12 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0x13 },
+  { 0xDE, 0xAD, 0xBE, 0xEF, 0xBE, 0x14 },
 };
 
 // Select the IP address according to your local network
@@ -225,7 +277,7 @@ void handleRoot()
   int hr = min / 60;
 
   snprintf(temp, 400,
-"<html>\
+           "<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
 <title>ESP8266 Demo</title>\
@@ -302,7 +354,7 @@ void setup(void)
 
   // Just info to know how to connect correctly
   Serial.println("=========================");
-  Serial.println("Used/default SPI pinout:");
+  Serial.println("Default SPI pinout:");
   Serial.print("MOSI:");
   Serial.println(MOSI);
   Serial.print("MISO:");
@@ -313,11 +365,84 @@ void setup(void)
   Serial.println(SS);
   Serial.println("=========================");
 
+#if defined(ESP8266)
+// For ESP8266, change for other boards if necessary
+#if ( USE_ETHERNET || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  // For ESP8266
+  // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+  // Ethernet           0                 X            X            X            X        0
+  // Ethernet2          X                 X            X            X            X        0
+  // Ethernet3          X                 X            X            X            X        0
+  // EthernetLarge      X                 X            X            X            X        0
+  // Ethernet_ESP8266   0                 0            0            0            0        0
+  // D1 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+  // Must use library patch for Ethernet, EthernetLarge libraries
+  Ethernet.setCsPin (D1);
+
+#if USE_ETHERNET3
+  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+  #define ETHERNET3_MAX_SOCK_NUM      4
+  
+  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+#endif
+  
+#elif ( USE_ETHERNET2 )
+  Ethernet.init (D1);
+#endif
+
+#else
+// For other boards, to change if necessary
+#if ( USE_ETHERNET || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  // Must use library patch for Ethernet, EthernetLarge libraries
+  // ESP32 => GPIO13 OK with Ethernet, EthernetLarge, not Ethernet3
+  Ethernet.setCsPin (13);
+
+#if USE_ETHERNET3
+  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+  #define ETHERNET3_MAX_SOCK_NUM      4
+  
+  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+#endif
+  
+#elif ( USE_ETHERNET2 )
+// ESP32 => GPIO13 OK with Ethernet2
+  Ethernet.init (13);
+#endif
+
+#endif    //defined(ESP8266)
+
   // start the ethernet connection and the server:
   // Use Static IP
   //Ethernet.begin(mac, ip);
-  // Use DHCP dynamic IP
-  Ethernet.begin(mac);
+  // Use DHCP dynamic IP and random mac
+  srand(1);
+  uint16_t index = rand() % NUMBER_OF_MAC;
+  //uint16_t index = random(NUMBER_OF_MAC);
+
+  Ethernet.begin(mac[index]);
+
+  // Just info to know how to connect correctly
+  Serial.println("=========================");
+  Serial.println("Currently Used SPI pinout:");
+  Serial.print("MOSI:");
+  Serial.println(MOSI);
+  Serial.print("MISO:");
+  Serial.println(MISO);
+  Serial.print("SCK:");
+  Serial.println(SCK);
+  Serial.print("SS:");
+  Serial.println(SS);
+#if USE_ETHERNET3
+  Serial.print("SPI_CS:");
+  Serial.println(SPI_CS);
+#endif
+  Serial.println("=========================");
+
+  Serial.print("Using mac index = ");
+  Serial.println(index);
+
+  Serial.print("Connected! IP address: ");
+  Serial.println(Ethernet.localIP());
 
   server.on("/", handleRoot);
   server.on("/test.svg", drawGraph);
