@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.8
+   Version: 1.0.9
 
    Original author:
    @file       Esp8266WebServer.h
@@ -25,7 +25,8 @@
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
     1.0.6   K Hoang      27/04/2020 Add W5x00 support to ESP32/ESP8266 boards
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards  
-    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.      
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.    
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_Debug_H
@@ -47,7 +48,7 @@
 // 4: DEBUG: errors, warnings, informational and debug
 
 #ifndef _ETHERNET_WEBSERVER_LOGLEVEL_
-#define _ETHERNET_WEBSERVER_LOGLEVEL_       1
+#define _ETHERNET_WEBSERVER_LOGLEVEL_       2
 #endif
 
 

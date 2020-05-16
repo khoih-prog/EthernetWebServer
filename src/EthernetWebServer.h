@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.8
+   Version: 1.0.9
 
    Original author:
    @file       Esp8266WebServer.h
@@ -25,7 +25,8 @@
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
     1.0.6   K Hoang      27/04/2020 Add W5x00 support to ESP32/ESP8266 boards
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards  
-    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.     
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_h
@@ -64,10 +65,12 @@
 #endif
 
 
-#ifndef USE_UIP_ETHERNET
+//#ifndef USE_UIP_ETHERNET
+#if USE_ETHERNET_WRAPPER
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
-#define USE_UIP_ETHERNET   false
+//#define USE_UIP_ETHERNET   false
+#include "EthernetWrapper.h"
 #endif
 
 #if USE_UIP_ETHERNET
@@ -75,7 +78,7 @@
 #include <utility/logging.h>
 #warning Use UIPEthernet library from EthernetWebServer
 #elif USE_CUSTOM_ETHERNET
-#warning Use Custom Ethernet library from EthernetWebServer
+#warning Use Custom Ethernet library from EthernetWebServer. You must include a library here or error.
 #else
 #include <Ethernet.h>
 #warning Use Ethernet library from EthernetWebServer

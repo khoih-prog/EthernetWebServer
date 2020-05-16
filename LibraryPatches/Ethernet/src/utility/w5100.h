@@ -6,15 +6,26 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.8
+   Version: 1.0.9
 
    Copyright 2018 Paul Stoffregen
-   Copyright (c) 2010 by Cristian Maglie <c.maglie@bug.st>
  
-   This file is free software; you can redistribute it and/or modify
-   it under the terms of either the GNU General Public License version 2
-   or the GNU Lesser General Public License version 2.1, both as
-   published by the Free Software Foundation.
+   Permission is hereby granted, free of charge, to any person obtaining a copy of this
+   software and associated documentation files (the "Software"), to deal in the Software
+   without restriction, including without limitation the rights to use, copy, modify,
+   merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+   permit persons to whom the Software is furnished to do so, subject to the following
+   conditions:
+ 
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+ 
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+   INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+   PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+   HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+   OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
    Version Modified By   Date      Comments
    ------- -----------  ---------- -----------
@@ -26,9 +37,10 @@
     1.0.5   K Hoang      24/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
-    1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards
+    1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards   
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
-    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards. Sync with ESP8266 core 2.7.1.
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
  *****************************************************************************************************************************/
 
 // w5100.h contains private W5x00 hardware "driver" level definitions

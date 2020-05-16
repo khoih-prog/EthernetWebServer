@@ -6,7 +6,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.8
+   Version: 1.0.9
 
    Copyright 2018 Paul Stoffregen
  
@@ -39,7 +39,8 @@
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
     1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards   
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
-    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards. Sync with ESP8266 core 2.7.1. 
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
  *****************************************************************************************************************************/
 
 #include <Arduino.h>
@@ -72,27 +73,44 @@ EthernetClient EthernetServer::available()
 #if MAX_SOCK_NUM > 4
 	if (chip == 51) maxindex = 4; // W5100 chip never supports more than 4 sockets
 #endif
-	for (uint8_t i=0; i < maxindex; i++) {
-		if (server_port[i] == _port) {
+
+	for (uint8_t i=0; i < maxindex; i++) 
+	{
+		if (server_port[i] == _port) 
+		{
 			uint8_t stat = Ethernet.socketStatus(i);
-			if (stat == SnSR::ESTABLISHED || stat == SnSR::CLOSE_WAIT) {
-				if (Ethernet.socketRecvAvailable(i) > 0) {
+			if (stat == SnSR::ESTABLISHED || stat == SnSR::CLOSE_WAIT) 
+			{
+				if (Ethernet.socketRecvAvailable(i) > 0) 
+				{				
 					sockindex = i;
-				} else {
+				} 
+				else 
+				{
 					// remote host closed connection, our end still open
-					if (stat == SnSR::CLOSE_WAIT) {
+					if (stat == SnSR::CLOSE_WAIT) 
+					{				  
 						Ethernet.socketDisconnect(i);
 						// status becomes LAST_ACK for short time
 					}
 				}
-			} else if (stat == SnSR::LISTEN) {
+			} 
+			else if (stat == SnSR::LISTEN) 
+			{
 				listening = true;
-			} else if (stat == SnSR::CLOSED) {
+			} 
+			else if (stat == SnSR::CLOSED) 
+			{			
 				server_port[i] = 0;
 			}
 		}
 	}
-	if (!listening) begin();
+	
+	if (!listening)
+	{				
+	  begin();
+	}
+	  
 	return EthernetClient(sockindex);
 }
 
@@ -107,24 +125,35 @@ EthernetClient EthernetServer::accept()
 #if MAX_SOCK_NUM > 4
 	if (chip == 51) maxindex = 4; // W5100 chip never supports more than 4 sockets
 #endif
-	for (uint8_t i=0; i < maxindex; i++) {
-		if (server_port[i] == _port) {
+
+	for (uint8_t i=0; i < maxindex; i++) 
+	{
+		if (server_port[i] == _port) 
+		{
 			uint8_t stat = Ethernet.socketStatus(i);
-			if (sockindex == MAX_SOCK_NUM &&
-			  (stat == SnSR::ESTABLISHED || stat == SnSR::CLOSE_WAIT)) {
+			
+			if (sockindex == MAX_SOCK_NUM && (stat == SnSR::ESTABLISHED || stat == SnSR::CLOSE_WAIT)) 
+			  {
 				// Return the connected client even if no data received.
 				// Some protocols like FTP expect the server to send the
 				// first data.
 				sockindex = i;
 				server_port[i] = 0; // only return the client once
-			} else if (stat == SnSR::LISTEN) {
+			} 
+			else if (stat == SnSR::LISTEN) 
+      {
 				listening = true;
-			} else if (stat == SnSR::CLOSED) {
+			} 
+			else if (stat == SnSR::CLOSED) 
+			{
 				server_port[i] = 0;
 			}
 		}
 	}
-	if (!listening) begin();
+	
+	if (!listening) 
+	  begin();
+	  
 	return EthernetClient(sockindex);
 }
 
@@ -134,9 +163,13 @@ EthernetServer::operator bool()
 #if MAX_SOCK_NUM > 4
 	if (W5100.getChip() == 51) maxindex = 4; // W5100 chip never supports more than 4 sockets
 #endif
-	for (uint8_t i=0; i < maxindex; i++) {
-		if (server_port[i] == _port) {
-			if (Ethernet.socketStatus(i) == SnSR::LISTEN) {
+
+	for (uint8_t i=0; i < maxindex; i++) 
+	{
+		if (server_port[i] == _port) 
+		{
+			if (Ethernet.socketStatus(i) == SnSR::LISTEN) 
+			{
 				return true; // server is listening for incoming clients
 			}
 		}
@@ -192,9 +225,13 @@ size_t EthernetServer::write(const uint8_t *buffer, size_t size)
 	if (chip == 51) maxindex = 4; // W5100 chip never supports more than 4 sockets
 #endif
 	available();
-	for (uint8_t i=0; i < maxindex; i++) {
-		if (server_port[i] == _port) {
-			if (Ethernet.socketStatus(i) == SnSR::ESTABLISHED) {
+	
+	for (uint8_t i=0; i < maxindex; i++) 
+	{
+		if (server_port[i] == _port) 
+		{
+			if (Ethernet.socketStatus(i) == SnSR::ESTABLISHED) 
+			{
 				Ethernet.socketSend(i, buffer, size);
 			}
 		}

@@ -6,7 +6,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.8
+   Version: 1.0.9
 
    Copyright 2018 Paul Stoffregen
  
@@ -39,7 +39,8 @@
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
     1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards   
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
-    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards. Sync with ESP8266 core 2.7.1. 
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
  *****************************************************************************************************************************/
 
 #include <Arduino.h>
@@ -63,6 +64,7 @@ void EthernetClass::setRstPin(uint8_t pinRST)
 void EthernetClass::setCsPin(uint8_t pinCS) 
 {
   _pinCS = pinCS;
+  W5100.setSS(pinCS);
   
 #if ( ETHERNET_DEBUG > 0 )  
   Serial.print("Input pinCS = ");
@@ -104,10 +106,8 @@ int EthernetClass::begin(uint8_t *mac, unsigned long timeout, unsigned long resp
 #endif
 	
 	// Initialise the basic info
-	// KH
-	if (W5100.init(MAX_SOCK_NUM, _pinCS) == 0) 
+	if (W5100.init() == 0) 
 	  return 0;
-	
 	
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5100.setMACAddress(mac);
@@ -157,7 +157,8 @@ void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress g
 
 void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet)
 {
-	if (W5100.init(MAX_SOCK_NUM, _pinCS) == 0) 
+	// Initialise the basic info
+	if (W5100.init() == 0) 
 	  return;
 	  
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);

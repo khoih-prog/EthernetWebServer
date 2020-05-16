@@ -6,7 +6,7 @@
     Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
     Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
     Licensed under MIT license
-    Version: 1.0.8
+    Version: 1.0.9
 
     Copyright (c) 2015, Majenko Technologies
     All rights reserved.
@@ -49,6 +49,7 @@
     1.0.6   K Hoang      27/04/2020 Add W5x00 support to ESP32/ESP8266 boards
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
     1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
  *****************************************************************************************************************************/
 /*
    The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
@@ -174,7 +175,7 @@
 
 #elif ( defined(ESP32) )
 // For ESP32
-#warning Use ESP32architecture
+#warning Use ESP32 architecture
 #define ETHERNET_USE_ESP32
 #define BOARD_TYPE      "ESP32"
 
@@ -187,23 +188,37 @@
 
 #include <SPI.h>
 
+#define USE_ETHERNET_WRAPPER    true
+//#define USE_ETHERNET_WRAPPER    false
+
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 
 //#define USE_UIP_ETHERNET   true
 //#define USE_UIP_ETHERNET   false
 
+//#define USE_CUSTOM_ETHERNET     true
+
 // Note: To rename ESP628266 Ethernet lib files to Ethernet_ESP8266.h and Ethernet_ESP8266.cpp
+// In order to USE_ETHERNET_ESP8266
 #if ( !defined(USE_UIP_ETHERNET) || !USE_UIP_ETHERNET )
 
+// To override the default CS/SS pin. Don't use unless you know exactly which pin to use
+//#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
+
 // Only one if the following to be true
-#define USE_ETHERNET2         false
-#define USE_ETHERNET3         true
+#define USE_ETHERNET2         false //true
+#define USE_ETHERNET3         false //true
 #define USE_ETHERNET_LARGE    false //true
-#define USE_ETHERNET_ESP8266  false
+#define USE_ETHERNET_ESP8266  false //true
+
+#if !USE_ETHERNET_WRAPPER
 
 #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 )
-#define USE_CUSTOM_ETHERNET   true
+  #ifdef USE_CUSTOM_ETHERNET
+    #undef USE_CUSTOM_ETHERNET
+    #define USE_CUSTOM_ETHERNET   true
+  #endif
 #endif
 
 #if USE_ETHERNET3
@@ -218,6 +233,9 @@
 #elif USE_ETHERNET_ESP8266
 #include "Ethernet_ESP8266.h"
 #warning Use Ethernet_ESP8266 lib
+#elif USE_CUSTOM_ETHERNET
+#include "Ethernet_XYZ.h"
+#warning Use Custom Ethernet library from EthernetWrapper. You must include a library here or error.
 #else
 #define USE_ETHERNET          true
 #include "Ethernet.h"
@@ -229,6 +247,7 @@
 // Otherwise, standard Ethernet library will be used for W5x00
 
 #endif    //#if !USE_UIP_ETHERNET
+#endif    //USE_ETHERNET_WRAPPER
 
 #include <EthernetWebServer.h>
 
@@ -266,40 +285,36 @@ EthernetWebServer server(80);
 
 int reqCount = 0;                // number of requests received
 
-const int led = 13;
-
 void handleRoot()
 {
-  digitalWrite(led, 1);
   char temp[400];
   int sec = millis() / 1000;
   int min = sec / 60;
   int hr = min / 60;
+  int day = hr / 24;
 
   snprintf(temp, 400,
            "<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
-<title>ESP8266 Demo</title>\
+<title>AdvancedServer Demo</title>\
 <style>\
 body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
 </style>\
 </head>\
 <body>\
 <h2>Hi from EthernetWebServer!</h2>\
-<p>Uptime: %02d:%02d:%02d</p>\
+<p>Uptime: %d d %02d:%02d:%02d</p>\
 <img src=\"/test.svg\" />\
 </body>\
 </html>",
-           hr, min % 60, sec % 60);
+           day, hr % 24, min % 60, sec % 60);
 
   server.send(200, "text/html", temp);
-  digitalWrite(led, 0);
 }
 
 void handleNotFound()
 {
-  digitalWrite(led, 1);
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += server.uri();
@@ -315,7 +330,6 @@ void handleNotFound()
   }
 
   server.send(404, "text/plain", message);
-  digitalWrite(led, 0);
 }
 
 void drawGraph()
@@ -342,9 +356,6 @@ void drawGraph()
 
 void setup(void)
 {
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
-
   Serial.begin(115200);
   while (!Serial);
 
@@ -352,64 +363,131 @@ void setup(void)
 
   Serial.println("\nStarting AdvancedServer on " + String(BOARD_TYPE));
 
-  // Just info to know how to connect correctly
-  Serial.println("=========================");
-  Serial.println("Default SPI pinout:");
-  Serial.print("MOSI:");
-  Serial.println(MOSI);
-  Serial.print("MISO:");
-  Serial.println(MISO);
-  Serial.print("SCK:");
-  Serial.println(SCK);
-  Serial.print("SS:");
-  Serial.println(SS);
-  Serial.println("=========================");
+  #if USE_ETHERNET_WRAPPER
 
-#if defined(ESP8266)
-// For ESP8266, change for other boards if necessary
-#if ( USE_ETHERNET || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-  // For ESP8266
-  // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
-  // Ethernet           0                 X            X            X            X        0
-  // Ethernet2          X                 X            X            X            X        0
-  // Ethernet3          X                 X            X            X            X        0
-  // EthernetLarge      X                 X            X            X            X        0
-  // Ethernet_ESP8266   0                 0            0            0            0        0
-  // D1 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
-  // Must use library patch for Ethernet, EthernetLarge libraries
-  Ethernet.setCsPin (D1);
+    EthernetInit();
 
-#if USE_ETHERNET3
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-  #define ETHERNET3_MAX_SOCK_NUM      4
+  #else
+
+    #if USE_ETHERNET
+      LOGWARN(F("=========== USE_ETHERNET ==========="));
+    #elif USE_ETHERNET2
+      LOGWARN(F("=========== USE_ETHERNET2 ==========="));
+    #elif USE_ETHERNET3
+      LOGWARN(F("=========== USE_ETHERNET3 ==========="));
+    #elif USE_ETHERNET_LARGE
+      LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
+    #elif USE_ETHERNET_ESP8266
+      LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
+    #else
+      LOGWARN(F("========================="));
+    #endif
+   
+      LOGWARN(F("Default SPI pinout:"));
+      LOGWARN1(F("MOSI:"), MOSI);
+      LOGWARN1(F("MISO:"), MISO);
+      LOGWARN1(F("SCK:"),  SCK);
+      LOGWARN1(F("SS:"),   SS);
+      LOGWARN(F("========================="));
+       
+    #if defined(ESP8266)
+      // For ESP8266, change for other boards if necessary
+      #ifndef USE_THIS_SS_PIN
+        #define USE_THIS_SS_PIN   D2    // For ESP8266
+      #endif
+      
+      LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
+      
+      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
+        // For ESP8266
+        // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+        // Ethernet           0                 X            X            X            X        0
+        // Ethernet2          X                 X            X            X            X        0
+        // Ethernet3          X                 X            X            X            X        0
+        // EthernetLarge      X                 X            X            X            X        0
+        // Ethernet_ESP8266   0                 0            0            0            0        0
+        // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+        // Must use library patch for Ethernet, EthernetLarge libraries
+        Ethernet.init (USE_THIS_SS_PIN);
   
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-#endif
+      #elif USE_ETHERNET3
+        // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+        #ifndef ETHERNET3_MAX_SOCK_NUM
+          #define ETHERNET3_MAX_SOCK_NUM      4
+        #endif
+        
+        Ethernet.setCsPin (USE_THIS_SS_PIN);
+        Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+ 
+      #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+        
+    #elif defined(ESP32)
   
-#elif ( USE_ETHERNET2 )
-  Ethernet.init (D1);
-#endif
-
-#else
-// For other boards, to change if necessary
-#if ( USE_ETHERNET || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-  // Must use library patch for Ethernet, EthernetLarge libraries
-  // ESP32 => GPIO13 OK with Ethernet, EthernetLarge, not Ethernet3
-  Ethernet.setCsPin (13);
-
-#if USE_ETHERNET3
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-  #define ETHERNET3_MAX_SOCK_NUM      4
+      // You can use Ethernet.init(pin) to configure the CS pin
+      //Ethernet.init(10);  // Most Arduino shields
+      //Ethernet.init(5);   // MKR ETH shield
+      //Ethernet.init(0);   // Teensy 2.0
+      //Ethernet.init(20);  // Teensy++ 2.0
+      //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
+      //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
+      
+      #ifndef USE_THIS_SS_PIN
+        #define USE_THIS_SS_PIN   22    // For ESP32
+      #endif
+      
+      LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
+      
+      // For other boards, to change if necessary
+      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
+        // Must use library patch for Ethernet, EthernetLarge libraries
+        // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
+        // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
+           
+        //Ethernet.setCsPin (USE_THIS_SS_PIN);
+        Ethernet.init (USE_THIS_SS_PIN);
   
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-#endif
+      #elif USE_ETHERNET3
+        // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+        #ifndef ETHERNET3_MAX_SOCK_NUM
+          #define ETHERNET3_MAX_SOCK_NUM      4
+        #endif
+        
+        Ethernet.setCsPin (USE_THIS_SS_PIN);
+        Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+              
+      #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
   
-#elif ( USE_ETHERNET2 )
-// ESP32 => GPIO13 OK with Ethernet2
-  Ethernet.init (13);
-#endif
+    #else   //defined(ESP8266)
+      // unknown board, do nothing, use default SS = 10
+      #ifdef USE_THIS_SS_PIN
+        #undef USE_THIS_SS_PIN
+        #define USE_THIS_SS_PIN   10    // For other boards
+      #endif
+           
+      LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
+  
+      // For other boards, to change if necessary
+      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
+        // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
+  
+        Ethernet.init (USE_THIS_SS_PIN);
+  
+      #elif USE_ETHERNET3
+        // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+        #ifndef ETHERNET3_MAX_SOCK_NUM
+          #define ETHERNET3_MAX_SOCK_NUM      4
+        #endif
+        
+        Ethernet.setCsPin (USE_THIS_SS_PIN);
+        Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+                        
+      #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+      
+    #endif    //defined(ESP8266)
+  
+  
+  #endif  //USE_ETHERNET_WRAPPER
 
-#endif    //defined(ESP8266)
 
   // start the ethernet connection and the server:
   // Use Static IP
@@ -458,7 +536,39 @@ void setup(void)
   Serial.println(Ethernet.localIP());
 }
 
+void heartBeatPrint(void)
+{
+  static int num = 1;
+
+  Serial.print(F("."));
+
+  if (num == 80)
+  {
+    Serial.println();
+    num = 1;
+  }
+  else if (num++ % 10 == 0)
+  {
+    Serial.print(F(" "));
+  }
+}
+
+void check_status()
+{
+  static unsigned long checkstatus_timeout = 0;
+
+#define STATUS_CHECK_INTERVAL     10000L
+
+  // Send status report every STATUS_REPORT_INTERVAL (60) seconds: we don't need to send updates frequently if there is no status change.
+  if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
+  {
+    heartBeatPrint();
+    checkstatus_timeout = millis() + STATUS_CHECK_INTERVAL;
+  }
+}
+
 void loop(void)
 {
   server.handleClient();
+  check_status();
 }

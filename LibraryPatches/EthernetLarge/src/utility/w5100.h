@@ -6,7 +6,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.8
+   Version: 1.0.9
 
    Copyright 2018 Paul Stoffregen
    Copyright (c) 2010 by Cristian Maglie <c.maglie@bug.st>
@@ -28,7 +28,8 @@
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
     1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
-    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards. Sync with ESP8266 core 2.7.1.   
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.  
  *****************************************************************************************************************************/
 
 // w5100.h contains private W5x00 hardware "driver" level definitions
@@ -40,15 +41,29 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-// Safe for all chips
-#define SPI_ETHERNET_SETTINGS SPISettings(14000000, MSBFIRST, SPI_MODE0)
+#ifndef USE_W5500
+#define USE_W5500     false
+#else
+#define USE_W5500     true
+#endif
+
+#if USE_W5500
 
 // Safe for W5200 and W5500, but too fast for W5100
 // Uncomment this if you know you'll never need W5100 support.
 //  Higher SPI clock only results in faster transfer to hosts on a LAN
 //  or with very low packet latency.  With ordinary internet latency,
 //  the TCP window size & packet loss determine your overall speed.
-//#define SPI_ETHERNET_SETTINGS SPISettings(30000000, MSBFIRST, SPI_MODE0)
+#warning Use 30MHz clock for W5200/W5500. Not for W5100
+#define SPI_ETHERNET_SETTINGS SPISettings(30000000, MSBFIRST, SPI_MODE0)
+
+#else
+
+// Safe for all chips
+#define SPI_ETHERNET_SETTINGS SPISettings(14000000, MSBFIRST, SPI_MODE0)
+#warning Use 14MHz clock for W5100/W5200/W5500. Slow.
+
+#endif
 
 
 // Require Ethernet.h, because we need MAX_SOCK_NUM

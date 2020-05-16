@@ -6,7 +6,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.8
+   Version: 1.0.9
 
    Copyright 2018 Paul Stoffregen
  
@@ -39,13 +39,16 @@
                                     More Custom Ethernet libraries supported such as Ethernet2, Ethernet3, EthernetLarge
     1.0.6   K Hoang      27/04/2020 Add support to ESP32/ESP8266 boards   
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
-    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards. Sync with ESP8266 core 2.7.1. 
+    1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
  *****************************************************************************************************************************/
 
 #include <Arduino.h>
 #include "EthernetLarge.h"
 #include "utility/w5100.h"
 #include "Dhcp.h"
+
+#define ETHERNET_DEBUG    1
 
 IPAddress EthernetClass::_dnsServerAddress;
 DhcpClass* EthernetClass::_dhcp = NULL;
@@ -60,10 +63,14 @@ void EthernetClass::setRstPin(uint8_t pinRST)
 void EthernetClass::setCsPin(uint8_t pinCS) 
 {
   _pinCS = pinCS;
+  W5100.setSS(pinCS);
+  
+#if ( ETHERNET_DEBUG > 0 )  
   Serial.print("Input pinCS = ");
 	Serial.println(pinCS);
   Serial.print("_pinCS = ");
 	Serial.println(_pinCS);
+#endif	
 }
 
 void EthernetClass::initMaxSockNum(uint8_t maxSockNum) 
@@ -92,10 +99,13 @@ int EthernetClass::begin(uint8_t *mac, unsigned long timeout, unsigned long resp
 	static DhcpClass s_dhcp;
 	_dhcp = &s_dhcp;
 
+#if ( ETHERNET_DEBUG > 0 )  
+  Serial.print("_pinCS = ");
+	Serial.print(_pinCS);
+#endif
+	
 	// Initialise the basic info
-	//if (W5100.init() == 0) return 0;
-	// KH
-	if (W5100.init(MAX_SOCK_NUM, _pinCS) == 0) 
+	if (W5100.init() == 0) 
 	  return 0;
 	  
 	  
@@ -146,13 +156,13 @@ void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress g
 
 void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet)
 {
-	//if (W5100.init() == 0) return;
-	// KH
-	if (W5100.init(MAX_SOCK_NUM, _pinCS) == 0) 
+	// Initialise the basic info
+	if (W5100.init() == 0) 
+	  return;
 	
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
 	W5100.setMACAddress(mac);
-#ifdef ESP8266
+#if  ( defined(ESP8266) || defined(ESP32)  )
 	W5100.setIPAddress(&ip[0]);
 	W5100.setGatewayIp(&gateway[0]);
 	W5100.setSubnetMask(&subnet[0]);
@@ -200,7 +210,8 @@ int EthernetClass::maintain()
 	if (_dhcp != NULL) {
 		// we have a pointer to dhcp, use it
 		rc = _dhcp->checkLease();
-		switch (rc) {
+		switch (rc) 
+		{
 		case DHCP_CHECK_NONE:
 			//nothing done
 			break;

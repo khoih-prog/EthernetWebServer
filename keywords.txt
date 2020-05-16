@@ -13,6 +13,12 @@ HTTPUpload  KEYWORD1
 #######################################
 
 #######################
+# EthernetWrapper
+#######################
+
+EthernetInit  KEYWORD2
+
+#######################
 # EthernetWebServer
 #######################
 
