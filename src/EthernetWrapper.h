@@ -64,9 +64,9 @@
 
     #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 )
       #ifdef USE_CUSTOM_ETHERNET
-        #undef USE_CUSTOM_ETHERNET
-        #define USE_CUSTOM_ETHERNET   true
+        #undef USE_CUSTOM_ETHERNET    
       #endif
+      #define USE_CUSTOM_ETHERNET   true
     #endif
 
     #if USE_ETHERNET3
