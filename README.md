@@ -10,6 +10,7 @@
 
 1. Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
 2. Add default SS/CS pin for ESP8266 and ESP32
+3. Increase default clock speed for W5x00 in Ethernet and EthernetLarge libraries to 25MHz from 14MHz. Tested OK on W5100 as well as W5500.
 
 #### New in v1.0.8
 
@@ -1001,6 +1002,7 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
 1. Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
 2. Add default SS/CS pin for ESP8266 and ESP32
+3. Increase default clock speed for W5x00 in Ethernet and EthernetLarge libraries to 25MHz from 14MHz. Tested OK on W5100 as well as W5500.
 
 #### New in v1.0.8
 

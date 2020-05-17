@@ -52,25 +52,25 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-#ifndef USE_W5500
-#define USE_W5500     false
+#ifndef USE_W5100
+#define USE_W5100     false
 #else
-#define USE_W5500     true
+#define USE_W5100     true
 #endif
 
-#if USE_W5500
+#if !USE_W5100
 
-// Safe for W5200 and W5500, but too fast for W5100
-// Uncomment this if you know you'll never need W5100 support.
-//  Higher SPI clock only results in faster transfer to hosts on a LAN
-//  or with very low packet latency.  With ordinary internet latency,
-//  the TCP window size & packet loss determine your overall speed.
-#warning Use 30MHz clock for W5200/W5500. Not for W5100
-#define SPI_ETHERNET_SETTINGS SPISettings(30000000, MSBFIRST, SPI_MODE0)
+// Safe for W5200 and W5500, but also tested OK on W5100
+// Use 14MHz if you know your W5100 can't run
+// Higher SPI clock results in faster transfer to hosts on a LAN
+// or with very low packet latency.  With ordinary internet latency,
+// the TCP window size & packet loss determine your overall speed.
+#warning Use 25MHz clock for W5200/W5500. Not for W5100
+#define SPI_ETHERNET_SETTINGS SPISettings(25000000, MSBFIRST, SPI_MODE0)
 
 #else
 
-// Safe for all chips
+// Safe for all chips but too slow
 #define SPI_ETHERNET_SETTINGS SPISettings(14000000, MSBFIRST, SPI_MODE0)
 #warning Use 14MHz clock for W5100/W5200/W5500. Slow.
 

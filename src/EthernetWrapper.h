@@ -192,8 +192,7 @@
   
     #else   //defined(ESP8266)
       // unknown board, do nothing, use default SS = 10
-      #ifdef USE_THIS_SS_PIN
-        #undef USE_THIS_SS_PIN
+      #ifndef USE_THIS_SS_PIN
         #define USE_THIS_SS_PIN   10    // For other boards
       #endif
            

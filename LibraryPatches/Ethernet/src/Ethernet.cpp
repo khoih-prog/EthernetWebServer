@@ -158,7 +158,7 @@ void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress g
 void EthernetClass::begin(uint8_t *mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet)
 {
 	// Initialise the basic info
-	if (W5100.init() == 0) 
+	if (W5100.init() == 0)
 	  return;
 	  
 	SPI.beginTransaction(SPI_ETHERNET_SETTINGS);
