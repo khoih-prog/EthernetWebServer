@@ -34,7 +34,7 @@
 #endif
 #include "logging.h"
 
-// For nRF52
+// KH, For nRF52
 //#define ENC28J60_USE_SPILIB      true
 
 uint8_t ENC28J60ControlCS = ENC28J60_CONTROL_CS;

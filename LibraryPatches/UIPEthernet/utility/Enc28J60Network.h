@@ -225,6 +225,15 @@ extern uint8_t ENC28J60ControlCS;
    #define ENC28J60_USE_SPILIB 1
 #endif
 
+// KH, For nRF52
+#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+      defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
+      defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
+   #include <SPI.h>
+   #define ENC28J60_USE_SPILIB 1      
+#endif      
+      
+      
 #define UIP_RECEIVEBUFFERHANDLE 0xff
 
 /*
