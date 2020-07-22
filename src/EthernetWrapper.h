@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.9
+   Version: 1.0.10
 
    Original author:
    @file       Esp8266WebServer.h
@@ -27,6 +27,7 @@
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards  
     1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
     1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
+    1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
 #ifndef EthernetWrapper_h
 #define EthernetWrapper_h
@@ -102,25 +103,25 @@
     // Just info to know how to connect correctly
     
     #if USE_ETHERNET
-      LOGWARN(F("=========== USE_ETHERNET ==========="));
+      ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
     #elif USE_ETHERNET2
-      LOGWARN(F("=========== USE_ETHERNET2 ==========="));
+      ET_LOGWARN(F("=========== USE_ETHERNET2 ==========="));
     #elif USE_ETHERNET3
-      LOGWARN(F("=========== USE_ETHERNET3 ==========="));
+      ET_LOGWARN(F("=========== USE_ETHERNET3 ==========="));
     #elif USE_ETHERNET_LARGE
-      LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
+      ET_LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
     #elif USE_ETHERNET_ESP8266
-      LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
+      ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
     #else
-      LOGWARN(F("========================="));
+      ET_LOGWARN(F("========================="));
     #endif
    
-      LOGWARN(F("Default SPI pinout:"));
-      LOGWARN1(F("MOSI:"), MOSI);
-      LOGWARN1(F("MISO:"), MISO);
-      LOGWARN1(F("SCK:"),  SCK);
-      LOGWARN1(F("SS:"),   SS);
-      LOGWARN(F("========================="));
+      ET_LOGWARN(F("Default SPI pinout:"));
+      ET_LOGWARN1(F("MOSI:"), MOSI);
+      ET_LOGWARN1(F("MISO:"), MISO);
+      ET_LOGWARN1(F("SCK:"),  SCK);
+      ET_LOGWARN1(F("SS:"),   SS);
+      ET_LOGWARN(F("========================="));
        
     #if defined(ESP8266)
       // For ESP8266, change for other boards if necessary
@@ -128,7 +129,7 @@
         #define USE_THIS_SS_PIN   D2    // For ESP8266
       #endif
       
-      LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
+      ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
       
       #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
         // For ESP8266
@@ -168,7 +169,7 @@
         #define USE_THIS_SS_PIN   22    // For ESP32
       #endif
       
-      LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
+      ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
       
       // For other boards, to change if necessary
       #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
@@ -196,7 +197,7 @@
         #define USE_THIS_SS_PIN   10    // For other boards
       #endif
            
-      LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
+      ET_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
   
       // For other boards, to change if necessary
       #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )

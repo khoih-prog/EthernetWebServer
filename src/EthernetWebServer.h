@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.9
+   Version: 1.0.10
 
    Original author:
    @file       Esp8266WebServer.h
@@ -27,10 +27,13 @@
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards  
     1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
     1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
+    1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_h
 #define EthernetWebServer_h
+
+#define USE_NEW_WEBSERVER_VERSION     true
 
 #include <functional-vlpp.h>
 
@@ -48,7 +51,7 @@
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
-        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) )
+        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
 #if defined(ETHERNET_USE_NRF528XX)
 #undef ETHERNET_USE_NRF528XX
 #endif
@@ -84,37 +87,68 @@
 #warning Use Ethernet library from EthernetWebServer
 #endif
 
-enum HTTPMethod { HTTP_ANY, HTTP_GET, HTTP_POST, HTTP_PUT, HTTP_PATCH, HTTP_DELETE, HTTP_OPTIONS };
-enum HTTPUploadStatus { UPLOAD_FILE_START, UPLOAD_FILE_WRITE, UPLOAD_FILE_END,
-                        UPLOAD_FILE_ABORTED
-                      };
-enum HTTPClientStatus { HC_NONE, HC_WAIT_READ, HC_WAIT_CLOSE };
+#include "detail/mimetable.h"
+
+enum HTTPMethod 
+{ 
+  HTTP_ANY, 
+  HTTP_GET,
+  HTTP_HEAD,
+  HTTP_POST, 
+  HTTP_PUT, 
+  HTTP_PATCH, 
+  HTTP_DELETE, 
+  HTTP_OPTIONS 
+};
+
+enum HTTPUploadStatus 
+{ 
+  UPLOAD_FILE_START, 
+  UPLOAD_FILE_WRITE, 
+  UPLOAD_FILE_END,
+  UPLOAD_FILE_ABORTED
+};
+
+enum HTTPClientStatus 
+{ 
+  HC_NONE, 
+  HC_WAIT_READ, 
+  HC_WAIT_CLOSE 
+};
+
+enum HTTPAuthMethod 
+{ 
+  BASIC_AUTH, 
+  DIGEST_AUTH 
+};
 
 #define HTTP_DOWNLOAD_UNIT_SIZE 1460
 
 // Permit user to increase HTTP_UPLOAD_BUFLEN larger than default 2K
 //#define HTTP_UPLOAD_BUFLEN 2048
 #if !defined(HTTP_UPLOAD_BUFLEN)
-#define HTTP_UPLOAD_BUFLEN 4096   //2048
+  #define HTTP_UPLOAD_BUFLEN 4096   //2048
 #endif
 
-#define HTTP_MAX_DATA_WAIT 1000 //ms to wait for the client to send the request
-#define HTTP_MAX_POST_WAIT 1000 //ms to wait for POST data to arrive
-#define HTTP_MAX_SEND_WAIT 5000 //ms to wait for data chunk to be ACKed
-#define HTTP_MAX_CLOSE_WAIT 2000 //ms to wait for the client to close the connection
+#define HTTP_MAX_DATA_WAIT      3000 //ms to wait for the client to send the request
+#define HTTP_MAX_POST_WAIT      3000 //ms to wait for POST data to arrive
+#define HTTP_MAX_SEND_WAIT      3000 //ms to wait for data chunk to be ACKed
+#define HTTP_MAX_CLOSE_WAIT     2000 //ms to wait for the client to close the connection
 
-#define CONTENT_LENGTH_UNKNOWN ((size_t) -1)
-#define CONTENT_LENGTH_NOT_SET ((size_t) -2)
+#define CONTENT_LENGTH_UNKNOWN  ((size_t) -1)
+#define CONTENT_LENGTH_NOT_SET  ((size_t) -2)
 
 class EthernetWebServer;
 
-typedef struct {
+typedef struct 
+{
   HTTPUploadStatus status;
   String  filename;
   String  name;
   String  type;
-  size_t  totalSize;    // file size
-  size_t  currentSize;  // size of data currently in buf
+  size_t  totalSize;      // file size
+  size_t  currentSize;    // size of data currently in buf
+  size_t  contentLength;  // size of entire post request, file size + headers and other request data.
   uint8_t buf[HTTP_UPLOAD_BUFLEN];
 } HTTPUpload;
 
@@ -146,18 +180,32 @@ class EthernetWebServer
     void onNotFound(THandlerFunction fn);  //called when handler is not assigned
     void onFileUpload(THandlerFunction fn); //handle file uploads
 
-    String uri() {
+    String uri() 
+    {
       return _currentUri;
     }
-    HTTPMethod method() {
+    
+    HTTPMethod method() 
+    {
       return _currentMethod;
     }
-    EthernetClient client() {
+    
+    EthernetClient client() 
+    {
       return _currentClient;
     }
-    HTTPUpload& upload() {
+    
+    #if USE_NEW_WEBSERVER_VERSION
+    HTTPUpload& upload() 
+    {
+      return *_currentUpload;
+    }
+    #else
+    HTTPUpload& upload() 
+    {
       return _currentUpload;
     }
+    #endif
 
     String arg(String name);        // get request argument value by name
     String arg(int i);              // get request argument value by number
@@ -197,24 +245,38 @@ class EthernetWebServer
 
     static String urlDecode(const String& text);
 
-    template<typename T> size_t streamFile(T &file, const String& contentType) {
+    template<typename T> size_t streamFile(T &file, const String& contentType) 
+    {
+      using namespace mime;
       setContentLength(file.size());
-      if (String(file.name()).endsWith(".gz") &&
-          contentType != "application/x-gzip" &&
-          contentType != "application/octet-stream") {
+      
+      if (String(file.name()).endsWith(mimeTable[gz].endsWith) && contentType != mimeTable[gz].mimeType && contentType != mimeTable[none].mimeType) 
+      {
         sendHeader("Content-Encoding", "gzip");
       }
+      
       send(200, contentType, "");
+      
       return _currentClient.write(file);
     }
 
   protected:
     void _addRequestHandler(RequestHandler* handler);
     void _handleRequest();
+    void _finalizeResponse();
     bool _parseRequest(EthernetClient& client);
-    void _parseArguments(String data);
-    static String _responseCodeToString(int code);
+    
+    //KH
+    #if USE_NEW_WEBSERVER_VERSION
+    void _parseArguments(const String& data);
+    int  _parseArgumentsPrivate(const String& data, vl::Func<void(String&,String&,const String&,int,int,int,int)> handler);
+    bool _parseForm(EthernetClient& client, const String& boundary, uint32_t len);
+    #else
+    void _parseArguments(String data);    
     bool _parseForm(EthernetClient& client, String boundary, uint32_t len);
+    #endif
+      
+    static String _responseCodeToString(int code);
     bool _parseFormUploadAborted();
     void _uploadWriteByte(uint8_t b);
     uint8_t _uploadReadByte(EthernetClient& client);
@@ -222,41 +284,50 @@ class EthernetWebServer
     bool _collectHeader(const char* headerName, const char* headerValue);
 
     struct RequestArgument {
+    
       String key;
       String value;
     };
 
     EthernetServer  _server;
 
-    EthernetClient  _currentClient;
-    HTTPMethod  _currentMethod;
-    String      _currentUri;
-    uint8_t     _currentVersion;
-    HTTPClientStatus _currentStatus;
-    unsigned long _statusChange;
+    EthernetClient    _currentClient;
+    HTTPMethod        _currentMethod;
+    String            _currentUri;
+    uint8_t           _currentVersion;
+    HTTPClientStatus  _currentStatus;
+    unsigned long     _statusChange;
 
-    RequestHandler*  _currentHandler;
-    RequestHandler*  _firstHandler;
-    RequestHandler*  _lastHandler;
-    THandlerFunction _notFoundHandler;
-    THandlerFunction _fileUploadHandler;
+    RequestHandler*   _currentHandler;
+    RequestHandler*   _firstHandler;
+    RequestHandler*   _lastHandler;
+    THandlerFunction  _notFoundHandler;
+    THandlerFunction  _fileUploadHandler;
 
-    int              _currentArgCount;
-    RequestArgument* _currentArgs;
-    HTTPUpload       _currentUpload;
+    int               _currentArgCount;
+    RequestArgument*  _currentArgs;
+    
+    //KH
+    #if USE_NEW_WEBSERVER_VERSION
+    HTTPUpload*       _currentUpload;
+    int               _postArgsLen;
+    RequestArgument*  _postArgs;
+    
+    #else
+    HTTPUpload        _currentUpload;
+    #endif
+    
+    int               _headerKeysCount;
+    RequestArgument*  _currentHeaders;
+    size_t            _contentLength;
+    String            _responseHeaders;
 
-    int              _headerKeysCount;
-    RequestArgument* _currentHeaders;
-    size_t           _contentLength;
-    String           _responseHeaders;
-
-    String           _hostHeader;
-    bool             _chunked;
+    String            _hostHeader;
+    bool              _chunked;
 
 };
 
 #include "EthernetWebServer-impl.h"
 #include "Parsing-impl.h"
-
 
 #endif //EthernetWebServer_H

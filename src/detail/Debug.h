@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.9
+   Version: 1.0.10
 
    Original author:
    @file       Esp8266WebServer.h
@@ -26,7 +26,8 @@
     1.0.6   K Hoang      27/04/2020 Add W5x00 support to ESP32/ESP8266 boards
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards  
     1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
-    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.    
+    1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
+    1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_Debug_H
@@ -35,9 +36,9 @@
 #include <stdio.h>
 
 #ifdef DEBUG_ETHERNET_WEBSERVER_PORT
-#define DEBUG_OUTPUT DEBUG_ETHERNET_WEBSERVER_PORT
+#define ET_DEBUG_OUTPUT DEBUG_ETHERNET_WEBSERVER_PORT
 #else
-#define DEBUG_OUTPUT Serial
+#define ET_DEBUG_OUTPUT Serial
 #endif
 
 // Change _ETHERNET_WEBSERVER_LOGLEVEL_ to set tracing and logging verbosity
@@ -48,21 +49,23 @@
 // 4: DEBUG: errors, warnings, informational and debug
 
 #ifndef _ETHERNET_WEBSERVER_LOGLEVEL_
-#define _ETHERNET_WEBSERVER_LOGLEVEL_       2
+#define _ETHERNET_WEBSERVER_LOGLEVEL_       0
 #endif
 
 
-#define LOGERROR(x)    if(_ETHERNET_WEBSERVER_LOGLEVEL_>0) { DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); DEBUG_OUTPUT.println(x); }
-#define LOGERROR1(x,y) if(_ETHERNET_WEBSERVER_LOGLEVEL_>0) { DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); DEBUG_OUTPUT.print(x); DEBUG_OUTPUT.print(" "); DEBUG_OUTPUT.println(y); }
-#define LOGWARN(x)     if(_ETHERNET_WEBSERVER_LOGLEVEL_>1) { DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); DEBUG_OUTPUT.println(x); }
-#define LOGWARN1(x,y)  if(_ETHERNET_WEBSERVER_LOGLEVEL_>1) { DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); DEBUG_OUTPUT.print(x); DEBUG_OUTPUT.print(" "); DEBUG_OUTPUT.println(y); }
-#define LOGINFO(x)     if(_ETHERNET_WEBSERVER_LOGLEVEL_>2) { DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); DEBUG_OUTPUT.println(x); }
-#define LOGINFO1(x,y)  if(_ETHERNET_WEBSERVER_LOGLEVEL_>2) { DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); DEBUG_OUTPUT.print(x); DEBUG_OUTPUT.print(" "); DEBUG_OUTPUT.println(y); }
+#define ET_LOGERROR(x)    if(_ETHERNET_WEBSERVER_LOGLEVEL_>0) { ET_DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); ET_DEBUG_OUTPUT.println(x); }
+#define ET_LOGERROR1(x,y) if(_ETHERNET_WEBSERVER_LOGLEVEL_>0) { ET_DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); ET_DEBUG_OUTPUT.print(x); ET_DEBUG_OUTPUT.print(" "); ET_DEBUG_OUTPUT.println(y); }
 
-#define LOGDEBUG(x)      if(_ETHERNET_WEBSERVER_LOGLEVEL_>3) { DEBUG_OUTPUT.println(x); }
-#define LOGDEBUG0(x)     if(_ETHERNET_WEBSERVER_LOGLEVEL_>3) { DEBUG_OUTPUT.print(x); }
-#define LOGDEBUG1(x,y)   if(_ETHERNET_WEBSERVER_LOGLEVEL_>3) { DEBUG_OUTPUT.print(x); DEBUG_OUTPUT.print(" "); DEBUG_OUTPUT.println(y); }
-#define LOGDEBUG2(x,y,z) if(_ETHERNET_WEBSERVER_LOGLEVEL_>3) { DEBUG_OUTPUT.print(x); DEBUG_OUTPUT.print(" "); DEBUG_OUTPUT.print(y); DEBUG_OUTPUT.print(" "); DEBUG_OUTPUT.println(z); }
+#define ET_LOGWARN(x)     if(_ETHERNET_WEBSERVER_LOGLEVEL_>1) { ET_DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); ET_DEBUG_OUTPUT.println(x); }
+#define ET_LOGWARN1(x,y)  if(_ETHERNET_WEBSERVER_LOGLEVEL_>1) { ET_DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); ET_DEBUG_OUTPUT.print(x); ET_DEBUG_OUTPUT.print(" "); ET_DEBUG_OUTPUT.println(y); }
+
+#define ET_LOGINFO(x)     if(_ETHERNET_WEBSERVER_LOGLEVEL_>2) { ET_DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); ET_DEBUG_OUTPUT.println(x); }
+#define ET_LOGINFO1(x,y)  if(_ETHERNET_WEBSERVER_LOGLEVEL_>2) { ET_DEBUG_OUTPUT.print("[ETHERNET_WEBSERVER] "); ET_DEBUG_OUTPUT.print(x); ET_DEBUG_OUTPUT.print(" "); ET_DEBUG_OUTPUT.println(y); }
+
+#define ET_LOGDEBUG(x)      if(_ETHERNET_WEBSERVER_LOGLEVEL_>3) { ET_DEBUG_OUTPUT.println(x); }
+#define ET_LOGDEBUG0(x)     if(_ETHERNET_WEBSERVER_LOGLEVEL_>3) { ET_DEBUG_OUTPUT.print(x); }
+#define ET_LOGDEBUG1(x,y)   if(_ETHERNET_WEBSERVER_LOGLEVEL_>3) { ET_DEBUG_OUTPUT.print(x); ET_DEBUG_OUTPUT.print(" "); ET_DEBUG_OUTPUT.println(y); }
+#define ET_LOGDEBUG2(x,y,z) if(_ETHERNET_WEBSERVER_LOGLEVEL_>3) { ET_DEBUG_OUTPUT.print(x); ET_DEBUG_OUTPUT.print(" "); ET_DEBUG_OUTPUT.print(y); ET_DEBUG_OUTPUT.print(" "); ET_DEBUG_OUTPUT.println(z); }
 
 
 #endif

@@ -7,6 +7,7 @@ HTTPMethod	KEYWORD1
 HTTPUploadStatus  KEYWORD1
 HTTPClientStatus  KEYWORD1
 HTTPUpload  KEYWORD1
+HTTPAuthMethod  KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)

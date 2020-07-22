@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.9
+   Version: 1.0.10
 
    Original author:
    @file       Esp8266WebServer.h
@@ -27,6 +27,7 @@
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards  
     1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
     1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
+    1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
 #ifndef Parsing_impl_h
 #define Parsing_impl_h
@@ -34,44 +35,102 @@
 #include <Arduino.h>
 #include "EthernetWebServer.h"
 
+#ifndef WEBSERVER_MAX_POST_ARGS
+#define WEBSERVER_MAX_POST_ARGS 32
+#endif
+
+// KH
+#if USE_NEW_WEBSERVER_VERSION
+
+static bool readBytesWithTimeout(EthernetClient& client, size_t maxLength, String& data, int timeout_ms)
+{
+  if (!data.reserve(maxLength + 1))
+    return false;
+
+  data[0] = 0;  // data.clear()??
+
+  while (data.length() < maxLength)
+  {
+    int tries = timeout_ms;
+    size_t avail;
+
+    while (!(avail = client.available()) && tries--)
+      delay(1);
+
+    if (!avail)
+      break;
+
+    if (data.length() + avail > maxLength)
+      avail = maxLength - data.length();
+
+    while (avail--)
+      data += (char)client.read();
+  }
+
+  return data.length() == maxLength;
+}
+
+#else
+
 static char* readBytesWithTimeout(EthernetClient& client, size_t maxLength, size_t& dataLength, int timeout_ms)
 {
   char *buf = nullptr;
   dataLength = 0;
-  while (dataLength < maxLength) {
+
+  while (dataLength < maxLength)
+  {
     int tries = timeout_ms;
     size_t newLength;
-    while (!(newLength = client.available()) && tries--) delay(1);
-    if (!newLength) {
+
+    while (!(newLength = client.available()) && tries--)
+      delay(1);
+
+    if (!newLength)
+    {
       break;
     }
-    if (!buf) {
+
+    if (!buf)
+    {
       buf = (char *) malloc(newLength + 1);
-      if (!buf) {
+
+      if (!buf)
+      {
         return nullptr;
       }
     }
-    else {
+    else
+    {
       char* newBuf = (char *) realloc(buf, dataLength + newLength + 1);
-      if (!newBuf) {
+
+      if (!newBuf)
+      {
         free(buf);
         return nullptr;
       }
+
       buf = newBuf;
     }
+
     client.readBytes(buf + dataLength, newLength);
     dataLength += newLength;
     buf[dataLength] = '\0';
   }
+
   return buf;
 }
 
-bool EthernetWebServer::_parseRequest(EthernetClient& client) {
+#endif
+
+bool EthernetWebServer::_parseRequest(EthernetClient& client)
+{
   // Read the first line of HTTP request
   String req = client.readStringUntil('\r');
   client.readStringUntil('\n');
+
   //reset header value
-  for (int i = 0; i < _headerKeysCount; ++i) {
+  for (int i = 0; i < _headerKeysCount; ++i)
+  {
     _currentHeaders[i].value = String();
   }
 
@@ -79,8 +138,10 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client) {
   // Retrieve the "/path" part by finding the spaces
   int addr_start = req.indexOf(' ');
   int addr_end = req.indexOf(' ', addr_start + 1);
-  if (addr_start == -1 || addr_end == -1) {
-    LOGDEBUG1(F("Invalid request: "), req);
+
+  if (addr_start == -1 || addr_end == -1)
+  {
+    ET_LOGDEBUG1(F("EthernetWebServer::_parseRequest: Invalid request: "), req);
     return false;
   }
 
@@ -90,40 +151,63 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client) {
   _currentVersion = atoi(versionEnd.c_str());
   String searchStr = "";
   int hasSearch = url.indexOf('?');
-  if (hasSearch != -1) {
+
+  if (hasSearch != -1)
+  {
     searchStr = urlDecode(url.substring(hasSearch + 1));
     url = url.substring(0, hasSearch);
   }
+
   _currentUri = url;
   _chunked = false;
 
   HTTPMethod method = HTTP_GET;
 
   // KH
-#if 0
-  if (methodStr == "HEAD") {
+#if USE_NEW_WEBSERVER_VERSION
+  if (methodStr == "HEAD")
+  {
     method = HTTP_HEAD;
-  } else if (methodStr == "POST") {
+  }
+  else if (methodStr == "POST")
+  {
     method = HTTP_POST;
-  } else if (methodStr == "DELETE") {
+  }
+  else if (methodStr == "DELETE")
+  {
     method = HTTP_DELETE;
-  } else if (methodStr == "OPTIONS") {
+  }
+  else if (methodStr == "OPTIONS")
+  {
     method = HTTP_OPTIONS;
-  } else if (methodStr == "PUT") {
+  }
+  else if (methodStr == "PUT")
+  {
     method = HTTP_PUT;
-  } else if (methodStr == "PATCH") {
+  }
+  else if (methodStr == "PATCH")
+  {
     method = HTTP_PATCH;
   }
 #else
-  if (methodStr == "POST") {
+  if (methodStr == "POST")
+  {
     method = HTTP_POST;
-  } else if (methodStr == "DELETE") {
+  }
+  else if (methodStr == "DELETE") {
+
     method = HTTP_DELETE;
-  } else if (methodStr == "OPTIONS") {
+  }
+  else if (methodStr == "OPTIONS")
+  {
     method = HTTP_OPTIONS;
-  } else if (methodStr == "PUT") {
+  }
+  else if (methodStr == "PUT")
+  {
     method = HTTP_PUT;
-  } else if (methodStr == "PATCH") {
+  }
+  else if (methodStr == "PATCH")
+  {
     method = HTTP_PATCH;
   }
 #endif
@@ -131,235 +215,507 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client) {
   _currentMethod = method;
 
 
-  LOGDEBUG1(F("method: "), methodStr);
-  LOGDEBUG1(F("url: "), url);
-  LOGDEBUG1(F("search: "), searchStr);
+  ET_LOGDEBUG1(F("method: "), methodStr);
+  ET_LOGDEBUG1(F("url: "), url);
+  ET_LOGDEBUG1(F("search: "), searchStr);
 
   //attach handler
   RequestHandler* handler;
-  for (handler = _firstHandler; handler; handler = handler->next()) {
+
+  for (handler = _firstHandler; handler; handler = handler->next())
+  {
     if (handler->canHandle(_currentMethod, _currentUri))
       break;
   }
+
   _currentHandler = handler;
 
   String formData;
+
   // below is needed only when POST type request
-  if (method == HTTP_POST || method == HTTP_PUT || method == HTTP_PATCH || method == HTTP_DELETE) {
+  if (method == HTTP_POST || method == HTTP_PUT || method == HTTP_PATCH || method == HTTP_DELETE)
+  {
     String boundaryStr;
     String headerName;
     String headerValue;
     bool isForm = false;
     bool isEncoded = false;
     uint32_t contentLength = 0;
+
     //parse headers
-    while (1) {
+    while (1)
+    {
       req = client.readStringUntil('\r');
       client.readStringUntil('\n');
-      if (req == "") break;//no moar headers
+
+      if (req == "")
+        break;//no moar headers
+
       int headerDiv = req.indexOf(':');
-      if (headerDiv == -1) {
+
+      if (headerDiv == -1)
+      {
         break;
       }
+
       headerName = req.substring(0, headerDiv);
       headerValue = req.substring(headerDiv + 1);
       headerValue.trim();
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
-      LOGDEBUG1(F("headerName: "), headerName);
-      LOGDEBUG1(F("headerValue: "), headerValue);
+      ET_LOGDEBUG1(F("headerName: "), headerName);
+      ET_LOGDEBUG1(F("headerValue: "), headerValue);
 
-      if (headerName == "Content-Type") {
-        if (headerValue.startsWith("text/plain")) {
+      //KH
+      if (headerName.equalsIgnoreCase("Content-Type"))
+        //if (headerName == "Content-Type")
+      {
+        using namespace mime;
+        if (headerValue.startsWith(mimeTable[txt].mimeType))
+        {
           isForm = false;
-        } else if (headerValue.startsWith("application/x-www-form-urlencoded")) {
+        }
+        else if (headerValue.startsWith("application/x-www-form-urlencoded"))
+        {
           isForm = false;
           isEncoded = true;
-        } else if (headerValue.startsWith("multipart/")) {
+        }
+        else if (headerValue.startsWith("multipart/"))
+        {
           boundaryStr = headerValue.substring(headerValue.indexOf('=') + 1);
           // KH
           boundaryStr.replace("\"", "");
           //
           isForm = true;
         }
-      } else if (headerName == "Content-Length") {
+      }
+      //KH
+      else if (headerName.equalsIgnoreCase("Content-Length"))
+        //else if (headerName == "Content-Length")
+      {
         contentLength = headerValue.toInt();
-      } else if (headerName == "Host") {
+      }
+      //KH
+      else if (headerName.equalsIgnoreCase("Host"))
+        //else if (headerName == "Host")
+      {
         _hostHeader = headerValue;
       }
     }
 
-    if (!isForm) {
-      size_t plainLength;
-      char* plainBuf = readBytesWithTimeout(client, contentLength, plainLength, HTTP_MAX_POST_WAIT);
-      if (plainLength < contentLength) {
-        free(plainBuf);
-        return false;
-      }
-      if (contentLength > 0) {
-        if (searchStr != "") searchStr += '&';
-        if (isEncoded) {
-          //url encoded form
-          String decoded = urlDecode(plainBuf);
-          size_t decodedLen = decoded.length();
-          memcpy(plainBuf, decoded.c_str(), decodedLen);
-          plainBuf[decodedLen] = 0;
-          searchStr += plainBuf;
-        }
-        _parseArguments(searchStr);
-        if (!isEncoded) {
-          //plain post json or other data
-          RequestArgument& arg = _currentArgs[_currentArgCount++];
-          arg.key = "plain";
-          arg.value = String(plainBuf);
-        }
+    //KH
+#if USE_NEW_WEBSERVER_VERSION
+    String plainBuf;
 
-        LOGDEBUG1(F("Plain: "), plainBuf);
-
-        free(plainBuf);
-      }
+    if (   !isForm
+           && // read content into plainBuf
+           (   !readBytesWithTimeout(client, contentLength, plainBuf, HTTP_MAX_POST_WAIT)
+               || (plainBuf.length() < contentLength)
+           )
+       )
+    {
+      return false;
     }
 
-    if (isForm) {
-      _parseArguments(searchStr);
-      if (!_parseForm(client, boundaryStr, contentLength)) {
+    if (isEncoded)
+    {
+      // isEncoded => !isForm => plainBuf is not empty
+      // add plainBuf in search str
+      if (searchStr.length())
+        searchStr += '&';
+
+      searchStr += plainBuf;
+    }
+
+    // parse searchStr for key/value pairs
+    _parseArguments(searchStr);
+
+    if (!isForm)
+    {
+      if (contentLength)
+      {
+        // add key=value: plain={body} (post json or other data)
+        RequestArgument& arg = _currentArgs[_currentArgCount++];
+        arg.key = F("plain");
+        arg.value = plainBuf;
+      }
+    }
+    else
+    {
+      // isForm is true
+      // here: content is not yet read (plainBuf is still empty)
+      if (!_parseForm(client, boundaryStr, contentLength))
+      {
         return false;
       }
     }
-  } else {
+  }
+  else
+  {
     String headerName;
     String headerValue;
+
     //parse headers
-    while (1) {
+    while (1)
+    {
       req = client.readStringUntil('\r');
       client.readStringUntil('\n');
-      if (req == "") break;//no moar headers
+
+      if (req == "")
+        break;//no moar headers
+
       int headerDiv = req.indexOf(':');
-      if (headerDiv == -1) {
+
+      if (headerDiv == -1)
+      {
         break;
       }
+
       headerName = req.substring(0, headerDiv);
       headerValue = req.substring(headerDiv + 2);
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
-      LOGDEBUG1(F("headerName: "), headerName);
-      LOGDEBUG1(F("headerValue: "), headerValue);
+      ET_LOGDEBUG1(F("headerName:"), headerName);
+      ET_LOGDEBUG1(F("headerValue:"), headerValue);
 
-      if (headerName == "Host") {
+      if (headerName.equalsIgnoreCase(F("Host")))
+      {
         _hostHeader = headerValue;
       }
     }
+
     _parseArguments(searchStr);
   }
+
   client.flush();
 
-  LOGDEBUG1(F("Request: "), url);
-  LOGDEBUG1(F("Arguments: "), searchStr);
+  ET_LOGDEBUG1(F("Request:"), url);
+  ET_LOGDEBUG1(F("Arguments:"), searchStr);
+  ET_LOGDEBUG (F("Final list of key/value pairs:"));
+
+  for (int i = 0; i < _currentArgCount; i++)
+  {
+    ET_LOGDEBUG1("key:",   _currentArgs[i].key.c_str());
+    ET_LOGDEBUG1("value:", _currentArgs[i].value.c_str());
+  }
 
   return true;
+
+#else
+
+    if (isForm)
+    {
+      _parseArguments(searchStr);
+
+      if (!_parseForm(client, boundaryStr, contentLength))
+      {
+        return false;
+      }
+    }
+  }
+  else
+  {
+    String headerName;
+    String headerValue;
+
+    //parse headers
+    while (1)
+    {
+      req = client.readStringUntil('\r');
+      client.readStringUntil('\n');
+
+      if (req == "")
+        break;//no moar headers
+
+      int headerDiv = req.indexOf(':');
+
+      if (headerDiv == -1)
+      {
+        break;
+      }
+
+      headerName = req.substring(0, headerDiv);
+      headerValue = req.substring(headerDiv + 2);
+      _collectHeader(headerName.c_str(), headerValue.c_str());
+
+      ET_LOGDEBUG1(F("headerName: "), headerName);
+      ET_LOGDEBUG1(F("headerValue: "), headerValue);
+
+      if (headerName == "Host")
+      {
+        _hostHeader = headerValue;
+      }
+    }
+
+    _parseArguments(searchStr);
+  }
+
+  client.flush();
+
+  ET_LOGDEBUG1(F("Request: "), url);
+  ET_LOGDEBUG1(F("Arguments: "), searchStr);
+
+  return true;
+
+#endif
 }
 
-bool EthernetWebServer::_collectHeader(const char* headerName, const char* headerValue) {
-  for (int i = 0; i < _headerKeysCount; i++) {
-    if (_currentHeaders[i].key == headerName) {
+bool EthernetWebServer::_collectHeader(const char* headerName, const char* headerValue)
+{
+  for (int i = 0; i < _headerKeysCount; i++)
+  {
+    //KH
+    if (_currentHeaders[i].key.equalsIgnoreCase(headerName))
+      //if (_currentHeaders[i].key == headerName)
+    {
       _currentHeaders[i].value = headerValue;
       return true;
     }
   }
+
   return false;
 }
 
-void EthernetWebServer::_parseArguments(String data) {
+#if USE_NEW_WEBSERVER_VERSION
 
-  LOGDEBUG1(F("args: "), data);
+struct storeArgHandler
+{
+  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos, int next_index)
+  {
+    key = EthernetWebServer::urlDecode(data.substring(pos, key_end_pos));
+
+    if ((equal_index != -1) && ((equal_index < next_index - 1) || (next_index == -1)))
+      value = EthernetWebServer::urlDecode(data.substring(equal_index + 1, next_index));
+  }
+};
+
+struct nullArgHandler
+{
+  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos, int next_index)
+  {
+    (void)key; (void)value; (void)data; (void)equal_index; (void)pos; (void)key_end_pos; (void)next_index;
+    // do nothing
+  }
+};
+
+void EthernetWebServer::_parseArguments(const String& data)
+{
+  if (_currentArgs)
+    delete[] _currentArgs;
+
+  _currentArgCount = _parseArgumentsPrivate(data, nullArgHandler());
+
+  // allocate one more, this is needed because {"plain": plainBuf} is always added
+  _currentArgs = new RequestArgument[_currentArgCount + 1];
+
+  (void)_parseArgumentsPrivate(data, storeArgHandler());
+}
+
+int EthernetWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(String&, String&, const String&, int, int, int, int)> handler)
+{
+
+  ET_LOGDEBUG1(F("args: "), data);
+
+  size_t pos = 0;
+  int arg_total = 0;
+
+  while (true)
+  {
+    // skip empty expression
+    while (data[pos] == '&' || data[pos] == ';')
+      if (++pos >= data.length())
+        break;
+
+    // locate separators
+    int equal_index = data.indexOf('=', pos);
+    int key_end_pos = equal_index;
+    int next_index = data.indexOf('&', pos);
+    int next_index2 = data.indexOf(';', pos);
+
+    if ((next_index == -1) || (next_index2 != -1 && next_index2 < next_index))
+      next_index = next_index2;
+
+    if ((key_end_pos == -1) || ((key_end_pos > next_index) && (next_index != -1)))
+      key_end_pos = next_index;
+
+    if (key_end_pos == -1)
+      key_end_pos = data.length();
+
+    // handle key/value
+    if ((int)pos < key_end_pos)
+    {
+      RequestArgument& arg = _currentArgs[arg_total];
+      handler(arg.key, arg.value, data, equal_index, pos, key_end_pos, next_index);
+
+      ++arg_total;
+      pos = next_index + 1;
+    }
+
+    if (next_index == -1)
+      break;
+  }
+
+  ET_LOGDEBUG1(F("args count: "), arg_total);
+
+  return arg_total;
+}
+
+void EthernetWebServer::_uploadWriteByte(uint8_t b)
+{
+  if (_currentUpload->currentSize == HTTP_UPLOAD_BUFLEN)
+  {
+    if (_currentHandler && _currentHandler->canUpload(_currentUri))
+      _currentHandler->upload(*this, _currentUri, *_currentUpload);
+
+    _currentUpload->totalSize += _currentUpload->currentSize;
+    _currentUpload->currentSize = 0;
+  }
+
+  _currentUpload->buf[_currentUpload->currentSize++] = b;
+}
+
+uint8_t EthernetWebServer::_uploadReadByte(EthernetClient& client)
+{
+  int res = client.read();
+
+  if (res == -1)
+  {
+    while (!client.available() && client.connected())
+      yield();
+
+    res = client.read();
+  }
+
+  return (uint8_t)res;
+}
+
+#else
+
+void EthernetWebServer::_parseArguments(String data)
+{
+
+  ET_LOGDEBUG1(F("args: "), data);
 
   if (_currentArgs)
     delete[] _currentArgs;
+
   _currentArgs = 0;
-  if (data.length() == 0) {
+
+  if (data.length() == 0)
+  {
     _currentArgCount = 0;
     _currentArgs = new RequestArgument[1];
+
     return;
   }
+
   _currentArgCount = 1;
 
-  for (int i = 0; i < (int)data.length(); ) {
+  for (int i = 0; i < (int)data.length(); )
+  {
     i = data.indexOf('&', i);
+
     if (i == -1)
       break;
+
     ++i;
     ++_currentArgCount;
   }
 
-  LOGDEBUG1(F("args count: "), _currentArgCount);
+  ET_LOGDEBUG1(F("args count: "), _currentArgCount);
 
   _currentArgs = new RequestArgument[_currentArgCount + 1];
   int pos = 0;
   int iarg;
-  for (iarg = 0; iarg < _currentArgCount;) {
+
+  for (iarg = 0; iarg < _currentArgCount;)
+  {
     int equal_sign_index = data.indexOf('=', pos);
     int next_arg_index = data.indexOf('&', pos);
 
-    LOGDEBUG1(F("pos: "), pos);
-    LOGDEBUG1(F("=@ "), equal_sign_index);
-    LOGDEBUG1(F(" &@ "), next_arg_index);
+    ET_LOGDEBUG1(F("pos: "), pos);
+    ET_LOGDEBUG1(F("=@ "), equal_sign_index);
+    ET_LOGDEBUG1(F(" &@ "), next_arg_index);
 
 
-    if ((equal_sign_index == -1) || ((equal_sign_index > next_arg_index) && (next_arg_index != -1))) {
-
-      LOGDEBUG1(F("arg missing value: "), iarg);
+    if ((equal_sign_index == -1) || ((equal_sign_index > next_arg_index) && (next_arg_index != -1)))
+    {
+      ET_LOGDEBUG1(F("arg missing value: "), iarg);
 
       if (next_arg_index == -1)
         break;
+
       pos = next_arg_index + 1;
+
       continue;
     }
+
     RequestArgument& arg = _currentArgs[iarg];
     arg.key = data.substring(pos, equal_sign_index);
     arg.value = data.substring(equal_sign_index + 1, next_arg_index);
 
-    LOGDEBUG1(F("arg: "), iarg);
-    LOGDEBUG1(F("key: "), arg.key);
-    LOGDEBUG1(F("value: "), arg.value);
+    ET_LOGDEBUG1(F("arg: "), iarg);
+    ET_LOGDEBUG1(F("key: "), arg.key);
+    ET_LOGDEBUG1(F("value: "), arg.value);
 
     ++iarg;
+
     if (next_arg_index == -1)
       break;
+
     pos = next_arg_index + 1;
   }
+
   _currentArgCount = iarg;
 
-  LOGDEBUG1(F("args count: "), _currentArgCount);
+  ET_LOGDEBUG1(F("args count: "), _currentArgCount);
 }
 
-void EthernetWebServer::_uploadWriteByte(uint8_t b) {
-  if (_currentUpload.currentSize == HTTP_UPLOAD_BUFLEN) {
+void EthernetWebServer::_uploadWriteByte(uint8_t b)
+{
+  if (_currentUpload.currentSize == HTTP_UPLOAD_BUFLEN)
+  {
     if (_currentHandler && _currentHandler->canUpload(_currentUri))
       _currentHandler->upload(*this, _currentUri, _currentUpload);
+
     _currentUpload.totalSize += _currentUpload.currentSize;
     _currentUpload.currentSize = 0;
   }
+
   _currentUpload.buf[_currentUpload.currentSize++] = b;
 }
 
-uint8_t EthernetWebServer::_uploadReadByte(EthernetClient& client) {
+uint8_t EthernetWebServer::_uploadReadByte(EthernetClient& client)
+{
   int res = client.read();
-  if (res == -1) {
+
+  if (res == -1)
+  {
     while (!client.available() && client.connected())
       yield();
+
     res = client.read();
   }
+
   return (uint8_t)res;
 }
 
-bool EthernetWebServer::_parseForm(EthernetClient& client, String boundary, uint32_t len) {
+#endif
 
-  LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
-  LOGDEBUG1(F("Length: "), len);
+#if USE_NEW_WEBSERVER_VERSION
+
+bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundary, uint32_t len)
+{
+  (void) len;
+
+  ET_LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
+  ET_LOGDEBUG1(F("Length: "), len);
 
   String line;
   int retry = 0;
-  do {
+
+  do
+  {
     line = client.readStringUntil('\r');
     ++retry;
   } while (line.length() == 0 && retry < 3);
@@ -367,9 +723,15 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, String boundary, uint
   client.readStringUntil('\n');
   //start reading the form
   if (line == ("--" + boundary)) {
-    RequestArgument* postArgs = new RequestArgument[32];
-    int postArgsLen = 0;
-    while (1) {
+
+    if (_postArgs)
+      delete[] _postArgs;
+
+    _postArgs = new RequestArgument[WEBSERVER_MAX_POST_ARGS];
+    _postArgsLen = 0;
+
+    while (1)
+    {
       String argName;
       String argValue;
       String argType;
@@ -378,95 +740,139 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, String boundary, uint
 
       line = client.readStringUntil('\r');
       client.readStringUntil('\n');
-      if (line.startsWith("Content-Disposition")) {
+
+      if (line.length() > 19 && line.substring(0, 19).equalsIgnoreCase(F("Content-Disposition")))
+      {
         int nameStart = line.indexOf('=');
-        if (nameStart != -1) {
+
+        if (nameStart != -1)
+        {
           argName = line.substring(nameStart + 2);
           nameStart = argName.indexOf('=');
-          if (nameStart == -1) {
+
+          if (nameStart == -1)
+          {
             argName = argName.substring(0, argName.length() - 1);
-          } else {
+          }
+          else
+          {
             argFilename = argName.substring(nameStart + 2, argName.length() - 1);
             argName = argName.substring(0, argName.indexOf('"'));
             argIsFile = true;
 
-            LOGDEBUG1(F("PostArg FileName: "), argFilename);
+            ET_LOGDEBUG1(F("PostArg FileName: "), argFilename);
 
             //use GET to set the filename if uploading using blob
-            if (argFilename == "blob" && hasArg("filename")) argFilename = arg("filename");
+            if (argFilename == F("blob") && hasArg("filename"))
+              argFilename = arg("filename");
           }
 
-          LOGDEBUG1(F("PostArg Name: "), argName);
+          ET_LOGDEBUG1(F("PostArg Name: "), argName);
 
-          argType = "text/plain";
+          using namespace mime;
+          argType = mimeTable[txt].mimeType;
           line = client.readStringUntil('\r');
           client.readStringUntil('\n');
-          if (line.startsWith("Content-Type")) {
+
+          if (line.length() > 12 && line.substring(0, 12).equalsIgnoreCase("Content-Type"))
+          {
             argType = line.substring(line.indexOf(':') + 2);
             //skip next line
             client.readStringUntil('\r');
             client.readStringUntil('\n');
           }
 
-          LOGDEBUG1(F("PostArg Type: "), argType);
+          ET_LOGDEBUG1(F("PostArg Type: "), argType);
 
-          if (!argIsFile) {
-            while (1) {
+          if (!argIsFile)
+          {
+            while (1)
+            {
               line = client.readStringUntil('\r');
               client.readStringUntil('\n');
-              if (line.startsWith("--" + boundary)) break;
-              if (argValue.length() > 0) argValue += "\n";
+
+              if (line.startsWith("--" + boundary))
+                break;
+
+              if (argValue.length() > 0)
+                argValue += "\n";
+
               argValue += line;
             }
 
-            LOGDEBUG1(F("PostArg Value: "), argValue);
+            ET_LOGDEBUG1(F("PostArg Value: "), argValue);
 
-            RequestArgument& arg = postArgs[postArgsLen++];
+            RequestArgument& arg = _postArgs[_postArgsLen++];
             arg.key = argName;
             arg.value = argValue;
 
-            if (line == ("--" + boundary + "--")) {
-
-              LOGDEBUG(F("Done Parsing POST"));
+            if (line == ("--" + boundary + "--"))
+            {
+              ET_LOGDEBUG(F("Done Parsing POST"));
 
               break;
             }
-          } else {
-            _currentUpload.status = UPLOAD_FILE_START;
-            _currentUpload.name = argName;
-            _currentUpload.filename = argFilename;
-            _currentUpload.type = argType;
-            _currentUpload.totalSize = 0;
-            _currentUpload.currentSize = 0;
+          }
+          else
+          {
+            //_currentUpload.reset(new HTTPUpload());
+            if (!_currentUpload)
+              _currentUpload = new HTTPUpload();
 
-            LOGDEBUG1(F("Start File: "), _currentUpload.filename);
-            LOGDEBUG1(F("Type: "), _currentUpload.type);
+            _currentUpload->status = UPLOAD_FILE_START;
+            _currentUpload->name = argName;
+            _currentUpload->filename = argFilename;
+            _currentUpload->type = argType;
+            _currentUpload->totalSize = 0;
+            _currentUpload->currentSize = 0;
+            _currentUpload->contentLength = len;
+
+            ET_LOGDEBUG1(F("Start File: "), _currentUpload->filename);
+            ET_LOGDEBUG1(F("Type: "), _currentUpload->type);
 
             if (_currentHandler && _currentHandler->canUpload(_currentUri))
-              _currentHandler->upload(*this, _currentUri, _currentUpload);
-            _currentUpload.status = UPLOAD_FILE_WRITE;
+              _currentHandler->upload(*this, _currentUri, *_currentUpload);
+
+            _currentUpload->status = UPLOAD_FILE_WRITE;
             uint8_t argByte = _uploadReadByte(client);
 readfile:
-            while (argByte != 0x0D) {
-              if (!client.connected()) return _parseFormUploadAborted();
+            while (argByte != 0x0D)
+            {
+              if (!client.connected())
+                return _parseFormUploadAborted();
+
               _uploadWriteByte(argByte);
               argByte = _uploadReadByte(client);
             }
 
             argByte = _uploadReadByte(client);
-            if (!client.connected()) return _parseFormUploadAborted();
-            if (argByte == 0x0A) {
+
+            if (!client.connected())
+              return _parseFormUploadAborted();
+
+            if (argByte == 0x0A)
+            {
               argByte = _uploadReadByte(client);
-              if (!client.connected()) return _parseFormUploadAborted();
-              if ((char)argByte != '-') {
+
+              if (!client.connected())
+                return _parseFormUploadAborted();
+
+              if ((char)argByte != '-')
+              {
                 //continue reading the file
                 _uploadWriteByte(0x0D);
                 _uploadWriteByte(0x0A);
                 goto readfile;
-              } else {
+              }
+              else
+              {
                 argByte = _uploadReadByte(client);
-                if (!client.connected()) return _parseFormUploadAborted();
-                if ((char)argByte != '-') {
+
+                if (!client.connected())
+                  return _parseFormUploadAborted();
+
+                if ((char)argByte != '-')
+                {
                   //continue reading the file
                   _uploadWriteByte(0x0D);
                   _uploadWriteByte(0x0A);
@@ -478,42 +884,331 @@ readfile:
               uint8_t endBuf[boundary.length()];
               client.readBytes(endBuf, boundary.length());
 
-              if (strstr((const char*)endBuf, boundary.c_str()) != NULL) {
+              if (strstr((const char*)endBuf, boundary.c_str()) != NULL)
+              {
                 if (_currentHandler && _currentHandler->canUpload(_currentUri))
-                  _currentHandler->upload(*this, _currentUri, _currentUpload);
-                _currentUpload.totalSize += _currentUpload.currentSize;
-                _currentUpload.status = UPLOAD_FILE_END;
-                if (_currentHandler && _currentHandler->canUpload(_currentUri))
-                  _currentHandler->upload(*this, _currentUri, _currentUpload);
+                  _currentHandler->upload(*this, _currentUri, *_currentUpload);
 
-                LOGDEBUG1(F("End File: "), _currentUpload.filename);
-                LOGDEBUG1(F("Type: "), _currentUpload.type);
-                LOGDEBUG1(F("Size: "), _currentUpload.totalSize);
+                _currentUpload->totalSize += _currentUpload->currentSize;
+                _currentUpload->status = UPLOAD_FILE_END;
+
+                if (_currentHandler && _currentHandler->canUpload(_currentUri))
+                  _currentHandler->upload(*this, _currentUri, *_currentUpload);
+
+                ET_LOGDEBUG1(F("End File: "), _currentUpload->filename);
+                ET_LOGDEBUG1(F("Type: "), _currentUpload->type);
+                ET_LOGDEBUG1(F("Size: "), _currentUpload->totalSize);
 
                 line = client.readStringUntil(0x0D);
                 client.readStringUntil(0x0A);
-                if (line == "--") {
-                  LOGDEBUG(F("Done Parsing POST"));
 
+                if (line == "--")
+                {
+                  ET_LOGDEBUG(F("Done Parsing POST"));
                   break;
                 }
                 continue;
-              } else {
+              }
+              else
+              {
                 _uploadWriteByte(0x0D);
                 _uploadWriteByte(0x0A);
                 _uploadWriteByte((uint8_t)('-'));
                 _uploadWriteByte((uint8_t)('-'));
                 uint32_t i = 0;
-                while (i < boundary.length()) {
+
+                while (i < boundary.length())
+                {
                   _uploadWriteByte(endBuf[i++]);
                 }
+
                 argByte = _uploadReadByte(client);
                 goto readfile;
               }
-            } else {
+            }
+            else
+            {
               _uploadWriteByte(0x0D);
               goto readfile;
             }
+
+            break;
+          }
+        }
+      }
+    }
+
+    int iarg;
+    int totalArgs = ((WEBSERVER_MAX_POST_ARGS - _postArgsLen) < _currentArgCount) ? (WEBSERVER_MAX_POST_ARGS - _postArgsLen) : _currentArgCount;
+
+    for (iarg = 0; iarg < totalArgs; iarg++)
+    {
+      RequestArgument& arg = _postArgs[_postArgsLen++];
+      arg.key = _currentArgs[iarg].key;
+      arg.value = _currentArgs[iarg].value;
+    }
+
+    if (_currentArgs)
+      delete[] _currentArgs;
+
+    _currentArgs = new RequestArgument[_postArgsLen];
+
+    for (iarg = 0; iarg < _postArgsLen; iarg++)
+    {
+      RequestArgument& arg = _currentArgs[iarg];
+      arg.key = _postArgs[iarg].key;
+      arg.value = _postArgs[iarg].value;
+    }
+
+    _currentArgCount = iarg;
+
+    if (_postArgs)
+    {
+      delete[] _postArgs;
+      _postArgs = nullptr;
+      _postArgsLen = 0;
+    }
+    return true;
+  }
+
+  ET_LOGDEBUG1(F("Error: line: "), line);
+
+  return false;
+}
+
+bool EthernetWebServer::_parseFormUploadAborted()
+{
+  _currentUpload->status = UPLOAD_FILE_ABORTED;
+
+  if (_currentHandler && _currentHandler->canUpload(_currentUri))
+    _currentHandler->upload(*this, _currentUri, *_currentUpload);
+
+  return false;
+}
+
+#else
+
+
+bool EthernetWebServer::_parseForm(EthernetClient& client, String boundary, uint32_t len) {
+
+  ET_LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
+  ET_LOGDEBUG1(F("Length: "), len);
+
+  String line;
+  int retry = 0;
+
+  do
+  {
+    line = client.readStringUntil('\r');
+    ++retry;
+  } while (line.length() == 0 && retry < 3);
+
+  client.readStringUntil('\n');
+
+  //start reading the form
+  if (line == ("--" + boundary))
+  {
+    RequestArgument* postArgs = new RequestArgument[32];
+    int postArgsLen = 0;
+
+    while (1)
+    {
+      String argName;
+      String argValue;
+      String argType;
+      String argFilename;
+      bool argIsFile = false;
+
+      line = client.readStringUntil('\r');
+      client.readStringUntil('\n');
+
+      if (line.startsWith("Content-Disposition"))
+      {
+        int nameStart = line.indexOf('=');
+
+        if (nameStart != -1)
+        {
+          argName = line.substring(nameStart + 2);
+          nameStart = argName.indexOf('=');
+
+          if (nameStart == -1)
+          {
+            argName = argName.substring(0, argName.length() - 1);
+          }
+          else
+          {
+            argFilename = argName.substring(nameStart + 2, argName.length() - 1);
+            argName = argName.substring(0, argName.indexOf('"'));
+            argIsFile = true;
+
+            ET_LOGDEBUG1(F("PostArg FileName: "), argFilename);
+
+            //use GET to set the filename if uploading using blob
+            if (argFilename == "blob" && hasArg("filename"))
+              argFilename = arg("filename");
+          }
+
+          ET_LOGDEBUG1(F("PostArg Name: "), argName);
+
+          argType = "text/plain";
+          line = client.readStringUntil('\r');
+          client.readStringUntil('\n');
+
+          if (line.startsWith("Content-Type"))
+          {
+            argType = line.substring(line.indexOf(':') + 2);
+            //skip next line
+            client.readStringUntil('\r');
+            client.readStringUntil('\n');
+          }
+
+          ET_LOGDEBUG1(F("PostArg Type: "), argType);
+
+          if (!argIsFile)
+          {
+            while (1)
+            {
+              line = client.readStringUntil('\r');
+              client.readStringUntil('\n');
+
+              if (line.startsWith("--" + boundary))
+                break;
+
+              if (argValue.length() > 0)
+                argValue += "\n";
+
+              argValue += line;
+            }
+
+            ET_LOGDEBUG1(F("PostArg Value: "), argValue);
+
+            RequestArgument& arg = postArgs[postArgsLen++];
+            arg.key = argName;
+            arg.value = argValue;
+
+            if (line == ("--" + boundary + "--"))
+            {
+              ET_LOGDEBUG(F("Done Parsing POST"));
+
+              break;
+            }
+          }
+          else
+          {
+            _currentUpload.status = UPLOAD_FILE_START;
+            _currentUpload.name = argName;
+            _currentUpload.filename = argFilename;
+            _currentUpload.type = argType;
+            _currentUpload.totalSize = 0;
+            _currentUpload.currentSize = 0;
+
+            ET_LOGDEBUG1(F("Start File: "), _currentUpload.filename);
+            ET_LOGDEBUG1(F("Type: "), _currentUpload.type);
+
+            if (_currentHandler && _currentHandler->canUpload(_currentUri))
+              _currentHandler->upload(*this, _currentUri, _currentUpload);
+
+            _currentUpload.status = UPLOAD_FILE_WRITE;
+            uint8_t argByte = _uploadReadByte(client);
+
+readfile:
+            while (argByte != 0x0D)
+            {
+              if (!client.connected())
+                return _parseFormUploadAborted();
+
+              _uploadWriteByte(argByte);
+              argByte = _uploadReadByte(client);
+            }
+
+            argByte = _uploadReadByte(client);
+
+            if (!client.connected())
+              return _parseFormUploadAborted();
+
+            if (argByte == 0x0A)
+            {
+              argByte = _uploadReadByte(client);
+
+              if (!client.connected())
+                return _parseFormUploadAborted();
+
+              if ((char)argByte != '-')
+              {
+                //continue reading the file
+                _uploadWriteByte(0x0D);
+                _uploadWriteByte(0x0A);
+                goto readfile;
+              }
+              else
+              {
+                argByte = _uploadReadByte(client);
+
+                if (!client.connected())
+                  return _parseFormUploadAborted();
+
+                if ((char)argByte != '-')
+                {
+                  //continue reading the file
+                  _uploadWriteByte(0x0D);
+                  _uploadWriteByte(0x0A);
+                  _uploadWriteByte((uint8_t)('-'));
+                  goto readfile;
+                }
+              }
+
+              uint8_t endBuf[boundary.length()];
+              client.readBytes(endBuf, boundary.length());
+
+              if (strstr((const char*)endBuf, boundary.c_str()) != NULL)
+              {
+                if (_currentHandler && _currentHandler->canUpload(_currentUri))
+                  _currentHandler->upload(*this, _currentUri, _currentUpload);
+
+                _currentUpload.totalSize += _currentUpload.currentSize;
+                _currentUpload.status = UPLOAD_FILE_END;
+
+                if (_currentHandler && _currentHandler->canUpload(_currentUri))
+                  _currentHandler->upload(*this, _currentUri, _currentUpload);
+
+                ET_LOGDEBUG1(F("End File: "), _currentUpload.filename);
+                ET_LOGDEBUG1(F("Type: "), _currentUpload.type);
+                ET_LOGDEBUG1(F("Size: "), _currentUpload.totalSize);
+
+                line = client.readStringUntil(0x0D);
+                client.readStringUntil(0x0A);
+
+                if (line == "--")
+                {
+                  ET_LOGDEBUG(F("Done Parsing POST"));
+
+                  break;
+                }
+                continue;
+              }
+              else
+              {
+                _uploadWriteByte(0x0D);
+                _uploadWriteByte(0x0A);
+                _uploadWriteByte((uint8_t)('-'));
+                _uploadWriteByte((uint8_t)('-'));
+                uint32_t i = 0;
+
+                while (i < boundary.length())
+                {
+                  _uploadWriteByte(endBuf[i++]);
+                }
+
+                argByte = _uploadReadByte(client);
+                goto readfile;
+              }
+            }
+            else
+            {
+              _uploadWriteByte(0x0D);
+              goto readfile;
+            }
+
             break;
           }
         }
@@ -522,27 +1217,48 @@ readfile:
 
     int iarg;
     int totalArgs = ((32 - postArgsLen) < _currentArgCount) ? (32 - postArgsLen) : _currentArgCount;
-    for (iarg = 0; iarg < totalArgs; iarg++) {
+
+    for (iarg = 0; iarg < totalArgs; iarg++)
+    {
       RequestArgument& arg = postArgs[postArgsLen++];
       arg.key = _currentArgs[iarg].key;
       arg.value = _currentArgs[iarg].value;
     }
+
     if (_currentArgs) delete[] _currentArgs;
     _currentArgs = new RequestArgument[postArgsLen];
-    for (iarg = 0; iarg < postArgsLen; iarg++) {
+
+    for (iarg = 0; iarg < postArgsLen; iarg++)
+    {
       RequestArgument& arg = _currentArgs[iarg];
       arg.key = postArgs[iarg].key;
       arg.value = postArgs[iarg].value;
     }
+
     _currentArgCount = iarg;
-    if (postArgs) delete[] postArgs;
+
+    if (postArgs)
+      delete[] postArgs;
+
     return true;
   }
 
-  LOGDEBUG1(F("Error: line: "), line);
+  ET_LOGDEBUG1(F("Error: line: "), line);
 
   return false;
 }
+
+bool EthernetWebServer::_parseFormUploadAborted()
+{
+  _currentUpload.status = UPLOAD_FILE_ABORTED;
+
+  if (_currentHandler && _currentHandler->canUpload(_currentUri))
+    _currentHandler->upload(*this, _currentUri, _currentUpload);
+
+  return false;
+}
+
+#endif
 
 String EthernetWebServer::urlDecode(const String& text)
 {
@@ -550,10 +1266,12 @@ String EthernetWebServer::urlDecode(const String& text)
   char temp[] = "0x00";
   unsigned int len = text.length();
   unsigned int i = 0;
+
   while (i < len)
   {
     char decodedChar;
     char encodedChar = text.charAt(i++);
+
     if ((encodedChar == '%') && (i + 1 < len))
     {
       temp[2] = text.charAt(i++);
@@ -561,25 +1279,22 @@ String EthernetWebServer::urlDecode(const String& text)
 
       decodedChar = strtol(temp, NULL, 16);
     }
-    else {
+    else
+    {
       if (encodedChar == '+')
       {
         decodedChar = ' ';
       }
-      else {
+      else
+      {
         decodedChar = encodedChar;  // normal ascii char
       }
     }
+
     decoded += decodedChar;
   }
-  return decoded;
-}
 
-bool EthernetWebServer::_parseFormUploadAborted() {
-  _currentUpload.status = UPLOAD_FILE_ABORTED;
-  if (_currentHandler && _currentHandler->canUpload(_currentUri))
-    _currentHandler->upload(*this, _currentUri, _currentUpload);
-  return false;
+  return decoded;
 }
 
 #endif //Parsing_impl_h

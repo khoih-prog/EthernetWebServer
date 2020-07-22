@@ -6,7 +6,7 @@
    Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.9
+   Version: 1.0.10
 
    Original author:
    @file       Esp8266WebServer.h
@@ -26,12 +26,18 @@
     1.0.7   K Hoang      30/04/2020 Add ENC28J60 support to ESP32/ESP8266 boards    
     1.0.8   K Hoang      12/05/2020 Fix W5x00 support for ESP8266 boards.
     1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
+    1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
 /*
     The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
     and pins 50, 51, and 52 on the Mega. On both boards, pin 10 is used as SS. On the Mega, the hardware SS pin, 53,
     is not used to select the Ethernet controller chip, but it must be kept as an output or the SPI interface won't work.
 */
+
+#define DEBUG_ETHERNET_WEBSERVER_PORT       Serial
+
+// Debug Level from 0 to 4
+#define _ETHERNET_WEBSERVER_LOGLEVEL_       1
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
@@ -46,7 +52,7 @@
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
-        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) )
+        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
 #if defined(ETHERNET_USE_NRF528XX)
 #undef ETHERNET_USE_NRF528XX
 #endif
@@ -124,6 +130,8 @@
 #define BOARD_TYPE      "NRF52840_PCA10056"
 #elif defined(NINA_B302_ublox)
 #define BOARD_TYPE      "NINA_B302_ublox"
+#elif defined(NINA_B112_ublox)
+#define BOARD_TYPE      "NINA_B112_ublox"
 #elif defined(PARTICLE_XENON)
 #define BOARD_TYPE      "PARTICLE_XENON"
 #elif defined(ARDUINO_NRF52_ADAFRUIT)
@@ -133,30 +141,50 @@
 #endif
 
 #elif ( defined(CORE_TEENSY) )
-// For Teensy 4.0
 #if defined(__IMXRT1062__)
-#define BOARD_TYPE      "TEENSY 4.0"
-#elif ( defined(__MKL26Z64__) || defined(ARDUINO_ARCH_AVR) )
-#define BOARD_TYPE      "TEENSY LC or 2.0"
+// For Teensy 4.1/4.0
+#define BOARD_TYPE      "TEENSY 4.1/4.0"
+#elif defined(__MK66FX1M0__)
+#define BOARD_TYPE "Teensy 3.6"
+#elif defined(__MK64FX512__)
+#define BOARD_TYPE "Teensy 3.5"
+#elif defined(__MKL26Z64__)
+#define BOARD_TYPE "Teensy LC"
+#elif defined(__MK20DX256__)
+#define BOARD_TYPE "Teensy 3.2" // and Teensy 3.1 (obsolete)
+#elif defined(__MK20DX128__)
+#define BOARD_TYPE "Teensy 3.0"
+#elif defined(__AVR_AT90USB1286__)
+#error Teensy 2.0++ not supported yet
+#elif defined(__AVR_ATmega32U4__)
+#error Teensy 2.0 not supported yet
 #else
-#define BOARD_TYPE      "TEENSY 3.X"
+// For Other Boards
+#define BOARD_TYPE      "Unknown Teensy Board"
 #endif
 
-#elif ( defined(ESP8266) ) 
+#elif ( defined(ESP8266) )
 // For ESP8266
 #warning Use ESP8266 architecture
+#include <ESP8266mDNS.h>
 #define ETHERNET_USE_ESP8266
 #define BOARD_TYPE      "ESP8266"
 
 #elif ( defined(ESP32) )
 // For ESP32
-#warning Use ESP32architecture
+#warning Use ESP32 architecture
 #define ETHERNET_USE_ESP32
 #define BOARD_TYPE      "ESP32"
+
+#define W5500_RST_PORT   21
 
 #else
 // For Mega
 #define BOARD_TYPE      "AVR Mega"
+#endif
+
+#ifndef BOARD_NAME
+  #define BOARD_NAME    BOARD_TYPE
 #endif
 
 #include <SPI.h>
@@ -267,7 +295,7 @@ void setup()
   while (!Serial);
 
   //delay(1000);
-  Serial.println("\nStarting HTTPBasicAuth on " + String(BOARD_TYPE));
+  Serial.println("\nStarting HTTPBasicAuth on " + String(BOARD_NAME));
 
   #if USE_ETHERNET_WRAPPER
 
