@@ -73,11 +73,11 @@ The EthernetWebServer class found in `EthernetWebServer.h` header, is a simple w
  9. [`ESP8266 core 2.7.2+`](https://github.com/esp8266/Arduino#installing-with-boards-manager) for ESP8266 boards. To use ESP8266 core 2.7.1+ for LittleFS. 
 10. [`Functional-VLPP library v1.0.1+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 11. Depending on which Ethernet card you're using:
-   - [Ethernet library](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500.
-   - [EthernetLarge library](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
-   - [Ethernet2 library](https://github.com/khoih-prog/Ethernet2) for W5500.
-   - [Ethernet3 library](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.
-   - [UIPEthernet](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60
+   - [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500.
+   - [`EthernetLarge library`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
+   - [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2) for W5500.
+   - [`Ethernet3 library`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.
+   - [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60
 
 ## Installation
 
@@ -95,14 +95,14 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 ### VS Code & PlatformIO:
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install **EthernetWebServer** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for WiFiWebServer in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install **EthernetWebServer** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for ***EthernetWebServer*** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](examples/platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically.
 
 ---
 
 ### Packages' Patches
 
-1. ***To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840 boards***, you have to copy the whole [nRF52 0.20.5](https://github.com/khoih-prog/WiFiWebServer/tree/master/Packages_Patches/adafruit/hardware/nrf52/0.20.5) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5). 
+1. ***To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840 boards***, you have to copy the whole [nRF52 0.20.5](https://github.com/khoih-prog/EthernetWebServer/tree/master/Packages_Patches/adafruit/hardware/nrf52/0.20.5) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5). 
 
 Supposing the Adafruit nRF52 version is 0.20.5. These files must be copied into the directory:
 - `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/platform.txt`
@@ -122,7 +122,7 @@ These files must be copied into the directory:
 - `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B112_ublox/variant.h`
 - `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B112_ublox/variant.cpp`
 
-2. ***To be able to compile and run on Teensy boards***, you have to copy the file [Teensy boards.txt](https://github.com/khoih-prog/WiFiWebServer/blob/master/Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
+2. ***To be able to compile and run on Teensy boards***, you have to copy the file [Teensy boards.txt](https://github.com/khoih-prog/EthernetWebServer/blob/master/Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
 
 Supposing the Arduino version is 1.8.12. This file must be copied into the directory:
 
@@ -133,7 +133,7 @@ This file must be copied into the directory:
 
 - `./arduino-x.yy.zz/hardware/teensy/avr/boards.txt`
 
-3. ***To be able to compile and run on SAM DUE boards***, you have to copy the whole [SAM DUE](https://github.com/khoih-prog/WiFiWebServer/tree/master/Packages_Patches/arduino/hardware/sam/1.6.12) directory into Arduino sam directory (~/.arduino15/packages/arduino/hardware/sam/1.6.12). 
+3. ***To be able to compile and run on SAM DUE boards***, you have to copy the whole [SAM DUE](https://github.com/khoih-prog/EthernetWebServer/tree/master/Packages_Patches/arduino/hardware/sam/1.6.12) directory into Arduino sam directory (~/.arduino15/packages/arduino/hardware/sam/1.6.12). 
 
 Supposing the Arduino SAM core version is 1.6.12. This file must be copied into the directory:
 
@@ -144,7 +144,7 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/sam/x.yy.zz/platform.txt`
 
-4. ***To be able to automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the file [Arduino SAMD platform.txt](https://github.com/khoih-prog/WiFiWebServer/tree/master/Packages_Patches/arduino/hardware/samd/1.8.6) into Arduino samd directory (~/.arduino15/packages/arduino/hardware/samd/1.8.6). 
+4. ***To be able to automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the file [Arduino SAMD platform.txt](https://github.com/khoih-prog/EthernetWebServer/tree/master/Packages_Patches/arduino/hardware/samd/1.8.6) into Arduino samd directory (~/.arduino15/packages/arduino/hardware/samd/1.8.6). 
 
 Supposing the Arduino SAMD core version is 1.8.6. This file must be copied into the directory:
 
@@ -155,7 +155,7 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/samd/x.yy.zz/platform.txt`
 
-5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](https://github.com/khoih-prog/WiFiWebServer/tree/master/Packages_Patches/adafruit/hardware/samd/1.5.14) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.5.14). 
+5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](https://github.com/khoih-prog/EthernetWebServer/tree/master/Packages_Patches/adafruit/hardware/samd/1.5.14) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.5.14). 
 
 Supposing the Adafruit SAMD core version is 1.5.14. This file must be copied into the directory:
 
@@ -180,8 +180,8 @@ This file must be copied into the directory:
 - [w5100.cpp](LibraryPatches/Ethernet/src/utility/w5100.cpp)
 
 3. To fix [`EthernetLarge library`](https://github.com/OPEnSLab-OSU/EthernetLarge), just copy these following files into the [`EthernetLarge library`](https://github.com/OPEnSLab-OSU/EthernetLarge) directory to overwrite the old files:
-- [Ethernet.h](LibraryPatches/EthernetLarge/src/Ethernet.h)
-- [Ethernet.cpp](LibraryPatches/EthernetLarge/src/Ethernet.cpp)
+- [EthernetLarge.h](LibraryPatches/EthernetLarge/src/EthernetLarge.h)
+- [EthernetLarge.cpp](LibraryPatches/EthernetLarge/src/EthernetLarge.cpp)
 - [EthernetServer.cpp](LibraryPatches/EthernetLarge/src/EthernetServer.cpp)
 - [w5100.h](LibraryPatches/EthernetLarge/src/utility/w5100.h)
 - [w5100.cpp](LibraryPatches/EthernetLarge/src/utility/w5100.cpp)
@@ -195,9 +195,9 @@ This file must be copied into the directory:
 
 ---
 
-#### Configuration Notes
+### Configuration Notes
 
-1. ***How to select which built-in Ethernet or shield to use***
+#### 1. How to select which built-in Ethernet or shield to use
 
 The easiest way is to use 
 
@@ -271,7 +271,7 @@ For example, Ethernet_XYZ library uses ***Ethernet_XYZ.h***
 - The ***Ethernet_Shield_W5200, EtherCard, EtherSia  libraries are not supported***. Don't use unless you know how to modify those libraries.
 - Requests to support for any future custom Ethernet library will be ignored. ***Use at your own risk***.
 
-2. ***How to select another CS/SS pin to use***
+#### 2. How to select another CS/SS pin to use
 
 The default CS/SS pin is GPIO4(D2) for ESP8266, GPIO22 for ESP32, 10 for all other boards.
 
@@ -288,7 +288,7 @@ then select the CS/SS pin (e.g. 22) to use as follows:
 #define USE_THIS_SS_PIN   22
 ```
 
-3. ***How to use W5x00 with ESP8266***
+#### 3. How to use W5x00 with ESP8266
 
 To avoid using the default but not-working Ethernet library of ESP8266, rename the Ethernet.h/cpp to Ethernet_ESP8266.h/cpp to avoid library conflict if you're using the Arduino Ethernet library. The Ethernet2, Ethernet3, EthernetLarge library can be used without conflict.
 
@@ -309,7 +309,7 @@ These pins are tested OK with ESP8266 and W5x00
 
 ```
 
-4. ***How to increase W5x00 TX/RX buffer***
+#### 4. How to increase W5x00 TX/RX buffer
 
 - For ***Ethernet3*** library only,  use as follows
 
@@ -1311,7 +1311,7 @@ The library supports
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
 
-1. Based on and mdified from from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
+1. Based on and modified from the good [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 2. [jandrassy](https://github.com/jandrassy) for [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
 3. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Blox B302 running as nRF52840 and U-Blox B112 running as nRF52832***, has never been started and finished. Also see [ESP32-based U-BLOX NINA W102 running ENC28J60](https://u-blox-ethernet-ninaw.blogspot.com/).
 4. Thanks to [Vladimir](https://github.com/workpage2) to initiate the work on ESP32 and ESP8266 in [Spiffs not work Issue #2](https://github.com/khoih-prog/EthernetWebServer/issues/2)
