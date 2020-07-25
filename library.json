@@ -1,6 +1,6 @@
 {
   "name": "EthernetWebServer",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "keywords": "WebServer, Ethernet, Ethernet2, Ethernet3, EthernetLarge, UIPEthernet, Arduino, Teensy, SAMD21, SAMD51, SAM DUE, AVR, Mega, nRF52, ESP32, ESP8266, W5100, W5200, W5500, ENC28J60, Ethernet shield",
   "description": "Simple EthernetWebServer library for AVR, Teensy, SAM DUE, SAMD21, SAMD51, ESP, nRF52, ESP32, ESP8266 boards using Ethernet shields W5100, W5200, W5500 or ENC28J60",
   "authors":
