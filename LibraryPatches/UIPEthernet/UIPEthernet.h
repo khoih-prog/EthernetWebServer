@@ -1,0 +1,158 @@
+/*
+ UIPEthernet.h - Arduino implementation of a uIP wrapper class.
+ Copyright (c) 2013 Norbert Truchsess <norbert.truchsess@t-online.de>
+ All rights reserved.
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
+
+#ifndef UIPETHERNET_H
+#define UIPETHERNET_H
+
+#include "ethernet_comp.h"
+#if defined(__MBED__)
+  #include <mbed.h>
+#endif
+#if defined(ARDUINO)
+  #include <Arduino.h>
+  #if defined(__STM32F3__) || defined(STM32F3) || defined(__RFduino__)
+    #include "mbed/IPAddress.h"
+  #else
+    #include "IPAddress.h"
+  #endif
+#endif
+#include "utility/Enc28J60Network.h"
+#include "utility/uipopt.h"
+#include "Dhcp.h"
+#if UIP_UDP
+  #include "UIPUdp.h"
+#endif
+#include "UIPClient.h"
+#include "UIPServer.h"
+
+extern "C"
+{
+#include "utility/uip_timer.h"
+#include "utility/uip.h"
+}
+
+#define UIPETHERNET_FREEPACKET 1
+#define UIPETHERNET_SENDPACKET 2
+#define UIPETHERNET_BUFFERREAD 4
+
+#define uip_ip_addr(addr, ip) do { \
+                     ((u16_t *)(addr))[0] = HTONS(((ip[0]) << 8) | (ip[1])); \
+                     ((u16_t *)(addr))[1] = HTONS(((ip[2]) << 8) | (ip[3])); \
+                  } while(0)
+
+#define ip_addr_uip(a) IPAddress(a[0] & 0xFF, a[0] >> 8 , a[1] & 0xFF, a[1] >> 8) //TODO this is not IPV6 capable
+
+#define uip_seteth_addr(eaddr) do {uip_ethaddr.addr[0] = eaddr[0]; \
+                              uip_ethaddr.addr[1] = eaddr[1];\
+                              uip_ethaddr.addr[2] = eaddr[2];\
+                              uip_ethaddr.addr[3] = eaddr[3];\
+                              uip_ethaddr.addr[4] = eaddr[4];\
+                              uip_ethaddr.addr[5] = eaddr[5];} while(0)
+
+#define BUF ((struct uip_tcpip_hdr *)&uip_buf[UIP_LLH_LEN])
+
+enum EthernetLinkStatus {
+  Unknown,
+  LinkON,
+  LinkOFF
+};
+
+class UIPEthernetClass
+{
+public:
+  UIPEthernetClass();
+
+  void init(const uint8_t pin);
+
+  int begin(const uint8_t* mac);
+  void begin(const uint8_t* mac, IPAddress ip);
+  void begin(const uint8_t* mac, IPAddress ip, IPAddress dns);
+  void begin(const uint8_t* mac, IPAddress ip, IPAddress dns, IPAddress gateway);
+  void begin(const uint8_t* mac, IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet);
+
+  // maintain() must be called at regular intervals to process the incoming serial
+  // data and issue IP events to the sketch.  It does not return until all IP
+  // events have been processed. Renews dhcp-lease if required.
+  int maintain();
+
+  EthernetLinkStatus linkStatus();
+  
+  // KH add to have similar function to Ethernet lib
+  // Certainly we can use void macAddress(uint8_t mac[]) to read from W5x00.
+  void MACAddress(uint8_t *mac_address)
+  {
+    memcpy(mac_address, _mac_address, sizeof(_mac_address));
+  }
+  //////
+
+  IPAddress localIP();
+  IPAddress subnetMask();
+  IPAddress gatewayIP();
+  IPAddress dnsServerIP();
+
+private:
+
+  // KH add to work with new func void MACAddress(uint8_t *mac_address); and SinricPro v2.5.1+
+  uint8_t _mac_address[6] ={0,};
+  //////
+  
+  static memhandle in_packet;
+  static memhandle uip_packet;
+  static uint8_t uip_hdrlen;
+  static uint8_t packetstate;
+  
+  static IPAddress _dnsServerAddress;
+  #if UIP_UDP
+    static DhcpClass* _dhcp;
+  #endif
+  static unsigned long periodic_timer;
+
+  static void netInit(const uint8_t* mac);
+  static void configure(IPAddress ip, IPAddress dns, IPAddress gateway, IPAddress subnet);
+
+  static void tick();
+
+  static bool network_send();
+
+  friend class UIPServer;
+
+  friend class UIPClient;
+
+  friend class UIPUDP;
+
+  static uint16_t chksum(uint16_t sum, const uint8_t* data, uint16_t len);
+  static uint16_t ipchksum(void);
+#if UIP_UDP
+  static uint16_t upper_layer_chksum(uint8_t proto);
+#endif
+  friend uint16_t uip_ipchksum(void);
+  friend uint16_t uip_tcpchksum(void);
+  friend uint16_t uip_udpchksum(void);
+
+  friend void uipclient_appcall(void);
+  friend void uipudp_appcall(void);
+
+#if UIP_CONF_IPV6
+  uint16_t uip_icmp6chksum(void);
+#endif /* UIP_CONF_IPV6 */
+};
+
+extern UIPEthernetClass UIPEthernet;
+
+#endif
