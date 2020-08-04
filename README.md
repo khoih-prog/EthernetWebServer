@@ -181,16 +181,27 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/sam/x.yy.zz/platform.txt`
 
- 4. ***To be able to automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the file [Arduino SAMD platform.txt](Packages_Patches/arduino/hardware/samd/1.8.6) into Arduino samd directory (~/.arduino15/packages/arduino/hardware/samd/1.8.6). 
+ 4. ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.7](Packages_Patches/arduino/hardware/samd/1.8.7) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.7).
+ 
+Supposing the Arduino SAMD version is 1.8.7. These files must be copied into the directory:
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.7/platform.txt`
+- ***`~/.arduino15/packages/arduino/hardware/samd/1.8.7/cores/arduino/Arduino.h`***
 
-Supposing the Arduino SAMD core version is 1.8.6. This file must be copied into the directory:
+Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 
-- `~/.arduino15/packages/arduino/hardware/samd/1.8.6/platform.txt`
+These files must be copied into the directory:
 
-Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+- `~/.arduino15/packages/arduino/hardware/samd/x.yy.z/platform.txt`
+- ***`~/.arduino15/packages/arduino/hardware/samd/x.yy.z/cores/arduino/Arduino.h`***
+ 
+ This is mandatory to fix the ***notorious Arduino SAMD compiler error***. See [Improve Arduino compatibility with the STL (min and max macro)](https://github.com/arduino/ArduinoCore-samd/pull/399)
+ 
+```
+ ...\arm-none-eabi\include\c++\7.2.1\bits\stl_algobase.h:243:56: error: macro "min" passed 3 arguments, but takes just 2
+     min(const _Tp& __a, const _Tp& __b, _Compare __comp)
+```
 
-- `~/.arduino15/packages/arduino/hardware/samd/x.yy.zz/platform.txt`
+Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
  5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
 
@@ -264,7 +275,6 @@ theses files must be copied into the corresponding directory:
 
 7. To fix [`ESP32 compile error`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.12/hardware/espressif/cores/esp32) to overwrite the old file:
 - [Server.h](LibraryPatches/esp32/cores/esp32/Server.h)
-
 
 ---
 
@@ -554,7 +564,8 @@ Example:*
 ```
 ---
 
-Also see examples:
+### Examples:
+
  1. [AdvancedWebServer](examples/AdvancedWebServer)
  2. [HelloServer](examples/HelloServer)
  3. [HelloServer2](examples/HelloServer2)
@@ -567,9 +578,11 @@ Also see examples:
 10. [WebClientRepeating](examples/WebClientRepeating)
 11. [WebServer](examples/WebServer)
 
-## Example [AdvancedWebServer](examples/AdvancedWebServer)
+---
 
-### File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
+### Example [AdvancedWebServer](examples/AdvancedWebServer)
+
+#### File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
 
 
 ```cpp
@@ -794,8 +807,8 @@ void setup(void)
   // Use Static IP
   //Ethernet.begin(mac, ip);
   // Use DHCP dynamic IP and random mac
-  srand(1);
-  uint16_t index = rand() % NUMBER_OF_MAC;
+  //srand(1);
+  uint16_t index = millis() % NUMBER_OF_MAC;
   //uint16_t index = random(NUMBER_OF_MAC);
 
   Ethernet.begin(mac[index]);
@@ -875,7 +888,7 @@ void loop(void)
 }
 ```
 
-### File [defines.h](examples/AdvancedWebServer/defines.h)
+#### File [defines.h](examples/AdvancedWebServer/defines.h)
 
 ```cpp
 #ifndef defines_h
