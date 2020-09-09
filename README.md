@@ -7,8 +7,9 @@
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/EthernetWebServer.svg)](http://github.com/khoih-prog/EthernetWebServer/issues)
 
 ---
+---
 
-#### New in v1.0.11
+### New in v1.0.11
 
 1. Add support to Seeeduino SAMD21/SAMD51 boards (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
 2. Add and restructure examples.
@@ -51,6 +52,7 @@ From v1.0.3+, the library supports more Arduino boards ( SAM DUE, SAMD21: ZERO, 
 From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel SAM3X8E ARM Cortex-M3, STM32F series, ESP8266, Intel ARC32(Genuino101), Nordic nRF51(RFduino), Teensy boards, Realtek Ameba(RTL8195A,RTL8710)) using Wiznet W5x00 or ENC28J60 EThernet shields by using [UIPEthernet](https://github.com/UIPEthernet/UIPEthernet) library besides standard [Ethernet library](https://www.arduino.cc/en/Reference/Ethernet).
 
 ---
+---
 
 This is simple yet complete WebServer library for `AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, ESP32/ESP8266, etc.` boards running Ethernet shields. The functions are similar and compatible to ESP8266/ESP32 WebServer libraries to make life much easier to port sketches from ESP8266/ESP32.
 
@@ -77,6 +79,8 @@ and these following Ethernet shields/modules:
 1. W5x00
 2. ENC28J60
 
+---
+
 The library provides supports to:
 
 1. WiFi Client, STA and AP mode
@@ -91,15 +95,16 @@ Library is based on and modified from:
 The EthernetWebServer class found in `EthernetWebServer.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
 
 ---
+---
 
 ## Prerequisite
  1. [`Arduino IDE 1.8.12+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 2. `Arduino AVR core 1.8.2+` for Arduino (Use Arduino Board Manager) for AVR boards
+ 2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install.
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards.
- 5. [`Arduino SAMD core 1.8.7+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
+ 5. [`Arduino SAMD core 1.8.8+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
  6. [`Adafruit SAMD core 1.6.0+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
- 7. [`Seeeduino SAMD core 1.7.7+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
+ 7. [`Seeeduino SAMD core 1.7.8+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
  8. [`Adafruit nRF52 v0.20.5+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
  9. [`ESP32 core 1.0.4+`](https://github.com/espressif/arduino-esp32/releases) for ESP32 boards
 10. [`ESP8266 core 2.7.3+`](https://github.com/esp8266/Arduino#installing-with-boards-manager) for ESP8266 boards. To use ESP8266 core 2.7.1+ for LittleFS. 
@@ -131,7 +136,7 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
 3. Install **EthernetWebServer** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for ***EthernetWebServer*** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
-4. Use included [platformio.ini](examples/platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically.
+4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
 
@@ -181,11 +186,11 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/sam/x.yy.zz/platform.txt`
 
- 4. ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.7](Packages_Patches/arduino/hardware/samd/1.8.7) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.7).
+ 4. ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.8](Packages_Patches/arduino/hardware/samd/1.8.8) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.8).
  
-Supposing the Arduino SAMD version is 1.8.7. These files must be copied into the directory:
-- `~/.arduino15/packages/arduino/hardware/samd/1.8.7/platform.txt`
-- ***`~/.arduino15/packages/arduino/hardware/samd/1.8.7/cores/arduino/Arduino.h`***
+Supposing the Arduino SAMD version is 1.8.8. These files must be copied into the directory:
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.8/platform.txt`
+- ***`~/.arduino15/packages/arduino/hardware/samd/1.8.8/cores/arduino/Arduino.h`***
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 
@@ -214,11 +219,11 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 6. ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.7) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.7). 
+ 6. ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.8) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8). 
 
-Supposing the Seeeduino SAMD core version is 1.7.7. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.7.8. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.7/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -276,6 +281,7 @@ theses files must be copied into the corresponding directory:
 7. To fix [`ESP32 compile error`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.12/hardware/espressif/cores/esp32) to overwrite the old file:
 - [Server.h](LibraryPatches/esp32/cores/esp32/Server.h)
 
+
 ---
 
 ### Configuration Notes
@@ -284,7 +290,7 @@ theses files must be copied into the corresponding directory:
 
 The easiest way is to use 
 
-```
+```cpp
 #define USE_ETHERNET_WRAPPER    true
 ```
 
@@ -292,7 +298,7 @@ then select ***one and only one*** Ethernet library to use as follows:
 
 - Standard Ethernet library is used by default, in the sketch, just be sure to comment out or leave these #defines to be false :
 
-```
+```cpp
 //#define USE_UIP_ETHERNET        true
 //#define USE_CUSTOM_ETHERNET     true
 
@@ -305,7 +311,7 @@ then select ***one and only one*** Ethernet library to use as follows:
 
 - To use built-in UIPEthernet built-in or shield:
 
-```
+```cpp
 #define USE_UIP_ETHERNET        true
 //#define USE_CUSTOM_ETHERNET     true
 
@@ -318,7 +324,7 @@ then select ***one and only one*** Ethernet library to use as follows:
 
 - To use any of the custom Ethernet library, such as Ethernet2, Ethernet3, EthernetLarge:
 
-```
+```cpp
 //#define USE_UIP_ETHERNET        true
 #define USE_CUSTOM_ETHERNET     true
 
@@ -332,7 +338,7 @@ then select ***one and only one*** Ethernet library to use as follows:
 - To use another Ethernet library
 For example, Ethernet_XYZ library uses ***Ethernet_XYZ.h***
 
-```
+```cpp
 //#define USE_UIP_ETHERNET        true
 #define USE_CUSTOM_ETHERNET     true
 
@@ -360,13 +366,13 @@ The default CS/SS pin is GPIO4(D2) for ESP8266, GPIO22 for ESP32, 10 for all oth
 
 If the default pin is not corect, the easiest way is to change is to use 
 
-```
+```cpp
 #define USE_ETHERNET_WRAPPER    true
 ```
 
 then select the CS/SS pin (e.g. 22) to use as follows:
 
-```
+```cpp
 // To override the default CS/SS pin. Don't use unless you know exactly which pin to use
 #define USE_THIS_SS_PIN   22
 ```
@@ -377,7 +383,7 @@ To avoid using the default but not-working Ethernet library of ESP8266, rename t
 
 These pins are tested OK with ESP8266 and W5x00
 
-```
+```cpp
   // For ESP8266
   // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
   // Ethernet           0                 X            X            X            X        0
@@ -396,7 +402,7 @@ These pins are tested OK with ESP8266 and W5x00
 
 - For ***Ethernet3*** library only,  use as follows
 
-```
+```cpp
   // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
   #ifndef ETHERNET3_MAX_SOCK_NUM
     #define ETHERNET3_MAX_SOCK_NUM      4
@@ -582,7 +588,7 @@ Example:*
 
 ### Example [AdvancedWebServer](examples/AdvancedWebServer)
 
-#### File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
+#### 1. File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
 
 
 ```cpp
@@ -888,7 +894,7 @@ void loop(void)
 }
 ```
 
-#### File [defines.h](examples/AdvancedWebServer/defines.h)
+#### 2. File [defines.h](examples/AdvancedWebServer/defines.h)
 
 ```cpp
 #ifndef defines_h
@@ -1355,6 +1361,7 @@ Content-Type: image/svg+xml
 Content-Length: 1950
 Connection: close
 ```
+---
 
 2. The terminal output of ESP32 running a [ENC28J60_WM_Config example](https://github.com/khoih-prog/BlynkEthernet_WM/tree/master/examples/ENC28J60_WM_Config) of [BlynkEthernet_WM Library](https://github.com/khoih-prog/BlynkEthernet_WM)
 
@@ -1391,8 +1398,11 @@ Token = token, IP = 192.168.2.103
 BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 ```
 ---
+---
 
-#### New in v1.0.11
+## Releases
+
+### New in v1.0.11
 
 1. Add support to Seeeduino SAMD21/SAMD51 boards (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
 2. Add and restructure examples.
@@ -1447,6 +1457,7 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
 This is simple yet complete WebServer library for AVR, Teensy, etc. boards running Ethernet shields. ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
 
+---
 ---
 
 This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
@@ -1515,12 +1526,14 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/igrr"><img src="https://github.com/igrr.png" width="100px;" alt="igrr"/><br /><sub><b>⭐️ igrr</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/igrr"><img src="https://github.com/igrr.png" width="100px;" alt="igrr"/><br /><sub><b>⭐️ Ivan Grokhotkov</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/jandrassy"><img src="https://github.com/jandrassy.png" width="100px;" alt="jandrassy"/><br /><sub><b>⭐️ jandrassy</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ tcpipchip</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/Vladimir"><img src="https://github.com/Vladimir.png" width="100px;" alt="Vladimir"/><br /><sub><b>Vladimir</b></sub></a><br /></td>
   </tr> 
 </table>
+
+---
 
 ### Contributing
 
@@ -1529,6 +1542,12 @@ If you want to contribute to this project:
 - Ask for enhancements
 - Create issues and pull requests
 - Tell other people about this library
+
+---
+
+### License
+
+- The library is licensed under [MIT](https://github.com/khoih-prog/EthernetWebServer/blob/master/LICENSE)
 
 ---
 

@@ -38,9 +38,33 @@
       defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
   #include <SPI.h>
   #define ENC28J60_USE_SPILIB 1  
-  // default to pin 10
-  #define ENC28J60_CONTROL_CS 10
-#endif      
+  
+  #ifndef USE_THIS_SS_PIN
+    // default to pin 10
+    #define ENC28J60_CONTROL_CS     10
+  #else
+    #warning Using USE_THIS_SS_PIN in Enc28J60Network.h for nRF52
+    #define ENC28J60_CONTROL_CS     USE_THIS_SS_PIN
+  #endif 
+#endif
+
+// KH, For SAMD21/SAMD51
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
+      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
+  #include <SPI.h>
+  #define ENC28J60_USE_SPILIB 1  
+  
+  #ifndef USE_THIS_SS_PIN
+    // default to pin 10
+    #define ENC28J60_CONTROL_CS     10
+  #else
+    #warning Using USE_THIS_SS_PIN in Enc28J60Network.h for SAMD
+    #define ENC28J60_CONTROL_CS     USE_THIS_SS_PIN
+  #endif  
+#endif         
 
 #include "mempool.h"
 #if defined(__MBED__)
