@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.11
+   Version: 1.0.12
 
    Original author:
    @file       Esp8266WebServer.h
@@ -29,6 +29,7 @@
     1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
     1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
     1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
+    1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
  *****************************************************************************************************************************/
 #ifndef EthernetWrapper_h
 #define EthernetWrapper_h
@@ -70,38 +71,50 @@
 
     #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
       #ifdef USE_CUSTOM_ETHERNET
-        #undef USE_CUSTOM_ETHERNET    
+        #undef USE_CUSTOM_ETHERNET
       #endif
       #define USE_CUSTOM_ETHERNET   true
     #endif
-
+    
     #if USE_ETHERNET3
       #include "Ethernet3.h"
       #warning Using Ethernet3 lib
+      #define SHIELD_TYPE           "W5x00 using Ethernet3 Library"
     #elif USE_ETHERNET2
       #include "Ethernet2.h"
       #warning Using Ethernet2 lib
+      #define SHIELD_TYPE           "W5x00 using Ethernet2 Library"
     #elif USE_ETHERNET_LARGE
       #include "EthernetLarge.h"
       #warning Using EthernetLarge lib
+      #define SHIELD_TYPE           "W5x00 using EthernetLarge Library"
     #elif USE_ETHERNET_ESP8266
       #include "Ethernet_ESP8266.h"
-      #warning Using Ethernet_ESP8266 lib
+      #warning Using Ethernet_ESP8266 lib 
+      #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library" 
     #elif USE_ETHERNET_ENC
       #include "EthernetENC.h"
-      #warning Using EthernetENC lib  
+      #warning Using EthernetENC lib
+      #define SHIELD_TYPE           "ENC28J60 using EthernetENC Library"
     #elif USE_CUSTOM_ETHERNET
+      #include "Ethernet_XYZ.h"
       #warning Using Custom Ethernet library from EthernetWrapper. You must include a library here or error.
+      #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
     #else
       #define USE_ETHERNET          true
       #include "Ethernet.h"
-      //#warning Use Ethernet lib
+      #warning Using Ethernet lib
+      #define SHIELD_TYPE           "W5x00 using Ethernet Library"
     #endif    //USE_ETHERNET3
 
     // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
     // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
     // Otherwise, standard Ethernet library will be used for W5x00
-
+    
+  #elif USE_UIP_ETHERNET
+    #include "UIPEthernet.h"
+    #warning Using UIPEthernet library
+    #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"  
   #endif    //( !defined(USE_UIP_ETHERNET) || !USE_UIP_ETHERNET )
 
 
@@ -109,7 +122,7 @@
   {
 #if !USE_UIP_ETHERNET
     // Just info to know how to connect correctly
-    
+
     #if USE_ETHERNET
       ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
     #elif USE_ETHERNET2
@@ -125,7 +138,7 @@
     #else
       ET_LOGWARN(F("========================="));
     #endif
-   
+
       ET_LOGWARN(F("Default SPI pinout:"));
       ET_LOGWARN1(F("MOSI:"), MOSI);
       ET_LOGWARN1(F("MISO:"), MISO);
@@ -153,7 +166,7 @@
         // Must use library patch for Ethernet, EthernetLarge libraries
         //Ethernet.setCsPin (USE_THIS_SS_PIN);
         Ethernet.init (USE_THIS_SS_PIN);
-  
+
       #elif USE_ETHERNET3
         // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
         #ifndef ETHERNET3_MAX_SOCK_NUM
@@ -162,11 +175,17 @@
         
         Ethernet.setCsPin (USE_THIS_SS_PIN);
         Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
- 
+        
+      #elif USE_CUSTOM_ETHERNET
+
+        // You have to add initialization for your Custom Ethernet here
+        // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+        Ethernet.init(USE_THIS_SS_PIN);  
+
       #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         
     #elif defined(ESP32)
-  
+
       // You can use Ethernet.init(pin) to configure the CS pin
       //Ethernet.init(10);  // Most Arduino shields
       //Ethernet.init(5);   // MKR ETH shield
@@ -189,7 +208,7 @@
            
         //Ethernet.setCsPin (USE_THIS_SS_PIN);
         Ethernet.init (USE_THIS_SS_PIN);
-  
+
       #elif USE_ETHERNET3
         // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
         #ifndef ETHERNET3_MAX_SOCK_NUM
@@ -198,23 +217,33 @@
         
         Ethernet.setCsPin (USE_THIS_SS_PIN);
         Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+        
+      #elif USE_CUSTOM_ETHERNET
+
+        // You have to add initialization for your Custom Ethernet here
+        // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+        Ethernet.init(USE_THIS_SS_PIN);  
               
       #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
-  
+
     #else   //defined(ESP8266)
       // unknown board, do nothing, use default SS = 10
       #ifndef USE_THIS_SS_PIN
         #define USE_THIS_SS_PIN   10    // For other boards
       #endif
-           
-      ET_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
-  
+      
+      #if defined(BOARD_NAME)
+        ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
+      #else
+        ET_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
+      #endif
+
       // For other boards, to change if necessary
       #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
-  
+
         Ethernet.init (USE_THIS_SS_PIN);
-  
+
       #elif USE_ETHERNET3
         // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
         #ifndef ETHERNET3_MAX_SOCK_NUM
@@ -223,6 +252,12 @@
         
         Ethernet.setCsPin (USE_THIS_SS_PIN);
         Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+        
+      #elif USE_CUSTOM_ETHERNET
+
+        // You have to add initialization for your Custom Ethernet here
+        // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+        Ethernet.init(USE_THIS_SS_PIN);  
                         
       #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
       

@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.11
+   Version: 1.0.12
 
    Original author:
    @file       Esp8266WebServer.h
@@ -29,6 +29,7 @@
     1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
     1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
     1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
+    1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_h
@@ -47,7 +48,7 @@
     #undef ETHERNET_USE_SAMD
   #endif
   #define ETHERNET_USE_SAMD      true
-  #warning Use SAMD architecture from EthernetWebServer
+  #warning Using SAMD architecture from EthernetWebServer
 #endif
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
@@ -57,7 +58,7 @@
     #undef ETHERNET_USE_NRF528XX
   #endif
   #define ETHERNET_USE_NRF528XX      true
-  #warning Use nFR52 architecture from EthernetWebServer
+  #warning Using nFR52 architecture from EthernetWebServer
 #endif
 
 #if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
@@ -65,7 +66,7 @@
     #undef ETHERNET_USE_SAM_DUE
   #endif
   #define ETHERNET_USE_SAM_DUE      true
-  #warning Use SAM_DUE architecture from EthernetWebServer
+  #warning Using SAM_DUE architecture from EthernetWebServer
 #endif
 
 
@@ -82,8 +83,8 @@
   #include <utility/logging.h>
   #warning Using UIPEthernet library from EthernetWebServer
 #elif USE_CUSTOM_ETHERNET
-  #warning Using Custom Ethernet library from EthernetWebServer. You must include a library here or error.
-#else
+  #warning Using Custom Ethernet library from EthernetWebServer. You must include a library or error.
+#elif !( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
   #include <Ethernet.h>
   #warning Using Ethernet library from EthernetWebServer
 #endif

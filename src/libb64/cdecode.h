@@ -6,7 +6,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.11
+   Version: 1.0.12
 
    Original author:
    @file       Esp8266WebServer.h
@@ -28,6 +28,7 @@
     1.0.9   K Hoang      15/05/2020 Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
     1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
     1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
+    1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
  *****************************************************************************************************************************/
 
 #ifndef BASE64_CDECODE_H
