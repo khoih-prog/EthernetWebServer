@@ -9,7 +9,12 @@
 ---
 ---
 
-### New in v1.0.11
+### New in v1.0.12
+
+1. Add support to new [**`EthernetENC library`**](https://github.com/jandrassy/EthernetENC) for ENC28J60.
+2. Add debug feature. Clean up code.
+
+#### New in v1.0.11
 
 1. Add support to Seeeduino SAMD21/SAMD51 boards (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
 2. Add and restructure examples.
@@ -56,7 +61,9 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
 
 This is simple yet complete WebServer library for `AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, ESP32/ESP8266, etc.` boards running Ethernet shields. The functions are similar and compatible to ESP8266/ESP32 WebServer libraries to make life much easier to port sketches from ESP8266/ESP32.
 
-This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
+#### Supporting Boards
+
+This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
 
  1. nRF52 boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.***
  2. SAM DUE
@@ -74,22 +81,22 @@ This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer
  7. ESP32
  8. ESP8266
 
-and these following Ethernet shields/modules:
+#### Supporting Ethernet shields/modules:
 
-1. W5x00
-2. ENC28J60
+1. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/khoih-prog/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
+2. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
 
 ---
 
-The library provides supports to:
+The library provides these features:
 
-1. WiFi Client, STA and AP mode
-2. TCP Server and Client
-3. UDP Server and Client
-4. HTTP Server and Client
-5. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
+1. TCP Server and Client
+2. UDP Server and Client
+3. HTTP Server and Client
+4. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
 
 Library is based on and modified from:
+
 1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 
 The EthernetWebServer class found in `EthernetWebServer.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
@@ -98,6 +105,7 @@ The EthernetWebServer class found in `EthernetWebServer.h` header, is a simple w
 ---
 
 ## Prerequisite
+
  1. [`Arduino IDE 1.8.12+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install.
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
@@ -114,6 +122,7 @@ The EthernetWebServer class found in `EthernetWebServer.h` header, is a simple w
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500.
    - [`Ethernet3 library v1.5.3+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.
+   - [`EthernetENC library v2.0.0+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. **New and Better**
    - [`UIPEthernet library v2.0.8+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60
 
 ---
@@ -283,6 +292,7 @@ theses files must be copied into the corresponding directory:
 
 
 ---
+---
 
 ### Configuration Notes
 
@@ -296,57 +306,95 @@ The easiest way is to use
 
 then select ***one and only one*** Ethernet library to use as follows:
 
-- Standard Ethernet library is used by default, in the sketch, just be sure to comment out or leave these #defines to be false :
+- Standard W5x00 Ethernet library is used by default, in the sketch, just be sure to comment out or leave these #defines to be false :
 
 ```cpp
-//#define USE_UIP_ETHERNET        true
-//#define USE_CUSTOM_ETHERNET     true
+#define USE_UIP_ETHERNET        false
+#define USE_CUSTOM_ETHERNET     false
 
 // Only one if the following to be true
-#define USE_ETHERNET2         false //true
-#define USE_ETHERNET3         false //true
-#define USE_ETHERNET_LARGE    false //true
-#define USE_ETHERNET_ESP8266  false //true
+#define USE_ETHERNET            false
+#define USE_ETHERNET2           false //true
+#define USE_ETHERNET3           false //true
+#define USE_ETHERNET_LARGE      false
+#define USE_ETHERNET_ESP8266    false //true
+#define USE_ETHERNET_ENC        false
 ```
 
-- To use built-in UIPEthernet built-in or shield:
+To use W5x00 Ethernet, for example using EthernetLarge library
+
+```cpp
+#define USE_UIP_ETHERNET        false
+#define USE_CUSTOM_ETHERNET     false
+
+// Only one if the following to be true
+#define USE_ETHERNET            false
+#define USE_ETHERNET2           false //true
+#define USE_ETHERNET3           false //true
+#define USE_ETHERNET_LARGE      true
+#define USE_ETHERNET_ESP8266    false //true
+#define USE_ETHERNET_ENC        false
+```
+
+- To use ENC28J60 Ethernet, using EthernetENC library (**NEW and Better**)
+
+```cpp
+#define USE_UIP_ETHERNET        false
+#define USE_CUSTOM_ETHERNET     false
+
+// Only one if the following to be true
+#define USE_ETHERNET            false
+#define USE_ETHERNET2           false //true
+#define USE_ETHERNET3           false //true
+#define USE_ETHERNET_LARGE      false
+#define USE_ETHERNET_ESP8266    false //true
+#define USE_ETHERNET_ENC        true
+```
+
+- To use ENC28J60 Ethernet, using UIPEthernet library:
 
 ```cpp
 #define USE_UIP_ETHERNET        true
-//#define USE_CUSTOM_ETHERNET     true
+#define USE_CUSTOM_ETHERNET     false
 
 // Only one if the following to be true
-#define USE_ETHERNET2         false //true
-#define USE_ETHERNET3         false //true
-#define USE_ETHERNET_LARGE    false //true
-#define USE_ETHERNET_ESP8266  false //true
+#define USE_ETHERNET            false
+#define USE_ETHERNET2           false //true
+#define USE_ETHERNET3           false //true
+#define USE_ETHERNET_LARGE      false
+#define USE_ETHERNET_ESP8266    false //true
+#define USE_ETHERNET_ENC        false
 ```
 
-- To use any of the custom Ethernet library, such as Ethernet2, Ethernet3, EthernetLarge:
+- To use any of the Ethernet libraries, such as Ethernet2, Ethernet3, EthernetLarge, EthernetENC:
 
 ```cpp
-//#define USE_UIP_ETHERNET        true
-#define USE_CUSTOM_ETHERNET     true
+#define USE_UIP_ETHERNET        false
+#define USE_CUSTOM_ETHERNET     false
 
 // Only one if the following to be true
-#define USE_ETHERNET2         false //true
-#define USE_ETHERNET3         false //true
-#define USE_ETHERNET_LARGE    true
-#define USE_ETHERNET_ESP8266  false //true
+#define USE_ETHERNET            false
+#define USE_ETHERNET2           false //true
+#define USE_ETHERNET3           true  //true
+#define USE_ETHERNET_LARGE      false
+#define USE_ETHERNET_ESP8266    false //true
+#define USE_ETHERNET_ENC        false
 ```
 
 - To use another Ethernet library
 For example, Ethernet_XYZ library uses ***Ethernet_XYZ.h***
 
 ```cpp
-//#define USE_UIP_ETHERNET        true
+#define USE_UIP_ETHERNET        false
 #define USE_CUSTOM_ETHERNET     true
 
 // Only one if the following to be true
-#define USE_ETHERNET2         false //true
-#define USE_ETHERNET3         false //true
-#define USE_ETHERNET_LARGE    false //true
-#define USE_ETHERNET_ESP8266  false //true
+#define USE_ETHERNET            false
+#define USE_ETHERNET2           false //true
+#define USE_ETHERNET3           false  //true
+#define USE_ETHERNET_LARGE      false
+#define USE_ETHERNET_ESP8266    false //true
+#define USE_ETHERNET_ENC        false
 
 //Must be placed before #include <EthernetWebServer.h>
 #include <Ethernet_XYZ.h>
@@ -355,10 +403,14 @@ For example, Ethernet_XYZ library uses ***Ethernet_XYZ.h***
 #include <EthernetWebServer.h>
 ```
 
+---
+
 #### Important:
 
 - The ***Ethernet_Shield_W5200, EtherCard, EtherSia  libraries are not supported***. Don't use unless you know how to modify those libraries.
 - Requests to support for any future custom Ethernet library will be ignored. ***Use at your own risk***.
+
+---
 
 #### 2. How to select another CS/SS pin to use
 
@@ -412,6 +464,7 @@ These pins are tested OK with ESP8266 and W5x00
   Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
 ```
 
+---
 ---
 
 #### Usage
@@ -585,6 +638,7 @@ Example:*
 11. [WebServer](examples/WebServer)
 
 ---
+---
 
 ### Example [AdvancedWebServer](examples/AdvancedWebServer)
 
@@ -680,9 +734,8 @@ void setup(void)
   Serial.begin(115200);
   while (!Serial);
 
-  //delay(1000);
-
-  Serial.println("\nStarting AdvancedWebServer on " + String(BOARD_NAME));
+  Serial.print("\nStarting AdvancedWebServer on " + String(BOARD_NAME));
+  Serial.println(" with " + String(SHIELD_TYPE));
 
 #if USE_ETHERNET_WRAPPER
 
@@ -713,34 +766,40 @@ void setup(void)
 
 #if defined(ESP8266)
   // For ESP8266, change for other boards if necessary
-#ifndef USE_THIS_SS_PIN
-#define USE_THIS_SS_PIN   D2    // For ESP8266
-#endif
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   D2    // For ESP8266
+  #endif
 
   ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
 
-#if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
-  // For ESP8266
-  // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
-  // Ethernet           0                 X            X            X            X        0
-  // Ethernet2          X                 X            X            X            X        0
-  // Ethernet3          X                 X            X            X            X        0
-  // EthernetLarge      X                 X            X            X            X        0
-  // Ethernet_ESP8266   0                 0            0            0            0        0
-  // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
-  // Must use library patch for Ethernet, EthernetLarge libraries
-  Ethernet.init (USE_THIS_SS_PIN);
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+    // For ESP8266
+    // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+    // Ethernet           0                 X            X            X            X        0
+    // Ethernet2          X                 X            X            X            X        0
+    // Ethernet3          X                 X            X            X            X        0
+    // EthernetLarge      X                 X            X            X            X        0
+    // Ethernet_ESP8266   0                 0            0            0            0        0
+    // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+    // Must use library patch for Ethernet, EthernetLarge libraries
+    Ethernet.init (USE_THIS_SS_PIN);
 
-#elif USE_ETHERNET3
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-#ifndef ETHERNET3_MAX_SOCK_NUM
-#define ETHERNET3_MAX_SOCK_NUM      4
-#endif
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
 
-  Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-#endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  #elif USE_CUSTOM_ETHERNET
+  
+    // You have to add initialization for your Custom Ethernet here
+    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+    Ethernet.init(USE_THIS_SS_PIN);
+  
+  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
 #elif defined(ESP32)
 
@@ -752,56 +811,68 @@ void setup(void)
   //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
   //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
 
-#ifndef USE_THIS_SS_PIN
-#define USE_THIS_SS_PIN   22    // For ESP32
-#endif
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   22    // For ESP32
+  #endif
 
   ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
 
   // For other boards, to change if necessary
-#if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
-  // Must use library patch for Ethernet, EthernetLarge libraries
-  // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
-  // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+    // Must use library patch for Ethernet, EthernetLarge libraries
+    // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
+    // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
+  
+    //Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (USE_THIS_SS_PIN);
+  
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
 
-  //Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (USE_THIS_SS_PIN);
-
-#elif USE_ETHERNET3
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-#ifndef ETHERNET3_MAX_SOCK_NUM
-#define ETHERNET3_MAX_SOCK_NUM      4
-#endif
-
-  Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-#endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  #elif USE_CUSTOM_ETHERNET
+  
+    // You have to add initialization for your Custom Ethernet here
+    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+    Ethernet.init(USE_THIS_SS_PIN); 
+  
+  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
 #else   //defined(ESP8266)
   // unknown board, do nothing, use default SS = 10
-#ifndef USE_THIS_SS_PIN
-#define USE_THIS_SS_PIN   10    // For other boards
-#endif
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   10    // For other boards
+  #endif
 
-  ET_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
+  ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
 
   // For other boards, to change if necessary
-#if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
-  // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2  || USE_ETHERNET_ENC )
+    // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
+  
+    Ethernet.init (USE_THIS_SS_PIN);
+  
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
 
-  Ethernet.init (USE_THIS_SS_PIN);
-
-#elif USE_ETHERNET3
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-#ifndef ETHERNET3_MAX_SOCK_NUM
-#define ETHERNET3_MAX_SOCK_NUM      4
-#endif
-
-  Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-#endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  #elif USE_CUSTOM_ETHERNET
+  
+    // You have to add initialization for your Custom Ethernet here
+    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+    Ethernet.init(USE_THIS_SS_PIN);
+    
+  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
 #endif    //defined(ESP8266)
 
@@ -810,13 +881,10 @@ void setup(void)
 
 
   // start the ethernet connection and the server:
-  // Use Static IP
-  //Ethernet.begin(mac, ip);
   // Use DHCP dynamic IP and random mac
-  //srand(1);
   uint16_t index = millis() % NUMBER_OF_MAC;
-  //uint16_t index = random(NUMBER_OF_MAC);
-
+  // Use Static IP
+  //Ethernet.begin(mac[index], ip);
   Ethernet.begin(mac[index]);
 
   // Just info to know how to connect correctly
@@ -894,6 +962,8 @@ void loop(void)
 }
 ```
 
+---
+
 #### 2. File [defines.h](examples/AdvancedWebServer/defines.h)
 
 ```cpp
@@ -903,7 +973,7 @@ void loop(void)
 #define DEBUG_ETHERNET_WEBSERVER_PORT       Serial
 
 // Debug Level from 0 to 4
-#define _ETHERNET_WEBSERVER_LOGLEVEL_       4
+#define _ETHERNET_WEBSERVER_LOGLEVEL_       3
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
@@ -934,6 +1004,8 @@ void loop(void)
 
 #if defined(ETHERNET_USE_SAMD)
   // For SAMD
+  // Default pin 10 to SS/CS
+  #define USE_THIS_SS_PIN       10
   
   #if ( defined(ARDUINO_SAMD_ZERO) && !defined(SEEED_XIAO_M0) )
     #define BOARD_TYPE      "SAMD Zero"
@@ -977,6 +1049,7 @@ void loop(void)
     #define BOARD_TYPE      "SAMD51 ADAFRUIT_FEATHER_M4_EXPRESS"
   #elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
     #define BOARD_TYPE      "SAMD51 ADAFRUIT_ITSYBITSY_M4_EXPRESS"
+    #define USE_THIS_SS_PIN       10
   #elif defined(ADAFRUIT_TRELLIS_M4_EXPRESS)
     #define BOARD_TYPE      "SAMD51 ADAFRUIT_TRELLIS_M4_EXPRESS"
   #elif defined(ADAFRUIT_PYPORTAL)
@@ -1003,6 +1076,9 @@ void loop(void)
     #define BOARD_TYPE      "SAMD SEEED_FEMTO_M0"
   #elif defined(SEEED_XIAO_M0)
     #define BOARD_TYPE      "SAMD SEEED_XIAO_M0"
+    #ifdef USE_THIS_SS_PIN
+      #undef USE_THIS_SS_PIN
+    #endif
     #define USE_THIS_SS_PIN       A1
     #warning define SEEED_XIAO_M0 USE_THIS_SS_PIN == A1
   #elif defined(Wio_Lite_MG126)
@@ -1036,9 +1112,13 @@ void loop(void)
   #endif
 
 #elif (ETHERNET_USE_SAM_DUE)
+  // Default pin 10 to SS/CS
+  #define USE_THIS_SS_PIN       10
   #define BOARD_TYPE      "SAM DUE"
 
 #elif (ETHERNET_USE_NRF528XX)
+  // Default pin 10 to SS/CS
+  #define USE_THIS_SS_PIN       10
 
   #if defined(NRF52840_FEATHER)
     #define BOARD_TYPE      "NRF52840_FEATHER"
@@ -1048,6 +1128,7 @@ void loop(void)
     #define BOARD_TYPE      "NRF52840_FEATHER_SENSE"
   #elif defined(NRF52840_ITSYBITSY)
     #define BOARD_TYPE      "NRF52840_ITSYBITSY"
+    #define USE_THIS_SS_PIN   10    // For other boards
   #elif defined(NRF52840_CIRCUITPLAY)
     #define BOARD_TYPE      "NRF52840_CIRCUITPLAY"
   #elif defined(NRF52840_CLUE)
@@ -1069,6 +1150,9 @@ void loop(void)
   #endif
 
 #elif ( defined(CORE_TEENSY) )
+  // Default pin 10 to SS/CS
+  #define USE_THIS_SS_PIN       10
+  
   #if defined(__IMXRT1062__)
     // For Teensy 4.1/4.0
     #define BOARD_TYPE      "TEENSY 4.1/4.0"
@@ -1108,7 +1192,9 @@ void loop(void)
 
 #else
   // For Mega
-  #define BOARD_TYPE      "AVR Mega"
+  // Default pin 10 to SS/CS
+  #define USE_THIS_SS_PIN       10
+  #define BOARD_TYPE            "AVR Mega"
 #endif
 
 #ifndef BOARD_NAME
@@ -1138,39 +1224,53 @@ void loop(void)
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET2         false //true
+  #define USE_ETHERNET          false //true
+  #define USE_ETHERNET2         true //true
   #define USE_ETHERNET3         false //true
   #define USE_ETHERNET_LARGE    false
   #define USE_ETHERNET_ESP8266  false //true
+  #define USE_ETHERNET_ENC      false
+  #define USE_CUSTOM_ETHERNET   false
   
   #if !USE_ETHERNET_WRAPPER
   
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 )
+    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET
-      #define USE_CUSTOM_ETHERNET   true
       #endif
+      #define USE_CUSTOM_ETHERNET   false //true
     #endif
     
     #if USE_ETHERNET3
       #include "Ethernet3.h"
-      #warning Use Ethernet3 lib
+      #warning Using Ethernet3 lib
+      #define SHIELD_TYPE           "W5x00 using Ethernet3 Library"
     #elif USE_ETHERNET2
       #include "Ethernet2.h"
-      #warning Use Ethernet2 lib
+      #warning Using Ethernet2 lib
+      #define SHIELD_TYPE           "W5x00 using Ethernet2 Library"
     #elif USE_ETHERNET_LARGE
       #include "EthernetLarge.h"
-      #warning Use EthernetLarge lib
+      #warning Using EthernetLarge lib
+      #define SHIELD_TYPE           "W5x00 using EthernetLarge Library"
     #elif USE_ETHERNET_ESP8266
       #include "Ethernet_ESP8266.h"
-      #warning Use Ethernet_ESP8266 lib
+      #warning Using Ethernet_ESP8266 lib 
+      #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library" 
+    #elif USE_ETHERNET_ENC
+      #include "EthernetENC.h"
+      #warning Using EthernetENC lib
+      #define SHIELD_TYPE           "ENC28J60 using EthernetENC Library"
     #elif USE_CUSTOM_ETHERNET
-      #include "Ethernet_XYZ.h"
-      #warning Use Custom Ethernet library from EthernetWrapper. You must include a library here or error.
+      //#include "Ethernet_XYZ.h"
+      #include "EthernetENC.h"
+      #warning Using Custom Ethernet library. You must include a library and initialize.
+      #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
     #else
       #define USE_ETHERNET          true
       #include "Ethernet.h"
-      #warning Use Ethernet lib
+      #warning Using Ethernet lib
+      #define SHIELD_TYPE           "W5x00 using Ethernet Library"
     #endif
     
     // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
@@ -1178,9 +1278,17 @@ void loop(void)
     // Otherwise, standard Ethernet library will be used for W5x00
   
   #endif    //  USE_ETHERNET_WRAPPER
+#elif USE_UIP_ETHERNET
+    #include "UIPEthernet.h"
+    #warning Using UIPEthernet library
+    #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
 #endif      // #if !USE_UIP_ETHERNET
 
 #include <EthernetWebServer.h>
+
+#ifndef SHIELD_TYPE
+  #define SHIELD_TYPE     "Unknown Ethernet shield/library" 
+#endif
 
 // Enter a MAC address and IP address for your controller below.
 #define NUMBER_OF_MAC      20
@@ -1216,6 +1324,7 @@ IPAddress ip(192, 168, 2, 222);
 
 ```
 ---
+---
 
 ### Debug Termimal Output Samples
 
@@ -1227,18 +1336,15 @@ IPAddress ip(192, 168, 2, 222);
 
 ```
 
-Starting AdvancedWebServer on NRF52840_FEATHER
-[ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
+Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
+[ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
 [ETHERNET_WEBSERVER] MISO: 24
 [ETHERNET_WEBSERVER] SCK: 26
 [ETHERNET_WEBSERVER] SS: 5
 [ETHERNET_WEBSERVER] =========================
-[ETHERNET_WEBSERVER] Unknown board setCsPin: 10
-_pinCS = 0
-W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
-W5100::init: W5500, SSIZE =4096
+[ETHERNET_WEBSERVER] Board : NRF52840_FEATHER , setCsPin: 10
 =========================
 Currently Used SPI pinout:
 MOSI:25
@@ -1246,10 +1352,10 @@ MISO:24
 SCK:26
 SS:5
 =========================
-Using mac index = 13
-Connected! IP address: 192.168.2.113
-HTTP EthernetWebServer is @ IP : 192.168.2.113
-.EthernetWebServer::handleClient: New Client
+Using mac index = 11
+Connected! IP address: 192.168.2.96
+HTTP EthernetWebServer is @ IP : 192.168.2.96
+EthernetWebServer::handleClient: New Client
 method:  GET
 url:  /
 search:
@@ -1361,6 +1467,7 @@ Content-Type: image/svg+xml
 Content-Length: 1950
 Connection: close
 ```
+
 ---
 
 2. The terminal output of ESP32 running a [ENC28J60_WM_Config example](https://github.com/khoih-prog/BlynkEthernet_WM/tree/master/examples/ENC28J60_WM_Config) of [BlynkEthernet_WM Library](https://github.com/khoih-prog/BlynkEthernet_WM)
@@ -1397,12 +1504,18 @@ Conn2Blynk: server = account.duckdns.org, port = 8080
 Token = token, IP = 192.168.2.103
 BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 ```
+
 ---
 ---
 
 ## Releases
 
-### New in v1.0.11
+### New in v1.0.12
+
+1. Add support to new [**`EthernetENC library`**](https://github.com/jandrassy/EthernetENC) for ENC28J60.
+2. Add debug feature. Clean up code.
+
+#### New in v1.0.11
 
 1. Add support to Seeeduino SAMD21/SAMD51 boards (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
 2. Add and restructure examples.
@@ -1460,6 +1573,8 @@ This is simple yet complete WebServer library for AVR, Teensy, etc. boards runni
 ---
 ---
 
+#### Supporting Boards
+
 This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
 
  1. nRF52 boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.***
@@ -1478,18 +1593,17 @@ This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer
  7. ESP32
  8. ESP8266
 
-and these following Ethernet shields/modules:
+#### Supporting Ethernet shields/modules:
 
-1. W5x00
-2. ENC28J60
+1. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/khoih-prog/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
+2. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
 
-The library provides supports to:
+The library provides these features:
 
-1. WiFi Client, STA and AP mode
-2. TCP Server and Client
-3. UDP Server and Client
-4. HTTP Server and Client
-5. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
+1. TCP Server and Client
+2. UDP Server and Client
+3. HTTP Server and Client
+4. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
 
 ---
 
@@ -1512,7 +1626,9 @@ The library provides supports to:
  7. Add support to Ethernet ENC28J60, using [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
  8. Add support to ESP32 and ESP8266
  9. Add support to Seeeduino SAMD21/SAMD51: LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, Wio Terminal, Grove UI Wireless
+10. Add support to [`EthernetENC`](https://github.com/jandrassy/EthernetENC)
  
+---
 ---
 
 ### Contributions and Thanks
@@ -1520,15 +1636,15 @@ The library provides supports to:
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this library.
 
 1. Based on and modified from the good [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
-2. [jandrassy](https://github.com/jandrassy) for [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
+2. [jandrassy](https://github.com/jandrassy) for [EthernetENC](https://github.com/jandrassy/EthernetENC) and [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
 3. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Blox B302 running as nRF52840 and U-Blox B112 running as nRF52832***, has never been started and finished. Also see [ESP32-based U-BLOX NINA W102 running ENC28J60](https://u-blox-ethernet-ninaw.blogspot.com/).
 4. Thanks to [Vladimir](https://github.com/workpage2) to initiate the work on ESP32 and ESP8266 in [Spiffs not work Issue #2](https://github.com/khoih-prog/EthernetWebServer/issues/2)
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/igrr"><img src="https://github.com/igrr.png" width="100px;" alt="igrr"/><br /><sub><b>⭐️ Ivan Grokhotkov</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/jandrassy"><img src="https://github.com/jandrassy.png" width="100px;" alt="jandrassy"/><br /><sub><b>⭐️ jandrassy</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ tcpipchip</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/jandrassy"><img src="https://github.com/jandrassy.png" width="100px;" alt="jandrassy"/><br /><sub><b>⭐️ Juraj Andrássy</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ Miguel Wisintainer</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/Vladimir"><img src="https://github.com/Vladimir.png" width="100px;" alt="Vladimir"/><br /><sub><b>Vladimir</b></sub></a><br /></td>
   </tr> 
 </table>

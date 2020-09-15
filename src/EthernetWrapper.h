@@ -63,8 +63,12 @@
     #ifndef USE_ETHERNET_ESP8266
       #define USE_ETHERNET_ESP8266  false
     #endif
+    
+    #ifndef USE_ETHERNET_ENC
+      #define USE_ETHERNET_ENC      false
+    #endif
 
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 )
+    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET    
       #endif
@@ -73,18 +77,21 @@
 
     #if USE_ETHERNET3
       #include "Ethernet3.h"
-      #warning Use Ethernet3 lib
+      #warning Using Ethernet3 lib
     #elif USE_ETHERNET2
       #include "Ethernet2.h"
-      #warning Use Ethernet2 lib
+      #warning Using Ethernet2 lib
     #elif USE_ETHERNET_LARGE
       #include "EthernetLarge.h"
-      #warning Use EthernetLarge lib
+      #warning Using EthernetLarge lib
     #elif USE_ETHERNET_ESP8266
       #include "Ethernet_ESP8266.h"
-      #warning Use Ethernet_ESP8266 lib
+      #warning Using Ethernet_ESP8266 lib
+    #elif USE_ETHERNET_ENC
+      #include "EthernetENC.h"
+      #warning Using EthernetENC lib  
     #elif USE_CUSTOM_ETHERNET
-      #warning Use Custom Ethernet library from EthernetWrapper. You must include a library here or error.
+      #warning Using Custom Ethernet library from EthernetWrapper. You must include a library here or error.
     #else
       #define USE_ETHERNET          true
       #include "Ethernet.h"
@@ -113,6 +120,8 @@
       ET_LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
     #elif USE_ETHERNET_ESP8266
       ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
+    #elif USE_ETHERNET_ENC
+      ET_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));
     #else
       ET_LOGWARN(F("========================="));
     #endif
@@ -132,7 +141,7 @@
       
       ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
       
-      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
+      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         // For ESP8266
         // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
         // Ethernet           0                 X            X            X            X        0
@@ -154,7 +163,7 @@
         Ethernet.setCsPin (USE_THIS_SS_PIN);
         Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
  
-      #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+      #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         
     #elif defined(ESP32)
   
@@ -173,7 +182,7 @@
       ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
       
       // For other boards, to change if necessary
-      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
+      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         // Must use library patch for Ethernet, EthernetLarge libraries
         // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
         // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
@@ -190,7 +199,7 @@
         Ethernet.setCsPin (USE_THIS_SS_PIN);
         Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
               
-      #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+      #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
   
     #else   //defined(ESP8266)
       // unknown board, do nothing, use default SS = 10
@@ -201,7 +210,7 @@
       ET_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
   
       // For other boards, to change if necessary
-      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 )
+      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
   
         Ethernet.init (USE_THIS_SS_PIN);
@@ -215,7 +224,7 @@
         Ethernet.setCsPin (USE_THIS_SS_PIN);
         Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
                         
-      #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+      #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
       
     #endif    //defined(ESP8266)
 #endif  //#if !USE_UIP_ETHERNET

@@ -43,49 +43,49 @@
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
       || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
-#if defined(ETHERNET_USE_SAMD)
-#undef ETHERNET_USE_SAMD
-#endif
-#define ETHERNET_USE_SAMD      true
-#warning Use SAMD architecture from EthernetWebServer
+  #if defined(ETHERNET_USE_SAMD)
+    #undef ETHERNET_USE_SAMD
+  #endif
+  #define ETHERNET_USE_SAMD      true
+  #warning Use SAMD architecture from EthernetWebServer
 #endif
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
         defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
-#if defined(ETHERNET_USE_NRF528XX)
-#undef ETHERNET_USE_NRF528XX
-#endif
-#define ETHERNET_USE_NRF528XX      true
-#warning Use nFR52 architecture from EthernetWebServer
+  #if defined(ETHERNET_USE_NRF528XX)
+    #undef ETHERNET_USE_NRF528XX
+  #endif
+  #define ETHERNET_USE_NRF528XX      true
+  #warning Use nFR52 architecture from EthernetWebServer
 #endif
 
 #if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
-#if defined(ETHERNET_USE_SAM_DUE)
-#undef ETHERNET_USE_SAM_DUE
-#endif
-#define ETHERNET_USE_SAM_DUE      true
-#warning Use SAM_DUE architecture from EthernetWebServer
+  #if defined(ETHERNET_USE_SAM_DUE)
+    #undef ETHERNET_USE_SAM_DUE
+  #endif
+  #define ETHERNET_USE_SAM_DUE      true
+  #warning Use SAM_DUE architecture from EthernetWebServer
 #endif
 
 
 //#ifndef USE_UIP_ETHERNET
 #if USE_ETHERNET_WRAPPER
-// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
-// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
-//#define USE_UIP_ETHERNET   false
-#include "EthernetWrapper.h"
+  // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+  // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+  //#define USE_UIP_ETHERNET   false
+  #include "EthernetWrapper.h"
 #endif
 
 #if USE_UIP_ETHERNET
-#include <UIPEthernet.h>
-#include <utility/logging.h>
-#warning Use UIPEthernet library from EthernetWebServer
+  #include <UIPEthernet.h>
+  #include <utility/logging.h>
+  #warning Using UIPEthernet library from EthernetWebServer
 #elif USE_CUSTOM_ETHERNET
-#warning Use Custom Ethernet library from EthernetWebServer. You must include a library here or error.
+  #warning Using Custom Ethernet library from EthernetWebServer. You must include a library here or error.
 #else
-#include <Ethernet.h>
-#warning Use Ethernet library from EthernetWebServer
+  #include <Ethernet.h>
+  #warning Using Ethernet library from EthernetWebServer
 #endif
 
 #include "detail/mimetable.h"
