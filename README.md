@@ -9,7 +9,14 @@
 ---
 ---
 
-### New in v1.0.12
+### Release v1.0.13
+
+1. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
+2. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
+3. Clean up code. 
+4. Update examples.
+
+#### New in v1.0.12
 
 1. Add support to new [**`EthernetENC library`**](https://github.com/jandrassy/EthernetENC) for ENC28J60.
 2. Add debug feature. Clean up code.
@@ -45,14 +52,14 @@
 
 #### New in v1.0.5
 
-1. Add support to **nRF52** boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.***
+1. Add support to **nRF52** boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.**
 2. Support any future custom Ethernet library that meets the no-compiling-error requirements. Currently [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) and [`Ethernet3`](https://github.com/sstaub/Ethernet3) libraries are supported. **Ethernet_Shield_W5200, EtherCard, EtherSia** libraries are not supported now.
 
 #### New in v1.0.4
 
-1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)***.
+1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
 
-From v1.0.3+, the library supports more Arduino boards ( SAM DUE, SAMD21: ZERO, MKR, **NANO_33_IOT***, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
+From v1.0.3+, the library supports more Arduino boards ( SAM DUE, SAMD21: ZERO, MKR, **NANO_33_IOT**, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
 
 From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel SAM3X8E ARM Cortex-M3, STM32F series, ESP8266, Intel ARC32(Genuino101), Nordic nRF51(RFduino), Teensy boards, Realtek Ameba(RTL8195A,RTL8710)) using Wiznet W5x00 or ENC28J60 Ethernet shields by using [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library besides standard [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet) library.
 
@@ -65,7 +72,7 @@ This is simple yet complete WebServer library for `AVR, Teensy, SAM DUE, Arduino
 
 This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
 
- 1. nRF52 boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.***
+ 1. nRF52 boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**
  2. SAM DUE
  3. SAMD21 
   - Arduino: ZERO, MKR, NANO_33_IOT, etc.
@@ -124,7 +131,7 @@ The EthernetWebServer class, found in `EthernetWebServer.h` header, is a simple 
    - [`Ethernet2 library v1.0.4+`](https://github.com/adafruit/Ethernet2) for W5500.
    - [`Ethernet3 library v1.5.3+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.
    - [`EthernetENC library v2.0.0+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. **New and Better**
-   - [`UIPEthernet library v2.0.8+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60
+   - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60
 
 ---
 
@@ -153,7 +160,7 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 ### Packages' Patches
 
- 1. **To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards***, you have to copy the whole [nRF52 0.20.5](Packages_Patches/adafruit/hardware/nrf52/0.20.5) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5). 
+ 1. **To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.20.5](Packages_Patches/adafruit/hardware/nrf52/0.20.5) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5). 
 
 Supposing the Adafruit nRF52 version is 0.20.5. These files must be copied into the directory:
 - `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/platform.txt`
@@ -162,7 +169,7 @@ Supposing the Adafruit nRF52 version is 0.20.5. These files must be copied into 
 - `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B302_ublox/variant.cpp`
 - `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B112_ublox/variant.h`
 - `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B112_ublox/variant.cpp`
-- **`~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/cores/nRF5/Udp.h`***
+- **`~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/cores/nRF5/Udp.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 These files must be copied into the directory:
@@ -173,9 +180,9 @@ These files must be copied into the directory:
 - `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B302_ublox/variant.cpp`
 - `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B112_ublox/variant.h`
 - `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B112_ublox/variant.cpp`
-- **`~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/cores/nRF5/Udp.h`***
+- **`~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/cores/nRF5/Udp.h`**
 
- 2. **To be able to compile and run on Teensy boards***, you have to copy the file [Teensy boards.txt](Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
+ 2. **To be able to compile and run on Teensy boards**, you have to copy the file [Teensy boards.txt](Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
 
 Supposing the Arduino version is 1.8.12. This file must be copied into the directory:
 
@@ -186,7 +193,7 @@ This file must be copied into the directory:
 
 - `./arduino-x.yy.zz/hardware/teensy/avr/boards.txt`
 
- 3. **To be able to compile and run on SAM DUE boards***, you have to copy the whole [SAM DUE](Packages_Patches/arduino/hardware/sam/1.6.12) directory into Arduino sam directory (~/.arduino15/packages/arduino/hardware/sam/1.6.12). 
+ 3. **To be able to compile and run on SAM DUE boards**, you have to copy the whole [SAM DUE](Packages_Patches/arduino/hardware/sam/1.6.12) directory into Arduino sam directory (~/.arduino15/packages/arduino/hardware/sam/1.6.12). 
 
 Supposing the Arduino SAM core version is 1.6.12. This file must be copied into the directory:
 
@@ -197,20 +204,20 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/sam/x.yy.zz/platform.txt`
 
- 4. **To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.8](Packages_Patches/arduino/hardware/samd/1.8.8) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.8).
+ 4. **To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards**, you have to copy the whole [Arduino SAMD cores 1.8.8](Packages_Patches/arduino/hardware/samd/1.8.8) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.8).
  
 Supposing the Arduino SAMD version is 1.8.8. These files must be copied into the directory:
 - `~/.arduino15/packages/arduino/hardware/samd/1.8.8/platform.txt`
-- **`~/.arduino15/packages/arduino/hardware/samd/1.8.8/cores/arduino/Arduino.h`***
+- **`~/.arduino15/packages/arduino/hardware/samd/1.8.8/cores/arduino/Arduino.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 
 These files must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/samd/x.yy.z/platform.txt`
-- **`~/.arduino15/packages/arduino/hardware/samd/x.yy.z/cores/arduino/Arduino.h`***
+- **`~/.arduino15/packages/arduino/hardware/samd/x.yy.z/cores/arduino/Arduino.h`**
  
- This is mandatory to fix the **notorious Arduino SAMD compiler error***. See [Improve Arduino compatibility with the STL (min and max macro)](https://github.com/arduino/ArduinoCore-samd/pull/399)
+ This is mandatory to fix the **notorious Arduino SAMD compiler error**. See [Improve Arduino compatibility with the STL (min and max macro)](https://github.com/arduino/ArduinoCore-samd/pull/399)
  
 ```
  ...\arm-none-eabi\include\c++\7.2.1\bits\stl_algobase.h:243:56: error: macro "min" passed 3 arguments, but takes just 2
@@ -219,7 +226,7 @@ These files must be copied into the directory:
 
 Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
- 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
+ 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
 
 Supposing the Adafruit SAMD core version is 1.6.0. This file must be copied into the directory:
 
@@ -230,7 +237,7 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.8) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8). 
+ 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.8) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8). 
 
 Supposing the Seeeduino SAMD core version is 1.7.8. This file must be copied into the directory:
 
@@ -241,7 +248,7 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/platform.txt`
 
-7. **To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards***, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/1.9.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
+7. **To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/1.9.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
 
 Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
 
@@ -274,15 +281,21 @@ theses files must be copied into the corresponding directory:
 - [w5100.h](LibraryPatches/EthernetLarge/src/utility/w5100.h)
 - [w5100.cpp](LibraryPatches/EthernetLarge/src/utility/w5100.cpp)
 
-4. To fix [`Ethernet2 library`](https://github.com/adafruit/Ethernet2), just copy these following files into the [`Ethernet2 library`](https://github.com/adafruit/Ethernet2) directory to overwrite the old files:
+4. To fix [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2), just copy these following files into the [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2) directory to overwrite the old files:
+
 - [Ethernet2.h](LibraryPatches/Ethernet2/src/Ethernet2.h)
 - [Ethernet2.cpp](LibraryPatches/Ethernet2/src/Ethernet2.cpp)
+
+To add UDP Multicast support, necessary for this [**UPnP_Generic library**](https://github.com/khoih-prog/UPnP_Generic):
+
+- [EthernetUdp2.h](LibraryPatches/Ethernet2/src/EthernetUdp2.h)
+- [EthernetUdp2.cpp](LibraryPatches/Ethernet2/src/EthernetUdp2.cpp)
 
 5. To fix [`Ethernet3 library`](https://github.com/sstaub/Ethernet3), just copy these following files into the [`Ethernet3 library`](https://github.com/sstaub/Ethernet3) directory to overwrite the old files:
 - [Ethernet3.h](LibraryPatches/Ethernet3/src/Ethernet3.h)
 - [Ethernet3.cpp](LibraryPatches/Ethernet3/src/Ethernet3.cpp)
 
-6. **To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
+6. **To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library**, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
 
 - [UIPEthernet.h](LibraryPatches/UIPEthernet/UIPEthernet.h)
 - [UIPEthernet.cpp](LibraryPatches/UIPEthernet/UIPEthernet.cpp)
@@ -384,7 +397,7 @@ To use W5x00 Ethernet, for example using EthernetLarge library
 ```
 
 - To use another Ethernet library
-For example, Ethernet_XYZ library uses **Ethernet_XYZ.h***
+For example, Ethernet_XYZ library uses **Ethernet_XYZ.h**
 
 ```cpp
 #define USE_UIP_ETHERNET        false
@@ -466,6 +479,16 @@ These pins are tested OK with ESP8266 and W5x00
   Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
 ```
 
+### 5. How to adjust sendContent_P() and send_P() buffer size
+
+sendContent_P() and send_P() buffer size is set default at 4 Kbytes, and minimum is 256 bytes. If you need to change, just add a definition, e.g.:
+
+```cpp
+#define SENDCONTENT_P_BUFFER_SZ     2048
+```
+
+Note that the buffer size must be larger than 256 bytes. See [Sending GZIP HTML ~ 120kb+ (suggested enhancement)](https://github.com/khoih-prog/EthernetWebServer_STM32/issues/3).
+
 ---
 ---
 
@@ -491,19 +514,19 @@ host port number: ``int port`` (default is the standard HTTP port 80)
 
 #### Basic Operations
 
-***Starting the server***
+**Starting the server**
 
 ```cpp
   void begin();
 ```
 
-***Handling incoming client requests***
+**Handling incoming client requests**
 
 ```cpp
   void handleClient();
 ```
 
-***Disabling the server***
+**Disabling the server**
 
 ```cpp
   void close();
@@ -512,7 +535,7 @@ host port number: ``int port`` (default is the standard HTTP port 80)
 
 Both methods function the same
 
-***Client request handlers***
+**Client request handlers**
 
 ```cpp
   void on();
@@ -521,7 +544,7 @@ Both methods function the same
   void onFileUpload();	
 ```
 
-Example:*
+Example:
 
 ```cpp
   server.on("/", handlerFunction);
@@ -529,7 +552,7 @@ Example:*
   server.onFileUpload(handlerFunction); // handle file uploads
 ```
 
-***Sending responses to the client***
+**Sending responses to the client**
 
 ```cpp
   void send();
@@ -546,7 +569,7 @@ Example:*
 
 #### Advanced Options
 
-***Getting information about request arguments***
+**Getting information about request arguments**
 
 ```cpp
   const String & arg();
@@ -565,7 +588,8 @@ Example:*
 	
 `hasArg` - check if argument exist
 
-***Getting information about request headers***
+
+**Getting information about request headers**
 
 ```cpp
   const String & header();
@@ -586,7 +610,8 @@ Example:*
 	
 `hasHeader` - check if header exist
 
-***Authentication***
+
+**Authentication**
 
 ```cpp
   bool authenticate();
@@ -623,6 +648,7 @@ Example:*
   void serveStatic();
   size_t streamFile();
 ```
+---
 ---
 
 ### Examples:
@@ -687,26 +713,27 @@ body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Col
 </body>\
 </html>", BOARD_NAME, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
 
-  server.send(200, "text/html", temp);
+  server.send(200, F("text/html"), temp);
 }
 
 void handleNotFound()
 {
-  String message = "File Not Found\n\n";
-  message += "URI: ";
+  String message = F("File Not Found\n\n");
+  
+  message += F("URI: ");
   message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
+  message += F("\nMethod: ");
+  message += (server.method() == HTTP_GET) ? F("GET") : F("POST");
+  message += F("\nArguments: ");
   message += server.args();
-  message += "\n";
-
+  message += F("\n");
+  
   for (uint8_t i = 0; i < server.args(); i++)
   {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
-
-  server.send(404, "text/plain", message);
+  
+  server.send(404, F("text/plain"), message);
 }
 
 void drawGraph()
@@ -714,9 +741,10 @@ void drawGraph()
   String out;
   out.reserve(3000);
   char temp[70];
-  out += "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n";
-  out += "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"1\" stroke=\"rgb(0, 0, 0)\" />\n";
-  out += "<g stroke=\"black\">\n";
+  
+  out += F("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n");
+  out += F("<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"1\" stroke=\"rgb(0, 0, 0)\" />\n");
+  out += F("<g stroke=\"black\">\n");
   int y = rand() % 130;
 
   for (int x = 10; x < 300; x += 10)
@@ -726,9 +754,9 @@ void drawGraph()
     out += temp;
     y = y2;
   }
-  out += "</g>\n</svg>\n";
+  out += F("</g>\n</svg>\n");
 
-  server.send(200, "image/svg+xml", out);
+  server.send(200, F("image/svg+xml"), out);
 }
 
 void setup(void)
@@ -890,33 +918,33 @@ void setup(void)
   Ethernet.begin(mac[index]);
 
   // Just info to know how to connect correctly
-  Serial.println("=========================");
-  Serial.println("Currently Used SPI pinout:");
-  Serial.print("MOSI:");
+  Serial.println(F("========================="));
+  Serial.println(F("Currently Used SPI pinout:"));
+  Serial.print(F("MOSI:"));
   Serial.println(MOSI);
-  Serial.print("MISO:");
+  Serial.print(F("MISO:"));
   Serial.println(MISO);
-  Serial.print("SCK:");
+  Serial.print(F("SCK:"));
   Serial.println(SCK);
-  Serial.print("SS:");
+  Serial.print(F("SS:"));
   Serial.println(SS);
 #if USE_ETHERNET3
-  Serial.print("SPI_CS:");
+  Serial.print(F("SPI_CS:"));
   Serial.println(SPI_CS);
 #endif
-  Serial.println("=========================");
+  Serial.println(F("========================="));
 
-  Serial.print("Using mac index = ");
+  Serial.print(F("Using mac index = "));
   Serial.println(index);
 
-  Serial.print("Connected! IP address: ");
+  Serial.print(F("Connected! IP address: "));
   Serial.println(Ethernet.localIP());
 
-  server.on("/", handleRoot);
-  server.on("/test.svg", drawGraph);
-  server.on("/inline", []()
+  server.on(F("/"), handleRoot);
+  server.on(F("/test.svg"), drawGraph);
+  server.on(F("/inline"), []()
   {
-    server.send(200, "text/plain", "This works as well");
+    server.send(200, F("text/plain"), F("This works as well"));
   });
 
   server.onNotFound(handleNotFound);
@@ -1196,6 +1224,10 @@ void loop(void)
   // For Mega
   // Default pin 10 to SS/CS
   #define USE_THIS_SS_PIN       10
+
+  // Reduce size for Mega
+  #define SENDCONTENT_P_BUFFER_SZ     512
+  
   #define BOARD_TYPE            "AVR Mega"
 #endif
 
@@ -1227,9 +1259,9 @@ void loop(void)
   
   // Only one if the following to be true
   #define USE_ETHERNET          false //true
-  #define USE_ETHERNET2         true //true
+  #define USE_ETHERNET2         false //true
   #define USE_ETHERNET3         false //true
-  #define USE_ETHERNET_LARGE    false
+  #define USE_ETHERNET_LARGE    true
   #define USE_ETHERNET_ESP8266  false //true
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
@@ -1330,14 +1362,13 @@ IPAddress ip(192, 168, 2, 222);
 
 ### Debug Termimal Output Samples
 
-1. The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on Adafruit NRF52840_FEATHER_EXPRESS
+1. The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on Adafruit NRF52840_FEATHER_EXPRESS with ENC28J60 using EthernetENC Library
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/AdvancedWebServer.png">
 </p>
 
 ```
-
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
@@ -1512,7 +1543,14 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
 ## Releases
 
-### New in v1.0.12
+### Release v1.0.13
+
+1. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
+2. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
+3. Clean up code. 
+4. Update examples.
+
+#### New in v1.0.12
 
 1. Add support to new [**`EthernetENC library`**](https://github.com/jandrassy/EthernetENC) for ENC28J60.
 2. Add debug feature. Clean up code.
@@ -1548,12 +1586,12 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
 #### New in v1.0.5
 
-1. Add support to **nRF52** boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.***
+1. Add support to **nRF52** boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.**
 2. Support any future custom Ethernet library that meets the no-compiling-error requirements. Currently [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) and [`Ethernet3`](https://github.com/sstaub/Ethernet3) libraries are supported. **Ethernet_Shield_W5200, EtherCard, EtherSia** libraries are not supported now.
 
 #### New in v1.0.4
 
-1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)***.
+1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
 
 #### Version v1.0.3
 
@@ -1579,7 +1617,7 @@ This is simple yet complete WebServer library for AVR, Teensy, etc. boards runni
 
 This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
 
- 1. nRF52 boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.***
+ 1. nRF52 boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**
  2. SAM DUE
  3. SAMD21 
   - Arduino: ZERO, MKR, NANO_33_IOT, etc.
@@ -1619,16 +1657,17 @@ The library provides these features:
 
 ### DONE
 
- 1. Add support to **Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, etc.)***
- 2. Add support to **Adafruit SAMD21 (Itsy-Bitsy M0, Metro M0, Feather M0 Express, etc.)***.
- 3. Add support to **Adafruit SAMD51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)***.
- 4. Add support to **Adafruit nRF52 ( Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.***.
+ 1. Add support to **Arduino SAMD21 (ZERO, MKR, NANO_33_IOT, etc.)**
+ 2. Add support to **Adafruit SAMD21 (Itsy-Bitsy M0, Metro M0, Feather M0 Express, etc.)**.
+ 3. Add support to **Adafruit SAMD51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
+ 4. Add support to **Adafruit nRF52 ( Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**.
  5. Add support to SAM DUE.
  6. Add support to Ethernet W5x00, using either [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`Ethernet2`](https://github.com/adafruit/Ethernet2), [`Ethernet3`](https://github.com/sstaub/Ethernet3) or [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge) library
  7. Add support to Ethernet ENC28J60, using [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
  8. Add support to ESP32 and ESP8266
  9. Add support to Seeeduino SAMD21/SAMD51: LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, Wio Terminal, Grove UI Wireless
 10. Add support to [`EthernetENC`](https://github.com/jandrassy/EthernetENC)
+11. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
  
 ---
 ---
@@ -1639,7 +1678,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 
 1. Based on and modified from the good [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) and [ESP32 WebServer](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) libraries.
 2. [jandrassy](https://github.com/jandrassy) for [EthernetENC](https://github.com/jandrassy/EthernetENC) and [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
-3. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially **U-Blox B302 running as nRF52840 and U-Blox B112 running as nRF52832***, has never been started and finished. Also see [ESP32-based U-BLOX NINA W102 running ENC28J60](https://u-blox-ethernet-ninaw.blogspot.com/).
+3. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially **U-Blox B302 running as nRF52840 and U-Blox B112 running as nRF52832**, has never been started and finished. Also see [ESP32-based U-BLOX NINA W102 running ENC28J60](https://u-blox-ethernet-ninaw.blogspot.com/).
 4. Thanks to [Vladimir](https://github.com/workpage2) to initiate the work on ESP32 and ESP8266 in [Spiffs not work Issue #2](https://github.com/khoih-prog/EthernetWebServer/issues/2)
 
 <table>

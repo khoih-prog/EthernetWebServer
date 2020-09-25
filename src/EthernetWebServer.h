@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.12
+   Version: 1.0.13
 
    Original author:
    @file       Esp8266WebServer.h
@@ -30,6 +30,7 @@
     1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
     1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
     1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
+    1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  *****************************************************************************************************************************/
 
 #ifndef EthernetWebServer_h
@@ -90,6 +91,32 @@
 #endif
 
 #include "detail/mimetable.h"
+
+// KH, For PROGMEM commands
+// ESP32/ESP8266 includes <pgmspace.h> by default, and memccpy_P was already defined there
+#if !(ESP32 || ESP8266)
+  #include <avr/pgmspace.h>
+  #define memccpy_P(dest, src, c, n) memccpy((dest), (src), (c), (n))
+#endif
+
+// Permit redefinition of SENDCONTENT_P_BUFFER_SZ in sketch, default is 4K, minimum is 256 bytes
+#ifndef SENDCONTENT_P_BUFFER_SZ
+  #define SENDCONTENT_P_BUFFER_SZ     4096
+  #warning SENDCONTENT_P_BUFFER_SZ using default 4 Kbytes
+#else
+  #if (SENDCONTENT_P_BUFFER_SZ < 256)
+    #undef SENDCONTENT_P_BUFFER_SZ
+    #define SENDCONTENT_P_BUFFER_SZ   256
+    #warning SENDCONTENT_P_BUFFER_SZ reset to min 256 bytes
+  #endif
+#endif
+
+#ifndef PGM_VOID_P
+  #define PGM_VOID_P const void *
+#endif
+
+//////
+
 
 enum HTTPMethod 
 { 
@@ -232,19 +259,22 @@ class EthernetWebServer
     void send(int code, const String& content_type, const String& content);
     //KH
     void send(int code, char*  content_type, const String& content, size_t contentLength);
-
-#if !( defined(CORE_TEENSY) || (ETHERNET_USE_SAMD) || ETHERNET_USE_SAM_DUE || ETHERNET_USE_NRF528XX )
-    void send_P(int code, PGM_P content_type, PGM_P content);
-    void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
-#endif
-
+    
     void setContentLength(size_t contentLength);
     void sendHeader(const String& name, const String& value, bool first = false);
     void sendContent(const String& content);
     void sendContent(const String& content, size_t size);
+
+    // KH, Restore PROGMEM commands
+//#if !( defined(CORE_TEENSY) || (ETHERNET_USE_SAMD) || ETHERNET_USE_SAM_DUE || ETHERNET_USE_NRF528XX )
+    void send_P(int code, PGM_P content_type, PGM_P content);
+    void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
+    
     void sendContent_P(PGM_P content);
     void sendContent_P(PGM_P content, size_t size);
-
+//#endif
+    //////
+    
     static String urlDecode(const String& text);
 
     template<typename T> size_t streamFile(T &file, const String& contentType) 

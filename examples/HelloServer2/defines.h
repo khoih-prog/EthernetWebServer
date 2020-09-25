@@ -6,8 +6,8 @@
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
   
-  Version: 1.0.12
-  
+  Version: 1.0.13
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
@@ -25,6 +25,7 @@
   1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
   1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
   1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
+  1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  ***************************************************************************************************************************************/
 
 #ifndef defines_h
@@ -286,10 +287,10 @@
   // Only one if the following to be true
   #define USE_ETHERNET          false //true
   #define USE_ETHERNET2         false //true
-  #define USE_ETHERNET3         false //true
+  #define USE_ETHERNET3         true //true
   #define USE_ETHERNET_LARGE    false
   #define USE_ETHERNET_ESP8266  false //true
-  #define USE_ETHERNET_ENC      true
+  #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
   
   #if !USE_ETHERNET_WRAPPER

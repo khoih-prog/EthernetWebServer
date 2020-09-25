@@ -11,8 +11,8 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
   
-  Version: 1.0.12
-  
+  Version: 1.0.13
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
@@ -30,6 +30,7 @@
   1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
   1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
   1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
+  1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  *****************************************************************************************************************************/
 /*
    The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
@@ -45,27 +46,32 @@ const int led = 13;
 
 void handleRoot()
 {
-  String html = "Hello from HelloServer2 running on " + String(BOARD_NAME); 
-  //digitalWrite(led, 1);
-  server.send(200, "text/plain", html);
-  //digitalWrite(led, 0);
+  String html = F("Hello from HelloServer2 running on ");
+
+  html += String(BOARD_NAME); 
+  
+  server.send(200, F("text/plain"), html);
 }
 
 void handleNotFound()
 {
-  digitalWrite(led, 1);
-  String message = "File Not Found\n\n";
-  message += "URI: ";
+  String message = F("File Not Found\n\n");
+  
+  message += F("URI: ");
   message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
+  message += F("\nMethod: ");
+  message += (server.method() == HTTP_GET) ? F("GET") : F("POST");
+  message += F("\nArguments: ");
   message += server.args();
-  message += "\n";
-  for (uint8_t i = 0; i < server.args(); i++) {
+  message += F("\n");
+  
+  for (uint8_t i = 0; i < server.args(); i++)
+  {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
-  server.send(404, "text/plain", message);
+  
+  server.send(404, F("text/plain"), message);
+  
   digitalWrite(led, 0);
 }
 
@@ -223,7 +229,6 @@ void setup(void)
 
 #endif  //USE_ETHERNET_WRAPPER
 
-
   // start the ethernet connection and the server:
   // Use DHCP dynamic IP and random mac
   uint16_t index = millis() % NUMBER_OF_MAC;
@@ -231,42 +236,57 @@ void setup(void)
   //Ethernet.begin(mac[index], ip);
   Ethernet.begin(mac[index]);
 
-  server.on("/", handleRoot);
+  // Just info to know how to connect correctly
+  Serial.println(F("========================="));
+  Serial.println(F("Currently Used SPI pinout:"));
+  Serial.print(F("MOSI:"));
+  Serial.println(MOSI);
+  Serial.print(F("MISO:"));
+  Serial.println(MISO);
+  Serial.print(F("SCK:"));
+  Serial.println(SCK);
+  Serial.print(F("SS:"));
+  Serial.println(SS);
+#if USE_ETHERNET3
+  Serial.print(F("SPI_CS:"));
+  Serial.println(SPI_CS);
+#endif
+  Serial.println(F("========================="));
 
-  server.on("/inline", []() {
-    server.send(200, "text/plain", "This works as well");
+  Serial.print(F("Using mac index = "));
+  Serial.println(index);
+
+  Serial.print(F("Connected! IP address: "));
+  Serial.println(Ethernet.localIP());
+
+  server.on(F("/"), handleRoot);
+
+  server.on(F("/inline"), []() 
+  {
+    server.send(200, F("text/plain"), F("This works as well"));
   });
 
-  server.on("/gif", []() {
-#if ( defined(CORE_TEENSY) || ETHERNET_USE_SAMD )
-    static const uint8_t gif[] = {
-#else
-    static const uint8_t gif[] PROGMEM = {
-#endif
+  server.on(F("/gif"), []() 
+  {
+    static const uint8_t gif[] PROGMEM = 
+    {
       0x47, 0x49, 0x46, 0x38, 0x37, 0x61, 0x10, 0x00, 0x10, 0x00, 0x80, 0x01,
       0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x2c, 0x00, 0x00, 0x00, 0x00,
       0x10, 0x00, 0x10, 0x00, 0x00, 0x02, 0x19, 0x8c, 0x8f, 0xa9, 0xcb, 0x9d,
       0x00, 0x5f, 0x74, 0xb4, 0x56, 0xb0, 0xb0, 0xd2, 0xf2, 0x35, 0x1e, 0x4c,
       0x0c, 0x24, 0x5a, 0xe6, 0x89, 0xa6, 0x4d, 0x01, 0x00, 0x3b
     };
+    
     char gif_colored[sizeof(gif)];
 
-#if ( defined(CORE_TEENSY) || ETHERNET_USE_SAMD )
-    memcpy(gif_colored, gif, sizeof(gif));
-#else
     memcpy_P(gif_colored, gif, sizeof(gif));
-#endif
 
     // Set the background to a random set of colors
     gif_colored[16] = millis() % 256;
     gif_colored[17] = millis() % 256;
     gif_colored[18] = millis() % 256;
 
-#if ( defined(CORE_TEENSY) || (ETHERNET_USE_SAMD) || ETHERNET_USE_SAM_DUE || ETHERNET_USE_NRF528XX )
-    server.send(200, (char *) "image/gif", gif_colored, sizeof(gif_colored));
-#else
     server.send_P(200, "image/gif", gif_colored, sizeof(gif_colored));
-#endif
   });
 
   server.onNotFound(handleNotFound);

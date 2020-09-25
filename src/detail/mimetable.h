@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.12
+   Version: 1.0.13
 
    Original author:
    @file       Esp8266WebServer.h
@@ -30,6 +30,7 @@
     1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
     1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
     1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
+    1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  *****************************************************************************************************************************/
  
 #ifndef __MIMETABLE_H__
@@ -75,29 +76,29 @@ struct Entry
 // Table of extension->MIME strings stored in PROGMEM, needs to be global due to GCC section typing rules
 const Entry mimeTable[maxType] = 
 {
-    { ".html", "text/html" },
-    { ".htm", "text/html" },
-    { ".css", "text/css" },
-    { ".txt", "text/plain" },
-    { ".js", "application/javascript" },
-    { ".json", "application/json" },
-    { ".png", "image/png" },
-    { ".gif", "image/gif" },
-    { ".jpg", "image/jpeg" },
-    { ".ico", "image/x-icon" },
-    { ".svg", "image/svg+xml" },
-    { ".ttf", "application/x-font-ttf" },
-    { ".otf", "application/x-font-opentype" },
-    { ".woff", "application/font-woff" },
-    { ".woff2", "application/font-woff2" },
-    { ".eot", "application/vnd.ms-fontobject" },
-    { ".sfnt", "application/font-sfnt" },
-    { ".xml", "text/xml" },
-    { ".pdf", "application/pdf" },
-    { ".zip", "application/zip" },
-    { ".gz", "application/x-gzip" },
-    { ".appcache", "text/cache-manifest" },
-    { "", "application/octet-stream" } 
+    { ".html",      "text/html" },
+    { ".htm",       "text/html" },
+    { ".css",       "text/css" },
+    { ".txt",       "text/plain" },
+    { ".js",        "application/javascript" },
+    { ".json",      "application/json" },
+    { ".png",       "image/png" },
+    { ".gif",       "image/gif" },
+    { ".jpg",       "image/jpeg" },
+    { ".ico",       "image/x-icon" },
+    { ".svg",       "image/svg+xml" },
+    { ".ttf",       "application/x-font-ttf" },
+    { ".otf",       "application/x-font-opentype" },
+    { ".woff",      "application/font-woff" },
+    { ".woff2",     "application/font-woff2" },
+    { ".eot",       "application/vnd.ms-fontobject" },
+    { ".sfnt",      "application/font-sfnt" },
+    { ".xml",       "text/xml" },
+    { ".pdf",       "application/pdf" },
+    { ".zip",       "application/zip" },
+    { ".gz",        "application/x-gzip" },
+    { ".appcache",  "text/cache-manifest" },
+    { "",           "application/octet-stream" } 
 };
 //extern const Entry mimeTable[maxType];
 }

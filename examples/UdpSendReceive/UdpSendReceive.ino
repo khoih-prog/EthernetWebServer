@@ -11,8 +11,8 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
   
-  Version: 1.0.12
-  
+  Version: 1.0.13
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
@@ -30,6 +30,7 @@
   1.0.10  K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
   1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
   1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
+  1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  *****************************************************************************************************************************/
 /*
    The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
@@ -205,6 +206,26 @@ void setup()
   //Ethernet.begin(mac[index], ip);
   Ethernet.begin(mac[index]);
 
+  // Just info to know how to connect correctly
+  Serial.println(F("========================="));
+  Serial.println(F("Currently Used SPI pinout:"));
+  Serial.print(F("MOSI:"));
+  Serial.println(MOSI);
+  Serial.print(F("MISO:"));
+  Serial.println(MISO);
+  Serial.print(F("SCK:"));
+  Serial.println(SCK);
+  Serial.print(F("SS:"));
+  Serial.println(SS);
+#if USE_ETHERNET3
+  Serial.print(F("SPI_CS:"));
+  Serial.println(SPI_CS);
+#endif
+  Serial.println(F("========================="));
+
+  Serial.print(F("Using mac index = "));
+  Serial.println(index);
+
   // you're connected now, so print out the data
   Serial.print(F("You're connected to the network, IP = "));
   Serial.println(Ethernet.localIP());
@@ -234,6 +255,7 @@ void loop()
 
     // read the packet into packetBufffer
     int len = Udp.read(packetBuffer, 255);
+    
     if (len > 0)
     {
       packetBuffer[len] = 0;
