@@ -11,7 +11,7 @@
 
 ### Release v1.0.13
 
-1. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
+1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
 2. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
 3. Clean up code. 
 4. Update examples.
@@ -114,16 +114,16 @@ The EthernetWebServer class, found in `EthernetWebServer.h` header, is a simple 
 
 ## Prerequisite
 
- 1. [`Arduino IDE 1.8.12+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install.
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.8+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
- 6. [`Adafruit SAMD core 1.6.0+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
- 7. [`Seeeduino SAMD core 1.7.8+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
- 8. [`Adafruit nRF52 v0.20.5+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
+ 6. [`Adafruit SAMD core 1.6.3+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
+ 7. [`Seeeduino SAMD core 1.7.9+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
+ 8. [`Adafruit nRF52 v0.21.0+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
  9. [`ESP32 core 1.0.4+`](https://github.com/espressif/arduino-esp32/releases) for ESP32 boards
-10. [`ESP8266 core 2.7.3+`](https://github.com/esp8266/Arduino#installing-with-boards-manager) for ESP8266 boards. To use ESP8266 core 2.7.1+ for LittleFS. 
+10. [`ESP8266 core 2.7.4+`](https://github.com/esp8266/Arduino#installing-with-boards-manager) for ESP8266 boards. To use ESP8266 core 2.7.1+ for LittleFS. 
 11. [`Functional-VLPP library v1.0.1+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 12. Depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://www.arduino.cc/en/Reference/Ethernet) for W5100, W5200 and W5500.
@@ -160,16 +160,16 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 ### Packages' Patches
 
- 1. **To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.20.5](Packages_Patches/adafruit/hardware/nrf52/0.20.5) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5). 
+ 1. **To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.21.0](Packages_Patches/adafruit/hardware/nrf52/0.21.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0). 
 
-Supposing the Adafruit nRF52 version is 0.20.5. These files must be copied into the directory:
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/boards.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B302_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B302_ublox/variant.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B112_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B112_ublox/variant.cpp`
-- **`~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/cores/nRF5/Udp.h`**
+Supposing the Adafruit nRF52 version is 0.21.0. These files must be copied into the directory:
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/boards.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B302_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B302_ublox/variant.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B112_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B112_ublox/variant.cpp`
+- **`~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/cores/nRF5/Udp.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 These files must be copied into the directory:
@@ -226,22 +226,22 @@ These files must be copied into the directory:
 
 Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
- 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
+ 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.3) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.3). 
 
-Supposing the Adafruit SAMD core version is 1.6.0. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.6.3. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.3/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.8) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8). 
+ 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.9) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9). 
 
-Supposing the Seeeduino SAMD core version is 1.7.8. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.7.9. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -260,6 +260,50 @@ theses files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_F767ZI/variant.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_L053R8/variant.h`
+
+---
+
+### Libraries' Patches
+
+1. If your application requires 2K+ HTML page, the current [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) must be modified if you are using W5200/W5500 Ethernet shields. W5100 is not supported for 2K+ buffer. If you use boards requiring different CS/SS pin for W5x00 Ethernet shield, for example ESP32, ESP8266, nRF52, etc., you also have to modify the following libraries to be able to specify the CS/SS pin correctly.
+
+2. To fix [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet), just copy these following files into the [`Ethernet library`](https://www.arduino.cc/en/Reference/Ethernet) directory to overwrite the old files:
+- [Ethernet.h](LibraryPatches/Ethernet/src/Ethernet.h)
+- [Ethernet.cpp](LibraryPatches/Ethernet/src/Ethernet.cpp)
+- [EthernetServer.cpp](LibraryPatches/Ethernet/src/EthernetServer.cpp)
+- [w5100.h](LibraryPatches/Ethernet/src/utility/w5100.h)
+- [w5100.cpp](LibraryPatches/Ethernet/src/utility/w5100.cpp)
+
+3. To fix [`EthernetLarge library`](https://github.com/OPEnSLab-OSU/EthernetLarge), just copy these following files into the [`EthernetLarge library`](https://github.com/OPEnSLab-OSU/EthernetLarge) directory to overwrite the old files:
+- [EthernetLarge.h](LibraryPatches/EthernetLarge/src/EthernetLarge.h)
+- [EthernetLarge.cpp](LibraryPatches/EthernetLarge/src/EthernetLarge.cpp)
+- [EthernetServer.cpp](LibraryPatches/EthernetLarge/src/EthernetServer.cpp)
+- [w5100.h](LibraryPatches/EthernetLarge/src/utility/w5100.h)
+- [w5100.cpp](LibraryPatches/EthernetLarge/src/utility/w5100.cpp)
+
+4. To fix [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2), just copy these following files into the [`Ethernet2 library`](https://github.com/khoih-prog/Ethernet2) directory to overwrite the old files:
+
+- [Ethernet2.h](LibraryPatches/Ethernet2/src/Ethernet2.h)
+- [Ethernet2.cpp](LibraryPatches/Ethernet2/src/Ethernet2.cpp)
+
+To add UDP Multicast support, necessary for this [**UPnP_Generic library**](https://github.com/khoih-prog/UPnP_Generic):
+
+- [EthernetUdp2.h](LibraryPatches/Ethernet2/src/EthernetUdp2.h)
+- [EthernetUdp2.cpp](LibraryPatches/Ethernet2/src/EthernetUdp2.cpp)
+
+5. To fix [`Ethernet3 library`](https://github.com/sstaub/Ethernet3), just copy these following files into the [`Ethernet3 library`](https://github.com/sstaub/Ethernet3) directory to overwrite the old files:
+- [Ethernet3.h](LibraryPatches/Ethernet3/src/Ethernet3.h)
+- [Ethernet3.cpp](LibraryPatches/Ethernet3/src/Ethernet3.cpp)
+
+6. ***To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
+
+- [UIPEthernet.h](LibraryPatches/UIPEthernet/UIPEthernet.h)
+- [UIPEthernet.cpp](LibraryPatches/UIPEthernet/UIPEthernet.cpp)
+- [Enc28J60Network.h](LibraryPatches/UIPEthernet/utility/Enc28J60Network.h)
+- [Enc28J60Network.cpp](LibraryPatches/UIPEthernet/utility/Enc28J60Network.cpp)
+
+7. To fix [`ESP32 compile error`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.12/hardware/espressif/cores/esp32) to overwrite the old file:
+- [Server.h](LibraryPatches/esp32/cores/esp32/Server.h)
 
 ---
 
@@ -1545,7 +1589,7 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
 ### Release v1.0.13
 
-1. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
+1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
 2. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
 3. Clean up code. 
 4. Update examples.
@@ -1615,7 +1659,7 @@ This is simple yet complete WebServer library for AVR, Teensy, etc. boards runni
 
 #### Supporting Boards
 
-This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
+This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
 
  1. nRF52 boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**
  2. SAM DUE
@@ -1644,6 +1688,12 @@ The library provides these features:
 2. UDP Server and Client
 3. HTTP Server and Client
 4. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
+
+---
+
+### Issues ###
+
+Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/EthernetWebServer/issues)
 
 ---
 
