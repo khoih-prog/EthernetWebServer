@@ -9,6 +9,55 @@
 ---
 ---
 
+### Why do we need this [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer)
+
+This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32, etc.** boards using Ethernet shields. The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
+
+
+#### Supporting Boards
+
+This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
+
+ 1. **nRF52 boards**, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**
+ 2. **SAM DUE**
+ 3. **SAMD21**
+  - Arduino SAMD21: ZERO, MKRs, NANO_33_IOT, etc.
+  - Adafruit SAMD21 (M0): ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
+  - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
+  
+ 4. **SAMD51**
+  - Adafruit SAMD51 (M4): Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
+  - Seeeduino: Wio Terminal, Grove UI Wireless
+  
+ 5. **Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)**
+ 6. **AVR Mega1280, 2560, ADK.**
+ 7. ESP32
+ 8. ESP8266
+
+#### Supporting Ethernet shields/modules:
+
+1. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
+2. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
+
+---
+
+The library provides these features:
+
+1. TCP Server and Client
+2. UDP Server and Client
+3. HTTP Server and Client
+4. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
+
+Library is based on and modified from:
+
+1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
+2. [Ivan Grokhotkov's ESP32 WebServer](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer)
+
+The EthernetWebServer class, found in `EthernetWebServer.h` header, is a simple WebServer class, knowing how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
+
+---
+---
+
 ### Release v1.0.13
 
 1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
@@ -23,7 +72,7 @@
 
 #### New in v1.0.11
 
-1. Add support to Seeeduino SAMD21/SAMD51 boards (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
+1. Add support to **Seeeduino SAMD21/SAMD51 boards** (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
 2. Add and restructure examples.
 
 #### New in v1.0.10
@@ -66,52 +115,6 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
 ---
 ---
 
-This is simple yet complete WebServer library for `AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32, etc.` boards running Ethernet shields. The functions are similar and compatible to [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
-
-#### Supporting Boards
-
-This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
-
- 1. nRF52 boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**
- 2. SAM DUE
- 3. SAMD21 
-  - Arduino: ZERO, MKR, NANO_33_IOT, etc.
-  - Adafruit M0: ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
-  - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
-  
- 4. SAMD51 
-  - Adafruit M4 : Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
-  - Seeeduino: Wio Terminal, Grove UI Wireless
-  
- 5. Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
- 6. AVR Mega1280, 2560, ADK.
- 7. ESP32
- 8. ESP8266
-
-#### Supporting Ethernet shields/modules:
-
-1. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
-2. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
-
----
-
-The library provides these features:
-
-1. TCP Server and Client
-2. UDP Server and Client
-3. HTTP Server and Client
-4. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
-
-Library is based on and modified from:
-
-1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
-2. [Ivan Grokhotkov's ESP32 WebServer](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer)
-
-The EthernetWebServer class, found in `EthernetWebServer.h` header, is a simple WebServer class, knowing how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
-
----
----
-
 ## Prerequisite
 
  1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
@@ -119,8 +122,8 @@ The EthernetWebServer class, found in `EthernetWebServer.h` header, is a simple 
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.9+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
- 6. [`Adafruit SAMD core 1.6.3+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
- 7. [`Seeeduino SAMD core 1.7.9+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
+ 6. [`Adafruit SAMD core 1.6.4+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
+ 7. [`Seeeduino SAMD core 1.8.1+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
  8. [`Adafruit nRF52 v0.21.0+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
  9. [`ESP32 core 1.0.4+`](https://github.com/espressif/arduino-esp32/releases) for ESP32 boards
 10. [`ESP8266 core 2.7.4+`](https://github.com/esp8266/Arduino#installing-with-boards-manager) for ESP8266 boards. To use ESP8266 core 2.7.1+ for LittleFS. 
@@ -138,6 +141,7 @@ The EthernetWebServer class, found in `EthernetWebServer.h` header, is a simple 
 ## Installation
 
 ### Use Arduino Library Manager
+
 The best and easiest way is to use `Arduino Library Manager`. Search for `EthernetWebServer`, then select / install the latest version.
 You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/EthernetWebServer.svg?)](https://www.ardu-badge.com/EthernetWebServer) for more detailed instructions.
 
@@ -152,7 +156,7 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install **EthernetWebServer** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for **EthernetWebServer** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**EthernetWebServer** library](https://platformio.org/lib/show/7063/EthernetWebServer) by using [Library Manager](https://platformio.org/lib/show/7063/EthernetWebServer/installation). Search for EthernetWebServer in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
@@ -226,22 +230,22 @@ These files must be copied into the directory:
 
 Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
- 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.3) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.3). 
+ 5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.4) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.4). 
 
-Supposing the Adafruit SAMD core version is 1.6.3. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.6.4. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.3/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.4/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.9) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9). 
+ 6. ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.8.1) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1). 
 
-Supposing the Seeeduino SAMD core version is 1.7.9. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.8.1. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -1596,7 +1600,7 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
 #### New in v1.0.11
 
-1. Add support to Seeeduino SAMD21/SAMD51 boards (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
+1. Add support to **Seeeduino SAMD21/SAMD51 boards** (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
 2. Add and restructure examples.
 
 #### New in v1.0.10
@@ -1613,7 +1617,7 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
 #### New in v1.0.8
 
-1. Fix W5x00 support for ESP8266 boards.
+1. Fix W5x00 support for ESP8266 and many more boards.
 
 #### New in v1.0.7
 
@@ -1621,7 +1625,7 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 
 #### New in v1.0.6
 
-1. Add W5x00 support to **ESP32 and ESP8266** boards.
+1. Add W5x00 nsupport to **ESP32 and ESP8266** boards.
 
 #### New in v1.0.5
 
@@ -1631,6 +1635,7 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 #### New in v1.0.4
 
 1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
+
 
 #### Version v1.0.3
 
@@ -1654,21 +1659,21 @@ This is simple yet complete WebServer library for AVR, Teensy, etc. boards runni
 
 #### Supporting Boards
 
-This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
+This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
 
- 1. nRF52 boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**
- 2. SAM DUE
- 3. SAMD21 
-  - Arduino: ZERO, MKR, NANO_33_IOT, etc.
-  - Adafruit M0: ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
+ 1. **nRF52 boards**, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**
+ 2. **SAM DUE**
+ 3. **SAMD21**
+  - Arduino SAMD21: ZERO, MKRs, NANO_33_IOT, etc.
+  - Adafruit SAMD21 (M0): ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
   - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
   
- 4. SAMD51 
-  - Adafruit M4 : Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
+ 4. **SAMD51**
+  - Adafruit SAMD51 (M4): Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
   - Seeeduino: Wio Terminal, Grove UI Wireless
   
- 5. Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
- 6. AVR Mega1280, 2560, ADK.
+ 5. **Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)**
+ 6. **AVR Mega1280, 2560, ADK.**
  7. ESP32
  8. ESP8266
 
