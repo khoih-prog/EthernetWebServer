@@ -2,12 +2,35 @@
 # Datatypes (KEYWORD1)
 #######################################
 
+#######################
+# EthernetWebServer
+#######################
+
 EthernetWebServer	KEYWORD1
 HTTPMethod	KEYWORD1
 HTTPUploadStatus  KEYWORD1
 HTTPClientStatus  KEYWORD1
 HTTPUpload  KEYWORD1
 HTTPAuthMethod  KEYWORD1
+
+#######################
+# EthernetHttpClient
+#######################
+
+EthernetHttpClient  KEYWORD1
+
+##########################
+# EthernetWebSocketClient
+##########################
+
+EthernetWebSocketClient KEYWORD1
+
+##########################
+# EthernetURLEncoderClass
+##########################
+
+EthernetURLEncoderClass KEYWORD1
+
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -78,6 +101,70 @@ handle  KEYWORD2
 upload  KEYWORD2
 next  KEYWORD2
 getContentType  KEYWORD2
+
+#######################
+# EthernetHttpClient
+#######################
+
+beginRequest  KEYWORD2
+endRequest  KEYWORD2
+beginBody KEYWORD2
+get KEYWORD2
+post  KEYWORD2
+put KEYWORD2
+patch KEYWORD2
+del KEYWORD2
+startRequest  KEYWORD2
+sendHeader  KEYWORD2
+sendBasicAuth KEYWORD2
+responseStatusCode  KEYWORD2
+headerAvailable KEYWORD2
+readHeaderValue KEYWORD2
+readHeader  KEYWORD2
+skipResponseHeaders KEYWORD2
+endOfHeadersReached KEYWORD2
+endOfBodyReached  KEYWORD2
+endOfStream KEYWORD2
+completed KEYWORD2
+contentLength KEYWORD2
+isResponseChunked KEYWORD2
+responseBody  KEYWORD2
+connectionKeepAlive KEYWORD2
+noDefaultRequestHeaders KEYWORD2
+write KEYWORD2
+available KEYWORD2
+read  KEYWORD2
+peek  KEYWORD2
+flush KEYWORD2
+connect KEYWORD2
+stop  KEYWORD2
+connected KEYWORD2
+httpResponseTimeout KEYWORD2
+setHttpResponseTimeout  KEYWORD2
+
+##########################
+# EthernetWebSocketClient
+##########################
+
+begin KEYWORD2
+beginMessage  KEYWORD2
+endMessage  KEYWORD2
+parseMessage  KEYWORD2
+messageType KEYWORD2
+isFinal KEYWORD2
+readString  KEYWORD2
+ping  KEYWORD2
+write KEYWORD2
+available KEYWORD2
+read  KEYWORD2
+peek  KEYWORD2
+
+##########################
+# EthernetURLEncoderClass
+##########################
+
+encode  KEYWORD2
+
 
 #######################################
 # Constants (LITERAL1)

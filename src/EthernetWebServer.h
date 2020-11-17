@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.13
+   Version: 1.1.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -31,10 +31,10 @@
     1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
     1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
     1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
+    1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
  *****************************************************************************************************************************/
 
-#ifndef EthernetWebServer_h
-#define EthernetWebServer_h
+#pragma once
 
 #define USE_NEW_WEBSERVER_VERSION     true
 
@@ -266,13 +266,11 @@ class EthernetWebServer
     void sendContent(const String& content, size_t size);
 
     // KH, Restore PROGMEM commands
-//#if !( defined(CORE_TEENSY) || (ETHERNET_USE_SAMD) || ETHERNET_USE_SAM_DUE || ETHERNET_USE_NRF528XX )
     void send_P(int code, PGM_P content_type, PGM_P content);
     void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
     
     void sendContent_P(PGM_P content);
     void sendContent_P(PGM_P content, size_t size);
-//#endif
     //////
     
     static String urlDecode(const String& text);
@@ -362,4 +360,3 @@ class EthernetWebServer
 #include "EthernetWebServer-impl.h"
 #include "Parsing-impl.h"
 
-#endif //EthernetWebServer_H

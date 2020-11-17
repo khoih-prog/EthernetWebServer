@@ -6,7 +6,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.13
+   Version: 1.1.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -30,10 +30,10 @@
     1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
     1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
     1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
+    1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
  *****************************************************************************************************************************/
 
-#ifndef BASE64_CDECODE_H
-#define BASE64_CDECODE_H
+#pragma once
 
 #define base64_decode_expected_len(n) ((n * 3) / 4)
 
@@ -62,4 +62,3 @@ int base64_decode_chars(const char* code_in, const int length_in, char* plaintex
 } // extern "C"
 #endif
 
-#endif /* BASE64_CDECODE_H */

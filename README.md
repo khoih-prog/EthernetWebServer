@@ -11,7 +11,9 @@
 
 ### Why do we need this [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer)
 
-This [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32, etc.** boards using Ethernet shields. The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
+This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32, etc.** boards using Ethernet shields. The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
+
+This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer), from v1.1.0, also provides high-level **HTTP and WebSocket Client** with the functions are similar and compatible to those of [**ArduinoHttpClient Library**](https://github.com/arduino-libraries/ArduinoHttpClient)
 
 
 #### Supporting Boards
@@ -47,16 +49,24 @@ The library provides these features:
 2. UDP Server and Client
 3. HTTP Server and Client
 4. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
+5. **High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client**. From v1.1.0.
 
 Library is based on and modified from:
 
 1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 2. [Ivan Grokhotkov's ESP32 WebServer](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer)
+3. [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
+
 
 The EthernetWebServer class, found in `EthernetWebServer.h` header, is a simple WebServer class, knowing how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
 
 ---
 ---
+
+### Major Release v1.1.0
+
+1. Add high-level **HTTP and WebSockets Client** by merging [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
+2. Add many more examples for HTTP and WebSockets Client.
 
 ### Release v1.0.13
 
@@ -696,6 +706,8 @@ Example:
 
 ### Examples:
 
+#### Original Examples
+
  1. [AdvancedWebServer](examples/AdvancedWebServer)
  2. [HelloServer](examples/HelloServer)
  3. [HelloServer2](examples/HelloServer2)
@@ -707,6 +719,24 @@ Example:
  9. [WebClient](examples/WebClient)
 10. [WebClientRepeating](examples/WebClientRepeating)
 11. [WebServer](examples/WebServer)
+
+#### HTTP and WebSocket Client New Examples
+
+ 1. [BasicAuthGet](examples/HTTPClient/BasicAuthGet)
+ 2. [CustomHeader](examples/HTTPClient/CustomHeader)
+ 3. [DweetGet](examples/HTTPClient/DweetGet)
+ 4. [DweetPost](examples/HTTPClient/DweetPost)
+ 5. [HueBlink](examples/HTTPClient/HueBlink)
+ 6. [node_test_server](examples/HTTPClient/node_test_server)
+ 7. [PostWithHeaders](examples/HTTPClient/PostWithHeaders)
+ 8. [SimpleDelete](examples/HTTPClient/SimpleDelete)
+ 9. [SimpleGet](examples/HTTPClient/SimpleGet)
+10. [SimpleHTTPExample](examples/HTTPClient/SimpleHTTPExample)
+11. [SimplePost](examples/HTTPClient/SimplePost)
+12. [SimplePut](examples/HTTPClient/SimplePut)
+13. [SimpleWebSocket](examples/HTTPClient/SimpleWebSocket)
+
+
 
 ---
 ---
@@ -1581,10 +1611,137 @@ Token = token, IP = 192.168.2.103
 BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
 ```
 
+
+---
+
+3. The terminal output of **SAM DUE with W5x00 using EthernetLarge Library** running [SimpleWebSocket example](examples/HTTPClient/SimpleWebSocket) to demonstrate newly-added WebSocket Client feature.
+
+
+```
+Starting SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library
+[ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 75
+[ETHERNET_WEBSERVER] MISO: 74
+[ETHERNET_WEBSERVER] SCK: 76
+[ETHERNET_WEBSERVER] SS: 10
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] Board : SAM DUE , setCsPin: 10
+_pinCS = 0
+W5100 init, using SS_PIN_DEFAULT = 10, new ss_pin = 10, W5100Class::ss_pin = 10
+W5100::init: W5100, SSIZE =4096
+=========================
+Currently Used SPI pinout:
+MOSI:75
+MISO:74
+SCK:76
+SS:10
+=========================
+Using mac index = 5
+Connected! IP address: 192.168.2.81
+starting WebSocket client
+Connection failed
+disconnected
+starting WebSocket client
+Connected
+Sending Hello 0
+Sending Hello 1
+Received a message:
+0 => Hello from SimpleWebSocket on SAM DUE, millis = 6906
+Sending Hello 2
+Received a message:
+1 => Hello from SimpleWebSocket on SAM DUE, millis = 11907
+Sending Hello 3
+Received a message:
+2 => Hello from SimpleWebSocket on SAM DUE, millis = 16909
+Sending Hello 4
+Received a message:
+3 => Hello from SimpleWebSocket on SAM DUE, millis = 21911
+Sending Hello 5
+Received a message:
+4 => Hello from SimpleWebSocket on SAM DUE, millis = 26913
+Sending Hello 6
+Received a message:
+5 => Hello from SimpleWebSocket on SAM DUE, millis = 31915
+Sending Hello 7
+Received a message:
+6 => Hello from SimpleWebSocket on SAM DUE, millis = 36917
+Sending Hello 8
+Received a message:
+7 => Hello from SimpleWebSocket on SAM DUE, millis = 41919
+Sending Hello 9
+Received a message:
+8 => Hello from SimpleWebSocket on SAM DUE, millis = 46921
+Sending Hello 10
+Received a message:
+9 => Hello from SimpleWebSocket on SAM DUE, millis = 51923
+Sending Hello 11
+Received a message:
+10 => Hello from SimpleWebSocket on SAM DUE, millis = 56925
+Sending Hello 12
+Received a message:
+11 => Hello from SimpleWebSocket on SAM DUE, millis = 61927
+Sending Hello 13
+Received a message:
+12 => Hello from SimpleWebSocket on SAM DUE, millis = 66929
+Sending Hello 14
+Received a message:
+13 => Hello from SimpleWebSocket on SAM DUE, millis = 71931
+Sending Hello 15
+Received a message:
+14 => Hello from SimpleWebSocket on SAM DUE, millis = 76933
+Sending Hello 16
+Received a message:
+15 => Hello from SimpleWebSocket on SAM DUE, millis = 81935
+Sending Hello 17
+Received a message:
+16 => Hello from SimpleWebSocket on SAM DUE, millis = 86937
+Sending Hello 18
+Received a message:
+17 => Hello from SimpleWebSocket on SAM DUE, millis = 91939
+```
+
+---
+
+
+4. The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet3 Library** running [DweetPost example](examples/HTTPClient/DweetPost) to demonstrate newly-added high-level HTTP Client feature.
+
+```
+Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library
+[ETHERNET_WEBSERVER] =========== USE_ETHERNET3 ===========
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 25
+[ETHERNET_WEBSERVER] MISO: 24
+[ETHERNET_WEBSERVER] SCK: 26
+[ETHERNET_WEBSERVER] SS: 5
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] Board : NRF52840_FEATHER , setCsPin: 10
+
+Ethernet3 W5500 init, using SPI_CS = 10, number of sockets = 4
+=========================
+Currently Used SPI pinout:
+MOSI:25
+MISO:24
+SCK:26
+SS:5
+SPI_CS:10
+=========================
+Using mac index = 17
+Connected! IP address: 192.168.2.80
+making POST request
+Status code: 200
+Response: {"this":"succeeded","by":"dweeting","the":"dweet","with":{"thing":"scandalous-cheese-hoarder","created":"2020-11-17T05:10:59.175Z","content":{"sensorValue":40},"transaction":"08ae7c04-f1e5-4411-ad05-eb4afe77a6b4"}}
+Wait ten seconds
+```
 ---
 ---
 
 ## Releases
+
+### Major Release v1.1.0
+
+1. Add high-level **HTTP and WebSockets Client** by merging [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
+2. Add many more examples for HTTP and WebSockets Client.
 
 ### Release v1.0.13
 
@@ -1688,6 +1845,7 @@ The library provides these features:
 2. UDP Server and Client
 3. HTTP Server and Client
 4. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
+5. **High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client**. From v1.1.0.
 
 ---
 
@@ -1700,7 +1858,7 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 ### TO DO
 
 1. Bug Searching and Killing
-2. Add SSL/TLS Client and Server support
+2. Add Server support
 3. Support more types of boards using Ethernet shields.
 4. Support more non-compatible Ethernet Libraries such as Ethernet_Shield_W5200, EtherCard, EtherSia
 5. Add mDNS features.
@@ -1718,6 +1876,7 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
  9. Add support to Seeeduino SAMD21/SAMD51: LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, Wio Terminal, Grove UI Wireless
 10. Add support to [`EthernetENC`](https://github.com/jandrassy/EthernetENC)
 11. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
+12. Add High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client
  
 ---
 ---
@@ -1730,10 +1889,14 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 2. [jandrassy](https://github.com/jandrassy) for [EthernetENC](https://github.com/jandrassy/EthernetENC) and [UIPEthernet library](https://github.com/UIPEthernet/UIPEthernet)
 3. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially **U-Blox B302 running as nRF52840 and U-Blox B112 running as nRF52832**, has never been started and finished. Also see [ESP32-based U-BLOX NINA W102 running ENC28J60](https://u-blox-ethernet-ninaw.blogspot.com/).
 4. Thanks to [Vladimir](https://github.com/workpage2) to initiate the work on ESP32 and ESP8266 in [Spiffs not work Issue #2](https://github.com/khoih-prog/EthernetWebServer/issues/2)
+5. [Adrian McEwen](https://github.com/amcewen) for [HttpClient Library](https://github.com/amcewen/HttpClient) on which the [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient) and this [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) are relied.
+
+
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/igrr"><img src="https://github.com/igrr.png" width="100px;" alt="igrr"/><br /><sub><b>⭐️ Ivan Grokhotkov</b></sub></a><br /></td>
+    td align="center"><a href="https://github.com/amcewen"><img src="https://github.com/amcewen.png" width="100px;" alt="amcewen"/><br /><sub><b>⭐️ Adrian McEwen</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/jandrassy"><img src="https://github.com/jandrassy.png" width="100px;" alt="jandrassy"/><br /><sub><b>⭐️ Juraj Andrássy</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ Miguel Wisintainer</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/Vladimir"><img src="https://github.com/Vladimir.png" width="100px;" alt="Vladimir"/><br /><sub><b>Vladimir</b></sub></a><br /></td>

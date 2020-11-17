@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.0.13
+   Version: 1.1.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -31,10 +31,10 @@
     1.0.11  K Hoang      25/07/2020 Add support to Seeeduino SAMD21/SAMD51 boards. Restructure examples.
     1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
     1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
+    1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
  *****************************************************************************************************************************/
 
-#ifndef EthernetWebServer_impl_h
-#define EthernetWebServer_impl_h
+#pragma once
 
 #include <Arduino.h>
 #include <libb64/cencode.h>
@@ -129,6 +129,7 @@ bool EthernetWebServer::authenticate(const char * username, const char * passwor
       delete[] toencode;
       delete[] encoded;
     }
+    
     authReq = String();
   }
   
@@ -439,7 +440,7 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
     sendHeader("Transfer-Encoding", "chunked");
   }
   
-   ET_LOGDEBUG(F("_prepareHeader sendHeader Conn close"));
+  ET_LOGDEBUG(F("_prepareHeader sendHeader Conn close"));
   
   sendHeader("Connection", "close");
 
@@ -558,7 +559,6 @@ void EthernetWebServer::sendContent(const String& content, size_t size)
 }
 
 // KH, Restore PROGMEM commands
-//#if !( defined(CORE_TEENSY) || (ETHERNET_USE_SAMD) || ETHERNET_USE_SAM_DUE || ETHERNET_USE_NRF528XX )
 void EthernetWebServer::send_P(int code, PGM_P content_type, PGM_P content) 
 {
   size_t contentLength = 0;
@@ -661,7 +661,6 @@ void EthernetWebServer::sendContent_P(PGM_P content, size_t size)
     _currentClient.write(footer, 2);
   }
 }
-//#endif
 //////
 
 String EthernetWebServer::arg(String name) 
@@ -814,6 +813,7 @@ void EthernetWebServer::_handleRequest()
   if (!handled) 
   {
     using namespace mime;
+    
     send(404, mimeTable[html].mimeType, String("Not found: ") + _currentUri);
     handled = true;
   }
@@ -882,4 +882,3 @@ String EthernetWebServer::_responseCodeToString(int code)
   }
 }
 
-#endif //EthernetWebServer_impl_h
