@@ -21,7 +21,15 @@
       "extras",
       "tests"
     ]
-  },  
+  },
+  "dependencies":
+  [
+    {
+      "owner": "khoih-prog",
+      "name": "Functional-Vlpp",
+      "version": "^1.0.1"
+    }
+  ],
   "frameworks": "*",
   "platforms": "*",
   "examples": "examples/*/*/*.ino"
