@@ -60,6 +60,7 @@ void setup()
 
   Serial.print("\nStarting WebClientRepeating on " + String(BOARD_NAME));
   Serial.println(" with " + String(SHIELD_TYPE));
+  Serial.println("EthernetWebServer Version " + String(ETHERNET_WEBSERVER_VERSION));
 
 #if USE_ETHERNET_WRAPPER
 
@@ -67,7 +68,9 @@ void setup()
 
 #else
 
-#if USE_ETHERNET
+#if USE_NATIVE_ETHERNET
+  ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
+#elif USE_ETHERNET
   ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
 #elif USE_ETHERNET2
   ET_LOGWARN(F("=========== USE_ETHERNET2 ==========="));
@@ -77,6 +80,8 @@ void setup()
   ET_LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
 #elif USE_ETHERNET_ESP8266
   ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
+#elif USE_ETHERNET_ENC
+  ET_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));  
 #else
   ET_LOGWARN(F("========================="));
 #endif
@@ -173,10 +178,14 @@ void setup()
     #define USE_THIS_SS_PIN   10    // For other boards
   #endif
 
-  ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
+  #if defined(BOARD_NAME)
+    ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
+  #else
+    ET_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
+  #endif
 
   // For other boards, to change if necessary
-  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2  || USE_ETHERNET_ENC )
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2  || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
     // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
   
     Ethernet.init (USE_THIS_SS_PIN);

@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.1.0
+   Version: 1.2.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -32,6 +32,7 @@
     1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
     1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
     1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
+    1.2.0   K Hoang      04/12/2020 Add support to NativeEthernet Library for Teensy 4.1
  *****************************************************************************************************************************/
 #ifndef EthernetWrapper_h
 #define EthernetWrapper_h
@@ -70,15 +71,23 @@
     #ifndef USE_ETHERNET_ENC
       #define USE_ETHERNET_ENC      false
     #endif
+    
+    #ifndef USE_NATIVE_ETHERNET
+      #define USE_NATIVE_ETHERNET      false
+    #endif
 
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
+    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET)
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET
       #endif
-      #define USE_CUSTOM_ETHERNET   true
+      #define USE_CUSTOM_ETHERNET   false //true
     #endif
     
-    #if USE_ETHERNET3
+    #if USE_NATIVE_ETHERNET
+      #include "NativeEthernet.h"
+      #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
+      #define SHIELD_TYPE           "Custom Ethernet using Teensy 4.1 NativeEthernet Library"
+    #elif USE_ETHERNET3
       #include "Ethernet3.h"
       #warning Using Ethernet3 lib
       #define SHIELD_TYPE           "W5x00 using Ethernet3 Library"
@@ -103,7 +112,10 @@
       #warning Using Custom Ethernet library from EthernetWrapper. You must include a library here or error.
       #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
     #else
-      #define USE_ETHERNET          true
+      #ifdef USE_ETHERNET
+        #undef USE_ETHERNET
+      #endif
+      #define USE_ETHERNET            true
       #include "Ethernet.h"
       #warning Using Ethernet lib
       #define SHIELD_TYPE           "W5x00 using Ethernet Library"
@@ -125,7 +137,9 @@
 #if !USE_UIP_ETHERNET
     // Just info to know how to connect correctly
 
-    #if USE_ETHERNET
+    #if USE_NATIVE_ETHERNET
+      ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
+    #elif USE_ETHERNET
       ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
     #elif USE_ETHERNET2
       ET_LOGWARN(F("=========== USE_ETHERNET2 ==========="));
@@ -241,7 +255,7 @@
       #endif
 
       // For other boards, to change if necessary
-      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
         // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
 
         Ethernet.init (USE_THIS_SS_PIN);

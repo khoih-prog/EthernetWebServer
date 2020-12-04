@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.1.0
+   Version: 1.2.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -32,11 +32,14 @@
     1.0.12  K Hoang      15/09/2020 Add support to new EthernetENC library for ENC28J60. Add debug feature.
     1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
     1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
+    1.2.0   K Hoang      04/12/2020 Add support to NativeEthernet Library for Teensy 4.1
  *****************************************************************************************************************************/
 
 #pragma once
 
-#define USE_NEW_WEBSERVER_VERSION     true
+#define ETHERNET_WEBSERVER_VERSION      "v1.2.0"
+
+#define USE_NEW_WEBSERVER_VERSION       true
 
 #include <functional-vlpp.h>
 
@@ -85,7 +88,7 @@
   #warning Using UIPEthernet library from EthernetWebServer
 #elif USE_CUSTOM_ETHERNET
   #warning Using Custom Ethernet library from EthernetWebServer. You must include a library or error.
-#elif !( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
+#elif !( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET)
   #include <Ethernet.h>
   #warning Using Ethernet library from EthernetWebServer
 #endif

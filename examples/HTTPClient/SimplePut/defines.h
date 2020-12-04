@@ -195,7 +195,15 @@
   
   #if defined(__IMXRT1062__)
     // For Teensy 4.1/4.0
-    #define BOARD_TYPE      "TEENSY 4.1/4.0"
+    #if defined(ARDUINO_TEENSY41)
+      #define BOARD_TYPE      "TEENSY 4.1"
+      // Use true for NativeEthernet Library, false if using other Ethernet libraries
+      #define USE_NATIVE_ETHERNET     true
+    #elif defined(ARDUINO_TEENSY40)
+      #define BOARD_TYPE      "TEENSY 4.0"
+    #else
+      #define BOARD_TYPE      "TEENSY 4.x"
+    #endif      
   #elif defined(__MK66FX1M0__)
     #define BOARD_TYPE "Teensy 3.6"
   #elif defined(__MK64FX512__)
@@ -234,6 +242,10 @@
   // For Mega
   // Default pin 10 to SS/CS
   #define USE_THIS_SS_PIN       10
+
+  // Reduce size for Mega
+  #define SENDCONTENT_P_BUFFER_SZ     512
+  
   #define BOARD_TYPE            "AVR Mega"
 #endif
 
@@ -252,8 +264,6 @@
 //#define USE_UIP_ETHERNET   true
 #define USE_UIP_ETHERNET   false
 
-//#define USE_CUSTOM_ETHERNET     true
-
 // Note: To rename ESP628266 Ethernet lib files to Ethernet_ESP8266.h and Ethernet_ESP8266.cpp
 // In order to USE_ETHERNET_ESP8266
 #if ( !defined(USE_UIP_ETHERNET) || !USE_UIP_ETHERNET )
@@ -264,24 +274,28 @@
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET          false //true
-  #define USE_ETHERNET2         false //true
-  #define USE_ETHERNET3         false //true
-  #define USE_ETHERNET_LARGE    true
-  #define USE_ETHERNET_ESP8266  false //true
+  #define USE_ETHERNET          true
+  #define USE_ETHERNET2         false
+  #define USE_ETHERNET3         false
+  #define USE_ETHERNET_LARGE    false
+  #define USE_ETHERNET_ESP8266  false 
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
   
   #if !USE_ETHERNET_WRAPPER
   
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
+    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET
       #endif
-      #define USE_CUSTOM_ETHERNET   false //true
+      #define USE_CUSTOM_ETHERNET   false
     #endif
-    
-    #if USE_ETHERNET3
+
+    #if USE_NATIVE_ETHERNET
+      #include "NativeEthernet.h"
+      #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
+      #define SHIELD_TYPE           "Custom Ethernet using Teensy 4.1 NativeEthernet Library"
+    #elif USE_ETHERNET3
       #include "Ethernet3.h"
       #warning Using Ethernet3 lib
       #define SHIELD_TYPE           "W5x00 using Ethernet3 Library"
@@ -307,7 +321,10 @@
       #warning Using Custom Ethernet library. You must include a library and initialize.
       #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
     #else
-      #define USE_ETHERNET          true
+      #ifdef USE_ETHERNET
+        #undef USE_ETHERNET
+      #endif
+      #define USE_ETHERNET   true
       #include "Ethernet.h"
       #warning Using Ethernet lib
       #define SHIELD_TYPE           "W5x00 using Ethernet Library"
