@@ -62,6 +62,11 @@ public:
 #endif
   
   int maintain();
+  
+  // KH add to report link status
+  uint8_t       link();           // returns the linkstate, 1 = linked, 0 = no link
+  const char*   linkReport();     // returns the linkstate as a string
+  //////
 
   // KH add to have similar function to Ethernet lib
   // Certainly we can use void macAddress(uint8_t mac[]) to read from W5x00.

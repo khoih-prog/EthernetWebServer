@@ -210,6 +210,21 @@ int EthernetClass::maintain(){
   return rc;
 }
 
+// KH add to report link status
+uint8_t EthernetClass::link() 
+{
+  return bitRead(w5500.getPHYCFGR(), 0);
+}
+
+const char* EthernetClass::linkReport() 
+{
+  if (bitRead(w5500.getPHYCFGR(), 0) == 1) 
+    return "LINK";
+  else 
+    return "NO LINK";
+}
+//////
+
 IPAddress EthernetClass::localIP()
 {
   IPAddress ret;
