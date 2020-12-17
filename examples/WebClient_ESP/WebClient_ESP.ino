@@ -104,7 +104,13 @@ void setup()
   // MOSI: GPIO23, MISP: GPIO19, SCK: GPIO18, CS/SS: GPIO22
   
   #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   22    // For ESP32
+    #define USING_M5STACK_W5500     false
+    #if USING_M5STACK_W5500
+      #warning Using M5Stack_Core_ESP32 with W5500 mudule
+      #define USE_THIS_SS_PIN   26    // For M5Stack_Core_ESP32 with W5500 mudule
+    #else
+      #define USE_THIS_SS_PIN   22    // For ESP32
+    #endif
   #endif
 
   ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
