@@ -60,7 +60,7 @@
   
 * [Configuration Notes](#configuration-notes)
   * [1. How to select which built-in Ethernet or shield to use](#1-how-to-select-which-built-in-ethernet-or-shield-to-use)
-    *[Important](#important)
+  * [Important](#important)
   * [2. How to select another CS/SS pin to use](#2-how-to-select-another-csss-pin-to-use)
   * [3. How to use W5x00 with ESP8266](#3-how-to-use-w5x00-with-esp8266)
   * [4. How to increase W5x00 TX/RX buffer](#4-how-to-increase-w5x00-txrx-buffer)
