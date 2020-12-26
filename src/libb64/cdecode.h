@@ -6,7 +6,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.2.0
+   Version: 1.2.1
 
    Original author:
    @file       Esp8266WebServer.h
@@ -32,6 +32,7 @@
     1.0.13  K Hoang      24/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
     1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
     1.2.0   K Hoang      04/12/2020 Add support to NativeEthernet Library for Teensy 4.1
+    1.2.1   K Hoang      26/12/2020 Suppress all possible compiler warnings
  *****************************************************************************************************************************/
 
 #pragma once
@@ -47,11 +48,13 @@
 extern "C" {
 #endif
 
-typedef enum {
+typedef enum 
+{
   step_a, step_b, step_c, step_d
 } base64_decodestep;
 
-typedef struct {
+typedef struct 
+{
   base64_decodestep step;
   char plainchar;
 } base64_decodestate;
