@@ -12,7 +12,7 @@
 ## Table of Contents
 
 
-* [Why do we need this EthernetWebServer_SSL library](#why-do-we-need-this-ethernetwebserver_ssl-library)
+* [Why do we need this EthernetWebServer library](#why-do-we-need-this-ethernetwebserver-library)
   * [Features](#features)
   * [Currently supported Boards](#currently-supported-boards)
   * [Currently supported Ethernet shields/modules](#currently-supported-ethernet-shieldsmodules)
