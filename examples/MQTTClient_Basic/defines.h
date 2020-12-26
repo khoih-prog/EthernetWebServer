@@ -7,8 +7,7 @@
   Licensed under MIT license
  ***************************************************************************************************************************************/
 
-#ifndef defines_h
-#define defines_h
+#pragma once
 
 #define DEBUG_ETHERNET_WEBSERVER_PORT       Serial
 
@@ -238,15 +237,25 @@
   
   #define W5500_RST_PORT   21
 
-#else
+#elif (__AVR__)
   // For Mega
   // Default pin 10 to SS/CS
   #define USE_THIS_SS_PIN       10
+  #define BOARD_TYPE            "AVR"
 
-  // Reduce size for Mega
-  #define SENDCONTENT_P_BUFFER_SZ     512
+  #error Not supporting AVR Mega, Nano, UNO, etc. yet.
+  // Currently not OK. See https://github.com/mike-matera/ArduinoSTL/issues/56
+  // Hopefully will be fixed in Arduino IDE 1.8.14
+  #include "ArduinoSTL.h"                                   // https://github.com/mike-matera/ArduinoSTL
+
+#else
+
+  // Default pin 10 to SS/CS
+  #define USE_THIS_SS_PIN       10
+  #define BOARD_TYPE            "Unknown"
+
+  //#error Not supporting yet.
   
-  #define BOARD_TYPE            "AVR Mega"
 #endif
 
 #ifndef BOARD_NAME
@@ -274,12 +283,12 @@
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET          false
+  #define USE_ETHERNET          true
   #define USE_ETHERNET2         false
   #define USE_ETHERNET3         false
   #define USE_ETHERNET_LARGE    false
   #define USE_ETHERNET_ESP8266  false 
-  #define USE_ETHERNET_ENC      true
+  #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
   
   #if !USE_ETHERNET_WRAPPER
@@ -377,4 +386,5 @@ byte mac[][NUMBER_OF_MAC] =
 // Select the IP address according to your local network
 IPAddress ip(192, 168, 2, 222);
 
-#endif    //defines_h
+// Google DNS Server IP
+IPAddress myDns(8, 8, 8, 8);

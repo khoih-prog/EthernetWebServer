@@ -24,7 +24,7 @@ void setup()
 
   Serial.print("\nStarting WebClient_ESP on " + String(ARDUINO_BOARD));
   Serial.println(" with " + String(SHIELD_TYPE));
-  Serial.println("EthernetWebServer Version " + String(ETHERNET_WEBSERVER_VERSION));
+  Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET
   ET_LOGWARN(F("=========== USE_ETHERNET ==========="));

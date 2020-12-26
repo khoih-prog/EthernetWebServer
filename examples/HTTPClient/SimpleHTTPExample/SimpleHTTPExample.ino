@@ -36,7 +36,7 @@ void setup()
   while (!Serial);
 
   Serial.print("\nStarting SimpleHTTPExample on " + String(BOARD_NAME));
-  Serial.println("EthernetWebServer Version " + String(ETHERNET_WEBSERVER_VERSION));
+  Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_WRAPPER
 

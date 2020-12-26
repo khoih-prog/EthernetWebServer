@@ -318,7 +318,7 @@
     #elif USE_CUSTOM_ETHERNET
       //#include "Ethernet_XYZ.h"
       #include "EthernetENC.h"
-      #warning Using Custom Ethernet library. You must include a library and initialize.
+      //#warning Using Custom Ethernet library. You must include a library and initialize.
       #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
     #else
       #ifdef USE_ETHERNET

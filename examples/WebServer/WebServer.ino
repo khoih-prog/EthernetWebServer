@@ -26,7 +26,7 @@ void setup()
 
   Serial.print("\nStarting WebServer on " + String(BOARD_NAME));
   Serial.println(" with " + String(SHIELD_TYPE));
-  Serial.println("EthernetWebServer Version " + String(ETHERNET_WEBSERVER_VERSION));
+  Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_WRAPPER
 

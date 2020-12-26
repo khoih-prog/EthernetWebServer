@@ -58,7 +58,7 @@ void setup(void)
 
   Serial.print("\nStarting HelloServer on " + String(BOARD_TYPE));
   Serial.println(" with " + String(SHIELD_TYPE));
-  Serial.println("EthernetWebServer Version " + String(ETHERNET_WEBSERVER_VERSION));
+  Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_WRAPPER
 
