@@ -40,6 +40,11 @@
 
 #include "RequestHandler.h"
 #include "mimetable.h"
+#include "FS.h"
+#include "WString.h"
+#include "Uri.h"
+#include <MD5Builder.h>
+#include <base64.h>
 
 class FunctionRequestHandler : public RequestHandler
 {
@@ -108,82 +113,97 @@ class FunctionRequestHandler : public RequestHandler
     HTTPMethod _method;
 };
 
-class StaticRequestHandler : public RequestHandler
-{
-  public:
-
-    bool canHandle(HTTPMethod requestMethod, String requestUri) override
+class StaticRequestHandler : public RequestHandler {
+    using WebServerType = EthernetWebServer;
+public:
+    StaticRequestHandler(FS& fs, const char* path, const char* uri, const char* cache_header)
+    : _fs(fs)
+    , _uri(uri)
+    , _path(path)
+    , _cache_header(cache_header)
     {
-      if (requestMethod != HTTP_GET)
-        return false;
-
-      if ((_isFile && requestUri != _uri) || !requestUri.startsWith(_uri))
-        return false;
-
-      return true;
+        //DEBUGV("StaticRequestHandler: path=%s uri=%s, cache_header=%s\r\n", path, uri, cache_header == __null ? "" : cache_header);
+        _isFile = fs.exists(path);
+        _baseUriLength = _uri.length();
     }
 
-#if USE_NEW_WEBSERVER_VERSION
-
-    static String getContentType(const String& path)
-    {
-      using namespace mime;
-      char buff[sizeof(mimeTable[0].mimeType)];
-
-      // Check all entries but last one for match, return if found
-      for (size_t i = 0; i < sizeof(mimeTable) / sizeof(mimeTable[0]) - 1; i++)
-      {
-        strcpy(buff, mimeTable[i].endsWith);
-
-        if (path.endsWith(buff))
-        {
-          strcpy(buff, mimeTable[i].mimeType);
-          return String(buff);
-        }
-      }
-
-      // Fall-through and just return default type
-      strcpy(buff, mimeTable[sizeof(mimeTable) / sizeof(mimeTable[0]) - 1].mimeType);
-      return String(buff);
+    bool validMethod(HTTPMethod requestMethod){
+        return (requestMethod == HTTP_GET) || (requestMethod == HTTP_HEAD);
     }
 
-#else
-
-    static String getContentType(const String& path)
-    {
-      if (path.endsWith(".html"))           return "text/html";
-      else if (path.endsWith(".htm"))       return "text/html";
-      else if (path.endsWith(".css"))       return "text/css";
-      else if (path.endsWith(".txt"))       return "text/plain";
-      else if (path.endsWith(".js"))        return "application/javascript";
-      else if (path.endsWith(".png"))       return "image/png";
-      else if (path.endsWith(".gif"))       return "image/gif";
-      else if (path.endsWith(".jpg"))       return "image/jpeg";
-      else if (path.endsWith(".ico"))       return "image/x-icon";
-      else if (path.endsWith(".svg"))       return "image/svg+xml";
-      else if (path.endsWith(".ttf"))       return "application/x-font-ttf";
-      else if (path.endsWith(".otf"))       return "application/x-font-opentype";
-      else if (path.endsWith(".woff"))      return "application/font-woff";
-      else if (path.endsWith(".woff2"))     return "application/font-woff2";
-      else if (path.endsWith(".eot"))       return "application/vnd.ms-fontobject";
-      else if (path.endsWith(".sfnt"))      return "application/font-sfnt";
-      else if (path.endsWith(".xml"))       return "text/xml";
-      else if (path.endsWith(".pdf"))       return "application/pdf";
-      else if (path.endsWith(".zip"))       return "application/zip";
-      else if (path.endsWith(".gz"))        return "application/x-gzip";
-      else if (path.endsWith(".appcache"))  return "text/cache-manifest";
-
-      return "application/octet-stream";
+    /* Deprecated version. Please use mime::getContentType instead */
+    static String getContentType(const String& path) __attribute__((deprecated)) {
+        return mime::getContentType(path);
     }
 
-#endif
-
-  protected:
-
+protected:
+    FS _fs;
+    bool _isFile;
     String _uri;
     String _path;
     String _cache_header;
-    bool _isFile;
     size_t _baseUriLength;
+};
+
+
+class StaticFileRequestHandler
+    :
+public StaticRequestHandler {
+
+    using SRH = StaticRequestHandler;
+    using WebServerType = EthernetWebServer;
+
+public:
+    StaticFileRequestHandler(FS& fs, const char* path, const char* uri, const char* cache_header)
+        :
+    StaticRequestHandler{fs, path, uri, cache_header}
+    {
+        File f = SRH::_fs.open(path, "r");
+        MD5Builder calcMD5;
+        calcMD5.begin();
+        calcMD5.addStream(f, f.size());
+        calcMD5.calculate();
+        calcMD5.getBytes(_ETag_md5);
+        f.close();
+    }
+
+    bool canHandle(HTTPMethod requestMethod, const String requestUri) override  {
+        return SRH::validMethod(requestMethod) && requestUri == SRH::_uri;
+    }
+
+    bool handle(EthernetWebServer& server, HTTPMethod requestMethod, const String requestUri) {
+
+        if (!canHandle(requestMethod, requestUri))
+            return false;
+
+        
+        const String etag = "\"" + base64::encode(_ETag_md5, 16) + "\"";
+
+        if(server.header("If-None-Match") == etag){
+            server.send(304);
+            return true;
+        }
+
+        File f = SRH::_fs.open(SRH::_path, "r");
+
+        if (!f)
+            return false;
+
+        if (!_isFile) {
+            f.close();
+            return false;
+        }
+
+        if (SRH::_cache_header.length() != 0)
+            server.sendHeader("Cache-Control", SRH::_cache_header);
+
+        server.sendHeader("ETag", etag);
+
+        server.streamFile(f, mime::getContentType(SRH::_path), requestMethod);
+        return true;
+    }
+
+protected:
+    uint8_t _ETag_md5[16];
 };
 
