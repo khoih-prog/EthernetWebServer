@@ -186,6 +186,7 @@ typedef struct
 } HTTPUpload;
 
 #include "detail/RequestHandler.h"
+#include "FS.h"
 
 class EthernetWebServer
 {
@@ -212,7 +213,8 @@ class EthernetWebServer
     void addHandler(RequestHandler* handler);
     void onNotFound(THandlerFunction fn);  //called when handler is not assigned
     void onFileUpload(THandlerFunction fn); //handle file uploads
-
+    void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); // serve static pages from file system
+    
     String uri() 
     {
       return _currentUri;
@@ -279,21 +281,24 @@ class EthernetWebServer
     
     static String urlDecode(const String& text);
 
-    template<typename T> size_t streamFile(T &file, const String& contentType) 
-    {
-      using namespace mime;
-      setContentLength(file.size());
-      
-      if (String(file.name()).endsWith(mimeTable[gz].endsWith) && contentType != mimeTable[gz].mimeType && contentType != mimeTable[none].mimeType) 
-      {
-        sendHeader("Content-Encoding", "gzip");
+    // Handle a GET request by sending a response header and stream file content to response body
+      template<typename T>
+      size_t streamFile(T &file, const String& contentType) {
+        return streamFile(file, contentType, HTTP_GET);
       }
-      
-      send(200, contentType, "");
-      
-      return _currentClient.write(file);
-    }
 
+      // Implement GET and HEAD requests for files.
+      // Stream body on HTTP_GET but not on HTTP_HEAD requests.
+      template<typename T>
+      size_t streamFile(T &file, const String& contentType, HTTPMethod requestMethod) {
+        size_t contentLength = 0;
+        _streamFileCore(file.size(), file.name(), contentType);
+        if (requestMethod == HTTP_GET) {
+            contentLength = _customClientWrite(file);
+        }
+        return contentLength;
+      }
+    
   protected:
     void _addRequestHandler(RequestHandler* handler);
     void _handleRequest();
@@ -316,6 +321,24 @@ class EthernetWebServer
     uint8_t _uploadReadByte(EthernetClient& client);
     void _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
     bool _collectHeader(const char* headerName, const char* headerValue);
+
+    void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
+
+    template<typename T>
+    size_t _customClientWrite(T &file) {
+        char buffer[256];
+        size_t contentLength = 0;
+        size_t bytesRead = 0;
+
+        // read up to sizeof(buffer) bytes
+          while ((bytesRead = file.readBytes(buffer, sizeof(buffer))) > 0)
+          {
+              _currentClient.write(buffer, sizeof(buffer));
+              contentLength += bytesRead;
+          }
+
+        return contentLength;
+    }
 
     struct RequestArgument {
     
