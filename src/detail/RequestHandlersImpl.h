@@ -38,6 +38,7 @@
 
 #pragma once
 
+#if !(ESP32 || ESP8266)
 #include "RequestHandler.h"
 #include "mimetable.h"
 
@@ -187,3 +188,6 @@ class StaticRequestHandler : public RequestHandler
     size_t _baseUriLength;
 };
 
+#else
+#include "ESP_RequestHandlersImpl.h"
+#endif
