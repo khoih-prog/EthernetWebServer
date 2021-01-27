@@ -25,7 +25,6 @@
 #include "esp_detail/mimetable.h"
 #include "FS.h"
 #include "WString.h"
-#include "Uri.h"
 #include <MD5Builder.h>
 #include <base64.h>
 

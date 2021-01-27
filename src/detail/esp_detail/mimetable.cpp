@@ -1,3 +1,5 @@
+#if (ESP32 || ESP8266)
+
 #include "mimetable.h"
 #include "pgmspace.h"
 #include "WString.h"
@@ -99,3 +101,5 @@ const Entry mimeTable[maxType] PROGMEM =
     }
 
 }
+
+#endif

@@ -1,6 +1,8 @@
 #ifndef __MIMETABLE_H__
 #define __MIMETABLE_H__
 
+#if (ESP32 || ESP8266)
+
 #include "WString.h"
 
 namespace mime_esp
@@ -49,4 +51,5 @@ extern const Entry mimeTable[maxType];
 String getContentType(const String& path);
 }
 
+#endif
 #endif
