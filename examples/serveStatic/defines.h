@@ -42,7 +42,7 @@
 
   // For ESP8266
   #include <FS.h>
-  #include <LittleFS.h
+  #include <LittleFS.h>
 
   #warning Use ESP8266 architecture
   #include <ESP8266mDNS.h>
