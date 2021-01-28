@@ -1,8 +1,8 @@
 {
   "name": "EthernetWebServer",
-  "version": "1.2.1",
-  "keywords": "WebServer, Ethernet, Ethernet2, Ethernet3, EthernetLarge, EtnernetENC, UIPEthernet, NativeEthernet, Arduino, Teensy, SAMD21, SAMD51, SAM DUE, AVR, Mega, nRF52, ESP32, ESP8266, W5100, W5200, W5500, ENC28J60, HTTP-Client, WebSocket-Client, server, client, websocket",
-  "description": "Simple Ethernet WebServer, HTTP Client and WebSocket Client library for AVR, Teensy, SAM DUE, SAMD21, SAMD51, ESP, nRF52, ESP32, ESP8266 boards using Ethernet shields W5100, W5200, W5500, ENC28J60 or Teensy 4.1 NativeEthernet",
+  "version": "1.3.0",
+  "keywords": "WebServer, Ethernet, Ethernet2, Ethernet3, EthernetLarge, EtnernetENC, UIPEthernet, NativeEthernet, Arduino, Teensy, SAMD21, SAMD51, SAM DUE, AVR, Mega, nRF52, ESP32, ESP8266, W5100, W5200, W5500, ENC28J60, HTTP-Client, WebSocket-Client, server, client, websocket, LittleFS, SPIFFS",
+  "description": "Simple Ethernet WebServer, HTTP Client and WebSocket Client library for AVR, Teensy, SAM DUE, SAMD21, SAMD51, ESP, nRF52, ESP32, ESP8266 boards using Ethernet shields W5100, W5200, W5500, ENC28J60 or Teensy 4.1 NativeEthernet. The WebServer supports HTTP GET and POST requests, provides argument parsing, handles one client at a time. It now provides HTTP Client and WebSocket Client. It supports Arduino boards (Atmel AVR-s, SAM DUE, Atmel SAM3X8E ARM Cortex-M3, SAMD21, SAMD51, ESP8266, ESP32, Adafruit nRF52, Teensy boards, Realtek Ameba(RTL8195A,RTL8710)) using Wiznet W5x00 or ENC28J60 network shields. It now supports WebServer serving from LittleFS/SPIFFS for ESP8266/ESP32.",
   "authors":
   {
     "name":  "Khoi Hoang",

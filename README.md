@@ -17,6 +17,7 @@
   * [Currently supported Boards](#currently-supported-boards)
   * [Currently supported Ethernet shields/modules](#currently-supported-ethernet-shieldsmodules)
 * [Changelog](#changelog)
+  * [Major Releases v1.3.0](#major-releases-v130)
   * [Releases v1.2.1](#releases-v121)
   * [Releases v1.2.0](#releases-v120)
   * [Major Releases v1.1.0](#major-releases-v110)
@@ -52,12 +53,12 @@
   * [4. For Etherne2 library](#4-for-ethernet2-library)
   * [5. For Ethernet3 library](#5-for-ethernet3-library)
   * [6. For UIPEthernet library](#6-for-uipethernet-library)
-  * [7. For fixing ESP32 compile error](#7-for-fixing-esp32-compile-error) 
+  * [7. For fixing ESP32 compile error](#7-for-fixing-esp32-compile-error)
+  * [8. For fixing ESP8266 compile error](#8-for-fixing-esp8266-compile-error)
 * [HOWTO Use analogRead() with ESP32 running WiFi and/or BlueTooth (BT/BLE)](#howto-use-analogread-with-esp32-running-wifi-andor-bluetooth-btble)
   * [1. ESP32 has 2 ADCs, named ADC1 and ADC2](#1--esp32-has-2-adcs-named-adc1-and-adc2)
   * [2. ESP32 ADCs functions](#2-esp32-adcs-functions)
   * [3. ESP32 WiFi uses ADC2 for WiFi functions](#3-esp32-wifi-uses-adc2-for-wifi-functions)
-  
 * [Configuration Notes](#configuration-notes)
   * [1. How to select which built-in Ethernet or shield to use](#1-how-to-select-which-built-in-ethernet-or-shield-to-use)
   * [Important](#important)
@@ -90,7 +91,11 @@
     * [15. WebClientRepeating](examples/WebClientRepeating)
     * [16. WebClientRepeating_ESP](examples/WebClientRepeating_ESP)
     * [17. WebServer](examples/WebServer)
-    * [18. **WebServer_NativeEthernet**](examples/WebServer_NativeEthernet).
+    * [18. **WebServer_NativeEthernet**](examples/WebServer_NativeEthernet)
+    * [19. **ESP32_FS_EthernetWebServer**](examples/ESP32_FS_EthernetWebServer)
+    * [20. **FS_EthernetWebServer**](examples/FS_EthernetWebServer)
+    * [21. **serveStatic**](examples/serveStatic)
+    * [22. **serveStaticLoadFile**](examples/serveStaticLoadFile)
   * [HTTP and WebSocket Client New Examples](#http-and-websocket-client-new-examples)
     * [ 1. BasicAuthGet](examples/HTTPClient/BasicAuthGet)
     * [ 2. CustomHeader](examples/HTTPClient/CustomHeader)
@@ -113,6 +118,9 @@
   * [2. ENC28J60_WM_Config on ESP32 with ENC28J60 using UIPEthernet Library](#2-enc28j60_wm_config-on-esp32-with-enc28j60-using-uipethernet-library)
   * [3. SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library](#3-simplewebsocket-on-sam-due-with-w5x00-using-ethernetlarge-library)
   * [4. DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library](#4-dweetpost-on-nrf52840_feather-with-w5x00-using-ethernet3-library)
+  * [5. ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library](#5-esp32_fs_ethernetwebserver-on-esp32-using-littlefs-with-w5x00-using-ethernet-library)
+  * [6. FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library](#6-fs_ethernetwebserver-on-esp8266-using-littlefs-with-w5x00-using-ethernet-library)
+  * [7. serveStatic on ESP8266 using LittleFS with W5x00 using Ethernet Library](#7-servestatic-on-esp8266-using-littlefs-with-w5x00-using-ethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -183,6 +191,12 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 ---
 
 ## Changelog
+
+### Releases v1.3.0
+
+1. Add WebServer feature to serve from LittleFS/SPIFFS for ESP32/ESP8266 with examples. Check [**streamFile and serveStatic for ESP8266/ESP32 boards #22**](https://github.com/khoih-prog/EthernetWebServer/pull/22)
+2. Add examples [**serveStatic**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/serveStatic) and [**serveStaticLoadFile**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/serveStaticLoadFile) to use new `serveStatic()`feature
+3. Add examples [**ESP32_FS_EthernetWebServer**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/ESP32_FS_EthernetWebServer) and [**FS_EthernetWebServer**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/FS_EthernetWebServer) to use new `serveStatic()`feature
 
 ### Releases v1.2.1
 
@@ -485,17 +499,30 @@ To add UDP Multicast support, necessary for the [**UPnP_Generic library**](https
 
 #### 6. For UIPEthernet library
 
-6. ***To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
+***To be able to compile and run on nRF52 boards with ENC28J60 using UIPEthernet library***, you have to copy these following files into the UIPEthernet `utility` directory to overwrite the old files:
 
 - [UIPEthernet.h](LibraryPatches/UIPEthernet/UIPEthernet.h)
 - [UIPEthernet.cpp](LibraryPatches/UIPEthernet/UIPEthernet.cpp)
 - [Enc28J60Network.h](LibraryPatches/UIPEthernet/utility/Enc28J60Network.h)
 - [Enc28J60Network.cpp](LibraryPatches/UIPEthernet/utility/Enc28J60Network.cpp)
 
-#### 4. For fixing ESP32 compile error
+#### 7. For fixing ESP32 compile error
 
-7. To fix [`ESP32 compile error`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.12/hardware/espressif/cores/esp32) to overwrite the old file:
+To fix [`ESP32 compile error`](https://github.com/espressif/arduino-esp32), just copy the following file into the [`ESP32`](https://github.com/espressif/arduino-esp32) cores/esp32 directory (e.g. ./arduino-1.8.13/hardware/espressif/cores/esp32) to overwrite the old file:
 - [Server.h](LibraryPatches/esp32/cores/esp32/Server.h)
+
+#### 8. For fixing ESP8266 compile error
+
+To fix `ESP8266 compile error` such as
+
+```
+error: 'class EthernetClass' has no member named 'init'
+Ethernet.init (USE_THIS_SS_PIN);
+```
+
+just rename the following file in ./arduino-1.8.13/hardware/esp8266com/esp8266/libraries/Ethernet directory
+
+- From `Ethernet.h` to `Ethernet_ESP8266.h`
 
 ---
 ---
@@ -933,19 +960,27 @@ Example:
 #### Original Examples
 
  1. [AdvancedWebServer](examples/AdvancedWebServer)
- 2. [HelloServer](examples/HelloServer)
- 3. [HelloServer2](examples/HelloServer2)
- 4. [HttpBasicAuth](examples/HttpBasicAuth)
- 5. [PostServer](examples/PostServer)
- 6. [SimpleAuthentication](examples/SimpleAuthentication)
- 7. [UdpNTPClient](examples/UdpNTPClient)
- 8. [UdpSendReceive](examples/UdpSendReceive)
- 9. [WebClient](examples/WebClient)
-10. [WebClientRepeating](examples/WebClientRepeating)
-11. [WebServer](examples/WebServer)
-12. [AdvancedWebServer_NativeEthernet](examples/AdvancedWebServer_NativeEthernet). New.
-13. [WebServer_NativeEthernet](examples/WebServer_NativeEthernet). New.
- 
+ 2. [**AdvancedWebServer_NativeEthernet**](examples/AdvancedWebServer_NativeEthernet)
+ 3. [HelloServer](examples/HelloServer)
+ 4. [HelloServer2](examples/HelloServer2)
+ 5. [HttpBasicAuth](examples/HttpBasicAuth)
+ 6. [**MQTTClient_Auth**](examples/MQTTClient_Auth)
+ 7. [**MQTTClient_Basic**](examples/MQTTClient_Basic)
+ 8. [**MQTT_ThingStream**](examples/MQTT_ThingStream)
+ 9. [PostServer](examples/PostServer)
+10. [SimpleAuthentication](examples/SimpleAuthentication)
+11. [UdpNTPClient](examples/UdpNTPClient)
+12. [UdpSendReceive](examples/UdpSendReceive)
+13. [WebClient](examples/WebClient)
+14. [WebClient_ESP](examples/WebClient_ESP)
+15. [WebClientRepeating](examples/WebClientRepeating)
+16. [WebClientRepeating_ESP](examples/WebClientRepeating_ESP)
+17. [WebServer](examples/WebServer)
+18. [**WebServer_NativeEthernet**](examples/WebServer_NativeEthernet)
+19. [**ESP32_FS_EthernetWebServer**](examples/ESP32_FS_EthernetWebServer). New
+20. [**FS_EthernetWebServer**](examples/FS_EthernetWebServer). New
+21. [**serveStatic**](examples/serveStatic). New
+22. [**serveStaticLoadFile**](examples/serveStaticLoadFile). New
 
 #### HTTP and WebSocket Client New Examples
 
@@ -1068,7 +1103,7 @@ void setup(void)
 
   Serial.print("\nStarting AdvancedWebServer on " + String(BOARD_NAME));
   Serial.println(" with " + String(SHIELD_TYPE));
-  Serial.println("EthernetWebServer Version " + String(ETHERNET_WEBSERVER_VERSION));
+  Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_WRAPPER
 
@@ -1325,7 +1360,7 @@ void loop(void)
     #undef ETHERNET_USE_SAMD
   #endif
   #define ETHERNET_USE_SAMD      true
-  #endif
+#endif
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
@@ -1696,7 +1731,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer Version v1.2.1
+EthernetWebServer Version v1.3.0
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -1994,6 +2029,150 @@ Status code: 200
 Response: {"this":"succeeded","by":"dweeting","the":"dweet","with":{"thing":"scandalous-cheese-hoarder","created":"2020-11-17T05:10:59.175Z","content":{"sensorValue":40},"transaction":"08ae7c04-f1e5-4411-ad05-eb4afe77a6b4"}}
 Wait ten seconds
 ```
+
+---
+
+#### 5. ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library
+
+The terminal output of **ESP32 with W5x00 using Ethernet Library** running [ESP32_FS_EthernetWebServer example](examples/HTTPClient/FS_EthernetWebServer) to demonstrate newly-added WebServer serving from LittleFS/SPIFFS
+
+```
+Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library
+EthernetWebServer v1.3.0
+[ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 23
+[ETHERNET_WEBSERVER] MISO: 19
+[ETHERNET_WEBSERVER] SCK: 18
+[ETHERNET_WEBSERVER] SS: 5
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] ESP32 setCsPin: 5
+
+W5100 init, using SS_PIN_DEFAULT = 22, new ss_pin = 10, W5100Class::ss_pin = 5
+W5100::init: W5500, SSIZE =4096
+=========================
+Currently Used SPI pinout:
+MOSI:23
+MISO:19
+SCK:18
+SS:5
+=========================
+Connected! IP address: 192.168.2.139
+FS File: /CanadaFlag_1.png, size: 40.25KB
+FS File: /CanadaFlag_2.png, size: 8.12KB
+FS File: /CanadaFlag_3.jpg, size: 10.89KB
+FS File: /edit.htm.gz, size: 4.02KB
+FS File: /favicon.ico, size: 1.12KB
+FS File: /graphs.js.gz, size: 1.92KB
+FS File: /index.htm, size: 3.63KB
+
+
+HTTP server started @192.168.2.139
+Open http://192.168.2.139/edit to see the file browser
+handleFileRead: /edit.htm
+handleFileRead: /index.htm
+handleFileRead: /favicon.ico
+```
+
+and the screen shot of the WebServer
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/ESP32_FS_EthernetWebServer.png">
+</p>
+
+---
+
+
+#### 6. FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library
+
+The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [FS_EthernetWebServer example](examples/HTTPClient/FS_EthernetWebServer) to demonstrate newly-added WebServer serving from LittleFS/SPIFFS
+
+```
+Starting FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library
+EthernetWebServer v1.3.0
+[ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 13
+[ETHERNET_WEBSERVER] MISO: 12
+[ETHERNET_WEBSERVER] SCK: 14
+[ETHERNET_WEBSERVER] SS: 15
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] ESP8266 setCsPin: 4
+
+W5100 init, using SS_PIN_DEFAULT = 15, new ss_pin = 10, W5100Class::ss_pin = 4
+W5100::init: W5500, SSIZE =4096
+=========================
+Currently Used SPI pinout:
+MOSI:13
+MISO:12
+SCK:14
+SS:15
+=========================
+Connected! IP address: 192.168.2.139
+Opening / directory
+FS File: CanadaFlag_1.png, size: 40.25KB
+FS File: CanadaFlag_2.png, size: 8.12KB
+FS File: CanadaFlag_3.jpg, size: 10.89KB
+FS File: edit.htm.gz, size: 4.02KB
+FS File: favicon.ico, size: 1.12KB
+FS File: graphs.js.gz, size: 1.92KB
+FS File: index.htm, size: 3.63KB
+FS File: page1.html, size: 1.16KB
+FS File: page1.htm, size: 1.16KB
+FS File: page2.html, size: 1.16KB
+FS File: page3.html, size: 1.16KB
+
+
+HTTP server started @192.168.2.139
+Open http://192.168.2.139/edit to see the file browser
+handleFileRead: /edit.htm
+handleFileRead: /index.htm
+handleFileRead: /favicon.ico
+```
+
+and the screen shot of the WebServer
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/FS_EthernetWebServer.png">
+</p>
+
+---
+
+#### 7. serveStatic on ESP8266 using LittleFS with W5x00 using Ethernet Library
+
+The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [serveStatic example](examples/HTTPClient/serveStatic) to demonstrate newly-added WebServer serving from LittleFS/SPIFFS
+
+```
+Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
+With W5x00 using Ethernet Library
+EthernetWebServer v1.3.0
+[ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
+[ETHERNET_WEBSERVER] Default SPI pinout:
+[ETHERNET_WEBSERVER] MOSI: 13
+[ETHERNET_WEBSERVER] MISO: 12
+[ETHERNET_WEBSERVER] SCK: 14
+[ETHERNET_WEBSERVER] SS: 15
+[ETHERNET_WEBSERVER] =========================
+[ETHERNET_WEBSERVER] ESP8266 setCsPin: 4
+
+W5100 init, using SS_PIN_DEFAULT = 15, new ss_pin = 10, W5100Class::ss_pin = 4
+W5100::init: W5500, SSIZE =4096
+=========================
+Currently Used SPI pinout:
+MOSI:13
+MISO:12
+SCK:14
+SS:15
+=========================
+Connected! IP address: 192.168.2.133
+HTTP server started
+```
+
+and the screen shot of the WebServer
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/serveStatic.png">
+</p>
 ---
 ---
 
@@ -2019,6 +2198,12 @@ If you get compilation errors, more often than not, you may need to install a ne
 ---
 
 ## Releases
+
+### Releases v1.3.0
+
+1. Add WebServer feature to serve from LittleFS/SPIFFS for ESP32/ESP8266 with examples. Check [**streamFile and serveStatic for ESP8266/ESP32 boards #22**](https://github.com/khoih-prog/EthernetWebServer/pull/22)
+2. Add examples [**serveStatic**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/serveStatic) and [**serveStaticLoadFile**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/serveStaticLoadFile) to use new `serveStatic()`feature
+3. Add examples [**ESP32_FS_EthernetWebServer**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/ESP32_FS_EthernetWebServer) and [**FS_EthernetWebServer**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/FS_EthernetWebServer) to use new `serveStatic()`feature
 
 ### Releases v1.2.1
 
@@ -2185,6 +2370,7 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 4. Thanks to [Vladimir](https://github.com/workpage2) to initiate the work on ESP32 and ESP8266 in [Spiffs not work Issue #2](https://github.com/khoih-prog/EthernetWebServer/issues/2)
 5. [Adrian McEwen](https://github.com/amcewen) for [HttpClient Library](https://github.com/amcewen/HttpClient) on which the [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient) and this [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) are relied.
 6. Thanks to [jimmie11](https://github.com/jimmie11) to report and suggest a fix in [Compile Error on Teensy 4.1 #14](https://github.com/khoih-prog/EthernetWebServer/issues/14) leading to the new version v1.2.0 to provide support to **Teensy 4.1** using [**NativeEthernet Library**](https://github.com/vjmuzik/NativeEthernet)
+7. Thanks to [Sardar Azari](https://github.com/gagulik) to make PR in [streamFile and serveStatic for ESP8266/ESP32 boards #22](https://github.com/khoih-prog/EthernetWebServer/pull/22) leading to the new version v1.3.0 to add WebServer feature to serve static from LittleFS/SPIFFS for ESP32/ESP8266. The example [**serveStatic**](examples/serveStatic) and [**serveStaticLoadFile**](examples/serveStaticLoadFile) are also contributed by [Sardar Azari](https://github.com/gagulik).
 
 
 <table>
@@ -2195,6 +2381,8 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
     <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ Miguel Wisintainer</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/Vladimir"><img src="https://github.com/Vladimir.png" width="100px;" alt="Vladimir"/><br /><sub><b>Vladimir</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/jimmie11"><img src="https://github.com/jimmie11.png" width="100px;" alt="jimmie11"/><br /><sub><b>jimmie11</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/gagulik"><img src="https://github.com/gagulik.png" width="100px;" alt="gagulik"/><br /><sub><b>
+Sardar Azari</b></sub></a><br /></td>
   </tr> 
 </table>
 

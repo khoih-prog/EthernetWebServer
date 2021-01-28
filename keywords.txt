@@ -78,6 +78,7 @@ sendHeader  KEYWORD2
 sendContent KEYWORD2
 urlDecode KEYWORD2
 streamFile  KEYWORD2
+serveStatic KEYWORD2
 
 #######################
 # Parsing-impl
