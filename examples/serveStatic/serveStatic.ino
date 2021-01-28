@@ -6,7 +6,6 @@
   https://www.qrz.com/db/ac8l
 
   Prior to the usage - use ESP8266/ESP32 Sketch data upoad tool to save the content of web-site to the SPIFFS flash memory.
-
   This example sketch is based on HTML templates from Robert Ulbricht: https://www.arduinoslovakia.eu
   https://github.com/RoboUlbricht/arduinoslovakia/tree/master/esp8266/simple_http_server_multiplepages_responsive_spiffs
 
@@ -20,7 +19,7 @@
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
- *****************************************************************************************************************************/
+ *****************************************************************************************************************************
 /*****************************************************************************************************************************
    The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
    and pins 50, 51, and 52 on the Mega. On both boards, pin 10 is used as SS. On the Mega, the hardware SS pin, 53,
@@ -52,7 +51,7 @@ void setup(void)
   EthernetInit();
 
 #else
-
+  
   #if USE_NATIVE_ETHERNET
     ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
   #elif USE_ETHERNET
@@ -77,7 +76,7 @@ void setup(void)
   ET_LOGWARN1(F("SCK:"),  SCK);
   ET_LOGWARN1(F("SS:"),   SS);
   ET_LOGWARN(F("========================="));
-
+  
   #if defined(ESP8266)
     // For ESP8266, change for other boards if necessary
     #ifndef USE_THIS_SS_PIN

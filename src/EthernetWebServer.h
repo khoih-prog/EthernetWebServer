@@ -186,6 +186,9 @@ typedef struct
 } HTTPUpload;
 
 #include "detail/RequestHandler.h"
+#if (ESP32 || ESP8266)
+    #include "FS.h"
+#endif
 
 class EthernetWebServer
 {
@@ -279,6 +282,7 @@ class EthernetWebServer
     
     static String urlDecode(const String& text);
 
+    #if !(ESP32 || ESP8266)
     template<typename T> size_t streamFile(T &file, const String& contentType) 
     {
       using namespace mime;
@@ -293,6 +297,27 @@ class EthernetWebServer
       
       return _currentClient.write(file);
     }
+    #else
+    void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); // serve static pages from file system
+
+    // Handle a GET request by sending a response header and stream file content to response body
+      template<typename T>
+      size_t streamFile(T &file, const String& contentType) {
+        return streamFile(file, contentType, HTTP_GET);
+      }
+
+      // Implement GET and HEAD requests for files.
+      // Stream body on HTTP_GET but not on HTTP_HEAD requests.
+      template<typename T>
+      size_t streamFile(T &file, const String& contentType, HTTPMethod requestMethod) {
+        size_t contentLength = 0;
+        _streamFileCore(file.size(), file.name(), contentType);
+        if (requestMethod == HTTP_GET) {
+            contentLength = _customClientWrite(file);
+        }
+        return contentLength;
+      }
+    #endif
 
   protected:
     void _addRequestHandler(RequestHandler* handler);
@@ -316,7 +341,27 @@ class EthernetWebServer
     uint8_t _uploadReadByte(EthernetClient& client);
     void _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
     bool _collectHeader(const char* headerName, const char* headerValue);
+    
+    #if (ESP32 || ESP8266)
+    void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
 
+    template<typename T>
+    size_t _customClientWrite(T &file) {
+        char buffer[256];
+        size_t contentLength = 0;
+        size_t bytesRead = 0;
+
+        // read up to sizeof(buffer) bytes
+          while ((bytesRead = file.readBytes(buffer, sizeof(buffer))) > 0)
+          {
+              _currentClient.write(buffer, bytesRead);
+              contentLength += bytesRead;
+          }
+
+        return contentLength;
+    }
+    #endif
+    
     struct RequestArgument {
     
       String key;
