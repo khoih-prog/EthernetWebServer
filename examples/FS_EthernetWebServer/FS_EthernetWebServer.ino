@@ -1,22 +1,5 @@
 /****************************************************************************************************************************
-  serveStaticLoadFile.ino - Dead simple web-server for Ethernet shields
-                            demoing the usage of serveStatic class method
-
-                            Used to load files to prepare for serveStatic.ino
-
-  v. 1.0
-  Copyright (C) 2021 Sardar Azari
-  https://www.qrz.com/db/ac8l
-
-  Prior to the usage - use ESP8266/ESP32 Sketch data upoad tool to save the content of web-site to the SPIFFS flash memory.
-
-  This example sketch is based on HTML templates from Robert Ulbricht: https://www.arduinoslovakia.eu
-  https://github.com/RoboUlbricht/arduinoslovakia/tree/master/esp8266/simple_http_server_multiplepages_responsive_spiffs
-
-  This code's core is based on HelloServer.ino example of this library by Khoi Hoang
-
-  Some great examples of commercial use of serveStatic function can be seen and learned at uStepper's WiFiGUI project:
-  https://github.com/uStepper/uStepperSWiFiGUI
+  FS_EthernetWebServer.ino - Dead simple FS Ethernet WebServer for ES8266 using Ethernet shields
 
   EthernetWebServer is a library for the Ethernet shields to run WebServer
 
@@ -43,6 +26,40 @@ EthernetWebServer server(80);
 
 //holds the current upload
 File fsUploadFile;
+
+void heartBeatPrint()
+{
+  static int num = 1;
+
+  Serial.print(F("H"));        // H means alive
+
+  if (num == 80)
+  {
+    Serial.println();
+    num = 1;
+  }
+  else if (num++ % 10 == 0)
+  {
+    Serial.print(F(" "));
+  }
+}
+
+void check_status()
+{
+  static ulong checkstatus_timeout  = 0;
+  static ulong current_millis;
+
+#define HEARTBEAT_INTERVAL    10000L
+
+  current_millis = millis();
+  
+  // Print hearbeat every HEARTBEAT_INTERVAL (10) seconds.
+  if ((current_millis > checkstatus_timeout) || (checkstatus_timeout == 0))
+  {
+    heartBeatPrint();
+    checkstatus_timeout = current_millis + HEARTBEAT_INTERVAL;
+  }
+}
 
 //format bytes
 String formatBytes(size_t bytes)
@@ -250,19 +267,58 @@ void handleFileUpload()
   }
 }
 
+void handleFileList() 
+{
+  if (!server.hasArg("dir")) 
+  {
+    server.send(500, "text/plain", "BAD ARGS");
+    return;
+  }
+
+  String path = server.arg("dir");
+  Serial.println("handleFileList: " + path);
+  Dir dir = filesystem->openDir(path);
+  path.clear();
+
+  String output = "[";
+  
+  while (dir.next()) 
+  {
+    File entry = dir.openFile("r");
+    
+    if (output != "[") 
+    {
+      output += ',';
+    }
+    
+    bool isDir = false;
+    output += "{\"type\":\"";
+    output += (isDir) ? "dir" : "file";
+    output += "\",\"name\":\"";
+    
+    if (entry.name()[0] == '/') 
+    {
+      output += &(entry.name()[1]);
+    } 
+    else 
+    {
+      output += entry.name();
+    }
+    
+    output += "\"}";
+    entry.close();
+  }
+
+  output += "]";
+  server.send(200, "text/json", output);
+}
+
 void initFS(void)
 {
   // Initialize LittleFS/SPIFFS file-system
-#if (ESP32)
-  // Format SPIFFS if not yet
-  if (!FileFS.begin(true))
-  {
-    Serial.println(F("SPIFFS/LittleFS failed! Formatting."));
-#else
   if (!FileFS.begin())
   {
     FileFS.format();
-#endif
 
     if (!FileFS.begin())
     {
@@ -280,8 +336,27 @@ void initFS(void)
   }
 }
 
+void listDir()
+{
+  Dir dir = filesystem->openDir("/");
+  Serial.println(F("Opening / directory"));
+  
+  while (dir.next()) 
+  {
+    String fileName = dir.fileName();
+    size_t fileSize = dir.fileSize();
+    Serial.printf("FS File: %s, size: %s\n", fileName.c_str(), formatBytes(fileSize).c_str());
+  }
+  
+  Serial.println();
+}
+
 void initWebserver(void)
 {
+  //SERVER INIT
+  //list directory
+  server.on("/list", HTTP_GET, handleFileList);
+
   //load editor
   server.on("/edit", HTTP_GET, []()
   {
@@ -303,6 +378,28 @@ void initWebserver(void)
   {
     server.send(200, "text/plain", "");
   }, handleFileUpload);
+
+  //called when the url is not defined here
+  //use it to load content from SPIFFS
+  server.onNotFound([]() 
+  {
+    if (!handleFileRead(server.uri())) 
+    {
+      server.send(404, "text/plain", "FileNotFound");
+    }
+  });
+
+  //get heap status, analog input value and all GPIO statuses in one json call
+  server.on("/all", HTTP_GET, []() 
+  {
+    String json('{');
+    json += "\"heap\":" + String(ESP.getFreeHeap());
+    json += ", \"analog\":" + String(analogRead(A0));
+    json += ", \"gpio\":" + String((uint32_t)(((GPI | GPO) & 0xFFFF) | ((GP16I & 0x01) << 16)));
+    json += "}";
+    server.send(200, "text/json", json);
+    json.clear();
+  });
 
   // Web Page handlers
   server.serveStatic("/", FileFS, "/page1.html");
@@ -329,7 +426,8 @@ void setup(void)
 
   delay(200);
 
-  Serial.print("\nStarting serveStaticLoadFile demoing 'serveStaticLoadFile' function on " + String(BOARD_TYPE));
+  Serial.print("\nStarting FS_EthernetWebServer on " + String(BOARD_TYPE));
+  Serial.print(" using "); Serial.print(CurrentFileFS);
   Serial.println(" with " + String(SHIELD_TYPE));
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
@@ -339,23 +437,23 @@ void setup(void)
 
 #else
 
-#if USE_NATIVE_ETHERNET
-  ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
-#elif USE_ETHERNET
-  ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
-#elif USE_ETHERNET2
-  ET_LOGWARN(F("=========== USE_ETHERNET2 ==========="));
-#elif USE_ETHERNET3
-  ET_LOGWARN(F("=========== USE_ETHERNET3 ==========="));
-#elif USE_ETHERNET_LARGE
-  ET_LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
-#elif USE_ETHERNET_ESP8266
-  ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
-#elif USE_ETHERNET_ENC
-  ET_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));
-#else
-  ET_LOGWARN(F("========================="));
-#endif
+  #if USE_NATIVE_ETHERNET
+    ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
+  #elif USE_ETHERNET
+    ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
+  #elif USE_ETHERNET2
+    ET_LOGWARN(F("=========== USE_ETHERNET2 ==========="));
+  #elif USE_ETHERNET3
+    ET_LOGWARN(F("=========== USE_ETHERNET3 ==========="));
+  #elif USE_ETHERNET_LARGE
+    ET_LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
+  #elif USE_ETHERNET_ESP8266
+    ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
+  #elif USE_ETHERNET_ENC
+    ET_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));
+  #else
+    ET_LOGWARN(F("========================="));
+  #endif
 
   ET_LOGWARN(F("Default SPI pinout:"));
   ET_LOGWARN1(F("MOSI:"), MOSI);
@@ -364,122 +462,42 @@ void setup(void)
   ET_LOGWARN1(F("SS:"),   SS);
   ET_LOGWARN(F("========================="));
 
-#if defined(ESP8266)
   // For ESP8266, change for other boards if necessary
-#ifndef USE_THIS_SS_PIN
-#define USE_THIS_SS_PIN   D2    // For ESP8266
-#endif
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   D2    // For ESP8266
+  #endif
 
   ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
 
-#if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
-  // For ESP8266
-  // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
-  // Ethernet           0                 X            X            X            X        0
-  // Ethernet2          X                 X            X            X            X        0
-  // Ethernet3          X                 X            X            X            X        0
-  // EthernetLarge      X                 X            X            X            X        0
-  // Ethernet_ESP8266   0                 0            0            0            0        0
-  // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
-  // Must use library patch for Ethernet, EthernetLarge libraries
-  Ethernet.init (USE_THIS_SS_PIN);
-
-#elif USE_ETHERNET3
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-#ifndef ETHERNET3_MAX_SOCK_NUM
-#define ETHERNET3_MAX_SOCK_NUM      4
-#endif
-
-  Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-#elif USE_CUSTOM_ETHERNET
-
-  // You have to add initialization for your Custom Ethernet here
-  // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-  Ethernet.init(USE_THIS_SS_PIN);
-
-#endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-
-#elif defined(ESP32)
-
-  // You can use Ethernet.init(pin) to configure the CS pin
-  //Ethernet.init(10);  // Most Arduino shields
-  //Ethernet.init(5);   // MKR ETH shield
-  //Ethernet.init(0);   // Teensy 2.0
-  //Ethernet.init(20);  // Teensy++ 2.0
-  //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
-  //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
-
-#ifndef USE_THIS_SS_PIN
-#define USE_THIS_SS_PIN   22    // For ESP32
-#endif
-
-  ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
-
-  // For other boards, to change if necessary
-#if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
-  // Must use library patch for Ethernet, EthernetLarge libraries
-  // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
-  // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
-
-  //Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (USE_THIS_SS_PIN);
-
-#elif USE_ETHERNET3
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-#ifndef ETHERNET3_MAX_SOCK_NUM
-#define ETHERNET3_MAX_SOCK_NUM      4
-#endif
-
-  Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-#elif USE_CUSTOM_ETHERNET
-
-  // You have to add initialization for your Custom Ethernet here
-  // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-  Ethernet.init(USE_THIS_SS_PIN);
-
-#endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-
-#else   //defined(ESP8266)
-  // unknown board, do nothing, use default SS = 10
-#ifndef USE_THIS_SS_PIN
-#define USE_THIS_SS_PIN   10    // For other boards
-#endif
-
-#if defined(BOARD_NAME)
-  ET_LOGWARN3(F("Board :"), BOARD_NAME, F(", setCsPin:"), USE_THIS_SS_PIN);
-#else
-  ET_LOGWARN1(F("Unknown board setCsPin:"), USE_THIS_SS_PIN);
-#endif
-
-  // For other boards, to change if necessary
-#if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2  || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
-  // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
-
-  Ethernet.init (USE_THIS_SS_PIN);
-
-#elif USE_ETHERNET3
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-#ifndef ETHERNET3_MAX_SOCK_NUM
-#define ETHERNET3_MAX_SOCK_NUM      4
-#endif
-
-  Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
-#elif USE_CUSTOM_ETHERNET
-
-  // You have to add initialization for your Custom Ethernet here
-  // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-  Ethernet.init(USE_THIS_SS_PIN);
-
-#endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
-
-#endif    //defined(ESP8266)
-
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+    // For ESP8266
+    // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+    // Ethernet           0                 X            X            X            X        0
+    // Ethernet2          X                 X            X            X            X        0
+    // Ethernet3          X                 X            X            X            X        0
+    // EthernetLarge      X                 X            X            X            X        0
+    // Ethernet_ESP8266   0                 0            0            0            0        0
+    // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+    // Must use library patch for Ethernet, EthernetLarge libraries
+    Ethernet.init (USE_THIS_SS_PIN);
+  
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+  
+  #elif USE_CUSTOM_ETHERNET
+  
+    // You have to add initialization for your Custom Ethernet here
+    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+    Ethernet.init(USE_THIS_SS_PIN);
+  
+  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  
 #endif  //USE_ETHERNET_WRAPPER
 
   // start the ethernet connection and the server:
@@ -510,9 +528,15 @@ void setup(void)
   Serial.println(Ethernet.localIP());
 
   initFS();
+  listDir();
   initWebserver();
 
-  Serial.println("HTTP server started");
+  Serial.print("HTTP server started @");
+  Serial.println(Ethernet.localIP());
+
+  Serial.print(F("Open http://"));
+  Serial.print(Ethernet.localIP());
+  Serial.println(F("/edit to see the file browser"));
 }
 
 void loop(void)

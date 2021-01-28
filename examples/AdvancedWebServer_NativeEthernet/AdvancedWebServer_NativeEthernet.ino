@@ -286,8 +286,8 @@ void setup(void)
   // Use DHCP dynamic IP and random mac
   uint16_t index = millis() % NUMBER_OF_MAC;
   // Use Static IP
-  //Ethernet.begin(mac[index], ip);
-  Ethernet.begin(mac[index]);
+  Ethernet.begin(mac[index], ip);
+  //Ethernet.begin(mac[index]);
 
   // Just info to know how to connect correctly
   Serial.println(F("========================="));

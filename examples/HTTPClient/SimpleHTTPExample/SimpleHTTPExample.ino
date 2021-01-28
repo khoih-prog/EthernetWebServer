@@ -296,5 +296,6 @@ void loop()
   httpClient.stop();
 
   // And just stop, now that we've tried a download
-  while (1);
+  while (true)
+    yield();
 }

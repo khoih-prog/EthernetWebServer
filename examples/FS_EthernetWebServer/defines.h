@@ -10,8 +10,8 @@
 #ifndef defines_h
 #define defines_h
 
-#if !(ESP8266 || ESP32)
-  #error This code is intended to run on the ESP8266/ESP32 platform! Please check your Tools->Board setting.
+#if !(ESP8266)
+  #error This code is intended to run on the ESP8266 platform! Please check your Tools->Board setting.
 #endif
 
 #define DEBUG_ETHERNET_WEBSERVER_PORT       Serial
@@ -22,63 +22,30 @@
 #define USE_LITTLEFS                true
 #define USE_SPIFFS                  false
 
-#if ( defined(ESP8266) )
-
-  #if USE_LITTLEFS
-    #include <LittleFS.h>
-    //LittleFS has higher priority
-    #define CurrentFileFS     "LittleFS"
-    FS* filesystem = &LittleFS;
-    #define FileFS            LittleFS
-    #ifdef USE_SPIFFS
-      #undef USE_SPIFFS
-    #endif
-    #define USE_SPIFFS                  false
-  #elif USE_SPIFFS
-    FS* filesystem = &SPIFFS;
-    #define FileFS            SPIFFS
-    #define CurrentFileFS     "SPIFFS"
-  #endif
-
-  // For ESP8266
-  #include <FS.h>
+#if USE_LITTLEFS
   #include <LittleFS.h>
-  
-  #warning Use ESP8266 architecture
-  #include <ESP8266mDNS.h>
-  #define ETHERNET_USE_ESP8266
-  #define BOARD_TYPE      "ESP8266"
-
-#elif ( defined(ESP32) )
-  // For ESP32
-    #if USE_LITTLEFS
-    //LittleFS has higher priority
-    #include "FS.h"
-  
-    // The library will be depreciated after being merged to future major Arduino esp32 core release 2.x
-    // At that time, just remove this library inclusion
-    #include <LITTLEFS.h>             // https://github.com/lorol/LITTLEFS
-  
-    #define CurrentFileFS     "LittleFS"
-    #define FileFS            LITTLEFS
-    #ifdef USE_SPIFFS
-      #undef USE_SPIFFS
-    #endif
-    #define USE_SPIFFS                  false
-  #elif USE_SPIFFS
-    #include "FS.h"
-    #include <SPIFFS.h>
-    #define FileFS            SPIFFS
-    #define CurrentFileFS     "SPIFFS"
+  //LittleFS has higher priority
+  #define CurrentFileFS     "LittleFS"
+  FS* filesystem = &LittleFS;
+  #define FileFS            LittleFS
+  #ifdef USE_SPIFFS
+    #undef USE_SPIFFS
   #endif
-  
-  #warning Use ESP32 architecture
-  #define ETHERNET_USE_ESP32
-  #define BOARD_TYPE      "ESP32"
-  
-  #define W5500_RST_PORT   21
-
+  #define USE_SPIFFS                  false
+#elif USE_SPIFFS
+  FS* filesystem = &SPIFFS;
+  #define FileFS            SPIFFS
+  #define CurrentFileFS     "SPIFFS"
 #endif
+
+// For ESP8266
+#include <FS.h>
+#include <LittleFS.h>
+
+#warning Use ESP8266 architecture
+#include <ESP8266mDNS.h>
+#define ETHERNET_USE_ESP8266
+#define BOARD_TYPE      "ESP8266"
 
 #ifndef BOARD_NAME
   #define BOARD_NAME    BOARD_TYPE

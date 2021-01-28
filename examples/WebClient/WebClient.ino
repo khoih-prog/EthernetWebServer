@@ -249,6 +249,7 @@ void loop()
     client.stop();
 
     // do nothing forevermore
-    while (true);
+    while (true)
+      yield();
   }
 }
