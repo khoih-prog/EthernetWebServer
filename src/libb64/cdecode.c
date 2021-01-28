@@ -35,8 +35,6 @@
     1.2.1   K Hoang      26/12/2020 Suppress all possible compiler warnings
  *****************************************************************************************************************************/
 
-#if !(ESP32 || ESP8266)
-
 #include "cdecode.h"
 
 int base64_decode_value(char value_in)
@@ -162,5 +160,3 @@ int base64_decode_chars(const char* code_in, const int length_in, char* plaintex
 
   return len;
 }
-
-#endif

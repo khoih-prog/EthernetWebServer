@@ -34,9 +34,7 @@
     1.2.0   K Hoang      04/12/2020 Add support to NativeEthernet Library for Teensy 4.1
     1.2.1   K Hoang      26/12/2020 Suppress all possible compiler warnings
  *****************************************************************************************************************************/
-
-#if !(ESP32 || ESP8266)
-
+ 
 #include "cencode.h"
 
 const int CHARS_PER_LINE = 72;
@@ -167,5 +165,3 @@ int base64_encode_chars(const char* plaintext_in, int length_in, char* code_out)
 
   return ( len + base64_encode_blockend((code_out + len), &_state) );
 }
-
-#endif
