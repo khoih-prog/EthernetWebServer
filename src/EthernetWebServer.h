@@ -186,7 +186,9 @@ typedef struct
 } HTTPUpload;
 
 #include "detail/RequestHandler.h"
-#include "FS.h"
+#if (ESP32 || ESP8266)
+    #include "FS.h"
+#endif
 
 class EthernetWebServer
 {
@@ -213,8 +215,7 @@ class EthernetWebServer
     void addHandler(RequestHandler* handler);
     void onNotFound(THandlerFunction fn);  //called when handler is not assigned
     void onFileUpload(THandlerFunction fn); //handle file uploads
-    void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); // serve static pages from file system
-    
+
     String uri() 
     {
       return _currentUri;
@@ -281,6 +282,24 @@ class EthernetWebServer
     
     static String urlDecode(const String& text);
 
+    #if !(ESP32 || ESP8266)
+    template<typename T> size_t streamFile(T &file, const String& contentType) 
+    {
+      using namespace mime;
+      setContentLength(file.size());
+      
+      if (String(file.name()).endsWith(mimeTable[gz].endsWith) && contentType != mimeTable[gz].mimeType && contentType != mimeTable[none].mimeType) 
+      {
+        sendHeader("Content-Encoding", "gzip");
+      }
+      
+      send(200, contentType, "");
+      
+      return _currentClient.write(file);
+    }
+    #else
+    void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); // serve static pages from file system
+
     // Handle a GET request by sending a response header and stream file content to response body
       template<typename T>
       size_t streamFile(T &file, const String& contentType) {
@@ -298,7 +317,8 @@ class EthernetWebServer
         }
         return contentLength;
       }
-    
+    #endif
+
   protected:
     void _addRequestHandler(RequestHandler* handler);
     void _handleRequest();
@@ -321,7 +341,8 @@ class EthernetWebServer
     uint8_t _uploadReadByte(EthernetClient& client);
     void _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
     bool _collectHeader(const char* headerName, const char* headerValue);
-
+    
+    #if (ESP32 || ESP8266)
     void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
 
     template<typename T>
@@ -333,13 +354,14 @@ class EthernetWebServer
         // read up to sizeof(buffer) bytes
           while ((bytesRead = file.readBytes(buffer, sizeof(buffer))) > 0)
           {
-              _currentClient.write(buffer, sizeof(buffer));
+              _currentClient.write(buffer, bytesRead);
               contentLength += bytesRead;
           }
 
         return contentLength;
     }
-
+    #endif
+    
     struct RequestArgument {
     
       String key;
