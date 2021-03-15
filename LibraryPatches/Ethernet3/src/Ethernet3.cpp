@@ -297,7 +297,7 @@ void EthernetClass::phyMode(phyMode_t mode) {
   w5500.setPHYCFGR(val);
   }
 
-void EthernetClass::setHostname(char* hostname) {
+void EthernetClass::setHostname(const char* hostname) {
   memset(_customHostname, 0, 32);
   memcpy((void*)_customHostname, (void*)hostname, strlen(hostname) >= 31 ? 31 : strlen(hostname));
   }
@@ -327,12 +327,9 @@ uint8_t EthernetClass::speed()
       
     if (bitRead(w5500.getPHYCFGR(), 1) == 0) 
       return 10;
-      
-    // KH add to fix compile error in some boards   
-    return 0;  
   }
-  else 
-    return 0;
+
+  return 0;
 }
 
 const char* EthernetClass::speedReport() 
@@ -344,12 +341,9 @@ const char* EthernetClass::speedReport()
       
     if (bitRead(w5500.getPHYCFGR(), 1) == 0) 
       return "10 MB";
-      
-    // KH add to fix compile error in some boards   
-    return "NO LINK"; 
   }
-  else 
-    return "NO LINK";
+
+  return "NO LINK";
 }
 
 uint8_t EthernetClass::duplex() 
@@ -361,12 +355,9 @@ uint8_t EthernetClass::duplex()
       
     if (bitRead(w5500.getPHYCFGR(), 2) == 0) 
       return 1;
-      
-    // KH add to fix compile error in some boards  
-    return 0;   
   }
-  else 
-    return 0;
+
+  return 0;
 }
 
 const char* EthernetClass::duplexReport() 
@@ -378,12 +369,9 @@ const char* EthernetClass::duplexReport()
       
     if (bitRead(w5500.getPHYCFGR(), 2) == 0) 
       return "HALF DUPLEX";
-    
-    // KH add to fix compile error in some boards   
-    return "NO LINK";  
   }
-  else 
-    return "NO LINK";
+
+  return "NO LINK";
 }
 
 void EthernetClass::setRtTimeOut(uint16_t timeout) {

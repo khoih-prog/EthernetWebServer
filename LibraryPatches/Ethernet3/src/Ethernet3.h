@@ -103,7 +103,7 @@ public:
   void macAddress(uint8_t mac[]); // get the MAC Address
   const char* macAddressReport(); // returns the the MAC Address as a string
 
-  void setHostname(char* hostname);
+  void setHostname(const char* hostname);
   
   // KH add to have similar function to Ethernet lib
   // Certainly we can use void macAddress(uint8_t mac[]) to read from W5x00.
