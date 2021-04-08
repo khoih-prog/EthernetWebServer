@@ -477,6 +477,10 @@ private:
 	inline static void resetSS() 
 	{
 		*(ss_pin_reg+33) = ss_pin_mask;
+		
+		// Check https://forum.pjrc.com/threads/66758-Teensy-4-0-and-Ethernet-(WIZ5100-and-WIZ812)
+		if (chip == 51) 
+		  delayNanoseconds(10); // <-- fixes W5100 on Teensy 4
 	}
 #elif defined(__MKL26Z64__)
 	static volatile uint8_t *ss_pin_reg;
