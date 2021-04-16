@@ -27,74 +27,53 @@
 
 const uint32_t g_ADigitalPinMap[] =
 {
-  // D0 .. D13
+   // D0 .. D13
   29,  // D0  is P0.29 (UART TX)
   45,  // D1  is P1.13 (UART RX 
   44,  // D2  is P1.12 (NFC2)
   31,  // D3  is P0.31 (LED1)
   13,  // D4  is P0.13 (LED2)
   11,  // D5  is P0.11
-   9,  // D6  is P0.09
+  9,   // D6  is P0.09
   10,  // D7  is P0.10 (Button)
-  41,  // D8  is P1.09 (NeoPixel)
+  41,  // D8  is P1.09 
   12,  // D9  is P0.12
   14,  // D10 is P0.14
   15,  // D11 is P0.15
   32,  // D12 is P1.00
-   7,  // D13 is P0.07
+  7,  // D13 is P0.07
 
-  // D14 .. D21 (aka A0 .. A7)
-   4,  // D14 is P0.04 (A0)
+  // D14 .. D21 (aka A0 .. A5)
+  4,  // D14 is P0.04 (A0)
   30,  // D15 is P0.30 (A1)
-   5,  // D16 is P0.05 (A2)
-   2,  // D17 is P0.02 (A3)
+  5,  // D16 is P0.05 (A2)
+  2,  // D17 is P0.02 (A3)
   28,  // D18 is P0.28 (A4)
-   3,  // D19 is P0.03 (A5)
-  29,  // D20 is P0.29 (A6, Battery) ????
-  31,  // D21 is P0.31 (A7, ARef)    ????
+  3,  // D19 is P0.03 (A5)
 
-  // D22 .. D23 (aka I2C pins)
-  16,  // D22 is P0.16 (SDA)
-  24,  // D23 is P0.24 (SCL)
-
-  // D24 .. D26 (aka SPI pins)
-  32,  // D24 is P1.00 (SPI MISO)
-  15,  // D25 is P0.15 (SPI MOSI)
-   7,  // D26 is P0.07 (SPI SCK )
-
+  // D20 .. D21 (aka I2C pins)
+  16,  // D20 is P0.16 (SDA)
+  24,  // D21 is P0.24 (SCL)
+   
   // QSPI pins (not exposed via any header / test point)
-  19,  // D27 is P0.19 (QSPI CLK)
-  17,  // D28 is P0.17 (QSPI CS)
-  20,  // D29 is P0.20 (QSPI Data 0)
-  21,  // D30 is P0.21 (QSPI Data 1)
-  22,  // D31 is P0.22 (QSPI Data 2)
-  23,  // D32 is P0.23 (QSPI Data 3)
-
-  // The remaining NFC pin
-   9,  // D33 is P0.09 (NFC1, exposed only via test point on bottom of board)
-
-  // Thus, there are 34 defined pins
-
-  // The remaining pins are not usable:
-  //
-  //
-  // The following pins were never listed as they were considered unusable
-  //  0,      // P0.00 is XL1   (attached to 32.768kHz crystal)
-  //  1,      // P0.01 is XL2   (attached to 32.768kHz crystal)
-  // 18,      // P0.18 is RESET (attached to switch)
-  // 32,      // P1.00 is SWO   (attached to debug header)
-  // 
-  // The remaining pins are not connected (per schematic)
-  // 33,      // P1.01 is not connected per schematic
-  // 35,      // P1.03 is not connected per schematic
-  // 36,      // P1.04 is not connected per schematic
-  // 37,      // P1.05 is not connected per schematic
-  // 38,      // P1.06 is not connected per schematic
-  // 39,      // P1.07 is not connected per schematic
-  // 43,      // P1.11 is not connected per schematic
-  // 44,      // P1.12 is not connected per schematic
-  // 45,      // P1.13 is not connected per schematic
-  // 46,      // P1.14 is not connected per schematic
+  19,  // D22 is P0.19 (QSPI CLK)
+  17,  // D23 is P0.17 (QSPI CS)
+  20,  // D24 is P0.20 (QSPI Data 0)
+  21,  // D25 is P0.21 (QSPI Data 1)
+  22,  // D26 is P0.22 (QSPI Data 2)
+  26,  // D27 is P0.23 (QSPI Data 3)
+  
+  40,  // D28 is P1.08 - IO34
+  41,  // D29 is P1.01 - IO35
+  44,  // D30 is P1.02 - IO36
+  45,  // D31 is P1.03 - IO37
+  42, // D32 is P1.10 - IO38
+  43, // D33 is P1.11 - IO39
+  47, // D34 is P1.15 - IO40
+  46, // D35 is P1.14 - IO41 
+  26, // D36 is P0.26 - IO42
+  6,  // D37 is P0.6  - IO43
+  27, // D38 is P0.27 - IO44  
 };
 
 void initVariant()
@@ -106,4 +85,3 @@ void initVariant()
   pinMode(PIN_LED2, OUTPUT);
   ledOff(PIN_LED2);
 }
-
