@@ -17,6 +17,7 @@
   * [Currently supported Boards](#currently-supported-boards)
   * [Currently supported Ethernet shields/modules](#currently-supported-ethernet-shieldsmodules)
 * [Changelog](#changelog)
+  * [Releases v1.3.1](#releases-v131)
   * [Major Releases v1.3.0](#major-releases-v130)
   * [Releases v1.2.1](#releases-v121)
   * [Releases v1.2.0](#releases-v120)
@@ -46,6 +47,8 @@
   * [5. For Adafruit SAMD boards](#5-for-adafruit-samd-boards)
   * [6. For Seeeduino SAMD boards](#6-for-seeeduino-samd-boards)
   * [7. For STM32 boards](#7-for-stm32-boards) 
+    * [7.1 For STM32 boards to use LAN8720](#71-for-stm32-boards-to-use-lan8720)
+    * [7.2 For STM32 boards to use Serial1](#72-for-stm32-boards-to-use-serial1)
 * [Libraries' Patches](#libraries-patches)
   * [1. For application requiring 2K+ HTML page](#1-for-application-requiring-2k-html-page)
   * [2. For Ethernet library](#2-for-ethernet-library)
@@ -75,7 +78,7 @@
 * [Examples](#examples)
   * [Original Examples](#original-examples)
     * [ 1. AdvancedWebServer](examples/AdvancedWebServer)
-    * [ 2. **AdvancedWebServer_NativeEthernet**](examples/AdvancedWebServer_NativeEthernet)
+    * [ 2. **SimpleWebServer_NativeEthernet**](examples/SimpleWebServer_NativeEthernet)
     * [ 3. HelloServer](examples/HelloServer)
     * [ 4. HelloServer2](examples/HelloServer2)
     * [ 5. HttpBasicAuth](examples/HttpBasicAuth)
@@ -121,6 +124,7 @@
   * [5. ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library](#5-esp32_fs_ethernetwebserver-on-esp32-using-littlefs-with-w5x00-using-ethernet-library)
   * [6. FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library](#6-fs_ethernetwebserver-on-esp8266-using-littlefs-with-w5x00-using-ethernet-library)
   * [7. serveStatic on ESP8266 using LittleFS with W5x00 using Ethernet Library](#7-servestatic-on-esp8266-using-littlefs-with-w5x00-using-ethernet-library)
+  * [8. SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet library](#8-simplewebserver_nativeethernet-on-teensy-41-with-nativeethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -191,6 +195,11 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 ---
 
 ## Changelog
+
+### Releases v1.3.1
+
+1. Add working example [SimpleWebServer_NativeEthernet**](examples/SimpleWebServer_NativeEthernet) for Teensy 4.1 NativeEthernet. Check [EthernetWebServer-on-Teensy4-1-with-MagJack](https://forum.pjrc.com/threads/67060-Khoi-Hoang-s-EthernetWebServer-on-Teensy4-1-with-MagJack-anyone-successful)
+2. Delete not working example **AdvancedWebServer_NativeEthernet**
 
 ### Major Releases v1.3.0
 
@@ -279,10 +288,10 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 6. [`Adafruit SAMD core 1.6.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 6. [`Adafruit SAMD core 1.6.7+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  7. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  8. [`Adafruit nRF52 v0.21.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
- 9. [`ESP32 Core 1.0.5+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
+ 9. [`ESP32 Core 1.0.6+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
 10. [`ESP8266 Core 2.7.4+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
 11. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 12. Depending on which Ethernet card you're using:
@@ -290,7 +299,7 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
    - [`Ethernet3 library v1.5.5+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip. [![GitHub release](https://img.shields.io/github/release/sstaub/Ethernet3.svg)](https://github.com/sstaub/Ethernet3/releases/latest)
-   - [`EthernetENC library v2.0.0+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
+   - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
    - [`NativeEthernet Library version stable111+`](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1 built-in NativeEthernet. **New**
 
@@ -419,11 +428,11 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 5. For Adafruit SAMD boards
  
- ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.4) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.4). 
+ ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.7) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.7). 
 
-Supposing the Adafruit SAMD core version is 1.6.4. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.6.7. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.4/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.7/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -445,6 +454,30 @@ This file must be copied into the directory:
 
 #### 7. For STM32 boards
 
+#### 7.1 For STM32 boards to use LAN8720
+
+To use LAN8720 on some STM32 boards 
+
+- **Nucleo-144 (F429ZI, NUCLEO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG)**
+- **Discovery (DISCO_F746NG)**
+- **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**
+
+you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/1.9.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/1.9.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system) to overwrite the old files.
+
+Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
+
+- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
+- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
+theses files must be copied into the corresponding directory:
+
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F4xx/stm32f4xx_hal_conf_default.h`
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F7xx/stm32f7xx_hal_conf_default.h
+
+
+#### 7.2 For STM32 boards to use Serial1
+
 **To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/1.9.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
 
 Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
@@ -457,6 +490,7 @@ theses files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_F767ZI/variant.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_L053R8/variant.h`
+
 
 ---
 
@@ -966,7 +1000,7 @@ Example:
 #### Original Examples
 
  1. [AdvancedWebServer](examples/AdvancedWebServer)
- 2. [**AdvancedWebServer_NativeEthernet**](examples/AdvancedWebServer_NativeEthernet)
+ 2. [**SimpleWebServer_NativeEthernet**](examples/SimpleWebServer_NativeEthernet)
  3. [HelloServer](examples/HelloServer)
  4. [HelloServer2](examples/HelloServer2)
  5. [HttpBasicAuth](examples/HttpBasicAuth)
@@ -2179,6 +2213,65 @@ and the screen shot of the WebServer
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/serveStatic.png">
 </p>
+
+---
+
+#### 8. SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet library
+
+
+The following are debug terminal output and screen shot when running example [SimpleWebServer_NativeEthernet](examples/SimpleWebServer_NativeEthernet) on **Teensy 4.1 with NativeEthernet library**
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/SimpleWebServer_NativeEthernet.png">
+</p>
+
+
+```
+SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
+EthernetWebServer v1.3.1
+Debug Level = 3
+Connected! IP address: 192.168.2.127
+[EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
+========================================
+[EWS] <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="310" height="150">
+<rect width="310" height="150" fill="rgb(250, 230, 210)" stroke-width="1" stroke="rgb(0, 0, 0)" />
+<g stroke="black">
+<line x1="10" y1="77" x2="20" y2="67" stroke-width="1" />
+<line x1="20" y1="67" x2="30" y2="98" stroke-width="1" />
+<line x1="30" y1="98" x2="40" y2="111" stroke-width="1" />
+<line x1="40" y1="111" x2="50" y2="90" stroke-width="1" />
+<line x1="50" y1="90" x2="60" y2="22" stroke-width="1" />
+<line x1="60" y1="22" x2="70" y2="98" stroke-width="1" />
+<line x1="70" y1="98" x2="80" y2="64" stroke-width="1" />
+<line x1="80" y1="64" x2="90" y2="104" stroke-width="1" />
+<line x1="90" y1="104" x2="100" y2="31" stroke-width="1" />
+<line x1="100" y1="31" x2="110" y2="59" stroke-width="1" />
+<line x1="110" y1="59" x2="120" y2="139" stroke-width="1" />
+<line x1="120" y1="139" x2="130" y2="117" stroke-width="1" />
+<line x1="130" y1="117" x2="140" y2="75" stroke-width="1" />
+<line x1="140" y1="75" x2="150" y2="72" stroke-width="1" />
+<line x1="150" y1="72" x2="160" y2="137" stroke-width="1" />
+<line x1="160" y1="137" x2="170" y2="20" stroke-width="1" />
+<line x1="170" y1="20" x2="180" y2="94" stroke-width="1" />
+<line x1="180" y1="94" x2="190" y2="81" stroke-width="1" />
+<line x1="190" y1="81" x2="200" y2="38" stroke-width="1" />
+<line x1="200" y1="38" x2="210" y2="33" stroke-width="1" />
+<line x1="210" y1="33" x2="220" y2="53" stroke-width="1" />
+<line x1="220" y1="53" x2="230" y2="88" stroke-width="1" />
+<line x1="230" y1="88" x2="240" y2="32" stroke-width="1" />
+<line x1="240" y1="32" x2="250" y2="110" stroke-width="1" />
+<line x1="250" y1="110" x2="260" y2="87" stroke-width="1" />
+<line x1="260" y1="87" x2="270" y2="11" stroke-width="1" />
+<line x1="270" y1="11" x2="280" y2="98" stroke-width="1" />
+<line x1="280" y1="98" x2="290" y2="76" stroke-width="1" />
+<line x1="290" y1="76" x2="300" y2="121" stroke-width="1" />
+</g>
+</svg>
+
+========================================
+```
+
+
 ---
 ---
 
@@ -2204,6 +2297,11 @@ If you get compilation errors, more often than not, you may need to install a ne
 ---
 
 ## Releases
+
+### Releases v1.3.1
+
+1. Add working example [SimpleWebServer_NativeEthernet**](examples/SimpleWebServer_NativeEthernet) for Teensy 4.1 NativeEthernet. Check [EthernetWebServer-on-Teensy4-1-with-MagJack](https://forum.pjrc.com/threads/67060-Khoi-Hoang-s-EthernetWebServer-on-Teensy4-1-with-MagJack-anyone-successful)
+2. Delete not working example **AdvancedWebServer_NativeEthernet**
 
 ### Releases v1.3.0
 
