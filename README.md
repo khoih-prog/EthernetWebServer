@@ -198,7 +198,7 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 
 ### Releases v1.3.1
 
-1. Add working example [SimpleWebServer_NativeEthernet**](examples/SimpleWebServer_NativeEthernet) for Teensy 4.1 NativeEthernet. Check [EthernetWebServer-on-Teensy4-1-with-MagJack](https://forum.pjrc.com/threads/67060-Khoi-Hoang-s-EthernetWebServer-on-Teensy4-1-with-MagJack-anyone-successful)
+1. Add working example [SimpleWebServer_NativeEthernet](examples/SimpleWebServer_NativeEthernet) for Teensy 4.1 NativeEthernet. Check [EthernetWebServer-on-Teensy4-1-with-MagJack](https://forum.pjrc.com/threads/67060-Khoi-Hoang-s-EthernetWebServer-on-Teensy4-1-with-MagJack-anyone-successful)
 2. Delete not working example **AdvancedWebServer_NativeEthernet**
 
 ### Major Releases v1.3.0
@@ -2300,7 +2300,7 @@ If you get compilation errors, more often than not, you may need to install a ne
 
 ### Releases v1.3.1
 
-1. Add working example [SimpleWebServer_NativeEthernet**](examples/SimpleWebServer_NativeEthernet) for Teensy 4.1 NativeEthernet. Check [EthernetWebServer-on-Teensy4-1-with-MagJack](https://forum.pjrc.com/threads/67060-Khoi-Hoang-s-EthernetWebServer-on-Teensy4-1-with-MagJack-anyone-successful)
+1. Add working example [SimpleWebServer_NativeEthernet](examples/SimpleWebServer_NativeEthernet) for Teensy 4.1 NativeEthernet. Check [EthernetWebServer-on-Teensy4-1-with-MagJack](https://forum.pjrc.com/threads/67060-Khoi-Hoang-s-EthernetWebServer-on-Teensy4-1-with-MagJack-anyone-successful)
 2. Delete not working example **AdvancedWebServer_NativeEthernet**
 
 ### Releases v1.3.0
