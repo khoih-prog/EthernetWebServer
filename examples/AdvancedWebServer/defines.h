@@ -42,6 +42,13 @@
   #define ETHERNET_USE_SAM_DUE      true
 #endif
 
+#if ( defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) )
+  #if defined(ETHERNET_USE_RPIPICO)
+    #undef ETHERNET_USE_RPIPICO
+  #endif
+  #define ETHERNET_USE_RPIPICO      true
+#endif
+
 #if defined(ETHERNET_USE_SAMD)
   // For SAMD
   // Default pin 10 to SS/CS
@@ -238,6 +245,40 @@
   
   #define W5500_RST_PORT   21
 
+#elif ETHERNET_USE_RPIPICO
+
+  // For RPI Pico
+  // SCK1: GPIO14,  MOSI1: GPIO15, MISO1: GPIO12, SS/CS1: GPIO13
+  // Default pin 5 (in Mbed) or 13 to SS/CS
+  #if defined(ARDUINO_ARCH_MBED)
+    
+    #define USE_THIS_SS_PIN       5
+
+    #if defined(BOARD_NAME)
+      #undef BOARD_NAME
+    #endif
+
+    #if defined(ARDUINO_RASPBERRY_PI_PICO) 
+      #define BOARD_TYPE      "MBED RASPBERRY_PI_PICO"
+    #elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
+      #define BOARD_TYPE      "MBED DAFRUIT_FEATHER_RP2040"
+    #elif defined(ARDUINO_GENERIC_RP2040)
+      #define BOARD_TYPE      "MBED GENERIC_RP2040"
+    #else
+      #define BOARD_TYPE      "MBED Unknown RP2040"
+    #endif
+    
+  #else
+  
+    #define USE_THIS_SS_PIN       13
+
+  #endif
+    
+  #define SS_PIN_DEFAULT        USE_THIS_SS_PIN
+
+  // For RPI Pico
+  #warning Use RPI-Pico RP2040 architecture
+
 #else
   // For Mega
   // Default pin 10 to SS/CS
@@ -276,8 +317,8 @@
   // Only one if the following to be true
   #define USE_ETHERNET          false
   #define USE_ETHERNET2         false
-  #define USE_ETHERNET3         false
-  #define USE_ETHERNET_LARGE    true
+  #define USE_ETHERNET3         true
+  #define USE_ETHERNET_LARGE    false
   #define USE_ETHERNET_ESP8266  false 
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
@@ -376,5 +417,8 @@ byte mac[][NUMBER_OF_MAC] =
 
 // Select the IP address according to your local network
 IPAddress ip(192, 168, 2, 222);
+
+// Google DNS Server IP
+IPAddress myDns(8, 8, 8, 8);
 
 #endif    //defines_h

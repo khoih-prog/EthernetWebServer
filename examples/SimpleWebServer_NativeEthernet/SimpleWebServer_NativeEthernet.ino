@@ -39,14 +39,16 @@
 #include <SPI.h>
 #include <NativeEthernet.h>
 
+#define LOCAL_DEBUG           true
+
 #define USING_STATIC_IP       true
 
 byte mac[] = { 0xFE, 0xED, 0xDE, 0xAD, 0xBE, 0xEF }; //physical mac address
 
 #if USING_STATIC_IP
-  IPAddress ip        (192, 168, 2, 127);
-  IPAddress gateway   (192, 168, 2, 1);
-  IPAddress subnet    (255, 255, 255, 0);
+IPAddress ip        (192, 168, 2, 222);
+IPAddress gateway   (192, 168, 2, 1);
+IPAddress subnet    (255, 255, 255, 0);
 #endif
 
 EthernetServer server(80); //server port
@@ -73,8 +75,6 @@ void handleRoot()
 
   hr = hr % 24;
 
-  Serial.print(F("R"));
-
   snprintf(htmlBuffer, BUFFER_SIZE - 1,
            "<html>\
 <head>\
@@ -91,21 +91,23 @@ body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Col
 </body>\
 </html>", BOARD_NAME, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
 
-  //server.send(200, F("text/html"), htmlBuffer);
+#if LOCAL_DEBUG
+  Serial.print(F("R"));
   Serial.println(htmlBuffer);
+#endif
 
   client.println(htmlBuffer);
 }
 
 //////////////////////
 
+//String out;
+
 void drawGraph()
 {
   String out;
   out.reserve(3000);
   char temp[70];
-
-  Serial.print(F("D"));
 
   out += F("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n");
   out += F("<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"1\" stroke=\"rgb(0, 0, 0)\" />\n");
@@ -121,8 +123,10 @@ void drawGraph()
   }
   out += F("</g>\n</svg>\n");
 
-  //server.send(200, F("image/svg+xml"), out);
+#if LOCAL_DEBUG
+  Serial.print(F("D"));
   Serial.println(out);
+#endif
 
   client.println(out);
 }
@@ -155,6 +159,40 @@ void setup()
   Serial.println(Ethernet.localIP());
 }
 
+void heartBeatPrint(void)
+{
+  static int num = 1;
+
+  Serial.print(F("H"));
+
+  if (num == 80)
+  {
+    Serial.println();
+    num = 1;
+  }
+  else if (num++ % 10 == 0)
+  {
+    Serial.print(F(" "));
+  }
+}
+
+void check_status()
+{
+  static unsigned long checkstatus_timeout  = 0;
+
+#define STATUS_CHECK_INTERVAL     10000L
+
+  // Send status report every STATUS_REPORT_INTERVAL (60) seconds: we don't need to send updates frequently if there is no status change.
+  if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
+  {
+#if !LOCAL_DEBUG
+    heartBeatPrint();
+#endif
+
+    checkstatus_timeout = millis() + STATUS_CHECK_INTERVAL;
+  }
+}
+
 void loop()
 {
   // Create a client connection
@@ -174,4 +212,6 @@ void loop()
       }
     }
   }
+
+  check_status();
 }

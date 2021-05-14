@@ -142,7 +142,7 @@ void setup()
       #warning Using M5Stack_Core_ESP32 with W5500 mudule
       #define USE_THIS_SS_PIN   26    // For M5Stack_Core_ESP32 with W5500 mudule
     #else
-      #define USE_THIS_SS_PIN   22    // For ESP32
+      #define USE_THIS_SS_PIN   5   //22    // For ESP32
     #endif
   #endif
 

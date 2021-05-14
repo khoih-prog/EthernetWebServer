@@ -241,6 +241,39 @@ void setup(void)
   
   #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
+#elif ETHERNET_USE_RPIPICO
+
+  pinMode(USE_THIS_SS_PIN, OUTPUT);
+  digitalWrite(USE_THIS_SS_PIN, HIGH);
+  
+  // ETHERNET_USE_RPIPICO, use default SS = 5 or 13
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   5   //13    // For other boards
+  #endif
+
+  ET_LOGWARN1(F("RPIPICO setCsPin:"), USE_THIS_SS_PIN);
+
+  // For other boards, to change if necessary
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+    // Must use library patch for Ethernet, EthernetLarge libraries
+    // For RPI Pico
+    // SCK1: GPIO14,  MOSI1: GPIO15, MISO1: GPIO12, SS/CS1: GPIO13
+    // Default pin 13 to SS/CS
+  
+    //Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (USE_THIS_SS_PIN);
+  
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+    
+  #endif    //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+
 #else   //defined(ESP8266)
   // unknown board, do nothing, use default SS = 10
   #ifndef USE_THIS_SS_PIN
