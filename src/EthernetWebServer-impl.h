@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.3.1
+   Version: 1.4.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -36,6 +36,7 @@
     1.2.1   K Hoang      26/12/2020 Suppress all possible compiler warnings
     1.3.0   K Hoang      27/01/2021 Add WebServer feature to serve from LittleFS/SPIFFS for ESP32/ESP8266 with examples
     1.3.1   K Hoang      29/04/2021 Add SimpleWebServer_NativeEthernet and delete AdvancedWebServer_NativeEthernet example
+    1.4.0   K Hoang      13/05/2021 Add support to RP2040-based boards using Arduino mbed_rp2040 core
  *****************************************************************************************************************************/
 
 #pragma once
@@ -267,7 +268,7 @@ void EthernetWebServer::handleClient()
   
   // KH, fix bug. Have to close the connection
   _currentClient.stop();
-  ET_LOGDEBUG(F("handleClient: Client disconnected"));
+  //ET_LOGDEBUG(F("handleClient: Client disconnected"));
 }
  
 #else
@@ -450,7 +451,9 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
 
   response += _responseHeaders;
   response += "\r\n";
-  _responseHeaders = String();
+  
+  //MR & KH fix
+  _responseHeaders = *(new String());
 }
 
 void EthernetWebServer::send(int code, const char* content_type, const String& content) 
@@ -845,7 +848,8 @@ void EthernetWebServer::_handleRequest()
     _finalizeResponse();
   }
   
-  _currentUri = String();
+  //MR & KH fix
+  _currentUri = *(new String());
 }
 
 void EthernetWebServer::_finalizeResponse() 

@@ -17,6 +17,7 @@
   * [Currently supported Boards](#currently-supported-boards)
   * [Currently supported Ethernet shields/modules](#currently-supported-ethernet-shieldsmodules)
 * [Changelog](#changelog)
+  * [Major Releases v1.4.0](#major-releases-v140)
   * [Releases v1.3.1](#releases-v131)
   * [Major Releases v1.3.0](#major-releases-v130)
   * [Releases v1.2.1](#releases-v121)
@@ -49,6 +50,7 @@
   * [7. For STM32 boards](#7-for-stm32-boards) 
     * [7.1 For STM32 boards to use LAN8720](#71-for-stm32-boards-to-use-lan8720)
     * [7.2 For STM32 boards to use Serial1](#72-for-stm32-boards-to-use-serial1)
+  * [8. For RP2040-based boards using Earle Philhower arduino-pico core](#8-for-rp2040-based-boards-using-earle-philhowers-arduino-pico-core)
 * [Libraries' Patches](#libraries-patches)
   * [1. For application requiring 2K+ HTML page](#1-for-application-requiring-2k-html-page)
   * [2. For Ethernet library](#2-for-ethernet-library)
@@ -117,14 +119,16 @@
   * [1. File AdvancedWebServer.ino](#1-file-advancedwebserverino)
   * [2. File defines.h](#2-file-definesh) 
 * [Debug Terminal Output Samples](#debug-termimal-output-samples)
-  * [1. AdvancedWebServer on NRF52840_FEATHER_EXPRESS with ENC28J60 using EthernetENC Library](#1-advancedwebserver-on-nrf52840_feather_express-with-enc28j60-using-ethernetenc-library)
-  * [2. ENC28J60_WM_Config on ESP32 with ENC28J60 using UIPEthernet Library](#2-enc28j60_wm_config-on-esp32-with-enc28j60-using-uipethernet-library)
-  * [3. SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library](#3-simplewebsocket-on-sam-due-with-w5x00-using-ethernetlarge-library)
-  * [4. DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library](#4-dweetpost-on-nrf52840_feather-with-w5x00-using-ethernet3-library)
-  * [5. ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library](#5-esp32_fs_ethernetwebserver-on-esp32-using-littlefs-with-w5x00-using-ethernet-library)
-  * [6. FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library](#6-fs_ethernetwebserver-on-esp8266-using-littlefs-with-w5x00-using-ethernet-library)
-  * [7. serveStatic on ESP8266 using LittleFS with W5x00 using Ethernet Library](#7-servestatic-on-esp8266-using-littlefs-with-w5x00-using-ethernet-library)
-  * [8. SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet library](#8-simplewebserver_nativeethernet-on-teensy-41-with-nativeethernet-library)
+  * [ 1. AdvancedWebServer on NRF52840_FEATHER_EXPRESS with ENC28J60 using EthernetENC Library](#1-advancedwebserver-on-nrf52840_feather_express-with-enc28j60-using-ethernetenc-library)
+  * [ 2. ENC28J60_WM_Config on ESP32 with ENC28J60 using UIPEthernet Library](#2-enc28j60_wm_config-on-esp32-with-enc28j60-using-uipethernet-library)
+  * [ 3. SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library](#3-simplewebsocket-on-sam-due-with-w5x00-using-ethernetlarge-library)
+  * [ 4. DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library](#4-dweetpost-on-nrf52840_feather-with-w5x00-using-ethernet3-library)
+  * [ 5. ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library](#5-esp32_fs_ethernetwebserver-on-esp32-using-littlefs-with-w5x00-using-ethernet-library)
+  * [ 6. FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library](#6-fs_ethernetwebserver-on-esp8266-using-littlefs-with-w5x00-using-ethernet-library)
+  * [ 7. serveStatic on ESP8266 using LittleFS with W5x00 using Ethernet Library](#7-servestatic-on-esp8266-using-littlefs-with-w5x00-using-ethernet-library)
+  * [ 8. SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet library](#8-simplewebserver_nativeethernet-on-teensy-41-with-nativeethernet-library)
+  * [ 9. AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet3 Library](#9-advancedwebserver-on-mbed-raspberry_pi_pico-with-w5x00-using-ethernet3-library)
+  * [10. MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library](#10-mqttclient_auth-on-mbed-raspberry_pi_pico-with-w5x00-using-ethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -145,6 +149,8 @@
 #### Features
 
 This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32, etc.** boards using Ethernet shields. The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
+
+The **RP2040-based boards, such as RASPBERRY_PI_PICO**, are currently supported using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed). The support to [Earle Philhower's arduino-pico core](https://github.com/earlephilhower/arduino-pico) will be added in the future.
 
 This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer), from v1.1.0, also provides high-level **HTTP and WebSocket Client** with the functions are similar and compatible to those of [**ArduinoHttpClient Library**](https://github.com/arduino-libraries/ArduinoHttpClient)
 
@@ -184,6 +190,7 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
  6. **AVR Mega1280, 2560, ADK.**
  7. ESP32
  8. ESP8266
+ 9. RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed). 
 
 #### Currently supported Ethernet shields/modules
 
@@ -195,6 +202,11 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 ---
 
 ## Changelog
+
+### Major Release v1.4.0
+
+1. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed).
+2. Update examples with new features
 
 ### Releases v1.3.1
 
@@ -285,17 +297,18 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
 ## Prerequisites
 
  1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
+ 2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 6. [`Adafruit SAMD core 1.6.7+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 6. [`Adafruit SAMD core 1.6.8+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  7. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  8. [`Adafruit nRF52 v0.21.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
  9. [`ESP32 Core 1.0.6+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
-10. [`ESP8266 Core 2.7.4+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS. 
-11. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-12. Depending on which Ethernet card you're using:
+10. [`ESP8266 Core 2.7.4+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS.
+11. [`Arduino mbed_rp2040 core 2.0.0+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as RASPBERRY_PI_PICO. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+12. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
+13. Depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
    - [`EthernetLarge library v2.0.0+`](https://github.com/OPEnSLab-OSU/EthernetLarge) for W5100, W5200 and W5500.
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
@@ -492,6 +505,18 @@ theses files must be copied into the corresponding directory:
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_F767ZI/variant.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_L053R8/variant.h`
 
+#### 8. For RP2040-based boards using [Earle Philhower arduino-pico core](https://github.com/earlephilhower/arduino-pico)
+ 
+ ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040, GENERIC_RP2040, etc) boards***, you have to copy the file [RP2040 platform.txt](Packages_Patches/rp2040/hardware/rp2040/1.2.1) into rp2040 directory (~/.arduino15/packages/rp2040/hardware/rp2040/1.2.1). 
+
+Supposing the rp2040 core version is 1.2.1. This file must be copied into the directory:
+
+- `~/.arduino15/packages/rp2040/hardware/rp2040/1.2.1/platform.txt`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/rp2040/hardware/rp2040/x.yy.zz/platform.txt`
 
 ---
 
@@ -1256,6 +1281,39 @@ void setup(void)
   
   #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
+#elif ETHERNET_USE_RPIPICO
+
+  pinMode(USE_THIS_SS_PIN, OUTPUT);
+  digitalWrite(USE_THIS_SS_PIN, HIGH);
+  
+  // ETHERNET_USE_RPIPICO, use default SS = 5 or 13
+  #ifndef USE_THIS_SS_PIN
+    #define USE_THIS_SS_PIN   5   //13    // For other boards
+  #endif
+
+  ET_LOGWARN1(F("RPIPICO setCsPin:"), USE_THIS_SS_PIN);
+
+  // For other boards, to change if necessary
+  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+    // Must use library patch for Ethernet, EthernetLarge libraries
+    // For RPI Pico
+    // SCK1: GPIO14,  MOSI1: GPIO15, MISO1: GPIO12, SS/CS1: GPIO13
+    // Default pin 13 to SS/CS
+  
+    //Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (USE_THIS_SS_PIN);
+  
+  #elif USE_ETHERNET3
+    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+    #ifndef ETHERNET3_MAX_SOCK_NUM
+      #define ETHERNET3_MAX_SOCK_NUM      4
+    #endif
+  
+    Ethernet.setCsPin (USE_THIS_SS_PIN);
+    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+    
+  #endif    //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+
 #else   //defined(ESP8266)
   // unknown board, do nothing, use default SS = 10
   #ifndef USE_THIS_SS_PIN
@@ -1417,6 +1475,13 @@ void loop(void)
     #undef ETHERNET_USE_SAM_DUE
   #endif
   #define ETHERNET_USE_SAM_DUE      true
+#endif
+
+#if ( defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) )
+  #if defined(ETHERNET_USE_RPIPICO)
+    #undef ETHERNET_USE_RPIPICO
+  #endif
+  #define ETHERNET_USE_RPIPICO      true
 #endif
 
 #if defined(ETHERNET_USE_SAMD)
@@ -1615,6 +1680,40 @@ void loop(void)
   
   #define W5500_RST_PORT   21
 
+#elif ETHERNET_USE_RPIPICO
+
+  // For RPI Pico
+  // SCK1: GPIO14,  MOSI1: GPIO15, MISO1: GPIO12, SS/CS1: GPIO13
+  // Default pin 5 (in Mbed) or 13 to SS/CS
+  #if defined(ARDUINO_ARCH_MBED)
+    
+    #define USE_THIS_SS_PIN       5
+
+    #if defined(BOARD_NAME)
+      #undef BOARD_NAME
+    #endif
+
+    #if defined(ARDUINO_RASPBERRY_PI_PICO) 
+      #define BOARD_TYPE      "MBED RASPBERRY_PI_PICO"
+    #elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
+      #define BOARD_TYPE      "MBED DAFRUIT_FEATHER_RP2040"
+    #elif defined(ARDUINO_GENERIC_RP2040)
+      #define BOARD_TYPE      "MBED GENERIC_RP2040"
+    #else
+      #define BOARD_TYPE      "MBED Unknown RP2040"
+    #endif
+    
+  #else
+  
+    #define USE_THIS_SS_PIN       13
+
+  #endif
+    
+  #define SS_PIN_DEFAULT        USE_THIS_SS_PIN
+
+  // For RPI Pico
+  #warning Use RPI-Pico RP2040 architecture
+
 #else
   // For Mega
   // Default pin 10 to SS/CS
@@ -1651,9 +1750,9 @@ void loop(void)
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET          true
+  #define USE_ETHERNET          false
   #define USE_ETHERNET2         false
-  #define USE_ETHERNET3         false
+  #define USE_ETHERNET3         true
   #define USE_ETHERNET_LARGE    false
   #define USE_ETHERNET_ESP8266  false 
   #define USE_ETHERNET_ENC      false
@@ -1754,6 +1853,9 @@ byte mac[][NUMBER_OF_MAC] =
 // Select the IP address according to your local network
 IPAddress ip(192, 168, 2, 222);
 
+// Google DNS Server IP
+IPAddress myDns(8, 8, 8, 8);
+
 #endif    //defines_h
 
 ```
@@ -1772,7 +1874,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer Version v1.3.0
+EthernetWebServer v1.4.0
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -1953,7 +2055,7 @@ The terminal output of **SAM DUE with W5x00 using EthernetLarge Library** runnin
 
 ```
 Starting SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library
-EthernetWebServer Version v1.2.0
+EthernetWebServer v1.4.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 75
@@ -2044,7 +2146,7 @@ The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet3 Library** r
 
 ```
 Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library
-EthernetWebServer Version v1.2.0
+EthernetWebServer v1.4.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET3 ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2079,7 +2181,7 @@ The terminal output of **ESP32 with W5x00 using Ethernet Library** running [ESP3
 
 ```
 Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.3.0
+EthernetWebServer v1.4.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 23
@@ -2130,7 +2232,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [FS
 
 ```
 Starting FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.3.0
+EthernetWebServer v1.4.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2186,7 +2288,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [se
 ```
 Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
 With W5x00 using Ethernet Library
-EthernetWebServer v1.3.0
+EthernetWebServer v1.4.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2229,7 +2331,7 @@ The following are debug terminal output and screen shot when running example [Si
 
 ```
 SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
-EthernetWebServer v1.3.1
+EthernetWebServer v1.4.0
 Debug Level = 3
 Connected! IP address: 192.168.2.127
 [EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
@@ -2272,6 +2374,74 @@ Connected! IP address: 192.168.2.127
 ========================================
 ```
 
+---
+
+
+#### 9. AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet3 Library
+
+The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on **RASPBERRY_PI_PICO** with W5x00 using Ethernet3 Library using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/AdvancedWebServer_RPi_Pico.png">
+</p>
+
+```
+Starting AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet3 Library
+EthernetWebServer v1.4.0
+[EWS] =========== USE_ETHERNET3 ===========
+[EWS] Default SPI pinout:
+[EWS] MOSI: 3
+[EWS] MISO: 4
+[EWS] SCK: 2
+[EWS] SS: 5
+[EWS] =========================
+[EWS] RPIPICO setCsPin: 5
+=========================
+Currently Used SPI pinout:
+MOSI:3
+MISO:4
+SCK:2
+SS:5
+SPI_CS:5
+=========================
+Using mac index = 12
+Connected! IP address: 192.168.2.95
+HTTP EthernetWebServer is @ IP : 192.168.2.95
+..
+```
+
+---
+
+#### 10. MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library
+
+The following are debug terminal output when running example [MQTTClient_Auth](examples/MQTTClient_Auth) on **RASPBERRY_PI_PICO** with W5x00 using Ethernet Library using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
+
+
+```
+Start MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library
+EthernetWebServer v1.4.0
+[EWS] =========== USE_ETHERNET ===========
+[EWS] Default SPI pinout:
+[EWS] MOSI: 3
+[EWS] MISO: 4
+[EWS] SCK: 2
+[EWS] SS: 5
+[EWS] =========================
+[EWS] Board : MBED RASPBERRY_PI_PICO , setCsPin: 5
+=========================
+Currently Used SPI pinout:
+MOSI:3
+MISO:4
+SCK:2
+SS:5
+=========================
+Using mac index = 10
+Connected! IP address: 192.168.2.94
+Attempting MQTT connection to broker.emqx.io...connected
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library
+```
+
 
 ---
 ---
@@ -2298,6 +2468,11 @@ If you get compilation errors, more often than not, you may need to install a ne
 ---
 
 ## Releases
+
+### Major Release v1.4.0
+
+1. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed).
+2. Update examples with new features
 
 ### Releases v1.3.1
 
@@ -2418,6 +2593,7 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
  6. **AVR Mega1280, 2560, ADK.**
  7. ESP32
  8. ESP8266
+ 9. RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed). 
  
 #### Supported Ethernet shields/modules:
 
@@ -2447,6 +2623,7 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 3. Support more types of boards using Ethernet shields.
 4. Support more non-compatible Ethernet Libraries such as Ethernet_Shield_W5200, EtherCard, EtherSia
 5. Add mDNS features.
+6. Add support to RP2040-based boards such as RASPBERRY_PI_PICO, using [Earle Philhower's arduino-pico core](https://github.com/earlephilhower/arduino-pico)
 
 ### DONE
 
@@ -2462,7 +2639,8 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 10. Add support to [`EthernetENC`](https://github.com/jandrassy/EthernetENC)
 11. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
 12. Add **High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client**
- 
+13. Add support to RP2040-based boards such as RASPBERRY_PI_PICO, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
+
 ---
 ---
 
