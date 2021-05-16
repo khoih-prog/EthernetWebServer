@@ -30,7 +30,7 @@ Arduino IDE version: 1.8.13
 RASPBERRY_PI_PICO board
 ArduinoCore-mbed v2.0.0
 OS: Ubuntu 20.04 LTS
-Linux xy-Inspiron-3593 5.4.0-72-generic #80-Ubuntu SMP Mon Apr 12 17:35:00 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+Linux xy-Inspiron-3593 5.4.0-73-generic #82-Ubuntu SMP Wed Apr 14 17:39:42 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 
 Context:
 I encountered a crash while trying to use the Timer Interrupt.
