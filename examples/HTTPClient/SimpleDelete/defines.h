@@ -246,11 +246,11 @@
   #define W5500_RST_PORT   21
 
 #elif ETHERNET_USE_RPIPICO
-
-  // For RPI Pico
-  // SCK1: GPIO14,  MOSI1: GPIO15, MISO1: GPIO12, SS/CS1: GPIO13
-  // Default pin 5 (in Mbed) or 13 to SS/CS
+  
+  // Default pin 5 (in Mbed) or 17 to SS/CS
   #if defined(ARDUINO_ARCH_MBED)
+    // For RPI Pico using Arduino Mbed RP2040 core
+    // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
     
     #define USE_THIS_SS_PIN       5
 
@@ -269,8 +269,9 @@
     #endif
     
   #else
-  
-    #define USE_THIS_SS_PIN       13
+    // For RPI Pico using E. Philhower RP2040 core
+  // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
+    #define USE_THIS_SS_PIN       17
 
   #endif
     
