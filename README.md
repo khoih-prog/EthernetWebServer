@@ -130,8 +130,8 @@
   * [ 8. SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet library](#8-simplewebserver_nativeethernet-on-teensy-41-with-nativeethernet-library)
   * [ 9. AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet3 Library](#9-advancedwebserver-on-mbed-raspberry_pi_pico-with-w5x00-using-ethernet3-library)
   * [10. MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library](#10-mqttclient_auth-on-mbed-raspberry_pi_pico-with-w5x00-using-ethernet-library)
-  * [11. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library](#9-advancedwebserver-on-raspberry_pi_pico-with-w5x00-using-ethernetlarge-library)
-  * [12. UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library](#9-udpntpclient-on-raspberry_pi_pico-with-w5x00-using-ethernetlarge-library)
+  * [11. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library](#11-advancedwebserver-on-raspberry_pi_pico-with-w5x00-using-ethernetlarge-library)
+  * [12. UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library](#12-udpntpclient-on-raspberry_pi_pico-with-w5x00-using-ethernetlarge-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -2725,7 +2725,6 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 3. Support more types of boards using Ethernet shields.
 4. Support more non-compatible Ethernet Libraries such as Ethernet_Shield_W5200, EtherCard, EtherSia
 5. Add mDNS features.
-6. Add support to RP2040-based boards such as RASPBERRY_PI_PICO, using [Earle Philhower's arduino-pico core](https://github.com/earlephilhower/arduino-pico)
 
 ### DONE
 
