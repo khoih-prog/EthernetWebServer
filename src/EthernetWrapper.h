@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.4.0
+   Version: 1.5.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -37,6 +37,7 @@
     1.3.0   K Hoang      27/01/2021 Add WebServer feature to serve from LittleFS/SPIFFS for ESP32/ESP8266 with examples
     1.3.1   K Hoang      29/04/2021 Add SimpleWebServer_NativeEthernet and delete AdvancedWebServer_NativeEthernet example
     1.4.0   K Hoang      13/05/2021 Add support to RP2040-based boards using Arduino mbed_rp2040 core
+    1.5.0   K Hoang      15/05/2021 Add support to RP2040-based boards using Arduino-pico rp2040 core
  *****************************************************************************************************************************/
 #ifndef EthernetWrapper_h
 #define EthernetWrapper_h
@@ -246,7 +247,46 @@
               
       #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
 
-    #else   //defined(ESP8266)
+    #elif ETHERNET_USE_RPIPICO
+
+        pinMode(USE_THIS_SS_PIN, OUTPUT);
+        digitalWrite(USE_THIS_SS_PIN, HIGH);
+        
+        // ETHERNET_USE_RPIPICO, use default SS = 5 or 17
+        #ifndef USE_THIS_SS_PIN
+          #if defined(ARDUINO_ARCH_MBED)
+            #define USE_THIS_SS_PIN   5     // For Arduino Mbed core
+          #else  
+            #define USE_THIS_SS_PIN   17    // For E.Philhower core
+          #endif
+        #endif
+
+        ET_LOGWARN1(F("RPIPICO setCsPin:"), USE_THIS_SS_PIN);
+
+        // For other boards, to change if necessary
+        #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+          // Must use library patch for Ethernet, EthernetLarge libraries
+          // For RPI Pico using Arduino Mbed RP2040 core
+          // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
+          // For RPI Pico using E. Philhower RP2040 core
+          // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
+          // Default pin 5/17 to SS/CS
+        
+          //Ethernet.setCsPin (USE_THIS_SS_PIN);
+          Ethernet.init (USE_THIS_SS_PIN);
+        
+        #elif USE_ETHERNET3
+          // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+          #ifndef ETHERNET3_MAX_SOCK_NUM
+            #define ETHERNET3_MAX_SOCK_NUM      4
+          #endif
+        
+          Ethernet.setCsPin (USE_THIS_SS_PIN);
+          Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+          
+        #endif    //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+
+      #else   //defined(ESP8266)
       // unknown board, do nothing, use default SS = 10
       #ifndef USE_THIS_SS_PIN
         #define USE_THIS_SS_PIN   10    // For other boards
