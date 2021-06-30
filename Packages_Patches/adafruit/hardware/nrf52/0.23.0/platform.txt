@@ -1,0 +1,163 @@
+# Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
+# Copyright (c) 2016 Sandeep Mistry All right reserved.
+# Copyright (c) 2017 Adafruit Industries.  All rights reserved.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+name=Adafruit nRF52 Boards
+version=0.23.0
+
+# Compile variables
+# -----------------
+
+compiler.warning_flags=-w
+compiler.warning_flags.none=-w
+compiler.warning_flags.default=
+compiler.warning_flags.more=-Wall
+compiler.warning_flags.all=-Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wno-pointer-arith
+
+# Allow changing optimization settings via platform.local.txt / boards.local.txt
+compiler.optimization_flag=-Ofast
+
+compiler.path={runtime.tools.arm-none-eabi-gcc.path}/bin/
+compiler.c.cmd=arm-none-eabi-gcc
+compiler.c.flags=-mcpu={build.mcu} -mthumb -c -g {compiler.warning_flags} {build.float_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -MMD
+compiler.c.elf.cmd=arm-none-eabi-gcc
+compiler.c.elf.flags={compiler.optimization_flag} -Wl,--gc-sections -save-temps
+compiler.S.cmd=arm-none-eabi-gcc
+compiler.S.flags=-mcpu={build.mcu} -mthumb -mabi=aapcs {compiler.optimization_flag} -g -c {build.float_flags} -x assembler-with-cpp
+
+compiler.cpp.cmd=arm-none-eabi-g++
+compiler.cpp.flags=-mcpu={build.mcu} -mthumb -c -g {compiler.warning_flags} {build.float_flags} -std=gnu++11 -ffunction-sections -fdata-sections -fno-threadsafe-statics -nostdlib --param max-inline-insns-single=500 -fno-rtti -fno-exceptions -MMD
+compiler.ar.cmd=arm-none-eabi-ar
+compiler.ar.flags=rcs
+compiler.objcopy.cmd=arm-none-eabi-objcopy
+compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
+compiler.elf2bin.flags=-O binary
+compiler.elf2bin.cmd=arm-none-eabi-objcopy
+compiler.elf2hex.flags=-O ihex
+compiler.elf2hex.cmd=arm-none-eabi-objcopy
+compiler.ldflags=-mcpu={build.mcu} -mthumb {build.float_flags} -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align --specs=nano.specs --specs=nosys.specs
+compiler.size.cmd=arm-none-eabi-size
+
+# this can be overriden in boards.txt
+build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16 -u _printf_float
+build.debug_flags=-DCFG_DEBUG=0
+build.logger_flags=-DCFG_LOGGER=1
+build.sysview_flags=-DCFG_SYSVIEW=0
+
+# USB flags
+build.flags.usb= -DUSBCON -DUSE_TINYUSB -DUSB_VID={build.vid} -DUSB_PID={build.pid} '-DUSB_MANUFACTURER={build.usb_manufacturer}' '-DUSB_PRODUCT={build.usb_product}'
+
+# These can be overridden in platform.local.txt
+compiler.c.extra_flags=
+compiler.c.elf.extra_flags=
+compiler.cpp.extra_flags=
+compiler.S.extra_flags=
+compiler.ar.extra_flags=
+compiler.libraries.ldflags=
+compiler.elf2bin.extra_flags=
+compiler.elf2hex.extra_flags=
+
+compiler.arm.cmsis.c.flags="-I{runtime.tools.CMSIS-5.7.0.path}/CMSIS/Core/Include/" "-I{runtime.tools.CMSIS-5.7.0.path}/CMSIS/DSP/Include/"
+compiler.arm.cmsis.ldflags="-L{runtime.tools.CMSIS-5.7.0.path}/CMSIS/DSP/Lib/GCC/" -larm_cortexM4lf_math
+
+# common compiler for nrf
+rtos.path={build.core.path}/freertos
+nordic.path={build.core.path}/nordic
+
+# build.logger_flags and build.sysview_flags are intentionally empty,
+# to allow modification via a user's own boards.local.txt or platform.local.txt files.
+build.flags.nrf= -DSOFTDEVICE_PRESENT -DARDUINO_NRF52_ADAFRUIT -DNRF52_SERIES -DDX_CC_TEE -DLFS_NAME_MAX=64 {compiler.optimization_flag} {build.debug_flags} {build.logger_flags} {build.sysview_flags} {compiler.arm.cmsis.c.flags} "-I{nordic.path}" "-I{nordic.path}/nrfx" "-I{nordic.path}/nrfx/hal" "-I{nordic.path}/nrfx/mdk" "-I{nordic.path}/nrfx/soc" "-I{nordic.path}/nrfx/drivers/include" "-I{nordic.path}/nrfx/drivers/src" "-I{nordic.path}/softdevice/{build.sd_name}_nrf52_{build.sd_version}_API/include" "-I{nordic.path}/softdevice/{build.sd_name}_nrf52_{build.sd_version}_API/include/nrf52" "-I{rtos.path}/Source/include" "-I{rtos.path}/config" "-I{rtos.path}/portable/GCC/nrf52" "-I{rtos.path}/portable/CMSIS/nrf52" "-I{build.core.path}/sysview/SEGGER" "-I{build.core.path}/sysview/Config" "-I{runtime.platform.path}/libraries/Adafruit_TinyUSB_Arduino/src/arduino"
+
+# Compile patterns
+# ----------------
+
+## Compile c files
+## KH Add -DBOARD_NAME="{build.board}"
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DBOARD_NAME="{build.board}" -DARDUINO_ARCH_{build.arch} '-DARDUINO_BSP_VERSION="{version}"' {compiler.c.extra_flags} {build.extra_flags} {build.flags.nrf} {includes} "{source_file}" -o "{object_file}"
+
+## Compile c++ files
+## KH Add -DBOARD_NAME="{build.board}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DBOARD_NAME="{build.board}" -DARDUINO_ARCH_{build.arch} '-DARDUINO_BSP_VERSION="{version}"' {compiler.cpp.extra_flags} {build.extra_flags} {build.flags.nrf} {includes} "{source_file}" -o "{object_file}"
+
+## Compile S files
+## KH Add -DBOARD_NAME="{build.board}"
+recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DBOARD_NAME="{build.board}" -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {build.flags.nrf} {includes} "{source_file}" -o "{object_file}"
+
+## Create archives
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
+
+## Combine gc-sections, archives, and objects
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" "-L{build.path}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-L{build.core.path}/linker" "-T{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" {object_files} -Wl,--start-group {compiler.arm.cmsis.ldflags} -lm "{build.path}/{archive_file}" {compiler.libraries.ldflags} -Wl,--end-group
+
+## Create output (bin file)
+#recipe.objcopy.bin.pattern="{compiler.path}{compiler.elf2bin.cmd}" {compiler.elf2bin.flags} {compiler.elf2bin.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+
+## Create output (hex file)
+recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+
+## Create dfu package zip file
+recipe.objcopy.zip.pattern="{tools.nrfutil.cmd}" dfu genpkg --dev-type 0x0052 --sd-req {build.sd_fwid} --application "{build.path}/{build.project_name}.hex" "{build.path}/{build.project_name}.zip"
+
+## Create uf2 file
+#recipe.objcopy.uf2.pattern=python "{runtime.platform.path}/tools/uf2conv/uf2conv.py" -f 0xADA52840 -c -o "{build.path}/{build.project_name}.uf2" "{build.path}/{build.project_name}.hex"
+
+## Save bin
+recipe.output.tmp_file_bin={build.project_name}.bin
+recipe.output.save_file_bin={build.project_name}.save.bin
+
+## Save hex
+recipe.output.tmp_file_hex={build.project_name}.hex
+recipe.output.save_file_hexu={build.project_name}.save.hex
+
+## Compute size
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+recipe.size.regex=^(?:\.text|\.data|)\s+([0-9]+).*
+recipe.size.regex.data=^(?:\.data|\.bss)\s+([0-9]+).*
+
+## Export Compiled Binary
+recipe.output.tmp_file={build.project_name}.hex
+recipe.output.save_file={build.project_name}.{build.variant}.hex
+
+#***************************************************
+# adafruit-nrfutil for uploading
+# https://github.com/adafruit/Adafruit_nRF52_nrfutil
+# pre-built binaries are provided for macos and windows
+#***************************************************
+tools.nrfutil.cmd=adafruit-nrfutil
+tools.nrfutil.cmd.windows={runtime.platform.path}/tools/adafruit-nrfutil/win32/adafruit-nrfutil.exe
+tools.nrfutil.cmd.macosx={runtime.platform.path}/tools/adafruit-nrfutil/macos/adafruit-nrfutil
+
+tools.nrfutil.upload.params.verbose=--verbose
+tools.nrfutil.upload.params.quiet=
+tools.nrfutil.upload.pattern="{cmd}" {upload.verbose} dfu serial -pkg "{build.path}/{build.project_name}.zip" -p {serial.port} -b 115200 --singlebank
+
+#***************************************************
+# Burning bootloader with either jlink or nrfutil
+#***************************************************
+
+# Bootloader version
+tools.bootburn.bootloader.file={runtime.platform.path}/bootloader/{build.variant}/{build.variant}_bootloader-0.6.0_{build.sd_name}_{build.sd_version}
+
+tools.bootburn.bootloader.params.verbose=
+tools.bootburn.bootloader.params.quiet=
+tools.bootburn.bootloader.pattern={program.burn_pattern}
+
+# erase flash page while programming
+tools.bootburn.erase.params.verbose=
+tools.bootburn.erase.params.quiet=
+tools.bootburn.erase.pattern=
+
