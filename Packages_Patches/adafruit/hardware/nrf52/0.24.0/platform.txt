@@ -34,7 +34,11 @@ compiler.optimization_flag=-Ofast
 compiler.path={runtime.tools.arm-none-eabi-gcc.path}/bin/
 compiler.c.cmd=arm-none-eabi-gcc
 compiler.c.flags=-mcpu={build.mcu} -mthumb -c -g {compiler.warning_flags} {build.float_flags} -std=gnu11 -ffunction-sections -fdata-sections -nostdlib --param max-inline-insns-single=500 -MMD
-compiler.c.elf.cmd=arm-none-eabi-gcc
+
+# KH, Error here to use gcc, must use g++
+#compiler.c.elf.cmd=arm-none-eabi-gcc
+compiler.c.elf.cmd=arm-none-eabi-g++
+
 compiler.c.elf.flags={compiler.optimization_flag} -Wl,--gc-sections -save-temps
 compiler.S.cmd=arm-none-eabi-gcc
 compiler.S.flags=-mcpu={build.mcu} -mthumb -mabi=aapcs {compiler.optimization_flag} -g -c {build.float_flags} -x assembler-with-cpp
