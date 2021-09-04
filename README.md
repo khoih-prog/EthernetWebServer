@@ -17,6 +17,7 @@
   * [Currently supported Boards](#currently-supported-boards)
   * [Currently supported Ethernet shields/modules](#currently-supported-ethernet-shieldsmodules)
 * [Changelog](#changelog)
+  * [Major Releases v1.6.0](#major-releases-v160)
   * [Major Releases v1.5.0](#major-releases-v150)
   * [Major Releases v1.4.0](#major-releases-v140)
   * [Releases v1.3.1](#releases-v131)
@@ -118,6 +119,11 @@
     * [11. SimplePost](examples/HTTPClient/SimplePost)
     * [12. SimplePut](examples/HTTPClient/SimplePut)
     * [13. SimpleWebSocket](examples/HTTPClient/SimpleWebSocket)
+  * [New Examples for Teensy 4.1 QNEthernet](#new-examples-for-teensy-41-qnethernet)
+    * [ 1. **AdvancedWebServer**](examples/QNEthernet/AdvancedWebServer)
+    * [ 2. **MQTTClient_Auth**](examples/QNEthernet/MQTTClient_Auth)
+    * [ 3. **MQTTClient_Basic**](examples/QNEthernet/MQTTClient_Basic) 
+    * [ 4. **MQTT_ThingStream**](examples/QNEthernet/MQTT_ThingStream) 
 * [Example AdvancedWebServer](#example-advancedwebserver)
   * [1. File AdvancedWebServer.ino](#1-file-advancedwebserverino)
   * [2. File defines.h](#2-file-definesh) 
@@ -134,6 +140,9 @@
   * [10. MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library](#10-mqttclient_auth-on-mbed-raspberry_pi_pico-with-w5x00-using-ethernet-library)
   * [11. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library](#11-advancedwebserver-on-raspberry_pi_pico-with-w5x00-using-ethernetlarge-library)
   * [12. UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library](#12-udpntpclient-on-raspberry_pi_pico-with-w5x00-using-ethernetlarge-library)
+  * [13. AdvancedWebServer on Teensy 4.1 using NativeEthernet Library](#13-advancedwebserver-on-teensy-41-using-nativeethernet-library)
+  * [14. AdvancedWebServer on Teensy 4.1 using QNEthernet Library](#14-advancedwebserver-on-teensy-41-using-qnethernet-library)
+  * [15. MQTTClient_Auth on Teensy 4.1 using QNEthernet Library](#15-mqttclient_auth-on-teensy-41-using-qnethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -155,7 +164,7 @@
 
 This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32, RP2040-based, etc.** boards using Ethernet shields. The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
 
-The **RP2040-based boards, such as RASPBERRY_PI_PICO**, are currently supported using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core v1.3.1+](https://github.com/earlephilhower/arduino-pico).
+The **RP2040-based boards, such as RASPBERRY_PI_PICO**, are currently supported using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
 
 This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer), from v1.1.0, also provides high-level **HTTP and WebSocket Client** with the functions are similar and compatible to those of [**ArduinoHttpClient Library**](https://github.com/arduino-libraries/ArduinoHttpClient)
 
@@ -201,12 +210,18 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 
 1. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
 2. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
-3. Teensy 4.1 built-in NativeEthernet using [NativeEthernet Library](https://github.com/vjmuzik/NativeEthernet)
+3. Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
+4. Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
 
 ---
 ---
 
 ## Changelog
+
+### Major Releases v1.6.0
+
+1. Add support to [QNEthernet Library](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet
+2. Update examples with new features
 
 ### Major Releases v1.5.0
 
@@ -306,18 +321,18 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
 
 ## Prerequisites
 
- 1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 1. [`Arduino IDE 1.8.15+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
- 3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
+ 3. [`Teensy core v1.54+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 6. [`Adafruit SAMD core 1.6.8+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 6. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  7. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
- 8. [`Adafruit nRF52 v0.21.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
- 9. [`ESP32 Core 1.0.6+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
-10. [`ESP8266 Core 3.0.0+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS.
-11. [`Arduino mbed_rp2040 core 2.1.0+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as RASPBERRY_PI_PICO. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-12. [`Earle Philhower's arduino-pico core v1.4.0+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+ 8. [`Adafruit nRF52 v1.0.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
+ 9. [`ESP32 Core 2.0.0+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
+10. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS.
+11. [`Arduino mbed_rp2040 core 2.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as RASPBERRY_PI_PICO. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+12. [`Earle Philhower's arduino-pico core v1.9.4+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
 13. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 14. Depending on which Ethernet card you're using:
    - [`Ethernet library v2.0.0+`](https://github.com/arduino-libraries/Ethernet) for W5100, W5200 and W5500.  [![GitHub release](https://img.shields.io/github/release/arduino-libraries/Ethernet.svg)](https://github.com/arduino-libraries/Ethernet/releases/latest)
@@ -325,8 +340,9 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
    - [`Ethernet2 library v1.0.4+`](https://github.com/khoih-prog/Ethernet2) for W5500. [![GitHub release](https://img.shields.io/github/release/adafruit/Ethernet2.svg)](https://github.com/adafruit/Ethernet2/releases/latest)
    - [`Ethernet3 library v1.5.5+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip. [![GitHub release](https://img.shields.io/github/release/sstaub/Ethernet3.svg)](https://github.com/sstaub/Ethernet3/releases/latest)
    - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
-   - [`UIPEthernet library v2.0.9+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
-   - [`NativeEthernet Library version stable111+`](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1 built-in NativeEthernet. **New**
+   - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
+   - [`NativeEthernet Library version stable111+`](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1 built-in NativeEthernet.
+   - [`QNEthernet Library version v0.4.0+`](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in NativeEthernet. **New**
 
 ---
 
@@ -358,16 +374,16 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 #### 1. For Adafruit nRF52840 and nRF52832 boards
 
-**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.21.0](Packages_Patches/adafruit/hardware/nrf52/0.21.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0). 
+**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 1.0.0](Packages_Patches/adafruit/hardware/nrf52/1.0.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/1.0.0). 
 
-Supposing the Adafruit nRF52 version is 0.21.0. These files must be copied into the directory:
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/boards.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B302_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B302_ublox/variant.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B112_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B112_ublox/variant.cpp`
-- **`~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/cores/nRF5/Udp.h`**
+Supposing the Adafruit nRF52 version is 1.0.0. These files must be copied into the directory:
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.0.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.0.0/boards.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.0.0/variants/NINA_B302_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.0.0/variants/NINA_B302_ublox/variant.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.0.0/variants/NINA_B112_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/1.0.0/variants/NINA_B112_ublox/variant.cpp`
+- **`~/.arduino15/packages/adafruit/hardware/nrf52/1.0.0/cores/nRF5/Udp.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 These files must be copied into the directory:
@@ -414,7 +430,7 @@ This file must be copied into the directory:
 
 #### 4. For Arduino SAMD boards
  
- ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.10](Packages_Patches/arduino/hardware/samd/1.8.10) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.10).
+ ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.11](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
  
 #### For core version v1.8.10+
 
@@ -453,11 +469,11 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
 
 #### 5. For Adafruit SAMD boards
  
- ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.7) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.7). 
+ ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.7.5) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.5). 
 
-Supposing the Adafruit SAMD core version is 1.6.7. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.5. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.7/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.7.5/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -531,7 +547,7 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/rp2040/hardware/rp2040/x.yy.zz/platform.txt`
 
-With core after v1.4.0, this step is not necessary anymore thanks to the PR [Add -DBOARD_NAME="{build.board}" #136](https://github.com/earlephilhower/arduino-pico/pull/136).
+With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add -DBOARD_NAME="{build.board}" #136](https://github.com/earlephilhower/arduino-pico/pull/136).
 
 #### 8.2 To avoid compile error relating to microsecondsToClockCycles
 
@@ -546,7 +562,7 @@ This file must be copied to replace:
 
 - `~/.arduino15/packages/rp2040/hardware/rp2040/x.yy.zz/cores/rp2040/Arduino.h`
 
-With core after v1.4.0, this step is not necessary anymore thanks to the PR [Add defs for compatibility #142](https://github.com/earlephilhower/arduino-pico/pull/142).
+With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add defs for compatibility #142](https://github.com/earlephilhower/arduino-pico/pull/142).
 
 ---
 
@@ -681,13 +697,15 @@ then select **one and only one** Ethernet library to use as follows:
 #define USE_UIP_ETHERNET        false
 
 // Only one if the following to be true
-#define USE_ETHERNET          true
-#define USE_ETHERNET2         false
-#define USE_ETHERNET3         false
-#define USE_ETHERNET_LARGE    false
-#define USE_ETHERNET_ESP8266  false 
-#define USE_ETHERNET_ENC      false
-#define USE_CUSTOM_ETHERNET   false
+#define USE_NATIVE_ETHERNET     false
+#define USE_QN_ETHERNET         false
+#define USE_ETHERNET            true
+#define USE_ETHERNET2           false
+#define USE_ETHERNET3           false
+#define USE_ETHERNET_LARGE      false
+#define USE_ETHERNET_ESP8266    false 
+#define USE_ETHERNET_ENC        false
+#define USE_CUSTOM_ETHERNET     false
 ```
 
 To use W5x00 Ethernet, for example using EthernetLarge library
@@ -696,6 +714,8 @@ To use W5x00 Ethernet, for example using EthernetLarge library
 #define USE_UIP_ETHERNET        false
 
 // Only one if the following to be true
+#define USE_NATIVE_ETHERNET     false
+#define USE_QN_ETHERNET         false
 #define USE_ETHERNET            false
 #define USE_ETHERNET2           false
 #define USE_ETHERNET3           false
@@ -711,6 +731,8 @@ To use W5x00 Ethernet, for example using EthernetLarge library
 #define USE_UIP_ETHERNET        false
 
 // Only one if the following to be true
+#define USE_NATIVE_ETHERNET     false
+#define USE_QN_ETHERNET         false
 #define USE_ETHERNET            false
 #define USE_ETHERNET2           false
 #define USE_ETHERNET3           false
@@ -726,6 +748,8 @@ To use W5x00 Ethernet, for example using EthernetLarge library
 #define USE_UIP_ETHERNET        true
 
 // Only one if the following to be true
+#define USE_NATIVE_ETHERNET     false
+#define USE_QN_ETHERNET         false
 #define USE_ETHERNET            false
 #define USE_ETHERNET2           false
 #define USE_ETHERNET3           false
@@ -741,6 +765,8 @@ To use W5x00 Ethernet, for example using EthernetLarge library
 #define USE_UIP_ETHERNET        false
 
 // Only one if the following to be true
+#define USE_NATIVE_ETHERNET     false
+#define USE_QN_ETHERNET         false
 #define USE_ETHERNET            false
 #define USE_ETHERNET2           false
 #define USE_ETHERNET3           true
@@ -757,6 +783,8 @@ For example, Ethernet_XYZ library uses **Ethernet_XYZ.h**
 #define USE_UIP_ETHERNET        false
 
 // Only one if the following to be true
+#define USE_NATIVE_ETHERNET     false
+#define USE_QN_ETHERNET         false
 #define USE_ETHERNET            false
 #define USE_ETHERNET2           false
 #define USE_ETHERNET3           false
@@ -781,6 +809,7 @@ For example, Ethernet_XYZ library uses **Ethernet_XYZ.h**
       #define BOARD_TYPE      "TEENSY 4.1"
       // Use true for NativeEthernet Library, false if using other Ethernet libraries
       #define USE_NATIVE_ETHERNET     true
+      #define USE_QN_ETHERNET         false
     #elif defined(ARDUINO_TEENSY40)
       #define BOARD_TYPE      "TEENSY 4.0"
     #else
@@ -799,6 +828,7 @@ For example, Ethernet_XYZ library uses **Ethernet_XYZ.h**
     #define BOARD_TYPE      "TEENSY 4.1"
     // Use true for NativeEthernet Library, false if using other Ethernet libraries
     #define USE_NATIVE_ETHERNET     false
+    #define USE_QN_ETHERNET         false
   #elif defined(ARDUINO_TEENSY40)
     #define BOARD_TYPE      "TEENSY 4.0"
   #else
@@ -818,6 +848,46 @@ For example, Ethernet_XYZ library uses **Ethernet_XYZ.h**
 #define USE_ETHERNET_ENC        false
 #define USE_CUSTOM_ETHERNET     false  
 ```
+
+- Only for Teensy 4.1, to use QNEthernet library
+
+```
+#if ( defined(CORE_TEENSY) && defined(__IMXRT1062__) && defined(ARDUINO_TEENSY41) ) 
+  // For Teensy 4.1
+  #define BOARD_TYPE      "TEENSY 4.1"
+  // Use true for NativeEthernet Library, false if using other Ethernet libraries
+  #define USE_NATIVE_ETHERNET     false
+  #define USE_QN_ETHERNET         true
+#else
+  #error Only Teensy 4.1 supported
+#endif
+
+#define USE_ETHERNET_WRAPPER    false
+
+// Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
+// Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
+
+#define USE_UIP_ETHERNET        false
+#define USE_ETHERNET            false
+#define USE_ETHERNET2           false
+#define USE_ETHERNET3           false
+#define USE_ETHERNET_LARGE      false
+#define USE_ETHERNET_ESP8266    false 
+#define USE_ETHERNET_ENC        false
+#define USE_CUSTOM_ETHERNET     false
+
+#if USE_NATIVE_ETHERNET
+  #include "NativeEthernet.h"
+  #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
+  #define SHIELD_TYPE           "using NativeEthernet"
+#elif USE_QN_ETHERNET
+  #include "QNEthernet.h"
+  using namespace qindesign::network;
+  #warning Using QNEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
+  #define SHIELD_TYPE           "using QNEthernet"  
+#endif 
+```
+
 ---
 
 #### Important:
@@ -1094,7 +1164,12 @@ Example:
 12. [SimplePut](examples/HTTPClient/SimplePut)
 13. [SimpleWebSocket](examples/HTTPClient/SimpleWebSocket)
 
+#### New Examples for Teensy 4.1 QNEthernet
 
+ 1. [AdvancedWebServer](examples/QNEthernet/AdvancedWebServer)
+ 2. [**MQTTClient_Auth**](examples/QNEthernet/MQTTClient_Auth)
+ 3. [**MQTTClient_Basic**](examples/QNEthernet/MQTTClient_Basic)
+ 4. [**MQTT_ThingStream**](examples/QNEthernet/MQTT_ThingStream)
 
 ---
 ---
@@ -1911,7 +1986,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2092,7 +2167,7 @@ The terminal output of **SAM DUE with W5x00 using EthernetLarge Library** runnin
 
 ```
 Starting SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 75
@@ -2183,7 +2258,7 @@ The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet3 Library** r
 
 ```
 Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET3 ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2218,7 +2293,7 @@ The terminal output of **ESP32 with W5x00 using Ethernet Library** running [ESP3
 
 ```
 Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 23
@@ -2269,7 +2344,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [FS
 
 ```
 Starting FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2325,7 +2400,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [se
 ```
 Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
 With W5x00 using Ethernet Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2368,7 +2443,7 @@ The following are debug terminal output and screen shot when running example [Si
 
 ```
 SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 Debug Level = 3
 Connected! IP address: 192.168.2.127
 [EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
@@ -2424,7 +2499,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet3 Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [EWS] =========== USE_ETHERNET3 ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2456,7 +2531,7 @@ The following are debug terminal output when running example [MQTTClient_Auth](e
 
 ```
 Start MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [EWS] =========== USE_ETHERNET ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2491,7 +2566,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2525,7 +2600,7 @@ The following are debug terminal output and screen shot when running example [Ud
 
 ```
 Start UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-EthernetWebServer v1.5.0
+EthernetWebServer v1.6.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2558,6 +2633,67 @@ Unix time = 1621129866
 The UTC time is 1:51:06
 ```
 
+---
+
+#### 13. AdvancedWebServer on Teensy 4.1 using NativeEthernet Library
+
+The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/QNEthernet/AdvancedWebServer) on **Teensy 4.1** using NativeEthernet Library
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/AdvancedWebServer_NativeEthernet.png">
+</p>
+
+```
+Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
+EthernetWebServer v1.6.0
+[EWS] =========== USE_QN_ETHERNET ===========
+Initialize Ethernet using static IP => IP Address = 192.168.2.222
+HTTP EthernetWebServer is @ IP : 192.168.2.222
+..........
+```
+
+
+---
+
+
+#### 14. AdvancedWebServer on Teensy 4.1 using QNEthernet Library
+
+The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/QNEthernet/AdvancedWebServer) on **Teensy 4.1** using QNEthernet Library
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/AdvancedWebServer_QNEthernet.png">
+</p>
+
+```
+Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
+EthernetWebServer v1.6.0
+[EWS] =========== USE_QN_ETHERNET ===========
+Initialize Ethernet using static IP => IP Address = 192.168.2.222
+HTTP EthernetWebServer is @ IP : 192.168.2.222
+.......... .......... .......... .......... .......... ..
+```
+
+---
+
+#### 15. MQTTClient_Auth on TEENSY 4.1 with using QNEthernet
+
+The following are debug terminal output and screen shot when running example [MQTTClient_Auth](examples/QNEthernet/MQTTClient_Auth) on **Teensy 4.1** using QNEthernet Library
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/AdvancedWebServer_QNEthernet.png">
+</p>
+
+```
+Start MQTTClient_Auth on TEENSY 4.1 using QNEthernet
+EthernetWebServer v1.6.0
+[EWS] =========== USE_QN_ETHERNET ===========
+Initialize Ethernet using static IP => IP Address = 192.168.2.222
+Attempting MQTT connection to broker.emqx.io...connected
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on TEENSY 4.1 using QNEthernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on TEENSY 4.1 using QNEthernet
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on TEENSY 4.1 using QNEthernet
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on TEENSY 4.1 using QNEthernet
+```
 
 ---
 ---
@@ -2584,6 +2720,11 @@ If you get compilation errors, more often than not, you may need to install a ne
 ---
 
 ## Releases
+
+### Major Releases v1.6.0
+
+1. Add support to [QNEthernet Library](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet
+2. Update examples with new features
 
 ### Major Releases v1.5.0
 
@@ -2722,6 +2863,9 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 
 1. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
 2. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
+3. Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
+4. Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
+
 
 The library provides these features:
 
@@ -2763,7 +2907,8 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 12. Add **High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client**
 13. Add support to RP2040-based boards such as RASPBERRY_PI_PICO, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
 14. Add support to RP2040-based boards such as RASPBERRY_PI_PICO, using [**Earle Philhower's arduino-pico** core v1.3.1+](https://github.com/earlephilhower/arduino-pico)
-
+15. Add support to Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
+16. Add support to Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/ssilverman/QNEthernet) library
 
 ---
 ---

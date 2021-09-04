@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.5.0
+   Version: 1.6.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -38,6 +38,7 @@
     1.3.1   K Hoang      29/04/2021 Add SimpleWebServer_NativeEthernet and delete AdvancedWebServer_NativeEthernet example
     1.4.0   K Hoang      13/05/2021 Add support to RP2040-based boards using Arduino mbed_rp2040 core
     1.5.0   K Hoang      15/05/2021 Add support to RP2040-based boards using Arduino-pico rp2040 core
+    1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
  *****************************************************************************************************************************/
  
 // Class to simplify HTTP fetching on Arduino

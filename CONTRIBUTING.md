@@ -14,7 +14,7 @@ If you don't find anything, please [open a new issue](https://github.com/khoih-p
 
 Please ensure to specify the following:
 
-* Arduino IDE version (e.g. 1.8.13) or Platform.io version
+* Arduino IDE version (e.g. 1.8.15) or Platform.io version
 * Board Core Version (e.g. Arduino SAMDUE core v1.6.12, ESP8266 core v2.7.4, ArduinoCore-mbed v2.0.0, etc.)
 * Contextual information (e.g. what you were trying to achieve)
 * Simplest possible steps to reproduce
@@ -26,7 +26,7 @@ Please ensure to specify the following:
 ### Example
 
 ```
-Arduino IDE version: 1.8.13
+Arduino IDE version: 1.8.15
 RASPBERRY_PI_PICO board
 ArduinoCore-mbed v2.0.0
 OS: Ubuntu 20.04 LTS

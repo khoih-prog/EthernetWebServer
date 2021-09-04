@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.5.0
+   Version: 1.6.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -38,11 +38,12 @@
     1.3.1   K Hoang      29/04/2021 Add SimpleWebServer_NativeEthernet and delete AdvancedWebServer_NativeEthernet example
     1.4.0   K Hoang      13/05/2021 Add support to RP2040-based boards using Arduino mbed_rp2040 core
     1.5.0   K Hoang      15/05/2021 Add support to RP2040-based boards using Arduino-pico rp2040 core
+    1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
  *****************************************************************************************************************************/
 
 #pragma once
 
-#define ETHERNET_WEBSERVER_VERSION      "EthernetWebServer v1.5.0"
+#define ETHERNET_WEBSERVER_VERSION      "EthernetWebServer v1.6.0"
 
 #define USE_NEW_WEBSERVER_VERSION       true
 
@@ -93,7 +94,8 @@
   #warning Using UIPEthernet library from EthernetWebServer
 #elif USE_CUSTOM_ETHERNET
   #warning Using Custom Ethernet library from EthernetWebServer. You must include a library or error.
-#elif !( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET)
+#elif !( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || \
+         USE_NATIVE_ETHERNET || USE_QN_ETHERNET)
   #include <Ethernet.h>
   #warning Using Ethernet library from EthernetWebServer
 #endif
