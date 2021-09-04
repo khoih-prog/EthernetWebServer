@@ -2675,7 +2675,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.222
 
 ---
 
-#### 15. MQTTClient_Auth on TEENSY 4.1 using QNEthernet
+#### 15. MQTTClient_Auth on TEENSY 4.1 using QNEthernet Library
 
 The following are debug terminal output and screen shot when running example [MQTTClient_Auth](examples/QNEthernet/MQTTClient_Auth) on **Teensy 4.1** using QNEthernet Library
 
