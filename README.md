@@ -341,8 +341,8 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
    - [`Ethernet3 library v1.5.5+`](https://github.com/sstaub/Ethernet3) for W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip. [![GitHub release](https://img.shields.io/github/release/sstaub/Ethernet3.svg)](https://github.com/sstaub/Ethernet3/releases/latest)
    - [`EthernetENC library v2.0.1+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.10+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
-   - [`NativeEthernet Library version stable111+`](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1 built-in NativeEthernet.
-   - [`QNEthernet Library version v0.4.0+`](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in NativeEthernet. **New**
+   - [`NativeEthernet Library version stable111+`](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1 built-in Ethernet.
+   - [`QNEthernet Library version v0.4.0+`](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet. **New**
 
 ---
 
@@ -2675,7 +2675,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.222
 
 ---
 
-#### 15. MQTTClient_Auth on TEENSY 4.1 with using QNEthernet
+#### 15. MQTTClient_Auth on TEENSY 4.1 using QNEthernet
 
 The following are debug terminal output and screen shot when running example [MQTTClient_Auth](examples/QNEthernet/MQTTClient_Auth) on **Teensy 4.1** using QNEthernet Library
 
@@ -2908,7 +2908,7 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 13. Add support to RP2040-based boards such as RASPBERRY_PI_PICO, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
 14. Add support to RP2040-based boards such as RASPBERRY_PI_PICO, using [**Earle Philhower's arduino-pico** core v1.3.1+](https://github.com/earlephilhower/arduino-pico)
 15. Add support to Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
-16. Add support to Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/ssilverman/QNEthernet) library
+16. Add support to Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
 
 ---
 ---
