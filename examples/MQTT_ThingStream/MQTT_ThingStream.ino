@@ -40,8 +40,6 @@ const char *MQTT_ANNOUNCE_TOPIC = "/status";
 const char *MQTT_CONTROL_TOPIC  = "/control";
 const char *MQTT_BLE_TOPIC      = "/ble";
 
-
-// GOT FROM ThingsStream!
 const char *MQTT_SERVER     = "mqtt.thingstream.io";
 const char *MQTT_USER       = "MQTT_USER";
 const char *MQTT_PASS       = "MQTT_PASS";

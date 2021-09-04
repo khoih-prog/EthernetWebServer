@@ -1,29 +1,29 @@
 /****************************************************************************************************************************
-  SimpleWebServer_NativeEthernet.ino - Dead simple web-server for Ethernet shields
-
+  AdvancedWebServer.h - Dead simple web-server for Ethernet shields
+  
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-
+  
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
-
+  
   Copyright (c) 2015, Majenko Technologies
   All rights reserved.
-
+  
   Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
-
+  
   Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
-
+  
   Redistributions in binary form must reproduce the above copyright notice, this
   list of conditions and the following disclaimer in the documentation and/or
   other materials provided with the distribution.
-
+  
   Neither the name of Majenko Technologies nor the names of its
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
-
+  
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -36,38 +36,17 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************************************************************/
 
-#include <SPI.h>
-#include <NativeEthernet.h>
+#include "defines.h"
 
-#define LOCAL_DEBUG           true
+EthernetWebServer server(80);
 
-#define USING_STATIC_IP       true
-
-byte mac[] = { 0xFE, 0xED, 0xDE, 0xAD, 0xBE, 0xEF }; //physical mac address
-
-#if USING_STATIC_IP
-IPAddress ip        (192, 168, 2, 222);
-IPAddress gateway   (192, 168, 2, 1);
-IPAddress subnet    (255, 255, 255, 0);
-#endif
-
-EthernetServer server(80); //server port
-
-EthernetClient client;
-
-String readString;
-
-//////////////////////
-
-#define BOARD_NAME    "Teensy 4.1 with NativeEthernet"
-
-#define ETHERNET_SS_PIN     10
-
-#define BUFFER_SIZE         400
-char htmlBuffer[BUFFER_SIZE];
+int reqCount = 0;                // number of requests received
 
 void handleRoot()
 {
+#define BUFFER_SIZE     400
+  
+  char temp[BUFFER_SIZE];
   int sec = millis() / 1000;
   int min = sec / 60;
   int hr = min / 60;
@@ -75,7 +54,7 @@ void handleRoot()
 
   hr = hr % 24;
 
-  snprintf(htmlBuffer, BUFFER_SIZE - 1,
+  snprintf(temp, BUFFER_SIZE - 1,
            "<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
@@ -86,29 +65,41 @@ body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Col
 </head>\
 <body>\
 <h2>Hi from EthernetWebServer!</h2>\
-<h3>on %s</h3>\
+<h3>%s on %s</h3>\
 <p>Uptime: %d d %02d:%02d:%02d</p>\
+<img src=\"/test.svg\" />\
 </body>\
-</html>", BOARD_NAME, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
+</html>", BOARD_NAME, SHIELD_TYPE, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
 
-#if LOCAL_DEBUG
-  Serial.print(F("R"));
-  Serial.println(htmlBuffer);
-#endif
-
-  client.println(htmlBuffer);
+  server.send(200, F("text/html"), temp);
 }
 
-//////////////////////
-
-//String out;
+void handleNotFound()
+{
+  String message = F("File Not Found\n\n");
+  
+  message += F("URI: ");
+  message += server.uri();
+  message += F("\nMethod: ");
+  message += (server.method() == HTTP_GET) ? F("GET") : F("POST");
+  message += F("\nArguments: ");
+  message += server.args();
+  message += F("\n");
+  
+  for (uint8_t i = 0; i < server.args(); i++)
+  {
+    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
+  }
+  
+  server.send(404, F("text/plain"), message);
+}
 
 void drawGraph()
 {
   String out;
   out.reserve(3000);
   char temp[70];
-
+  
   out += F("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n");
   out += F("<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"1\" stroke=\"rgb(0, 0, 0)\" />\n");
   out += F("<g stroke=\"black\">\n");
@@ -123,37 +114,90 @@ void drawGraph()
   }
   out += F("</g>\n</svg>\n");
 
-#if LOCAL_DEBUG
-  Serial.print(F("D"));
-  Serial.println(out);
-#endif
-
-  client.println(out);
+  server.send(200, F("image/svg+xml"), out);
 }
 
-//////////////////////
-
-void setup()
+void setup(void)
 {
-  //enable serial data print
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("SimpleWebServer_NativeEthernet on ");
-  Serial.println(BOARD_NAME);
+  Serial.print("\nStarting AdvancedWebServer on "); Serial.print(BOARD_NAME);
+  Serial.print(" " ); Serial.println(SHIELD_TYPE);
+  Serial.println(ETHERNET_WEBSERVER_VERSION);
 
-#if USING_STATIC_IP
-  // Static IP
-  //Ethernet.begin(mac, ip, gateway, subnet);
-  Ethernet.begin(mac, ip);
+#if USE_NATIVE_ETHERNET
+  ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
+#elif USE_QN_ETHERNET
+  ET_LOGWARN(F("=========== USE_QN_ETHERNET ==========="));
 #else
-  // DHCP
-  Ethernet.begin(mac);
+  ET_LOGWARN(F("========================="));
 #endif
 
-  server.begin();
+#if USE_NATIVE_ETHERNET
+
+  // start the ethernet connection and the server:
+  // Use DHCP dynamic IP and random mac
+  uint16_t index = millis() % NUMBER_OF_MAC;
+  // Use Static IP
+  //Ethernet.begin(mac[index], ip);
+  Ethernet.begin(mac[index]);
+
+  Serial.println(F("========================="));
+
+  Serial.print(F("Using mac index = "));
+  Serial.println(index);
 
   Serial.print(F("Connected! IP address: "));
+  Serial.println(Ethernet.localIP());
+
+#else
+
+  #if USING_DHCP
+    // Start the Ethernet connection, using DHCP
+    Serial.print("Initialize Ethernet using DHCP => ");
+    Ethernet.begin();
+  #else   
+    // Start the Ethernet connection, using static IP
+    Serial.print("Initialize Ethernet using static IP => ");
+    Ethernet.begin(myIP, myNetmask, myGW);
+    Ethernet.setDNSServerIP(mydnsServer);
+  #endif
+
+  if (!Ethernet.waitForLocalIP(5000))
+  {
+    Serial.println("Failed to configure Ethernet");
+
+    if (!Ethernet.linkStatus())
+    {
+      Serial.println("Ethernet cable is not connected.");
+    }
+
+    // Stay here forever
+    while (true)
+    {
+      delay(1);
+    }
+  }
+  else
+  {
+    Serial.print("IP Address = ");
+    Serial.println(Ethernet.localIP());
+  }
+
+#endif
+
+  server.on(F("/"), handleRoot);
+  server.on(F("/test.svg"), drawGraph);
+  server.on(F("/inline"), []()
+  {
+    server.send(200, F("text/plain"), F("This works as well"));
+  });
+
+  server.onNotFound(handleNotFound);
+  server.begin();
+
+  Serial.print(F("HTTP EthernetWebServer is @ IP : "));
   Serial.println(Ethernet.localIP());
 }
 
@@ -161,7 +205,7 @@ void heartBeatPrint(void)
 {
   static int num = 1;
 
-  Serial.print(F("H"));
+  Serial.print(F("."));
 
   if (num == 80)
   {
@@ -176,40 +220,20 @@ void heartBeatPrint(void)
 
 void check_status()
 {
-  static unsigned long checkstatus_timeout  = 0;
+  static unsigned long checkstatus_timeout = 0;
 
 #define STATUS_CHECK_INTERVAL     10000L
 
   // Send status report every STATUS_REPORT_INTERVAL (60) seconds: we don't need to send updates frequently if there is no status change.
   if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
   {
-#if !LOCAL_DEBUG
     heartBeatPrint();
-#endif
-
     checkstatus_timeout = millis() + STATUS_CHECK_INTERVAL;
   }
 }
 
-void loop()
+void loop(void)
 {
-  // Create a client connection
-  client = server.available();
-
-  if (client)
-  {
-    while (client.connected())
-    {
-      if (client.available())
-      {
-        handleRoot();
-        drawGraph();
-
-        //stopping client
-        client.stop();
-      }
-    }
-  }
-
+  server.handleClient();
   check_status();
 }
