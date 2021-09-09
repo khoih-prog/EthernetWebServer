@@ -14,7 +14,7 @@ If you don't find anything, please [open a new issue](https://github.com/khoih-p
 
 Please ensure to specify the following:
 
-* Arduino IDE version (e.g. 1.8.15) or Platform.io version
+* Arduino IDE version (e.g. 1.8.16) or Platform.io version
 * Board Core Version (e.g. Arduino SAMDUE core v1.6.12, ESP8266 core v2.7.4, ArduinoCore-mbed v2.0.0, etc.)
 * Contextual information (e.g. what you were trying to achieve)
 * Simplest possible steps to reproduce
@@ -26,11 +26,11 @@ Please ensure to specify the following:
 ### Example
 
 ```
-Arduino IDE version: 1.8.15
+Arduino IDE version: 1.8.16
 RASPBERRY_PI_PICO board
 ArduinoCore-mbed v2.0.0
 OS: Ubuntu 20.04 LTS
-Linux xy-Inspiron-3593 5.4.0-73-generic #82-Ubuntu SMP Wed Apr 14 17:39:42 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+Linux xy-Inspiron-3593 5.4.0-84-generic #94-Ubuntu SMP Thu Aug 26 20:27:37 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
 
 Context:
 I encountered a crash while trying to use the Timer Interrupt.
@@ -41,6 +41,7 @@ Steps to reproduce:
 3. ...
 4. ...
 ```
+
 ### Sending Feature Requests
 
 Feel free to post feature requests. It's helpful if you can explain exactly why the feature would be useful.

@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.6.0
+   Version: 1.7.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -39,6 +39,7 @@
     1.4.0   K Hoang      13/05/2021 Add support to RP2040-based boards using Arduino mbed_rp2040 core
     1.5.0   K Hoang      15/05/2021 Add support to RP2040-based boards using Arduino-pico rp2040 core
     1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
+    1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
  *****************************************************************************************************************************/
 
 #pragma once
@@ -275,6 +276,126 @@ void EthernetWebServer::handleClient()
  
 #else
 
+#if 1
+
+// KH, rewritten for Portenta H7 from v1.7.0
+
+void EthernetWebServer::handleClient() 
+{
+  if (_currentStatus == HC_NONE)
+  {
+    EthernetClient client = _server.available();
+    
+    if (!client)
+    {
+      return;
+    }
+
+    ET_LOGDEBUG(F("handleClient: New Client"));
+
+    _currentClient = client;
+    _currentStatus = HC_WAIT_READ;
+    _statusChange = millis();
+  }
+
+  if (!_currentClient.connected())
+  {
+    ET_LOGDEBUG(F("handleClient: Client not connected"));
+    
+    //_currentClient = EthernetClient();    
+    _currentStatus = HC_NONE;
+    
+    goto stopClient;
+    //return;
+  }
+
+  // Wait for data from client to become available
+  if (_currentStatus == HC_WAIT_READ)
+  {
+    //ET_LOGDEBUG(F("handleClient: _currentStatus = HC_WAIT_READ"));
+    
+    if (!_currentClient.available())
+    {
+      //ET_LOGDEBUG(F("handleClient: Client not available"));
+      
+      if (millis() - _statusChange > HTTP_MAX_DATA_WAIT)
+      {
+        ET_LOGDEBUG(F("handleClient: HTTP_MAX_DATA_WAIT Timeout"));
+        
+        //_currentClient = EthernetClient();
+        _currentStatus = HC_NONE;
+        
+        goto stopClient;
+      }
+      
+      yield();
+      return;
+    }
+
+    ET_LOGDEBUG(F("handleClient: Parsing Request"));
+    
+    if (!_parseRequest(_currentClient))
+    {
+      ET_LOGDEBUG(F("handleClient: Can't parse request"));
+      
+      //_currentClient = EthernetClient();
+      _currentStatus = HC_NONE;
+      
+      goto stopClient;
+      //return;
+    }
+    
+    _currentClient.setTimeout(HTTP_MAX_SEND_WAIT);
+    _contentLength = CONTENT_LENGTH_NOT_SET;
+    
+    //ET_LOGDEBUG(F("handleClient _handleRequest"));
+    _handleRequest();
+
+    if (!_currentClient.connected())
+    {
+      ET_LOGDEBUG(F("handleClient: Connection closed"));
+      
+      //_currentClient = EthernetClient();
+      _currentStatus = HC_NONE;
+      
+      goto stopClient;
+      //return;
+    }
+    else
+    {
+      _currentStatus = HC_WAIT_CLOSE;
+      _statusChange = millis();
+      return;
+    }
+  }
+
+  if (_currentStatus == HC_WAIT_CLOSE)
+  {
+    if (millis() - _statusChange > HTTP_MAX_CLOSE_WAIT)
+    {
+      //_currentClient = EthernetClient();
+      _currentStatus = HC_NONE;
+      
+      ET_LOGDEBUG(F("handleClient: HTTP_MAX_CLOSE_WAIT Timeout"));
+      
+      yield();
+    }
+    else
+    {
+      yield();
+      return;
+    }
+  }
+
+stopClient:
+  
+  // KH, fix bug. Have to close the connection
+  _currentClient.stop();
+  ET_LOGDEBUG(F("handleClient: Client disconnected"));
+}
+
+#else
+
 void EthernetWebServer::handleClient() 
 {
   if (_currentStatus == HC_NONE)
@@ -379,6 +500,8 @@ void EthernetWebServer::handleClient()
   _currentClient.stop();
   ET_LOGDEBUG(F("handleClient: Client disconnected"));
 }
+
+#endif
 
 #endif
 
@@ -850,8 +973,14 @@ void EthernetWebServer::_handleRequest()
     _finalizeResponse();
   }
   
+#if ETHERNET_USE_PORTENTA_H7
+  ET_LOGDEBUG(F("_handleRequest: Clear _currentUri"));
+  //_currentUri = String();
+  ET_LOGDEBUG(F("_handleRequest: Done Clear _currentUri"));
+#else  
   //MR & KH fix
   _currentUri = *(new String());
+#endif  
 }
 
 void EthernetWebServer::_finalizeResponse() 

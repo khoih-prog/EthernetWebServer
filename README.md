@@ -16,25 +16,6 @@
   * [Features](#features)
   * [Currently supported Boards](#currently-supported-boards)
   * [Currently supported Ethernet shields/modules](#currently-supported-ethernet-shieldsmodules)
-* [Changelog](#changelog)
-  * [Major Releases v1.6.0](#major-releases-v160)
-  * [Major Releases v1.5.0](#major-releases-v150)
-  * [Major Releases v1.4.0](#major-releases-v140)
-  * [Releases v1.3.1](#releases-v131)
-  * [Major Releases v1.3.0](#major-releases-v130)
-  * [Releases v1.2.1](#releases-v121)
-  * [Releases v1.2.0](#releases-v120)
-  * [Major Releases v1.1.0](#major-releases-v110)
-  * [Releases v1.0.13](#releases-v1013)
-  * [Releases v1.0.12](#releases-v1012)
-  * [Releases v1.0.11](#releases-v1011)
-  * [Releases v1.0.10](#releases-v1010)
-  * [Releases v1.0.9](#releases-v109)
-  * [Releases v1.0.8](#releases-v108)
-  * [Releases v1.0.7](#releases-v107)
-  * [Releases v1.0.6](#releases-v106)
-  * [Releases v1.0.5](#releases-v105)
-  * [Releases v1.0.4](#releases-v104)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
   * [Use Arduino Library Manager](#use-arduino-library-manager)
@@ -55,6 +36,7 @@
   * [8. For RP2040-based boards using Earle Philhower arduino-pico core](#8-for-rp2040-based-boards-using-earle-philhower-arduino-pico-core)
     * [8.1. To use BOARD_NAME](#81-to-use-board_name)
     * [8.2. To avoid compile error relating to microsecondsToClockCycles](#82-to-avoid-compile-error-relating-to-microsecondstoclockcycles)
+  * [9. For Portenta_H7 boards using Arduino IDE in Linux](#9-for-portenta_h7-boards-using-arduino-ide-in-linux)  
 * [Libraries' Patches](#libraries-patches)
   * [1. For application requiring 2K+ HTML page](#1-for-application-requiring-2k-html-page)
   * [2. For Ethernet library](#2-for-ethernet-library)
@@ -143,6 +125,9 @@
   * [13. AdvancedWebServer on Teensy 4.1 using NativeEthernet Library](#13-advancedwebserver-on-teensy-41-using-nativeethernet-library)
   * [14. AdvancedWebServer on Teensy 4.1 using QNEthernet Library](#14-advancedwebserver-on-teensy-41-using-qnethernet-library)
   * [15. MQTTClient_Auth on Teensy 4.1 using QNEthernet Library](#15-mqttclient_auth-on-teensy-41-using-qnethernet-library)
+  * [16. AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#16-advancedwebserver-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
+  * [17. SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#17-simplewebsocket-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
+  * [18. MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#18-mqttclient_auth-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -162,7 +147,7 @@
 
 #### Features
 
-This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32, RP2040-based, etc.** boards using Ethernet shields. The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
+This [**EthernetWebServer library**](https://github.com/khoih-prog/EthernetWebServer) is a simple yet complete WebServer library for **AVR, Portenta_H7, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32, RP2040-based, etc.** boards using Ethernet shields. The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
 
 The **RP2040-based boards, such as RASPBERRY_PI_PICO**, are currently supported using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
 
@@ -204,7 +189,10 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
  6. **AVR Mega1280, 2560, ADK.**
  7. ESP32
  8. ESP8266
+ 
  9. RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core v1.3.1+](https://github.com/earlephilhower/arduino-pico).
+ 
+ 10. **Portenta_H7**
 
 #### Currently supported Ethernet shields/modules
 
@@ -213,111 +201,11 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 3. Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
 4. Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
 
----
----
-
-## Changelog
-
-### Major Releases v1.6.0
-
-1. Add support to [QNEthernet Library](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet
-2. Update examples with new features
-
-### Major Releases v1.5.0
-
-1. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Earle Philhower's arduino-pico core** v1.3.1+](https://github.com/earlephilhower/arduino-pico).
-2. Update examples with new features
-
-### Major Releases v1.4.0
-
-1. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed).
-2. Update examples with new features
-
-### Releases v1.3.1
-
-1. Add working example [SimpleWebServer_NativeEthernet](examples/SimpleWebServer_NativeEthernet) for Teensy 4.1 NativeEthernet. Check [EthernetWebServer-on-Teensy4-1-with-MagJack](https://forum.pjrc.com/threads/67060-Khoi-Hoang-s-EthernetWebServer-on-Teensy4-1-with-MagJack-anyone-successful)
-2. Delete not working example **AdvancedWebServer_NativeEthernet**
-3. Enhance Debugging code
-
-### Major Releases v1.3.0
-
-1. Add WebServer feature to serve from LittleFS/SPIFFS for ESP32/ESP8266 with examples. Check [**streamFile and serveStatic for ESP8266/ESP32 boards #22**](https://github.com/khoih-prog/EthernetWebServer/pull/22)
-2. Add examples [**serveStatic**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/serveStatic) and [**serveStaticLoadFile**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/serveStaticLoadFile) to use new `serveStatic()`feature
-3. Add examples [**ESP32_FS_EthernetWebServer**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/ESP32_FS_EthernetWebServer) and [**FS_EthernetWebServer**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/FS_EthernetWebServer) to use new `serveStatic()`feature
-
-### Releases v1.2.1
-
-1. Clean-up all compiler warnings possible.
-2. Add Table of Contents
-3. Add examples
-4. Modify Version String 
-
-### Releases v1.2.0
-
-1. Add support to [NativeEthernet Library](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1
-2. Add Version String.
-
-### Major Releases v1.1.0
-
-1. Add high-level **HTTP and WebSockets Client** by merging [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
-2. Add many more examples for HTTP and WebSockets Client.
-
-### Releases v1.0.13
-
-1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
-2. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
-3. Clean up code. 
-4. Update examples.
-
-#### Releases v1.0.12
-
-1. Add support to new [**`EthernetENC library`**](https://github.com/jandrassy/EthernetENC) for ENC28J60.
-2. Add debug feature. Clean up code.
-
-#### Releases v1.0.11
-
-1. Add support to **Seeeduino SAMD21/SAMD51 boards** (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
-2. Add and restructure examples.
-
-#### Releases v1.0.10
-
-1. Fix bug not closing client and releasing socket.
-2. Merge new features from latest [ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
-3. Add and enhance examples.
-
-#### Releases v1.0.9
-
-1. Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
-2. Add default SS/CS pin for ESP8266 and ESP32
-3. Increase default clock speed for W5x00 in [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), and [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge) libraries to 25MHz from 14MHz. Tested OK on W5100 as well as W5500.
-
-#### Releases v1.0.8
-
-1. Fix W5x00 support for ESP8266 and many more boards.
-
-#### Releases v1.0.7
-
-1. Add ENC28J60 support to **ESP32 and ESP8266** boards.
-
-#### Releases v1.0.6
-
-1. Add W5x00 nsupport to **ESP32 and ESP8266** boards.
-
-#### Releases v1.0.5
-
-1. Add support to **nRF52** boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.**
-2. Support any future custom Ethernet library that meets the no-compiling-error requirements. Currently [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) and [`Ethernet3`](https://github.com/sstaub/Ethernet3) libraries are supported. **Ethernet_Shield_W5200, EtherCard, EtherSia** libraries are not supported now.
-
-#### Releases v1.0.4
-
-1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
-
-From v1.0.3+, the library supports more Arduino boards ( SAM DUE, SAMD21: ZERO, MKR, **NANO_33_IOT**, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
-
-From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel SAM3X8E ARM Cortex-M3, STM32F series, ESP8266, Intel ARC32(Genuino101), Nordic nRF51(RFduino), Teensy boards, Realtek Ameba(RTL8195A,RTL8710)) using Wiznet W5x00 or ENC28J60 Ethernet shields by using [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library besides standard [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet) library.
+5. Portenta_H7 Ethernet using [`Portenta_Ethernet`](https://github.com/arduino/ArduinoCore-mbed/tree/master/libraries/Ethernet) library
 
 ---
 ---
+
 
 ## Prerequisites
 
@@ -331,7 +219,7 @@ From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel 
  8. [`Adafruit nRF52 v1.0.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
  9. [`ESP32 Core 2.0.0+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
 10. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS.
-11. [`Arduino mbed_rp2040 core 2.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as RASPBERRY_PI_PICO. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+11. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 2.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 12. [`Earle Philhower's arduino-pico core v1.9.4+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
 13. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 14. Depending on which Ethernet card you're using:
@@ -398,14 +286,14 @@ These files must be copied into the directory:
 
 #### 2. For Teensy boards
  
- **To be able to compile and run on Teensy boards**, you have to copy the files in [**Packages_Patches for Teensy directory**](Packages_Patches/hardware/teensy/avr) into Teensy hardware directory (./arduino-1.8.13/hardware/teensy/avr/boards.txt). 
+ **To be able to compile and run on Teensy boards**, you have to copy the files in [**Packages_Patches for Teensy directory**](Packages_Patches/hardware/teensy/avr) into Teensy hardware directory (./arduino-1.8.15/hardware/teensy/avr/boards.txt). 
 
-Supposing the Arduino version is 1.8.13. These files must be copied into the directory:
+Supposing the Arduino version is 1.8.15. These files must be copied into the directory:
 
-- `./arduino-1.8.13/hardware/teensy/avr/boards.txt`
-- `./arduino-1.8.13/hardware/teensy/avr/cores/teensy/Stream.h`
-- `./arduino-1.8.13/hardware/teensy/avr/cores/teensy3/Stream.h`
-- `./arduino-1.8.13/hardware/teensy/avr/cores/teensy4/Stream.h`
+- `./arduino-1.8.15/hardware/teensy/avr/boards.txt`
+- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy/Stream.h`
+- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy3/Stream.h`
+- `./arduino-1.8.15/hardware/teensy/avr/cores/teensy4/Stream.h`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 These files must be copied into the directory:
@@ -564,6 +452,38 @@ This file must be copied to replace:
 
 With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add defs for compatibility #142](https://github.com/earlephilhower/arduino-pico/pull/142).
 
+
+#### 9. For Portenta_H7 boards using Arduino IDE in Linux
+
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh). 
+  
+  Then run the following command using `sudo`
+  
+```
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1
+$ chmod 755 portenta_post_install.sh
+$ sudo ./portenta_post_install.sh
+```
+
+This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
+
+```
+# Portenta H7 bootloader mode UDEV rules
+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
+```
+
+Supposing the ArduinoCore-mbed core version is 2.4.1. Now only one file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh`
+
+Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
+
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/x.yy.zz/portenta_post_install.sh`
+
+
 ---
 
 ### Libraries' Patches
@@ -694,104 +614,105 @@ then select **one and only one** Ethernet library to use as follows:
 - Standard W5x00 Ethernet library is used by default, in the sketch, just be sure to comment out or leave these #defines to be false :
 
 ```cpp
-#define USE_UIP_ETHERNET        false
 
 // Only one if the following to be true
-#define USE_NATIVE_ETHERNET     false
-#define USE_QN_ETHERNET         false
-#define USE_ETHERNET            true
-#define USE_ETHERNET2           false
-#define USE_ETHERNET3           false
-#define USE_ETHERNET_LARGE      false
-#define USE_ETHERNET_ESP8266    false 
-#define USE_ETHERNET_ENC        false
-#define USE_CUSTOM_ETHERNET     false
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET              false
+#define USE_ETHERNET2             false
+#define USE_ETHERNET3             false
+#define USE_ETHERNET_LARGE        false
+#define USE_ETHERNET_ESP8266      false 
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       false
 ```
 
 To use W5x00 Ethernet, for example using EthernetLarge library
 
 ```cpp
-#define USE_UIP_ETHERNET        false
-
 // Only one if the following to be true
-#define USE_NATIVE_ETHERNET     false
-#define USE_QN_ETHERNET         false
-#define USE_ETHERNET            false
-#define USE_ETHERNET2           false
-#define USE_ETHERNET3           false
-#define USE_ETHERNET_LARGE      true
-#define USE_ETHERNET_ESP8266    false
-#define USE_ETHERNET_ENC        false
-#define USE_CUSTOM_ETHERNET     false
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET              false
+#define USE_ETHERNET2             false
+#define USE_ETHERNET3             false
+#define USE_ETHERNET_LARGE        true
+#define USE_ETHERNET_ESP8266      false
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       false
 ```
 
 - To use ENC28J60 Ethernet, using EthernetENC library (**NEW and Better**)
 
 ```cpp
-#define USE_UIP_ETHERNET        false
-
 // Only one if the following to be true
-#define USE_NATIVE_ETHERNET     false
-#define USE_QN_ETHERNET         false
-#define USE_ETHERNET            false
-#define USE_ETHERNET2           false
-#define USE_ETHERNET3           false
-#define USE_ETHERNET_LARGE      false
-#define USE_ETHERNET_ESP8266    false
-#define USE_ETHERNET_ENC        true
-#define USE_CUSTOM_ETHERNET     false
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET              false
+#define USE_ETHERNET2             false
+#define USE_ETHERNET3             false
+#define USE_ETHERNET_LARGE        false
+#define USE_ETHERNET_ESP8266      false
+#define USE_ETHERNET_ENC          true
+#define USE_CUSTOM_ETHERNET       false
 ```
 
 - To use ENC28J60 Ethernet, using UIPEthernet library:
 
 ```cpp
-#define USE_UIP_ETHERNET        true
-
 // Only one if the following to be true
-#define USE_NATIVE_ETHERNET     false
-#define USE_QN_ETHERNET         false
-#define USE_ETHERNET            false
-#define USE_ETHERNET2           false
-#define USE_ETHERNET3           false
-#define USE_ETHERNET_LARGE      false
-#define USE_ETHERNET_ESP8266    false
-#define USE_ETHERNET_ENC        false
-#define USE_CUSTOM_ETHERNET     false
+#define USE_UIP_ETHERNET          true
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET              false
+#define USE_ETHERNET2             false
+#define USE_ETHERNET3             false
+#define USE_ETHERNET_LARGE        false
+#define USE_ETHERNET_ESP8266      false 
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       false
 ```
 
 - To use any of the Ethernet libraries, such as Ethernet2, Ethernet3, EthernetLarge, EthernetENC:
 
 ```cpp
-#define USE_UIP_ETHERNET        false
-
 // Only one if the following to be true
-#define USE_NATIVE_ETHERNET     false
-#define USE_QN_ETHERNET         false
-#define USE_ETHERNET            false
-#define USE_ETHERNET2           false
-#define USE_ETHERNET3           true
-#define USE_ETHERNET_LARGE      false
-#define USE_ETHERNET_ESP8266    false
-#define USE_ETHERNET_ENC        false
-#define USE_CUSTOM_ETHERNET     false
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET              false
+#define USE_ETHERNET2             false
+#define USE_ETHERNET3             true
+#define USE_ETHERNET_LARGE        false
+#define USE_ETHERNET_ESP8266      false 
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       false
 ```
 
 - To use another Ethernet library
 For example, Ethernet_XYZ library uses **Ethernet_XYZ.h**
 
 ```cpp
-#define USE_UIP_ETHERNET        false
-
 // Only one if the following to be true
-#define USE_NATIVE_ETHERNET     false
-#define USE_QN_ETHERNET         false
-#define USE_ETHERNET            false
-#define USE_ETHERNET2           false
-#define USE_ETHERNET3           false
-#define USE_ETHERNET_LARGE      false
-#define USE_ETHERNET_ESP8266    false
-#define USE_ETHERNET_ENC        false
-#define USE_CUSTOM_ETHERNET     true
+#define USE_UIP_ETHERNET          false
+#define USE_ETHERNET_PORTENTA_H7  false
+#define USE_NATIVE_ETHERNET       false
+#define USE_QN_ETHERNET           false
+#define USE_ETHERNET              false
+#define USE_ETHERNET2             false
+#define USE_ETHERNET3             false
+#define USE_ETHERNET_LARGE        false
+#define USE_ETHERNET_ESP8266      false 
+#define USE_ETHERNET_ENC          false
+#define USE_CUSTOM_ETHERNET       true
 
 //Must be placed before #include <EthernetWebServer.h>
 #include <Ethernet_XYZ.h>
@@ -1208,18 +1129,19 @@ void handleRoot()
            "<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
-<title>AdvancedWebServer %s</title>\
+<title>%s</title>\
 <style>\
 body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
 </style>\
 </head>\
 <body>\
-<h2>Hi from EthernetWebServer!</h2>\
+<h1>Hello from %s</h1>\
+<h3>running EthernetWebServer</h3>\
 <h3>on %s</h3>\
 <p>Uptime: %d d %02d:%02d:%02d</p>\
 <img src=\"/test.svg\" />\
 </body>\
-</html>", BOARD_NAME, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
+</html>", BOARD_NAME, BOARD_NAME, SHIELD_TYPE, day, hr, min % 60, sec % 60);
 
   server.send(200, F("text/html"), temp);
 }
@@ -1251,14 +1173,14 @@ void drawGraph()
   char temp[70];
   
   out += F("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n");
-  out += F("<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"1\" stroke=\"rgb(0, 0, 0)\" />\n");
-  out += F("<g stroke=\"black\">\n");
+  out += F("<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n");
+  out += F("<g stroke=\"blue\">\n");
   int y = rand() % 130;
 
   for (int x = 10; x < 300; x += 10)
   {
     int y2 = rand() % 130;
-    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"1\" />\n", x, 140 - y, x + 10, 140 - y2);
+    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"2\" />\n", x, 140 - y, x + 10, 140 - y2);
     out += temp;
     y = y2;
   }
@@ -1272,8 +1194,8 @@ void setup(void)
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStarting AdvancedWebServer on " + String(BOARD_NAME));
-  Serial.println(" with " + String(SHIELD_TYPE));
+  Serial.print("\nStarting AdvancedWebServer on "); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_WRAPPER
@@ -1282,7 +1204,9 @@ void setup(void)
 
 #else
 
-#if USE_NATIVE_ETHERNET
+#if USE_ETHERNET_PORTENTA_H7
+  ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
+#elif USE_NATIVE_ETHERNET
   ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
 #elif USE_ETHERNET
   ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
@@ -1300,6 +1224,7 @@ void setup(void)
   ET_LOGWARN(F("========================="));
 #endif
 
+#if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
   ET_LOGWARN(F("Default SPI pinout:"));
   ET_LOGWARN1(F("MOSI:"), MOSI);
   ET_LOGWARN1(F("MISO:"), MISO);
@@ -1460,7 +1385,9 @@ void setup(void)
     
   #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
-#endif    //defined(ESP8266)
+#endif    // defined(ESP8266)
+
+#endif    // #if !(USE_NATIVE_ETHERNET)
 
 
 #endif  //USE_ETHERNET_WRAPPER
@@ -1470,25 +1397,44 @@ void setup(void)
   // Use DHCP dynamic IP and random mac
   uint16_t index = millis() % NUMBER_OF_MAC;
   // Use Static IP
-  //Ethernet.begin(mac[index], ip);
-  Ethernet.begin(mac[index]);
+  Ethernet.begin(mac[index], ip);
+  //Ethernet.begin(mac[index]);
 
+#if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
   // Just info to know how to connect correctly
-  Serial.println(F("========================="));
-  Serial.println(F("Currently Used SPI pinout:"));
-  Serial.print(F("MOSI:"));
+  Serial.println("=========================");
+  Serial.println("Currently Used SPI pinout:");
+  Serial.print("MOSI:");
   Serial.println(MOSI);
-  Serial.print(F("MISO:"));
+  Serial.print("MISO:");
   Serial.println(MISO);
-  Serial.print(F("SCK:"));
+  Serial.print("SCK:");
   Serial.println(SCK);
-  Serial.print(F("SS:"));
+  Serial.print("SS:");
   Serial.println(SS);
 #if USE_ETHERNET3
-  Serial.print(F("SPI_CS:"));
+  Serial.print("SPI_CS:");
   Serial.println(SPI_CS);
 #endif
+
   Serial.println(F("========================="));
+
+#elif (USE_ETHERNET_PORTENTA_H7)
+  if (Ethernet.hardwareStatus() == EthernetNoHardware) 
+  {
+    Serial.println("No Ethernet found. Stay here forever");
+    
+    while (true) 
+    {
+      delay(1); // do nothing, no point running without Ethernet hardware
+    }
+  }
+  
+  if (Ethernet.linkStatus() == LinkOFF) 
+  {
+    Serial.println("Not connected Ethernet cable");
+  }
+#endif
 
   Serial.print(F("Using mac index = "));
   Serial.println(index);
@@ -1560,6 +1506,27 @@ void loop(void)
 
 // Debug Level from 0 to 4
 #define _ETHERNET_WEBSERVER_LOGLEVEL_       3
+
+#if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+
+  #if defined(BOARD_NAME)
+    #undef BOARD_NAME
+  #endif
+
+  #if defined(CORE_CM7)
+    #warning Using Portenta H7 M7 core
+    #define BOARD_NAME              "PORTENTA_H7_M7"
+  #else
+    #warning Using Portenta H7 M4 core
+    #define BOARD_NAME              "PORTENTA_H7_M4"
+  #endif
+
+  #define ETHERNET_USE_PORTENTA_H7  true
+  #define USE_ETHERNET_PORTENTA_H7  true
+  
+  #define USE_ETHERNET_WRAPPER      false
+  
+#endif
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
@@ -1816,7 +1783,7 @@ void loop(void)
     
   #else
     // For RPI Pico using E. Philhower RP2040 core
-    // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
+  // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
     #define USE_THIS_SS_PIN       17
 
   #endif
@@ -1872,14 +1839,19 @@ void loop(void)
   
   #if !USE_ETHERNET_WRAPPER
   
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
+    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7 )
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET
       #endif
       #define USE_CUSTOM_ETHERNET   false
     #endif
 
-    #if USE_NATIVE_ETHERNET
+    #if USE_ETHERNET_PORTENTA_H7
+      #include <Portenta_Ethernet.h>
+      #include <Ethernet.h>
+      #warning Using Portenta_Ethernet lib for Portenta_H7.
+      #define SHIELD_TYPE           "Ethernet using Portenta_Ethernet Library"
+    #elif USE_NATIVE_ETHERNET
       #include "NativeEthernet.h"
       #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
       #define SHIELD_TYPE           "Custom Ethernet using Teensy 4.1 NativeEthernet Library"
@@ -1986,7 +1958,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2034,7 +2006,7 @@ Arguments:
 Final list of key/value pairs:
 EthernetWebServer::_handleRequest handle
 EthernetWebServer::send1: len =  347
-content =  <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer NRF52840_FEATHER</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on NRF52840_FEATHER</h3><p>Uptime: 0 d 00:00:11</p><img src="/test.svg" /></body></html>
+content =  <html><head><meta http-equiv='refresh' content='5'/><title>NRF52840_FEATHER</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hello from NRF52840_FEATHER</h2><h3>running EthernetWebServer</h3><p>Uptime: 0 d 00:00:11</p><img src="/test.svg" /></body></html>
 EthernetWebServer::_prepareHeader sendHeader Conn close
 EthernetWebServer::send1: write header =  HTTP/1.1 200 OK
 Content-Type: text/html
@@ -2077,37 +2049,37 @@ Final list of key/value pairs:
 EthernetWebServer::_handleRequest handle
 EthernetWebServer::send1: len =  1950
 content =  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="310" height="150">
-<rect width="310" height="150" fill="rgb(250, 230, 210)" stroke-width="1" stroke="rgb(0, 0, 0)" />
-<g stroke="black">
-<line x1="10" y1="98" x2="20" y2="111" stroke-width="1" />
-<line x1="20" y1="111" x2="30" y2="90" stroke-width="1" />
-<line x1="30" y1="90" x2="40" y2="22" stroke-width="1" />
-<line x1="40" y1="22" x2="50" y2="98" stroke-width="1" />
-<line x1="50" y1="98" x2="60" y2="64" stroke-width="1" />
-<line x1="60" y1="64" x2="70" y2="104" stroke-width="1" />
-<line x1="70" y1="104" x2="80" y2="31" stroke-width="1" />
-<line x1="80" y1="31" x2="90" y2="59" stroke-width="1" />
-<line x1="90" y1="59" x2="100" y2="139" stroke-width="1" />
-<line x1="100" y1="139" x2="110" y2="117" stroke-width="1" />
-<line x1="110" y1="117" x2="120" y2="75" stroke-width="1" />
-<line x1="120" y1="75" x2="130" y2="72" stroke-width="1" />
-<line x1="130" y1="72" x2="140" y2="137" stroke-width="1" />
-<line x1="140" y1="137" x2="150" y2="20" stroke-width="1" />
-<line x1="150" y1="20" x2="160" y2="94" stroke-width="1" />
-<line x1="160" y1="94" x2="170" y2="81" stroke-width="1" />
-<line x1="170" y1="81" x2="180" y2="38" stroke-width="1" />
-<line x1="180" y1="38" x2="190" y2="33" stroke-width="1" />
-<line x1="190" y1="33" x2="200" y2="53" stroke-width="1" />
-<line x1="200" y1="53" x2="210" y2="88" stroke-width="1" />
-<line x1="210" y1="88" x2="220" y2="32" stroke-width="1" />
-<line x1="220" y1="32" x2="230" y2="110" stroke-width="1" />
-<line x1="230" y1="110" x2="240" y2="87" stroke-width="1" />
-<line x1="240" y1="87" x2="250" y2="11" stroke-width="1" />
-<line x1="250" y1="11" x2="260" y2="98" stroke-width="1" />
-<line x1="260" y1="98" x2="270" y2="76" stroke-width="1" />
-<line x1="270" y1="76" x2="280" y2="121" stroke-width="1" />
-<line x1="280" y1="121" x2="290" y2="139" stroke-width="1" />
-<line x1="290" y1="139" x2="300" y2="103" stroke-width="1" />
+<rect width="310" height="150" fill="rgb(250, 230, 210)" stroke-width="3" stroke="rgb(0, 0, 0)" />
+<g stroke="blue">
+<line x1="10" y1="98" x2="20" y2="111" stroke-width="2" />
+<line x1="20" y1="111" x2="30" y2="90" stroke-width="2" />
+<line x1="30" y1="90" x2="40" y2="22" stroke-width="2" />
+<line x1="40" y1="22" x2="50" y2="98" stroke-width="2" />
+<line x1="50" y1="98" x2="60" y2="64" stroke-width="2" />
+<line x1="60" y1="64" x2="70" y2="104" stroke-width="2" />
+<line x1="70" y1="104" x2="80" y2="31" stroke-width="2" />
+<line x1="80" y1="31" x2="90" y2="59" stroke-width="2" />
+<line x1="90" y1="59" x2="100" y2="139" stroke-width="2" />
+<line x1="100" y1="139" x2="110" y2="117" stroke-width="2" />
+<line x1="110" y1="117" x2="120" y2="75" stroke-width="2" />
+<line x1="120" y1="75" x2="130" y2="72" stroke-width="2" />
+<line x1="130" y1="72" x2="140" y2="137" stroke-width="2" />
+<line x1="140" y1="137" x2="150" y2="20" stroke-width="2" />
+<line x1="150" y1="20" x2="160" y2="94" stroke-width="2" />
+<line x1="160" y1="94" x2="170" y2="81" stroke-width="2" />
+<line x1="170" y1="81" x2="180" y2="38" stroke-width="2" />
+<line x1="180" y1="38" x2="190" y2="33" stroke-width="2" />
+<line x1="190" y1="33" x2="200" y2="53" stroke-width="2" />
+<line x1="200" y1="53" x2="210" y2="88" stroke-width="2" />
+<line x1="210" y1="88" x2="220" y2="32" stroke-width="2" />
+<line x1="220" y1="32" x2="230" y2="110" stroke-width="2" />
+<line x1="230" y1="110" x2="240" y2="87" stroke-width="2" />
+<line x1="240" y1="87" x2="250" y2="11" stroke-width="2" />
+<line x1="250" y1="11" x2="260" y2="98" stroke-width="2" />
+<line x1="260" y1="98" x2="270" y2="76" stroke-width="2" />
+<line x1="270" y1="76" x2="280" y2="121" stroke-width="2" />
+<line x1="280" y1="121" x2="290" y2="139" stroke-width="2" />
+<line x1="290" y1="139" x2="300" y2="103" stroke-width="2" />
 </g>
 </svg>
 
@@ -2167,7 +2139,7 @@ The terminal output of **SAM DUE with W5x00 using EthernetLarge Library** runnin
 
 ```
 Starting SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 75
@@ -2258,7 +2230,7 @@ The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet3 Library** r
 
 ```
 Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET3 ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2293,7 +2265,7 @@ The terminal output of **ESP32 with W5x00 using Ethernet Library** running [ESP3
 
 ```
 Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 23
@@ -2344,7 +2316,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [FS
 
 ```
 Starting FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2400,7 +2372,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [se
 ```
 Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
 With W5x00 using Ethernet Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2443,7 +2415,7 @@ The following are debug terminal output and screen shot when running example [Si
 
 ```
 SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 Debug Level = 3
 Connected! IP address: 192.168.2.127
 [EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
@@ -2499,7 +2471,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet3 Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [EWS] =========== USE_ETHERNET3 ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2531,7 +2503,7 @@ The following are debug terminal output when running example [MQTTClient_Auth](e
 
 ```
 Start MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [EWS] =========== USE_ETHERNET ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2566,7 +2538,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2600,7 +2572,7 @@ The following are debug terminal output and screen shot when running example [Ud
 
 ```
 Start UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2645,7 +2617,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2666,7 +2638,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2685,7 +2657,7 @@ The following are debug terminal output and screen shot when running example [MQ
 
 ```
 Start MQTTClient_Auth on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.6.0
+EthernetWebServer v1.7.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2694,6 +2666,105 @@ Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on TEENSY 4.1 using QNEthe
 Message Send : MQTT_Pub => Hello from MQTTClient_Auth on TEENSY 4.1 using QNEthernet
 Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on TEENSY 4.1 using QNEthernet
 ```
+
+
+---
+
+#### 16. AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+
+The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on **PORTENTA_H7_M7** with Ethernet using Portenta_Ethernet Library
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/AdvancedWebServer_Portenta_H7.png">
+</p>
+
+```
+Starting AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+EthernetWebServer v1.7.0
+[EWS] ======== USE_PORTENTA_H7_ETHERNET ========
+Using mac index = 6
+Connected! IP address: 192.168.2.222
+HTTP EthernetWebServer is @ IP : 192.168.2.222
+.......... .......... .......... .......... .......... ..
+```
+
+---
+
+#### 17. SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+
+The following is the debug terminal output when running example [MQTTClient_Auth](examples/SimpleWebSocket) on **PORTENTA_H7_M7** with Ethernet using Portenta_Ethernet Library
+
+##### 17.1 Client
+
+```
+Starting SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+EthernetWebServer v1.7.0
+[EWS] ======== USE_PORTENTA_H7_ETHERNET ========
+Using mac index = 4
+Connected! IP address: 192.168.2.132
+starting WebSocket client
+Sending Hello 0
+Sending Hello 1
+Received a message:
+0 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 5022
+Sending Hello 2
+Received a message:
+1 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 10075
+Sending Hello 3
+Received a message:
+2 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 15132
+Sending Hello 4
+Received a message:
+3 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 20145
+Sending Hello 5
+Received a message:
+4 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 25152
+```
+
+##### 17.2 Server
+
+```
+kh@kh-Inspiron-3593:~/Downloads/Nodejs/simple-websocket-server$ ./WS_server.sh 
+Wed Sep 08 2021 21:30:46 GMT-0400 (Eastern Daylight Time) Server is listening on port 8080
+Wed Sep 08 2021 21:31:08 GMT-0400 (Eastern Daylight Time) Connection accepted.
+Received Message: 0 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 5022
+Received Message: 1 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 10075
+Received Message: 2 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 15132
+Received Message: 3 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 20145
+Received Message: 4 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 25152
+Received Message: 5 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 30248
+Received Message: 6 => Hello from SimpleWebSocket on PORTENTA_H7_M7, millis = 35256
+```
+
+---
+
+
+#### 18. MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+
+The following is the debug terminal output when running example [MQTTClient_Auth](examples/MQTTClient_Auth) on **PORTENTA_H7_M7** with Ethernet using Portenta_Ethernet Library
+
+
+```
+Start MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+EthernetWebServer v1.7.0
+[EWS] ======== USE_PORTENTA_H7_ETHERNET ========
+Using mac index = 7
+Connected! IP address: 192.168.2.132
+Attempting MQTT connection to broker.emqx.io...connected
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+```
+
 
 ---
 ---
@@ -2855,8 +2926,11 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
  6. **AVR Mega1280, 2560, ADK.**
  7. ESP32
  8. ESP8266
+ 
  9. RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core v1.3.1+](https://github.com/earlephilhower/arduino-pico).
  
+11. **Portenta_H7**
+
 ---
  
 #### Supported Ethernet shields/modules:
@@ -2865,6 +2939,8 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 2. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
 3. Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
 4. Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
+
+5. Portenta_H7 Ethernet using [`Portenta_Ethernet`](https://github.com/arduino/ArduinoCore-mbed/tree/master/libraries/Ethernet) library
 
 
 The library provides these features:
@@ -2909,6 +2985,8 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 14. Add support to RP2040-based boards such as RASPBERRY_PI_PICO, using [**Earle Philhower's arduino-pico** core v1.3.1+](https://github.com/earlephilhower/arduino-pico)
 15. Add support to Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
 16. Add support to Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
+17. Add support to **Portenta_H7 boards**, using [**Arduino-mbed mbed_portenta** core](https://github.com/arduino/ArduinoCore-mbed).
+
 
 ---
 ---

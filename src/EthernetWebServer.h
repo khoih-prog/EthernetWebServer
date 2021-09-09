@@ -7,7 +7,7 @@
    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
    Licensed under MIT license
-   Version: 1.6.0
+   Version: 1.7.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -39,15 +39,30 @@
     1.4.0   K Hoang      13/05/2021 Add support to RP2040-based boards using Arduino mbed_rp2040 core
     1.5.0   K Hoang      15/05/2021 Add support to RP2040-based boards using Arduino-pico rp2040 core
     1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
+    1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
  *****************************************************************************************************************************/
 
 #pragma once
 
-#define ETHERNET_WEBSERVER_VERSION      "EthernetWebServer v1.6.0"
+#define ETHERNET_WEBSERVER_VERSION      "EthernetWebServer v1.7.0"
 
 #define USE_NEW_WEBSERVER_VERSION       true
 
 #include <functional-vlpp.h>
+
+#if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+  #if defined(ETHERNET_USE_PORTENTA_H7)
+    #undef ETHERNET_USE_PORTENTA_H7
+  #endif
+  #define ETHERNET_USE_PORTENTA_H7        true
+  
+  #if defined(USE_NEW_WEBSERVER_VERSION)
+    #undef USE_NEW_WEBSERVER_VERSION
+  #endif
+  #define USE_NEW_WEBSERVER_VERSION   false
+  
+  #warning Use mbed-portenta architecture for PORTENTA_H7 from EthernetWebServer
+#endif
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
