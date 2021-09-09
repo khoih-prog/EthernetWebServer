@@ -142,8 +142,8 @@ void setup(void)
   while (!Serial);
 
   //delay(1000);
-  Serial.print("\nStarting SimpleAuthentication on " + String(BOARD_NAME));
-  Serial.println(" with " + String(SHIELD_TYPE));
+  Serial.print("\nStarting SimpleAuthentication on "); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_WRAPPER
@@ -152,7 +152,9 @@ void setup(void)
 
 #else
 
-#if USE_NATIVE_ETHERNET
+#if USE_ETHERNET_PORTENTA_H7
+  ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
+#elif USE_NATIVE_ETHERNET
   ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
 #elif USE_ETHERNET
   ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
@@ -170,6 +172,7 @@ void setup(void)
   ET_LOGWARN(F("========================="));
 #endif
 
+#if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
   ET_LOGWARN(F("Default SPI pinout:"));
   ET_LOGWARN1(F("MOSI:"), MOSI);
   ET_LOGWARN1(F("MISO:"), MISO);
@@ -330,7 +333,9 @@ void setup(void)
     
   #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
-#endif    //defined(ESP8266)
+#endif    // defined(ESP8266)
+
+#endif    // #if !(USE_NATIVE_ETHERNET)
 
 
 #endif  //USE_ETHERNET_WRAPPER
@@ -343,22 +348,41 @@ void setup(void)
   //Ethernet.begin(mac[index], ip);
   Ethernet.begin(mac[index]);
 
+#if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
   // Just info to know how to connect correctly
-  Serial.println(F("========================="));
-  Serial.println(F("Currently Used SPI pinout:"));
-  Serial.print(F("MOSI:"));
+  Serial.println("=========================");
+  Serial.println("Currently Used SPI pinout:");
+  Serial.print("MOSI:");
   Serial.println(MOSI);
-  Serial.print(F("MISO:"));
+  Serial.print("MISO:");
   Serial.println(MISO);
-  Serial.print(F("SCK:"));
+  Serial.print("SCK:");
   Serial.println(SCK);
-  Serial.print(F("SS:"));
+  Serial.print("SS:");
   Serial.println(SS);
 #if USE_ETHERNET3
-  Serial.print(F("SPI_CS:"));
+  Serial.print("SPI_CS:");
   Serial.println(SPI_CS);
 #endif
+
   Serial.println(F("========================="));
+
+#elif (USE_ETHERNET_PORTENTA_H7)
+  if (Ethernet.hardwareStatus() == EthernetNoHardware) 
+  {
+    Serial.println("No Ethernet found. Stay here forever");
+    
+    while (true) 
+    {
+      delay(1); // do nothing, no point running without Ethernet hardware
+    }
+  }
+  
+  if (Ethernet.linkStatus() == LinkOFF) 
+  {
+    Serial.println("Not connected Ethernet cable");
+  }
+#endif
 
   Serial.print(F("Using mac index = "));
   Serial.println(index);

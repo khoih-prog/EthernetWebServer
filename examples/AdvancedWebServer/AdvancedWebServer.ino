@@ -63,18 +63,19 @@ void handleRoot()
            "<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
-<title>AdvancedWebServer %s</title>\
+<title>%s</title>\
 <style>\
 body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
 </style>\
 </head>\
 <body>\
-<h2>Hi from EthernetWebServer!</h2>\
+<h1>Hello from %s</h1>\
+<h3>running EthernetWebServer</h3>\
 <h3>on %s</h3>\
 <p>Uptime: %d d %02d:%02d:%02d</p>\
 <img src=\"/test.svg\" />\
 </body>\
-</html>", BOARD_NAME, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
+</html>", BOARD_NAME, BOARD_NAME, SHIELD_TYPE, day, hr, min % 60, sec % 60);
 
   server.send(200, F("text/html"), temp);
 }
@@ -106,14 +107,14 @@ void drawGraph()
   char temp[70];
   
   out += F("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n");
-  out += F("<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"1\" stroke=\"rgb(0, 0, 0)\" />\n");
-  out += F("<g stroke=\"black\">\n");
+  out += F("<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n");
+  out += F("<g stroke=\"blue\">\n");
   int y = rand() % 130;
 
   for (int x = 10; x < 300; x += 10)
   {
     int y2 = rand() % 130;
-    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"1\" />\n", x, 140 - y, x + 10, 140 - y2);
+    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"2\" />\n", x, 140 - y, x + 10, 140 - y2);
     out += temp;
     y = y2;
   }
@@ -127,8 +128,8 @@ void setup(void)
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStarting AdvancedWebServer on " + String(BOARD_NAME));
-  Serial.println(" with " + String(SHIELD_TYPE));
+  Serial.print("\nStarting AdvancedWebServer on "); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_WRAPPER
@@ -137,7 +138,9 @@ void setup(void)
 
 #else
 
-#if USE_NATIVE_ETHERNET
+#if USE_ETHERNET_PORTENTA_H7
+  ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
+#elif USE_NATIVE_ETHERNET
   ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
 #elif USE_ETHERNET
   ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
@@ -155,6 +158,7 @@ void setup(void)
   ET_LOGWARN(F("========================="));
 #endif
 
+#if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
   ET_LOGWARN(F("Default SPI pinout:"));
   ET_LOGWARN1(F("MOSI:"), MOSI);
   ET_LOGWARN1(F("MISO:"), MISO);
@@ -315,7 +319,9 @@ void setup(void)
     
   #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
-#endif    //defined(ESP8266)
+#endif    // defined(ESP8266)
+
+#endif    // #if !(USE_NATIVE_ETHERNET)
 
 
 #endif  //USE_ETHERNET_WRAPPER
@@ -325,25 +331,44 @@ void setup(void)
   // Use DHCP dynamic IP and random mac
   uint16_t index = millis() % NUMBER_OF_MAC;
   // Use Static IP
-  //Ethernet.begin(mac[index], ip);
-  Ethernet.begin(mac[index]);
+  Ethernet.begin(mac[index], ip);
+  //Ethernet.begin(mac[index]);
 
+#if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
   // Just info to know how to connect correctly
-  Serial.println(F("========================="));
-  Serial.println(F("Currently Used SPI pinout:"));
-  Serial.print(F("MOSI:"));
+  Serial.println("=========================");
+  Serial.println("Currently Used SPI pinout:");
+  Serial.print("MOSI:");
   Serial.println(MOSI);
-  Serial.print(F("MISO:"));
+  Serial.print("MISO:");
   Serial.println(MISO);
-  Serial.print(F("SCK:"));
+  Serial.print("SCK:");
   Serial.println(SCK);
-  Serial.print(F("SS:"));
+  Serial.print("SS:");
   Serial.println(SS);
 #if USE_ETHERNET3
-  Serial.print(F("SPI_CS:"));
+  Serial.print("SPI_CS:");
   Serial.println(SPI_CS);
 #endif
+
   Serial.println(F("========================="));
+
+#elif (USE_ETHERNET_PORTENTA_H7)
+  if (Ethernet.hardwareStatus() == EthernetNoHardware) 
+  {
+    Serial.println("No Ethernet found. Stay here forever");
+    
+    while (true) 
+    {
+      delay(1); // do nothing, no point running without Ethernet hardware
+    }
+  }
+  
+  if (Ethernet.linkStatus() == LinkOFF) 
+  {
+    Serial.println("Not connected Ethernet cable");
+  }
+#endif
 
   Serial.print(F("Using mac index = "));
   Serial.println(index);
