@@ -130,7 +130,6 @@
   * [18. MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#18-mqttclient_auth-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
-* [Releases](#releases)
 * [Issues](#issues)
 * [TO DO](#to-do)
 * [DONE](#done)
@@ -2649,11 +2648,8 @@ HTTP EthernetWebServer is @ IP : 192.168.2.222
 
 #### 15. MQTTClient_Auth on TEENSY 4.1 using QNEthernet Library
 
-The following are debug terminal output and screen shot when running example [MQTTClient_Auth](examples/QNEthernet/MQTTClient_Auth) on **Teensy 4.1** using QNEthernet Library
+The following is the debug terminal output when running example [MQTTClient_Auth](examples/QNEthernet/MQTTClient_Auth) on **Teensy 4.1** using QNEthernet Library
 
-<p align="center">
-    <img src="https://github.com/khoih-prog/EthernetWebServer/blob/master/pics/AdvancedWebServer_QNEthernet.png">
-</p>
 
 ```
 Start MQTTClient_Auth on TEENSY 4.1 using QNEthernet
@@ -2786,123 +2782,6 @@ Debug is enabled by default on Serial. Debug Level from 0 to 4. To disable, chan
 ## Troubleshooting
 
 If you get compilation errors, more often than not, you may need to install a newer version of the board's core, applying Libraries' Patches, Packages' Patches or this library latest version.
-
----
----
-
-## Releases
-
-### Major Releases v1.6.0
-
-1. Add support to [QNEthernet Library](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet
-2. Update examples with new features
-
-### Major Releases v1.5.0
-
-1. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Earle Philhower's arduino-pico core** v1.3.1+](https://github.com/earlephilhower/arduino-pico).
-2. Update examples with new features
-
-### Major Release v1.4.0
-
-1. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed).
-2. Update examples with new features
-
-### Releases v1.3.1
-
-1. Add working example [SimpleWebServer_NativeEthernet](examples/SimpleWebServer_NativeEthernet) for Teensy 4.1 NativeEthernet. Check [EthernetWebServer-on-Teensy4-1-with-MagJack](https://forum.pjrc.com/threads/67060-Khoi-Hoang-s-EthernetWebServer-on-Teensy4-1-with-MagJack-anyone-successful)
-2. Delete not working example **AdvancedWebServer_NativeEthernet**
-3. Enhance Debugging code
-
-### Releases v1.3.0
-
-1. Add WebServer feature to serve from LittleFS/SPIFFS for ESP32/ESP8266 with examples. Check [**streamFile and serveStatic for ESP8266/ESP32 boards #22**](https://github.com/khoih-prog/EthernetWebServer/pull/22)
-2. Add examples [**serveStatic**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/serveStatic) and [**serveStaticLoadFile**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/serveStaticLoadFile) to use new `serveStatic()`feature
-3. Add examples [**ESP32_FS_EthernetWebServer**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/ESP32_FS_EthernetWebServer) and [**FS_EthernetWebServer**](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/FS_EthernetWebServer) to use new `serveStatic()`feature
-
-### Releases v1.2.1
-
-1. Clean-up all compiler warnings possible.
-2. Add Table of Contents
-3. Add examples
-4. Modify Version String 
-
-### Release v1.2.0
-
-1. Add support to [NativeEthernet Library](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1
-2. Add Version String.
-
-### Major Release v1.1.0
-
-1. Add high-level **HTTP and WebSockets Client** by merging [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
-2. Add many more examples for HTTP and WebSockets Client.
-
-### Release v1.0.13
-
-1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
-2. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
-3. Clean up code. 
-4. Update examples.
-
-#### New in v1.0.12
-
-1. Add support to new [**`EthernetENC library`**](https://github.com/jandrassy/EthernetENC) for ENC28J60.
-2. Add debug feature. Clean up code.
-
-#### New in v1.0.11
-
-1. Add support to **Seeeduino SAMD21/SAMD51 boards** (LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.)
-2. Add and restructure examples.
-
-#### New in v1.0.10
-
-1. Fix bug not closing client and releasing socket.
-2. Merge new features from latest [ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
-3. Add and enhance examples.
-
-#### New in v1.0.9
-
-1. Add EthernetWrapper.h for easier W5x00 support as well as more Ethernet libs in the future.
-2. Add default SS/CS pin for ESP8266 and ESP32
-3. Increase default clock speed for W5x00 in [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), and [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge) libraries to 25MHz from 14MHz. Tested OK on W5100 as well as W5500.
-
-#### New in v1.0.8
-
-1. Fix W5x00 support for ESP8266 and many more boards.
-
-#### New in v1.0.7
-
-1. Add ENC28J60 support to **ESP32 and ESP8266** boards.
-
-#### New in v1.0.6
-
-1. Add W5x00 nsupport to **ESP32 and ESP8266** boards.
-
-#### New in v1.0.5
-
-1. Add support to **nRF52** boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.**
-2. Support any future custom Ethernet library that meets the no-compiling-error requirements. Currently [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) and [`Ethernet3`](https://github.com/sstaub/Ethernet3) libraries are supported. **Ethernet_Shield_W5200, EtherCard, EtherSia** libraries are not supported now.
-
-#### New in v1.0.4
-
-1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)**.
-
-
-#### Version v1.0.3
-
-1. From v1.0.3+, the library supports many more Arduino boards ( SAM DUE, SAMD: ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
-
-#### Version v1.0.2
-
-1. From v1.0.2+, the library supports many more Arduino boards (Atmel AVR-s, Atmel SAM3X8E ARM Cortex-M3, STM32F series, ESP8266, Intel ARC32(Genuino101), Nordic nRF51(RFduino), Teensy boards, Realtek Ameba(RTL8195A,RTL8710))
-2. Support Wiznet W5x00 or ENC28J60 EThernet shields by using [UIPEthernet](https://github.com/UIPEthernet/UIPEthernet) library besides standard Ethernet, Ethernet2, Ethernet3 libraries.
-
-#### Version v1.0.1
-
-1. Add support to Server's lambda function calls
-
-#### Version v1.0.0
-
-This is simple yet complete WebServer library for AVR, Teensy, etc. boards running Ethernet shields. **The functions are similar and compatible to ESP8266/ESP32 WebServer libraries** to make life much easier to port sketches from ESP8266/ESP32.
 
 ---
 ---
