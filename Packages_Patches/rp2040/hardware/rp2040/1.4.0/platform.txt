@@ -1,0 +1,145 @@
+# Copyright (c) 2021 Earle F. Philhower, III
+#
+# Raspberry Pi RP2040 Core platform file
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+# For more info:
+# https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
+
+name=Raspberry Pi RP2040 Boards(1.4.0)
+version=1.4.0
+
+
+
+
+
+
+compiler.path={runtime.tools.pqt-gcc.path}/bin/
+
+# Compile variables
+# -----------------
+
+compiler.warning_flags=-w
+compiler.warning_flags.none=-w
+compiler.warning_flags.default=
+compiler.warning_flags.more=-Wall
+compiler.warning_flags.all=-Wall -Wextra
+
+compiler.defines={build.led}
+compiler.includes="-iprefix{runtime.platform.path}/" "@{runtime.platform.path}/lib/platform_inc.txt"
+compiler.flags=-Os -march=armv6-m -mcpu=cortex-m0plus -mthumb -ffunction-sections -fdata-sections -fno-exceptions
+compiler.wrap="@{runtime.platform.path}/lib/platform_wrap.txt"
+
+compiler.c.cmd=arm-none-eabi-gcc
+compiler.c.flags=-c {compiler.defines} {compiler.flags} {compiler.includes} -std=gnu17 -g
+compiler.c.elf.cmd=arm-none-eabi-g++
+compiler.c.elf.flags={compiler.defines} {compiler.flags} -Wl,--gc-sections -u _printf_float -u _scanf_float
+compiler.S.cmd=arm-none-eabi-gcc
+compiler.S.flags=-c -g -x assembler-with-cpp -MMD {compiler.includes} -g
+compiler.cpp.cmd=arm-none-eabi-g++
+compiler.cpp.flags=-c {compiler.defines} {compiler.flags} {compiler.includes} -fno-rtti -std=gnu++17 -g
+
+compiler.ar.cmd=arm-none-eabi-ar
+compiler.ar.flags=rcs
+compiler.objcopy.cmd=arm-none-eabi-objcopy
+compiler.objcopy.eep.flags=-O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0
+compiler.elf2hex.bin.flags=-O binary
+compiler.elf2hex.hex.flags=-O ihex -R .eeprom
+compiler.elf2hex.cmd=arm-none-eabi-objcopy
+compiler.ldflags={compiler.wrap} -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common
+compiler.size.cmd=arm-none-eabi-size
+compiler.define=-DARDUINO=
+compiler.readelf.cmd=arm-none-eabi-readelf
+
+# this can be overriden in boards.txt
+build.extra_flags=
+
+# These can be overridden in platform.local.txt
+compiler.c.extra_flags=
+compiler.c.elf.extra_flags=
+compiler.cpp.extra_flags=
+compiler.S.extra_flags=
+compiler.ar.extra_flags=
+compiler.elf2hex.extra_flags=
+
+# Board configuration, set in boards.txt.  Present here to ensure substitution works
+build.flash_length=
+build.eeprom_start=
+build.fs_start=
+build.fs_end=
+
+build.boot2=boot2_generic_03h_4_padded_checksum
+
+# Allow Pico boards do be auto-discovered by the IDE
+discovery.rp2040.pattern="{runtime.tools.pqt-python3.path}/python3" "{runtime.platform.path}/tools/discovery.py"
+
+
+# Compile patterns
+# ----------------
+
+## Compile c files
+## Add -DBOARD_NAME="{build.board}"
+recipe.c.o.pattern="{compiler.path}{compiler.c.cmd}" {compiler.c.flags} {build.usbpid} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DBOARD_NAME="{build.board}" -DARDUINO_ARCH_{build.arch} {compiler.c.extra_flags} {build.extra_flags} {build.debug_port} {build.debug_level} {includes} "{source_file}" -o "{object_file}"
+
+## Compile c++ files
+## Add -DBOARD_NAME="{build.board}"
+recipe.cpp.o.pattern="{compiler.path}{compiler.cpp.cmd}" {compiler.cpp.flags} {build.usbpid} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DBOARD_NAME="{build.board}" -DARDUINO_ARCH_{build.arch} {compiler.cpp.extra_flags} {build.extra_flags} {build.debug_port} {build.debug_level} {includes} "{source_file}" -o "{object_file}"
+
+## Compile S files
+## Add -DBOARD_NAME="{build.board}"
+recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} {build.usbpid} -DF_CPU={build.f_cpu} -DARDUINO={runtime.ide.version} -DARDUINO_{build.board} -DBOARD_NAME="{build.board}" -DARDUINO_ARCH_{build.arch} {compiler.S.extra_flags} {build.extra_flags} {build.debug_port} {build.debug_level} {includes} "{source_file}" -o "{object_file}"
+
+## Create archives
+# archive_file_path is needed for backwards compatibility with IDE 1.6.5 or older, IDE 1.6.6 or newer overrides this value
+archive_file_path={build.path}/{archive_file}
+recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
+
+## Combine gc-sections, archives, and objects
+recipe.hooks.linking.prelink.1.pattern="{runtime.tools.pqt-python3.path}/python3" "{runtime.platform.path}/tools/simplesub.py" --input "{runtime.platform.path}/lib/memmap_default.ld" --out "{build.path}/memmap_default.ld" --sub __FLASH_LENGTH__ {build.flash_length} --sub __EEPROM_START__ {build.eeprom_start} --sub __FS_START__ {build.fs_start} --sub __FS_END__ {build.fs_end}
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}" "-L{build.path}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-Wl,--script={build.path}/memmap_default.ld" "-Wl,-Map,{build.path}/{build.project_name}.map" --specs=nosys.specs -Wl,--as-needed -Wl,--start-group {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" {object_files} "{build.path}/{archive_file}" -Wl,--whole-archive "{runtime.platform.path}/lib/libpico.a" -Wl,--no-whole-archive -lm "-I{runtime.platform.path}/pico-sdk/src/rp2040/hardware_regs/include/" "-I{runtime.platform.path}/pico-sdk/src/common/pico_binary_info/include" "{runtime.platform.path}/assembly/{build.boot2}.S" -lc -lstdc++ -Wl,--end-group
+
+## Create output (UF2 file)
+recipe.objcopy.uf2.pattern="{runtime.tools.pqt-elf2uf2.path}/elf2uf2" "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.uf2"
+
+build.preferred_out_format=uf2
+
+## Save hex
+recipe.output.tmp_file={build.project_name}.{build.preferred_out_format}
+recipe.output.save_file={build.project_name}.{build.variant}.{build.preferred_out_format}
+
+## Compute size
+recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+recipe.size.regex=^(?:\.boot2|\.text|\.rodata|\.ARM\.extab|\.ARM\.exidx)\s+([0-9]+).*
+recipe.size.regex.data=^(?:\.data|\.bss|\.ram_vector_table|\.uninitialized_data)\s+([0-9]+).*
+
+tools.uf2conv.path=
+# Because the variable expansion doesn't allow one tool to find another, the following lines
+# will point to "{runtime.platform.path}/tools/python3/python3" in GIT and
+# "{runtime.tools.pqt-python3.path}/python3" for JSON board manager releases.
+tools.uf2conv.cmd={runtime.tools.pqt-python3.path}/python3
+
+tools.uf2conv.upload.protocol=uf2
+tools.uf2conv.upload.params.verbose=
+tools.uf2conv.upload.params.quiet=
+tools.uf2conv.upload.pattern="{cmd}" "{runtime.platform.path}/tools/uf2conv.py" --serial "{serial.port}" --family RP2040 --deploy "{build.path}/{build.project_name}.uf2"
+
+
+tools.picoprobe.cmd={runtime.tools.pqt-openocd.path}
+
+tools.picoprobe.upload.protocol=picoprobe
+tools.picoprobe.upload.params.verbose=
+tools.picoprobe.upload.params.quiet=
+tools.picoprobe.upload.pattern="{cmd}/bin/openocd" -f "interface/picoprobe.cfg" -f "target/rp2040.cfg" -s "{cmd}/share/openocd/scripts" -c "program {build.path}/{build.project_name}.elf verify reset exit"
