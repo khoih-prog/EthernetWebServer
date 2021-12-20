@@ -12,15 +12,16 @@
    @file       Esp8266WebServer.h
    @author     Ivan Grokhotkov
    
-   Version: 1.7.1
+   Version: 1.8.0
 
    Version Modified By   Date      Comments
    ------- -----------  ---------- -----------
-    1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
-    ...
-    1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
-    1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
-    1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
+   1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
+   ...
+   1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
+   1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
+   1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
+   1.8.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
  *************************************************************************************************************************************/
 
 #pragma once
@@ -36,7 +37,7 @@ class RequestHandler
 
     virtual ~RequestHandler() { }
 
-    virtual bool canHandle(HTTPMethod method, String uri)
+    virtual bool canHandle(const HTTPMethod& method, const String& uri)
     {
       ETW_UNUSED(method);
       ETW_UNUSED(uri);
@@ -44,14 +45,14 @@ class RequestHandler
       return false;
     }
 
-    virtual bool canUpload(String uri)
+    virtual bool canUpload(const String& uri)
     {
       ETW_UNUSED(uri);
       
       return false;
     }
 
-    virtual bool handle(EthernetWebServer& server, HTTPMethod requestMethod, String requestUri)
+    virtual bool handle(EthernetWebServer& server, const HTTPMethod& requestMethod, const String& requestUri)
     {
       ETW_UNUSED(server);
       ETW_UNUSED(requestMethod);
@@ -60,7 +61,7 @@ class RequestHandler
       return false;
     }
 
-    virtual void upload(EthernetWebServer& server, String requestUri, HTTPUpload& upload) 
+    virtual void upload(EthernetWebServer& server, const String& requestUri, const HTTPUpload& upload) 
     {
       ETW_UNUSED(server);
       ETW_UNUSED(requestUri);

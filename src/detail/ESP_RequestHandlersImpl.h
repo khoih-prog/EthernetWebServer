@@ -13,15 +13,16 @@
    @file       Esp8266WebServer.h
    @author     Ivan Grokhotkov
    
-   Version: 1.7.1
+   Version: 1.8.0
 
    Version Modified By   Date      Comments
    ------- -----------  ---------- -----------
-    1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
-    ...
-    1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
-    1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
-    1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
+   1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
+   ...
+   1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
+   1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
+   1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
+   1.8.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
  *************************************************************************************************************************************/
 
 #pragma once
@@ -37,7 +38,7 @@ class FunctionRequestHandler : public RequestHandler
 {
   public:
 
-    FunctionRequestHandler(EthernetWebServer::THandlerFunction fn, EthernetWebServer::THandlerFunction ufn, const String &uri, HTTPMethod method)
+    FunctionRequestHandler(EthernetWebServer::THandlerFunction fn, EthernetWebServer::THandlerFunction ufn, const String &uri, const HTTPMethod& method)
       : _fn(fn)
       , _ufn(ufn)
       , _uri(uri)
@@ -45,7 +46,7 @@ class FunctionRequestHandler : public RequestHandler
     {
     }
 
-    bool canHandle(HTTPMethod requestMethod, String requestUri) override
+    bool canHandle(const HTTPMethod& requestMethod, const String& requestUri) override
     {
       if (_method != HTTP_ANY && _method != requestMethod)
         return false;
@@ -65,7 +66,7 @@ class FunctionRequestHandler : public RequestHandler
       return false;
     }
 
-    bool canUpload(String requestUri) override
+    bool canUpload(const String& requestUri) override
     {
       if (!_ufn || !canHandle(HTTP_POST, requestUri))
         return false;
@@ -73,7 +74,7 @@ class FunctionRequestHandler : public RequestHandler
       return true;
     }
 
-    bool handle(EthernetWebServer& server, HTTPMethod requestMethod, String requestUri) override
+    bool handle(EthernetWebServer& server, const HTTPMethod& requestMethod, const String& requestUri) override
     {
       ETW_UNUSED(server);
       
@@ -84,7 +85,7 @@ class FunctionRequestHandler : public RequestHandler
       return true;
     }
 
-    void upload(EthernetWebServer& server, String requestUri, HTTPUpload& upload) override
+    void upload(EthernetWebServer& server, const String& requestUri, const HTTPUpload& upload) override
     {
       ETW_UNUSED(server);
       ETW_UNUSED(upload);
@@ -100,8 +101,10 @@ class FunctionRequestHandler : public RequestHandler
     HTTPMethod _method;
 };
 
-class StaticRequestHandler : public RequestHandler {
+class StaticRequestHandler : public RequestHandler 
+{
     using WebServerType = EthernetWebServer;
+    
 public:
     StaticRequestHandler(FS& fs, const char* path, const char* uri, const char* cache_header)
     : _fs(fs)
@@ -119,7 +122,8 @@ public:
     }
 
     /* Deprecated version. Please use mime::getContentType instead */
-    static String getContentType(const String& path) __attribute__((deprecated)) {
+    static String getContentType(const String& path) __attribute__((deprecated)) 
+    {
         return mime_esp::getContentType(path);
     }
 
@@ -135,8 +139,8 @@ protected:
 
 class StaticFileRequestHandler
     :
-public StaticRequestHandler {
-
+public StaticRequestHandler 
+{
     using SRH = StaticRequestHandler;
     using WebServerType = EthernetWebServer;
 
@@ -154,12 +158,13 @@ public:
         f.close();
     }
 
-    bool canHandle(HTTPMethod requestMethod, const String requestUri) override  {
+    bool canHandle(const HTTPMethod& requestMethod, const String& requestUri) override  
+    {
         return SRH::validMethod(requestMethod) && requestUri == SRH::_uri;
     }
 
-    bool handle(EthernetWebServer& server, HTTPMethod requestMethod, const String requestUri) {
-
+    bool handle(EthernetWebServer& server, const HTTPMethod& requestMethod, const String& requestUri) 
+    {
         if (!canHandle(requestMethod, requestUri))
             return false;
 

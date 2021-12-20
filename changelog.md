@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Major Releases v1.8.0](#major-releases-v180)
   * [Releases v1.7.1](#releases-v171)
   * [Major Releases v1.7.0](#major-releases-v170)
   * [Major Releases v1.6.0](#major-releases-v160)
@@ -38,6 +39,12 @@
 ---
 
 ## Changelog
+
+### Major Releases v1.8.0
+
+1. Reduce usage of Arduino String with std::string
+2. Optimize library code and examples by using reference-passing instead of value-passing.
+3. Update `Packages' Patches`
 
 ### Releases v1.7.1
 

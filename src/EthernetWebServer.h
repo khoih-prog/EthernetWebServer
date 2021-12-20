@@ -12,20 +12,27 @@
    @file       Esp8266WebServer.h
    @author     Ivan Grokhotkov
    
-   Version: 1.7.1
+   Version: 1.8.0
 
    Version Modified By   Date      Comments
    ------- -----------  ---------- -----------
-    1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
-    ...
-    1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
-    1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
-    1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
+   1.0.0   K Hoang      13/02/2020 Initial coding for Arduino Mega, Teensy, etc to support Ethernetx libraries
+   ...
+   1.6.0   K Hoang      04/09/2021 Add support to QNEthernet Library for Teensy 4.1
+   1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
+   1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
+   1.8.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
  *************************************************************************************************************************************/
 
 #pragma once
 
-#define ETHERNET_WEBSERVER_VERSION      "EthernetWebServer v1.7.1"
+#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v1.8.0"
+
+#define ETHERNET_WEBSERVER_VERSION_MAJOR    1
+#define ETHERNET_WEBSERVER_VERSION_MINOR    8
+#define ETHERNET_WEBSERVER_VERSION_PATCH    0
+
+#define ETHERNET_WEBSERVER_VERSION_INT      1008000
 
 #define USE_NEW_WEBSERVER_VERSION       true
 
@@ -173,6 +180,36 @@ enum HTTPAuthMethod
 #define CONTENT_LENGTH_UNKNOWN  ((size_t) -1)
 #define CONTENT_LENGTH_NOT_SET  ((size_t) -2)
 
+/////////////////////////////////////////////////////////////////////////
+
+#define RETURN_NEWLINE       "\r\n"
+
+#include <string>
+#include <Arduino.h>
+
+typedef std::string EWString;
+
+EWString fromString(const String& str)
+{
+  return str.c_str();
+}
+
+EWString fromString(const String&& str)
+{
+  return str.c_str();
+}
+
+String fromEWString(const EWString& str)
+{
+  return str.c_str();
+}
+
+String fromEWString(const EWString&& str)
+{
+  return str.c_str();
+}
+
+
 class EthernetWebServer;
 
 typedef struct 
@@ -245,17 +282,18 @@ class EthernetWebServer
     }
     #endif
 
-    String arg(String name);        // get request argument value by name
+    String arg(const String& name);        // get request argument value by name
     String arg(int i);              // get request argument value by number
     String argName(int i);          // get request argument name by number
+    
     int args();                     // get arguments count
-    bool hasArg(String name);       // check if argument exists
+    bool hasArg(const String& name);       // check if argument exists
     void collectHeaders(const char* headerKeys[], const size_t headerKeysCount); // set the request headers to collect
-    String header(String name);      // get request header value by name
+    String header(const String& name);      // get request header value by name
     String header(int i);              // get request header value by number
     String headerName(int i);          // get request header name by number
     int headers();                     // get header count
-    bool hasHeader(String name);       // check if header exists
+    bool hasHeader(const String& name);       // check if header exists
 
     String hostHeader();            // get request host header if available or empty String if not
 
@@ -271,6 +309,7 @@ class EthernetWebServer
     
     void setContentLength(size_t contentLength);
     void sendHeader(const String& name, const String& value, bool first = false);
+    //void sendHeader(const EWString& name, const EWString& value, bool first = false);
     void sendContent(const String& content);
     void sendContent(const String& content, size_t size);
 
@@ -333,8 +372,8 @@ class EthernetWebServer
     int  _parseArgumentsPrivate(const String& data, vl::Func<void(String&,String&,const String&,int,int,int,int)> handler);
     bool _parseForm(EthernetClient& client, const String& boundary, uint32_t len);
     #else
-    void _parseArguments(String data);    
-    bool _parseForm(EthernetClient& client, String boundary, uint32_t len);
+    void _parseArguments(const String& data);    
+    bool _parseForm(EthernetClient& client, const String& boundary, uint32_t len);
     #endif
       
     static String _responseCodeToString(int code);
@@ -342,6 +381,7 @@ class EthernetWebServer
     void _uploadWriteByte(uint8_t b);
     uint8_t _uploadReadByte(EthernetClient& client);
     void _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
+    void _prepareHeader(EWString& response, int code, const char* content_type, size_t contentLength);
     bool _collectHeader(const char* headerName, const char* headerValue);
     
     #if (ESP32 || ESP8266)
@@ -407,6 +447,8 @@ class EthernetWebServer
     bool              _chunked;
 
 };
+
+/////////////////////////////////////////////////////////////////////////
 
 #include "EthernetWebServer-impl.h"
 #include "Parsing-impl.h"
