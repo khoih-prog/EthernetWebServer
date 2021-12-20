@@ -28,8 +28,8 @@
 const uint32_t g_ADigitalPinMap[] =
 {
    // D0 .. D13
-  29,  // D0  is P0.29 (UART TX)
-  45,  // D1  is P1.13 (UART RX 
+  29,  // D0  is P0.29 (UART RX)
+  45,  // D1  is P1.13 (UART TX) 
   44,  // D2  is P1.12 (NFC2)
   31,  // D3  is P0.31 (LED1)
   13,  // D4  is P0.13 (LED2)

@@ -16,6 +16,9 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+//https://www.u-blox.com/sites/default/files/NINA-B1_DataSheet_UBX-15019243.pdf
+//https://www.u-blox.com/sites/default/files/EVK-NINA-B1_UserGuide_%28UBX-15028120%29_C1-Public.pdf
+
 #ifndef _VARIANT_NINA_B112_UBLOX_
 #define _VARIANT_NINA_B112_UBLOX_
 
@@ -52,30 +55,29 @@ extern "C"
 #define LED_BUILTIN          PIN_LED
 
 //LEDs onboard
-#define LED1 (8)  // Red
-#define LED2 (16) // Green/SW1
-#define LED3 (18) // Blue
+#define LED1 (0)  // Red
+#define LED2 (24) // Green/SW1
+#define LED3 (4) // Blue
 
 #define LED_STATE_ON         1         // State when LED is litted
 
 //Switch
-
-#define SW1 (16)
-#define SW2 (30)
+#define SW1 (24)
+#define SW2 (19)
 
 // NFC
-#define PIN_NFC_1	(9)  // P0.9
-#define PIN_NFC_2	(10) // P0.10
+#define PIN_NFC_1	(6)  // P0.9
+#define PIN_NFC_2	(7)  // P0.10
 
 /*
  * Analog pins
  */
-#define PIN_A0               (3) // P0.03
-#define PIN_A1               (2) // P0.02
-#define PIN_A2               (4) // P0.04
-#define PIN_A3               (30) // P0.30
-#define PIN_A4               (29) // P0.29
-#define PIN_A5               (28) // P0.28
+#define PIN_A0               (16) // P0.03
+#define PIN_A1               (17) // P0.02
+#define PIN_A2               (18) // P0.04
+#define PIN_A3               (19) // P0.30
+#define PIN_A4               (20) // P0.29
+#define PIN_A5               (21) // P0.28
 
 static const uint8_t A0  = PIN_A0 ;
 static const uint8_t A1  = PIN_A1 ;
@@ -86,14 +88,14 @@ static const uint8_t A5  = PIN_A5 ;
 
 #define ADC_RESOLUTION    14
 
-#define PIN_D0               (5) // P0.05
-#define PIN_D1               (6) // P0.06
-#define PIN_D2               (7) // P0.07
-#define PIN_D3               (31) // P0.31
-#define PIN_D4               (18) // P0.18
-#define PIN_D6               (9) // P0.09
-#define PIN_D7               (10) // P0.10
-#define PIN_D9               (8) // P0.8
+#define PIN_D0               (0) // P0.05
+#define PIN_D1               (1) // P0.06
+#define PIN_D2               (2) // P0.07
+#define PIN_D3               (4) // P0.31
+#define PIN_D4               (5) // P0.18
+#define PIN_D6               (6) // P0.09
+#define PIN_D7               (7) // P0.10
+#define PIN_D9               (9) // P0.08
 #define PIN_D10              (11) // P0.11
 #define PIN_D11              (13) // P0.13
 #define PIN_D12              (12) // P0.12
@@ -125,13 +127,10 @@ static const uint8_t D15  = PIN_D15 ;
 /*
  * Serial interfaces
  */
-//#define PIN_SERIAL_RX       (8)  //used for original Adafruit Bootloader
-//#define PIN_SERIAL_TX       (6)  //used for original Adafruit Bootloader
-
-#define PIN_SERIAL_RX       (5) // P0.05
-#define PIN_SERIAL_TX       (6) // P0.06
-#define PIN_SERIAL_CTS      (7) // P0.07
-#define PIN_SERIAL_RTS      (31) // P0.31
+#define PIN_SERIAL_RX       (0) // P0.05
+#define PIN_SERIAL_TX       (1) // P0.06
+#define PIN_SERIAL_CTS      (2) // P0.07
+#define PIN_SERIAL_RTS      (3) // P0.31
 #define PIN_SERIAL_DTR      (28) // P0.28
 #define PIN_SERIAL_DSR      (29) // P0.29
 
@@ -141,10 +140,10 @@ static const uint8_t D15  = PIN_D15 ;
 #define SPI_INTERFACES_COUNT 1
 
 #define PIN_SPI_MISO         (12) // P0.12
-#define PIN_SPI_MOSI         (13) // P0.13
-#define PIN_SPI_SCK          (14) // P0.14
+#define PIN_SPI_MOSI         (11) // P0.13
+#define PIN_SPI_SCK          (13) // P0.14
 
-static const uint8_t SS   = 11 ;  // P0.11
+static const uint8_t SS   = 10 ;  // P0.11
 static const uint8_t MOSI = PIN_SPI_MOSI ;
 static const uint8_t MISO = PIN_SPI_MISO ;
 static const uint8_t SCK  = PIN_SPI_SCK ;
@@ -154,8 +153,8 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
  */
 #define WIRE_INTERFACES_COUNT 1
 
-#define PIN_WIRE_SDA         (2) // P0.02
-#define PIN_WIRE_SCL         (3) // P0.03
+#define PIN_WIRE_SDA         (14) // P0.02
+#define PIN_WIRE_SCL         (15) // P0.03
 
 static const uint8_t SDA = PIN_WIRE_SDA;
 static const uint8_t SCL = PIN_WIRE_SCL;
