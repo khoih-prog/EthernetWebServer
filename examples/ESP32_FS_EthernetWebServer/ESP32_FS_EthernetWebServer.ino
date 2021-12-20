@@ -82,7 +82,7 @@ String formatBytes(size_t bytes)
   }
 }
 
-String getContentType(String filename)
+String getContentType(const String& filename)
 {
   if (server.hasArg("download"))
   {
@@ -310,7 +310,7 @@ void handleFileList()
   server.send(200, "text/json", output);
 }
 
-void initFS(void)
+void initFS()
 {
   // Initialize LittleFS/SPIFFS file-system
   // Format SPIFFS if not yet
@@ -349,7 +349,7 @@ void listDir()
   Serial.println();
 }
 
-void initWebserver(void)
+void initWebserver()
 {
   //SERVER INIT
   //list directory
@@ -417,7 +417,7 @@ void initWebserver(void)
   server.begin();
 }
 
-void setup(void)
+void setup()
 {
   Serial.begin(115200);
   while (!Serial);
@@ -540,7 +540,7 @@ void setup(void)
   Serial.println(F("/edit to see the file browser"));
 }
 
-void loop(void)
+void loop()
 {
   server.handleClient();
 }

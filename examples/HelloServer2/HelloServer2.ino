@@ -50,7 +50,7 @@ void handleNotFound()
   digitalWrite(led, 0);
 }
 
-void setup(void)
+void setup()
 {
   pinMode(led, OUTPUT);
   digitalWrite(led, 0);
@@ -345,7 +345,7 @@ void setup(void)
   Serial.println(Ethernet.localIP());
 }
 
-void loop(void)
+void loop()
 {
   server.handleClient();
 }

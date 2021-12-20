@@ -94,6 +94,37 @@ void handleNotFound()
   server.send(404, F("text/plain"), message);
 }
 
+#if (defined(ETHERNET_WEBSERVER_VERSION_INT) && (ETHERNET_WEBSERVER_VERSION_INT >= 1008000))
+
+EWString initHeader = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n" \
+                      "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
+                      "<g stroke=\"blue\">\n";
+
+void drawGraph()
+{
+  EWString out;
+  
+  out.reserve(3000);
+  char temp[70];
+  
+  out += initHeader;
+  
+  int y = rand() % 130;
+  for (int x = 10; x < 300; x += 10)
+  {
+    int y2 = rand() % 130;
+    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"1\" />\n", x, 140 - y, x + 10, 140 - y2);
+    out += temp;
+    y = y2;
+  }
+  out += "</g>\n</svg>\n";
+
+  server.send(200, F("image/svg+xml"), fromEWString(out));
+}
+
+
+#else
+
 void drawGraph()
 {
   String out;
@@ -117,7 +148,9 @@ void drawGraph()
   server.send(200, F("image/svg+xml"), out);
 }
 
-void setup(void)
+#endif
+
+void setup()
 {
   Serial.begin(115200);
   while (!Serial);
@@ -201,7 +234,7 @@ void setup(void)
   Serial.println(Ethernet.localIP());
 }
 
-void heartBeatPrint(void)
+void heartBeatPrint()
 {
   static int num = 1;
 
@@ -232,7 +265,7 @@ void check_status()
   }
 }
 
-void loop(void)
+void loop()
 {
   server.handleClient();
   check_status();

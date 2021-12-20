@@ -38,7 +38,7 @@
 
 EthernetWebServer server(80);
 
-void setup(void) 
+void setup() 
 {
   Serial.begin(115200);
   while (!Serial);
@@ -232,12 +232,12 @@ void setup(void)
   Serial.println("HTTP server started");
 }
 
-void loop(void) 
+void loop() 
 {
   server.handleClient();
 }
 
-void initFS(void) 
+void initFS() 
 {
   // Initialize LittleFS/SPIFFS file-system
 #if (ESP32)
@@ -267,9 +267,8 @@ void initFS(void)
   }
 }
 
-void initWebserver(void) 
+void initWebserver() 
 {
- 
   // Web Page handlers
   server.serveStatic("/", FileFS, "/page1.html");
   server.serveStatic("/page2", FileFS, "/page2.html");

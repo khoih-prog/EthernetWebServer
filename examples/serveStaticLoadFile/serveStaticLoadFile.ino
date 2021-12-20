@@ -65,7 +65,7 @@ String formatBytes(size_t bytes)
   }
 }
 
-String getContentType(String filename)
+String getContentType(const String& filename)
 {
   if (server.hasArg("download"))
   {
@@ -250,7 +250,7 @@ void handleFileUpload()
   }
 }
 
-void initFS(void)
+void initFS()
 {
   // Initialize LittleFS/SPIFFS file-system
 #if (ESP32)
@@ -280,7 +280,7 @@ void initFS(void)
   }
 }
 
-void initWebserver(void)
+void initWebserver()
 {
   //load editor
   server.on("/edit", HTTP_GET, []()
@@ -322,7 +322,7 @@ void initWebserver(void)
   server.begin();
 }
 
-void setup(void)
+void setup()
 {
   Serial.begin(115200);
   while (!Serial);
@@ -515,7 +515,7 @@ void setup(void)
   Serial.println("HTTP server started");
 }
 
-void loop(void)
+void loop()
 {
   server.handleClient();
 }

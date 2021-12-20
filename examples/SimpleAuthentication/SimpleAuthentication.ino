@@ -136,7 +136,7 @@ void handleNotFound()
   server.send(404, F("text/plain"), message);
 }
 
-void setup(void)
+void setup()
 {
   Serial.begin(115200);
   while (!Serial);
@@ -413,7 +413,7 @@ void setup(void)
   Serial.println(Ethernet.localIP());
 }
 
-void loop(void)
+void loop()
 {
   server.handleClient();
 }
