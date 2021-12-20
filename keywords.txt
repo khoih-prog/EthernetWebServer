@@ -12,6 +12,7 @@ HTTPUploadStatus  KEYWORD1
 HTTPClientStatus  KEYWORD1
 HTTPUpload  KEYWORD1
 HTTPAuthMethod  KEYWORD1
+EWString  KEYWORD1
 
 #######################
 # EthernetHttpClient

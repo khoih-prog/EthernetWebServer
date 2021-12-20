@@ -43,7 +43,7 @@
 ### Major Releases v1.8.0
 
 1. Reduce usage of Arduino String with std::string
-2. Optimize library code and examples by using reference-passing instead of value-passing.
+2. Optimize library code and examples by using **reference-passing instead of value-passing**.
 3. Update `Packages' Patches`
 
 ### Releases v1.7.1
