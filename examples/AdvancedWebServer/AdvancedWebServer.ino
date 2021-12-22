@@ -49,7 +49,7 @@ int reqCount = 0;                // number of requests received
 
 void handleRoot()
 {
-#define BUFFER_SIZE     400
+#define BUFFER_SIZE     500
   
   char temp[BUFFER_SIZE];
   int sec = millis() / 1000;
