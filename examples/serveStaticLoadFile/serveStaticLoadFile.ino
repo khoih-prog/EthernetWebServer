@@ -37,6 +37,9 @@
    3) access the sample web page at http://localIPAddress/
 *****************************************************************************************************************************/
 
+// Important: For ESP32, check https://github.com/khoih-prog/EthernetWebServer#7-for-fixing-esp32-compile-error
+// and replace cores/esp32/Server.h to avoid compile error
+
 #include "defines.h"
 
 EthernetWebServer server(80);
