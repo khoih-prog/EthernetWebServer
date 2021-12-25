@@ -12,7 +12,7 @@
    @file       Esp8266WebServer.h
    @author     Ivan Grokhotkov
    
-   Version: 1.8.0
+   Version: 1.8.1
 
    Version Modified By   Date      Comments
    ------- -----------  ---------- -----------
@@ -22,17 +22,18 @@
    1.7.0   K Hoang      09/09/2021 Add support to Portenta H7 Ethernet
    1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
    1.8.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
+   1.8.1   K Hoang      24/12/2021 Fix bug
  *************************************************************************************************************************************/
 
 #pragma once
 
-#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v1.8.0"
+#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v1.8.1"
 
 #define ETHERNET_WEBSERVER_VERSION_MAJOR    1
 #define ETHERNET_WEBSERVER_VERSION_MINOR    8
-#define ETHERNET_WEBSERVER_VERSION_PATCH    0
+#define ETHERNET_WEBSERVER_VERSION_PATCH    1
 
-#define ETHERNET_WEBSERVER_VERSION_INT      1008000
+#define ETHERNET_WEBSERVER_VERSION_INT      1008001
 
 #define USE_NEW_WEBSERVER_VERSION       true
 

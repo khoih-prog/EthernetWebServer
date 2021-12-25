@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v1.8.1](#releases-v181)
   * [Major Releases v1.8.0](#major-releases-v180)
   * [Releases v1.7.1](#releases-v171)
   * [Major Releases v1.7.0](#major-releases-v170)
@@ -39,6 +40,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.8.1
+
+1. Fix bug related to String in library and examples
 
 ### Major Releases v1.8.0
 
