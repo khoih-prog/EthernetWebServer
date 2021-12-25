@@ -44,7 +44,7 @@ int reqCount = 0;                // number of requests received
 
 void handleRoot()
 {
-#define BUFFER_SIZE     400
+#define BUFFER_SIZE     512
   
   char temp[BUFFER_SIZE];
   int sec = millis() / 1000;
@@ -58,18 +58,19 @@ void handleRoot()
            "<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
-<title>AdvancedWebServer %s</title>\
+<title>%s</title>\
 <style>\
 body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
 </style>\
 </head>\
 <body>\
-<h2>Hi from EthernetWebServer!</h2>\
-<h3>%s on %s</h3>\
+<h1>Hello from %s</h1>\
+<h3>running EthernetWebServer</h3>\
+<h3>on %s</h3>\
 <p>Uptime: %d d %02d:%02d:%02d</p>\
 <img src=\"/test.svg\" />\
 </body>\
-</html>", BOARD_NAME, SHIELD_TYPE, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
+</html>", BOARD_NAME, BOARD_NAME, SHIELD_TYPE, day, hr, min % 60, sec % 60);
 
   server.send(200, F("text/html"), temp);
 }
@@ -94,61 +95,52 @@ void handleNotFound()
   server.send(404, F("text/plain"), message);
 }
 
-#if (defined(ETHERNET_WEBSERVER_VERSION_INT) && (ETHERNET_WEBSERVER_VERSION_INT >= 1008000))
-
-EWString initHeader = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n" \
-                      "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-                      "<g stroke=\"blue\">\n";
+#define ORIGINAL_STR_LEN        2048
 
 void drawGraph()
 {
-  EWString out;
-  
-  out.reserve(3000);
-  char temp[70];
-  
-  out += initHeader;
-  
-  int y = rand() % 130;
-  for (int x = 10; x < 300; x += 10)
+  static String out;
+  static uint16_t previousStrLen = ORIGINAL_STR_LEN;
+
+  if (out.length() == 0)
   {
-    int y2 = rand() % 130;
-    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"1\" />\n", x, 140 - y, x + 10, 140 - y2);
-    out += temp;
-    y = y2;
+    ET_LOGWARN1(F("String Len = 0, extend to"), ORIGINAL_STR_LEN);
+    out.reserve(ORIGINAL_STR_LEN);
   }
-  out += "</g>\n</svg>\n";
 
-  server.send(200, F("image/svg+xml"), fromEWString(out));
-}
+  out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n" \
+           "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
+           "<g stroke=\"blue\">\n");
 
-
-#else
-
-void drawGraph()
-{
-  String out;
-  out.reserve(3000);
   char temp[70];
   
-  out += F("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n");
-  out += F("<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"1\" stroke=\"rgb(0, 0, 0)\" />\n");
-  out += F("<g stroke=\"black\">\n");
   int y = rand() % 130;
 
   for (int x = 10; x < 300; x += 10)
   {
     int y2 = rand() % 130;
-    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"1\" />\n", x, 140 - y, x + 10, 140 - y2);
+    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"2\" />\n", x, 140 - y, x + 10, 140 - y2);
     out += temp;
     y = y2;
   }
+  
   out += F("</g>\n</svg>\n");
 
-  server.send(200, F("image/svg+xml"), out);
-}
+  ET_LOGDEBUG1(F("String Len = "), out.length());
 
-#endif
+  if (out.length() > previousStrLen)
+  {
+    ET_LOGERROR3(F("String Len > "), previousStrLen, F(", extend to"), out.length() + 48);
+
+    previousStrLen = out.length() + 48;
+    
+    out.reserve(previousStrLen);
+  }
+  else
+  {
+    server.send(200, "image/svg+xml", out);
+  }
+}
 
 void setup()
 {
