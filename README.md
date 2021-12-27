@@ -215,7 +215,7 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
  4. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.12+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
  6. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
- 7. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
+ 7. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  8. [`Adafruit nRF52 v1.2.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
  9. [`ESP32 Core 2.0.2+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
 10. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS.
@@ -2006,7 +2006,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2187,7 +2187,7 @@ The terminal output of **SAM DUE with W5x00 using EthernetLarge Library** runnin
 
 ```
 Starting SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 75
@@ -2278,7 +2278,7 @@ The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet3 Library** r
 
 ```
 Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET3 ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2313,7 +2313,7 @@ The terminal output of **ESP32 with W5x00 using Ethernet Library** running [ESP3
 
 ```
 Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 23
@@ -2364,7 +2364,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [FS
 
 ```
 Starting FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2420,7 +2420,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [se
 ```
 Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
 With W5x00 using Ethernet Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2463,7 +2463,7 @@ The following are debug terminal output and screen shot when running example [Si
 
 ```
 SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 Debug Level = 3
 Connected! IP address: 192.168.2.127
 [EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
@@ -2519,7 +2519,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet3 Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] =========== USE_ETHERNET3 ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2552,7 +2552,7 @@ The following are debug terminal output when running example [MQTTClient_Auth](e
 
 ```
 Start MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] =========== USE_ETHERNET ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2587,7 +2587,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2621,7 +2621,7 @@ The following are debug terminal output and screen shot when running example [Ud
 
 ```
 Start UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2666,7 +2666,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2688,7 +2688,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2706,7 +2706,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2729,7 +2729,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 6
 Connected! IP address: 192.168.2.222
@@ -2748,7 +2748,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Starting SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 4
 Connected! IP address: 192.168.2.132
@@ -2796,7 +2796,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v1.8.1
+EthernetWebServer v1.8.2
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 7
 Connected! IP address: 192.168.2.132
@@ -2936,7 +2936,8 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
 5. [Adrian McEwen](https://github.com/amcewen) for [HttpClient Library](https://github.com/amcewen/HttpClient) on which the [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient) and this [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer) are relied.
 6. Thanks to [jimmie11](https://github.com/jimmie11) to report and suggest a fix in [Compile Error on Teensy 4.1 #14](https://github.com/khoih-prog/EthernetWebServer/issues/14) leading to the new version v1.2.0 to provide support to **Teensy 4.1** using [**NativeEthernet Library**](https://github.com/vjmuzik/NativeEthernet)
 7. Thanks to [Sardar Azari](https://github.com/gagulik) to make PR in [streamFile and serveStatic for ESP8266/ESP32 boards #22](https://github.com/khoih-prog/EthernetWebServer/pull/22) leading to the new version v1.3.0 to add WebServer feature to serve static from LittleFS/SPIFFS for ESP32/ESP8266. The example [**serveStatic**](examples/serveStatic) and [**serveStaticLoadFile**](examples/serveStaticLoadFile) are also contributed by [Sardar Azari](https://github.com/gagulik).
-
+8. Thanks to [neardreams](https://github.com/neardreams) to report issue [Something wrong in http response header #41](https://github.com/khoih-prog/EthernetWebServer/issues/41), then make PR in [fix for wrong http status header #42](https://github.com/khoih-prog/EthernetWebServer/pull/42) leading to the new version v1.8.2 to fix wrong http status header bug.
+9. Thanks to [dirkdickler](https://github.com/dirkdickler) to report issue [server.authenticate problem #43](https://github.com/khoih-prog/EthernetWebServer/issues/43) which was fixed in v1.8.2
 
 <table>
   <tr>
@@ -2950,6 +2951,8 @@ Many thanks for everyone for bug reporting, new feature suggesting, testing and 
   <tr>
     <td align="center"><a href="https://github.com/gagulik"><img src="https://github.com/gagulik.png" width="100px;" alt="gagulik"/><br /><sub><b>
 Sardar Azari</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/neardreams"><img src="https://github.com/neardreams.png" width="100px;" alt="neardreams"/><br /><sub><b>neardreams</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/dirkdickler"><img src="https://github.com/dirkdickler.png" width="100px;" alt="dirkdickler"/><br /><sub><b>dirkdickler</b></sub></a><br /></td>
   </tr> 
 </table>
 

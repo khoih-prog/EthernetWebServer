@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v1.8.2](#releases-v182)
   * [Releases v1.8.1](#releases-v181)
   * [Major Releases v1.8.0](#major-releases-v180)
   * [Releases v1.7.1](#releases-v171)
@@ -40,6 +41,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.8.2
+
+1. Fix wrong http status header bug. Check [fix for wrong http status header #42](https://github.com/khoih-prog/EthernetWebServer/pull/42)
+
 
 ### Releases v1.8.1
 

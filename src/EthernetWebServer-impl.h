@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.1
+  Version: 1.8.2
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,6 +23,7 @@
   1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
   1.8.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
   1.8.1   K Hoang      24/12/2021 Fix bug
+  1.8.2   K Hoang      27/12/2021 Fix wrong http status header bug
  *************************************************************************************************************************************/
 
 #pragma once
@@ -418,10 +419,12 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
   EWString aResponse = fromString(response);
   
   aResponse = "HTTP/1." + fromString(String(_currentVersion)) + " ";
-  aResponse += String(code).c_str();
+  aResponse += fromString(String(code));
   aResponse += " ";
   aResponse += fromString(_responseCodeToString(code));
   aResponse += RETURN_NEWLINE;
+  
+  ET_LOGDEBUG1(F("_prepareHeader aResponse ="), fromEWString(aResponse));
 
  using namespace mime;
  
@@ -462,10 +465,12 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
 void EthernetWebServer::_prepareHeader(EWString& response, int code, const char* content_type, size_t contentLength) 
 {
   response = "HTTP/1." + fromString(String(_currentVersion)) + " ";
-  response += String(code).c_str();
+  response += fromString(String(code));
   response += " ";
   response += fromString(_responseCodeToString(code));
   response += RETURN_NEWLINE;
+  
+  ET_LOGDEBUG1(F("_prepareHeader response ="), fromEWString(response));
 
  using namespace mime;
  

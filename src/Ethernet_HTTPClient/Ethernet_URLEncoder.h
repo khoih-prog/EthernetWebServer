@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.1
+  Version: 1.8.2
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,6 +23,7 @@
   1.7.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
   1.8.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
   1.8.1   K Hoang      24/12/2021 Fix bug
+  1.8.2   K Hoang      27/12/2021 Fix wrong http status header bug
  *************************************************************************************************************************************/
  
 // Library to simplify HTTP fetching on Arduino
