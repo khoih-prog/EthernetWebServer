@@ -418,7 +418,7 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
   EWString aResponse = fromString(response);
   
   aResponse = "HTTP/1." + fromString(String(_currentVersion)) + " ";
-  aResponse += code;
+  aResponse += String(code).c_str();
   aResponse += " ";
   aResponse += fromString(_responseCodeToString(code));
   aResponse += RETURN_NEWLINE;
@@ -462,7 +462,7 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
 void EthernetWebServer::_prepareHeader(EWString& response, int code, const char* content_type, size_t contentLength) 
 {
   response = "HTTP/1." + fromString(String(_currentVersion)) + " ";
-  response += code;
+  response += String(code).c_str();
   response += " ";
   response += fromString(_responseCodeToString(code));
   response += RETURN_NEWLINE;
