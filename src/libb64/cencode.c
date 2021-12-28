@@ -11,7 +11,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.2
+  Version: 1.8.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,10 +23,9 @@
   1.8.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
   1.8.1   K Hoang      24/12/2021 Fix bug
   1.8.2   K Hoang      27/12/2021 Fix wrong http status header bug
- *************************************************************************************************************************************/
-
-#if !(ESP32 || ESP8266)
-
+  1.8.3   K Hoang      28/12/2021 Fix authenticate issue caused by libb64
+ *****************************************************************************************************************************/
+ 
 #include "cencode.h"
 
 const int CHARS_PER_LINE = 72;
@@ -53,8 +52,8 @@ int base64_encode_block(const char* plaintext_in, int length_in, char* code_out,
   const char* plainchar = plaintext_in;
   const char* const plaintextend = plaintext_in + length_in;
   char* codechar = code_out;
-  char  result;
-  char  fragment;
+  char result;
+  char fragment;
 
   result = state_in->result;
 
@@ -63,7 +62,6 @@ int base64_encode_block(const char* plaintext_in, int length_in, char* code_out,
       while (1)
       {
       case step_A:
-
         if (plainchar == plaintextend)
         {
           state_in->result = result;
@@ -76,10 +74,7 @@ int base64_encode_block(const char* plaintext_in, int length_in, char* code_out,
         *codechar++ = base64_encode_value(result);
         result = (fragment & 0x003) << 4;
 
-        break;
-
       case step_B:
-
         if (plainchar == plaintextend)
         {
           state_in->result = result;
@@ -92,10 +87,7 @@ int base64_encode_block(const char* plaintext_in, int length_in, char* code_out,
         *codechar++ = base64_encode_value(result);
         result = (fragment & 0x00f) << 2;
 
-        break;
-
       case step_C:
-
         if (plainchar == plaintextend)
         {
           state_in->result = result;
@@ -116,8 +108,6 @@ int base64_encode_block(const char* plaintext_in, int length_in, char* code_out,
           *codechar++ = '\n';
           state_in->stepcount = 0;
         }
-
-        break;
       }
   }
 
@@ -155,7 +145,5 @@ int base64_encode_chars(const char* plaintext_in, int length_in, char* code_out)
   base64_init_encodestate(&_state);
   int len = base64_encode_block(plaintext_in, length_in, code_out, &_state);
 
-  return ( len + base64_encode_blockend((code_out + len), &_state) );
+  return len + base64_encode_blockend((code_out + len), &_state);
 }
-
-#endif

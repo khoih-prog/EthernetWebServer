@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v1.8.3](#releases-v183)
   * [Releases v1.8.2](#releases-v182)
   * [Releases v1.8.1](#releases-v181)
   * [Major Releases v1.8.0](#major-releases-v180)
@@ -41,6 +42,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.8.3
+
+1. Fix authenticate issue caused by libb64
 
 ### Releases v1.8.2
 
