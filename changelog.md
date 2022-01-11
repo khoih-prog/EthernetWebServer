@@ -43,6 +43,11 @@
 
 ## Changelog
 
+### Releases v1.8.4
+
+1. Fix libb64 compile error for ESP8266. Check [multiple definition of base64 error with ver. 1.8.3 #44](https://github.com/khoih-prog/EthernetWebServer/issues/44)
+2. Update `Packages' Patches`
+
 ### Releases v1.8.3
 
 1. Fix authenticate issue caused by libb64
