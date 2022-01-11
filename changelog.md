@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v1.8.4](#releases-v184)
   * [Releases v1.8.3](#releases-v183)
   * [Releases v1.8.2](#releases-v182)
   * [Releases v1.8.1](#releases-v181)
