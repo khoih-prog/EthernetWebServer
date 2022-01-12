@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v1.8.5](#releases-v185)
   * [Releases v1.8.4](#releases-v184)
   * [Releases v1.8.3](#releases-v183)
   * [Releases v1.8.2](#releases-v182)
@@ -43,6 +44,12 @@
 ---
 
 ## Changelog
+
+### Releases v1.8.5
+
+1. Restore support to AVR Mega2560
+2. Add support to megaAVR boards such as `Arduino Nano Every`, `UNO WiFi Rev 2` using `ATmega4809` MPU
+2. Fix libb64 fallthrough compile warning
 
 ### Releases v1.8.4
 

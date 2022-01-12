@@ -11,7 +11,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.4
+  Version: 1.8.5
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -25,13 +25,14 @@
   1.8.2   K Hoang      27/12/2021 Fix wrong http status header bug
   1.8.3   K Hoang      28/12/2021 Fix authenticate issue caused by libb64
   1.8.4   K Hoang      11/01/2022 Fix libb64 compile error for ESP8266
+  1.8.5   K Hoang      11/01/2022 Restore support to AVR Mega2560 and add megaAVR boards. Fix libb64 fallthrough compile warning
  *****************************************************************************************************************************/
 
 #if !(ESP32 || ESP8266)
 
 #include "cdecode.h"
 
-int base64_decode_value(char value_in)
+int base64_decode_value(int value_in)
 {
   static const char decoding[] =
   { 62, -1, -1, -1, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -2, -1, -1, -1, 0, 1, 2,
@@ -59,7 +60,7 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
 {
   const char* codechar = code_in;
   char* plainchar = plaintext_out;
-  char fragment;
+  int fragment;
 
   *plainchar = state_in->plainchar;
 
@@ -77,10 +78,12 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
             return plainchar - plaintext_out;
           }
 
-          fragment = (char)base64_decode_value(*codechar++);
+          fragment = base64_decode_value(*codechar++);
         } while (fragment < 0);
 
         *plainchar    = (fragment & 0x03f) << 2;
+        
+        // fall through
 
       case step_b:
         do
@@ -92,11 +95,13 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
             return plainchar - plaintext_out;
           }
 
-          fragment = (char)base64_decode_value(*codechar++);
+          fragment = base64_decode_value(*codechar++);
         } while (fragment < 0);
 
         *plainchar++ |= (fragment & 0x030) >> 4;
         *plainchar    = (fragment & 0x00f) << 4;
+        
+        // fall through
 
       case step_c:
         do
@@ -108,11 +113,13 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
             return plainchar - plaintext_out;
           }
 
-          fragment = (char)base64_decode_value(*codechar++);
+          fragment = base64_decode_value(*codechar++);
         } while (fragment < 0);
 
         *plainchar++ |= (fragment & 0x03c) >> 2;
         *plainchar    = (fragment & 0x003) << 6;
+        
+        // fall through
 
       case step_d:
         do
@@ -124,10 +131,12 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
             return plainchar - plaintext_out;
           }
 
-          fragment = (char)base64_decode_value(*codechar++);
+          fragment = base64_decode_value(*codechar++);
         } while (fragment < 0);
 
         *plainchar++   |= (fragment & 0x03f);
+        
+        // fall through
       }
   }
 
