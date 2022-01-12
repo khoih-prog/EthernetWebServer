@@ -1,6 +1,6 @@
 {
   "name": "EthernetWebServer",
-  "version": "1.8.5",
+  "version": "1.8.6",
   "keywords": "WebServer, Ethernet, Ethernet2, Ethernet3, EthernetLarge, EthernetENC, UIPEthernet, NativeEthernet, QNEthernet, Portenta-H7, Teensy, SAMD21, SAMD51, SAM DUE, nRF52, ESP32, ESP8266, rpi-pico, rp2040, W5x00, W5500, ENC28J60, HTTP-Client, WebSocket-Client, server, client, websocket, LittleFS, SPIFFS, Arduino, Mega, AVR",
   "description": "Simple Ethernet WebServer, HTTP Client and WebSocket Client library for AVR, Portenta_H7, Teensy, SAM DUE, SAMD21, SAMD51, ESP, nRF52, ESP32, ESP8266 and RASPBERRY_PI_PICO boards using Ethernet shields W5100, W5200, W5500, ENC28J60 or Teensy 4.1 NativeEthernet/QNEthernet. The WebServer supports HTTP GET and POST requests, provides argument parsing, handles one client at a time. It now provides HTTP Client and WebSocket Client. It supports Arduino boards (Atmel AVR-s, SAM DUE, Atmel SAM3X8E ARM Cortex-M3, SAMD21, SAMD51, ESP8266, ESP32, Adafruit nRF52, Teensy boards, Realtek Ameba(RTL8195A,RTL8710)) using Wiznet W5x00 or ENC28J60 network shields. It now supports WebServer serving from LittleFS/SPIFFS for ESP8266/ESP32.",
   "authors":
@@ -36,6 +36,7 @@
       "platforms": ["teensy"]
     }
   ],
+  "license": "MIT",
   "frameworks": "*",
   "platforms": "*",
   "examples": "examples/*/*/*.ino",

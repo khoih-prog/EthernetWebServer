@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.5
+  Version: 1.8.6
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -27,17 +27,18 @@
   1.8.3   K Hoang      28/12/2021 Fix authenticate issue caused by libb64
   1.8.4   K Hoang      11/01/2022 Fix libb64 compile error for ESP8266
   1.8.5   K Hoang      11/01/2022 Restore support to AVR Mega2560 and add megaAVR boards. Fix libb64 fallthrough compile warning
+  1.8.6   K Hoang      12/01/2022 Fix bug not supporting boards
  *************************************************************************************************************************************/
 
 #pragma once
 
-#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v1.8.5"
+#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v1.8.6"
 
 #define ETHERNET_WEBSERVER_VERSION_MAJOR    1
 #define ETHERNET_WEBSERVER_VERSION_MINOR    8
-#define ETHERNET_WEBSERVER_VERSION_PATCH    5
+#define ETHERNET_WEBSERVER_VERSION_PATCH    6
 
-#define ETHERNET_WEBSERVER_VERSION_INT      1008005
+#define ETHERNET_WEBSERVER_VERSION_INT      1008006
 
 #define USE_NEW_WEBSERVER_VERSION       true
 
@@ -56,7 +57,9 @@
   
   #warning Use mbed-portenta architecture for PORTENTA_H7 from EthernetWebServer
 
-#elif    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+#endif
+
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
@@ -67,7 +70,9 @@
   #define ETHERNET_USE_SAMD      true
   #warning Using SAMD architecture from EthernetWebServer
 
-#elif ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+#endif
+
+#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
         defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
   #if defined(ETHERNET_USE_NRF528XX)
@@ -76,14 +81,18 @@
   #define ETHERNET_USE_NRF528XX      true
   #warning Using nFR52 architecture from EthernetWebServer
 
-#elif ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
+#endif
+
+#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
   #if defined(ETHERNET_USE_SAM_DUE)
     #undef ETHERNET_USE_SAM_DUE
   #endif
   #define ETHERNET_USE_SAM_DUE      true
   #warning Using SAM_DUE architecture from EthernetWebServer
 
-#elif ( defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__) || \
+#endif
+
+#if ( defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__) || defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__) || \
       defined(__AVR_ATmega640__) || defined(__AVR_ATmega641__))
   #if defined(ETHERNET_USE_AVR_MEGA)
     #undef ETHERNET_USE_AVR_MEGA
@@ -91,8 +100,9 @@
   #define ETHERNET_USE_AVR_MEGA      true
   #warning Using AVR_MEGA architecture from EthernetWebServer
 
-#elif ( defined(__AVR_ATmega4809__) || defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) )
+#endif
 
+#if ( defined(__AVR_ATmega4809__) || defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) )
 
   #if defined(ETHERNET_USE_MEGA_AVR)
     #undef ETHERNET_USE_MEGA_AVR
@@ -100,9 +110,26 @@
   #define ETHERNET_USE_MEGA_AVR      true
   #warning Using MEGA_AVR architecture from EthernetWebServer
 
-#else
+#endif
 
-  #error Not supported board. Please check your Tools->Board setting.
+#if (ESP32)
+
+  #if defined(ETHERNET_USE_ESP)
+    #undef ETHERNET_USE_ESP32
+  #endif
+  #define ETHERNET_USE_ESP32        true
+  #warning Using ESP32 architecture from EthernetWebServer
+  
+#endif
+
+#if (ESP8266)
+
+  #if defined(ETHERNET_USE_ESP8266)
+    #undef ETHERNET_USE_ESP8266
+  #endif
+  #define ETHERNET_USE_ESP8266      true
+  #warning Using ESP8266 architecture from EthernetWebServer  
+
 #endif
 
 
