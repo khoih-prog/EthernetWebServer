@@ -152,6 +152,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
+  delay(1000);
+
   Serial.print("\nStarting AdvancedWebServer on "); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(ETHERNET_WEBSERVER_VERSION);

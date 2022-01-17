@@ -15,9 +15,13 @@
 
 #include "defines.h"
 
+//using namespace ethernetwebserver;
+
 EthernetWebServer server(80);
 
 const int led = 13;
+
+//using namespace ethernetwebserver;
 
 void handleRoot()
 {

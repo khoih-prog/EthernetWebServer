@@ -235,7 +235,7 @@ void handleFileUpload()
     return;
   }
 
-  HTTPUpload& upload = server.upload();
+  ethernetHTTPUpload& upload = server.upload();
 
   if (upload.status == UPLOAD_FILE_START)
   {
