@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.6
+  Version: 2.0.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   1.8.4   K Hoang      11/01/2022 Fix libb64 compile error for ESP8266
   1.8.5   K Hoang      11/01/2022 Restore support to AVR Mega2560 and add megaAVR boards. Fix libb64 fallthrough compile warning
   1.8.6   K Hoang      12/01/2022 Fix bug not supporting boards
+  2.0.0   K Hoang      16/01/2022 To coexist with ESP32 WebServer and ESP8266 ESP8266WebServer
  *************************************************************************************************************************************/
 
 #pragma once
@@ -39,7 +40,7 @@
 #include "detail/Debug.h"
 #include "detail/mimetable.h"
 
-const char * AUTHORIZATION_HEADER = "Authorization";
+const char * ETHERNET_AUTHORIZATION_HEADER = "Authorization";
 
 // New to use EWString
 
@@ -65,11 +66,11 @@ EthernetWebServer::~EthernetWebServer()
     delete[]_currentHeaders;
     
   _headerKeysCount = 0;
-  RequestHandler* handler = _firstHandler;
+  ethernetRequestHandler* handler = _firstHandler;
   
   while (handler) 
   {
-    RequestHandler* next = handler->next();
+    ethernetRequestHandler* next = handler->next();
     delete handler;
     handler = next;
   }
@@ -88,9 +89,9 @@ void EthernetWebServer::begin()
 
 bool EthernetWebServer::authenticate(const char * username, const char * password) 
 {
-  if (hasHeader(AUTHORIZATION_HEADER)) 
+  if (hasHeader(ETHERNET_AUTHORIZATION_HEADER)) 
   {
-    String authReq = header(AUTHORIZATION_HEADER);
+    String authReq = header(ETHERNET_AUTHORIZATION_HEADER);
     
     if (authReq.startsWith("Basic")) 
     {
@@ -152,15 +153,15 @@ void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServ
 
 void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServer::THandlerFunction fn, EthernetWebServer::THandlerFunction ufn) 
 {
-  _addRequestHandler(new FunctionRequestHandler(fn, ufn, uri, method));
+  _addRequestHandler(new ethernetFunctionRequestHandler(fn, ufn, uri, method));
 }
 
-void EthernetWebServer::addHandler(RequestHandler* handler) 
+void EthernetWebServer::addHandler(ethernetRequestHandler* handler) 
 {
   _addRequestHandler(handler);
 }
 
-void EthernetWebServer::_addRequestHandler(RequestHandler* handler) 
+void EthernetWebServer::_addRequestHandler(ethernetRequestHandler* handler) 
 {
   if (!_lastHandler) 
   {
@@ -811,7 +812,7 @@ void EthernetWebServer::collectHeaders(const char* headerKeys[], const size_t he
     delete[]_currentHeaders;
     
   _currentHeaders = new RequestArgument[_headerKeysCount];
-  _currentHeaders[0].key = AUTHORIZATION_HEADER;
+  _currentHeaders[0].key = ETHERNET_AUTHORIZATION_HEADER;
   
   for (int i = 1; i < _headerKeysCount; i++) 
   {

@@ -10,7 +10,7 @@ EthernetWebServer	KEYWORD1
 HTTPMethod	KEYWORD1
 HTTPUploadStatus  KEYWORD1
 HTTPClientStatus  KEYWORD1
-HTTPUpload  KEYWORD1
+ethernetHTTPUpload  KEYWORD1
 HTTPAuthMethod  KEYWORD1
 EWString  KEYWORD1
 
@@ -94,9 +94,14 @@ _parseForm  KEYWORD2
 urlDecode KEYWORD2
 _parseFormUploadAborted KEYWORD2
 
-#######################
-# RequestHandler
-#######################
+#########################
+# ethernetRequestHandler
+#########################
+
+ethernetRequestHandler  KEYWORD2
+ethernetFunctionRequestHandler  KEYWORD2
+ethernetStaticRequestHandler  KEYWORD2
+
 canHandle KEYWORD2
 canUpload KEYWORD2
 handle  KEYWORD2
@@ -171,13 +176,21 @@ encode  KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
+
+ETHERNET_WEBSERVER_VERSION  LITERAL1
+ETHERNET_WEBSERVER_VERSION_MAJOR  LITERAL1
+ETHERNET_WEBSERVER_VERSION_MINOR  LITERAL1
+ETHERNET_WEBSERVER_VERSION_PATCH  LITERAL1
+ETHERNET_WEBSERVER_VERSION_INT  LITERAL1
+
 HTTP_DOWNLOAD_UNIT_SIZE LITERAL1
 HTTP_UPLOAD_BUFLEN  LITERAL1
 HTTP_MAX_DATA_WAIT  LITERAL1
 HTTP_MAX_POST_WAIT  LITERAL1
 HTTP_MAX_SEND_WAIT  LITERAL1
 HTTP_MAX_CLOSE_WAIT LITERAL1
-AUTHORIZATION_HEADER  LITERAL1
+
+ETHERNET_AUTHORIZATION_HEADER  LITERAL1
 _ETHERNET_WEBSERVER_LOGLEVEL_ LITERAL1
 
 

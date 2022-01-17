@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.6
+  Version: 2.0.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   1.8.4   K Hoang      11/01/2022 Fix libb64 compile error for ESP8266
   1.8.5   K Hoang      11/01/2022 Restore support to AVR Mega2560 and add megaAVR boards. Fix libb64 fallthrough compile warning
   1.8.6   K Hoang      12/01/2022 Fix bug not supporting boards
+  2.0.0   K Hoang      16/01/2022 To coexist with ESP32 WebServer and ESP8266 ESP8266WebServer
  *************************************************************************************************************************************/
 
 #pragma once
@@ -36,11 +37,11 @@
 #include "RequestHandler.h"
 #include "mimetable.h"
 
-class FunctionRequestHandler : public RequestHandler
+class ethernetFunctionRequestHandler : public ethernetRequestHandler
 {
   public:
 
-    FunctionRequestHandler(EthernetWebServer::THandlerFunction fn, EthernetWebServer::THandlerFunction ufn, const String &uri, const HTTPMethod& method)
+    ethernetFunctionRequestHandler(EthernetWebServer::THandlerFunction fn, EthernetWebServer::THandlerFunction ufn, const String &uri, const HTTPMethod& method)
       : _fn(fn)
       , _ufn(ufn)
       , _uri(uri)
@@ -87,7 +88,7 @@ class FunctionRequestHandler : public RequestHandler
       return true;
     }
 
-    void upload(EthernetWebServer& server, const String& requestUri, const HTTPUpload& upload) override
+    void upload(EthernetWebServer& server, const String& requestUri, const ethernetHTTPUpload& upload) override
     {
       ETW_UNUSED(server);
       ETW_UNUSED(upload);
@@ -103,7 +104,7 @@ class FunctionRequestHandler : public RequestHandler
     HTTPMethod  _method;
 };
 
-class StaticRequestHandler : public RequestHandler
+class ethernetStaticRequestHandler : public ethernetRequestHandler
 {
   public:
 
@@ -141,6 +142,11 @@ class StaticRequestHandler : public RequestHandler
       strcpy(buff, mimeTable[sizeof(mimeTable) / sizeof(mimeTable[0]) - 1].mimeType);
       return String(buff);
     }
+    
+    
+#if USING_NAME_SPACE
+}
+#endif
 
 #else
 

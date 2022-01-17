@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.6
+  Version: 2.0.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,17 +28,18 @@
   1.8.4   K Hoang      11/01/2022 Fix libb64 compile error for ESP8266
   1.8.5   K Hoang      11/01/2022 Restore support to AVR Mega2560 and add megaAVR boards. Fix libb64 fallthrough compile warning
   1.8.6   K Hoang      12/01/2022 Fix bug not supporting boards
+  2.0.0   K Hoang      16/01/2022 To coexist with ESP32 WebServer and ESP8266 ESP8266WebServer
  *************************************************************************************************************************************/
 
 #pragma once
 
-#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v1.8.6"
+#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.0.0"
 
-#define ETHERNET_WEBSERVER_VERSION_MAJOR    1
-#define ETHERNET_WEBSERVER_VERSION_MINOR    8
-#define ETHERNET_WEBSERVER_VERSION_PATCH    6
+#define ETHERNET_WEBSERVER_VERSION_MAJOR    2
+#define ETHERNET_WEBSERVER_VERSION_MINOR    0
+#define ETHERNET_WEBSERVER_VERSION_PATCH    0
 
-#define ETHERNET_WEBSERVER_VERSION_INT      1008006
+#define ETHERNET_WEBSERVER_VERSION_INT      2000000
 
 #define USE_NEW_WEBSERVER_VERSION       true
 
@@ -180,52 +181,67 @@
 
 //////
 
+// New definitions only when not using ESP32 WebServer.h
+#if !(( ESP32 || ESP8266) && (__has_include("WebServer.h") || __has_include("ESP8266WebServer.h")) )
 
-enum HTTPMethod 
-{ 
-  HTTP_ANY, 
-  HTTP_GET,
-  HTTP_HEAD,
-  HTTP_POST, 
-  HTTP_PUT, 
-  HTTP_PATCH, 
-  HTTP_DELETE, 
-  HTTP_OPTIONS 
-};
+  enum HTTPMethod 
+  { 
+    HTTP_ANY, 
+    HTTP_GET,
+    HTTP_HEAD,
+    HTTP_POST, 
+    HTTP_PUT, 
+    HTTP_PATCH, 
+    HTTP_DELETE, 
+    HTTP_OPTIONS 
+  };
+  
+  enum HTTPUploadStatus 
+  { 
+    UPLOAD_FILE_START, 
+    UPLOAD_FILE_WRITE, 
+    UPLOAD_FILE_END,
+    UPLOAD_FILE_ABORTED
+  };
 
-enum HTTPUploadStatus 
-{ 
-  UPLOAD_FILE_START, 
-  UPLOAD_FILE_WRITE, 
-  UPLOAD_FILE_END,
-  UPLOAD_FILE_ABORTED
-};
+  enum HTTPClientStatus 
+  { 
+    HC_NONE, 
+    HC_WAIT_READ, 
+    HC_WAIT_CLOSE 
+  };
 
-enum HTTPClientStatus 
-{ 
-  HC_NONE, 
-  HC_WAIT_READ, 
-  HC_WAIT_CLOSE 
-};
+  enum HTTPAuthMethod 
+  { 
+    BASIC_AUTH, 
+    DIGEST_AUTH 
+  };
+  
+  #if defined(HTTP_DOWNLOAD_UNIT_SIZE)
+    #undef HTTP_DOWNLOAD_UNIT_SIZE
+    #define HTTP_DOWNLOAD_UNIT_SIZE 1460
+  #endif
 
-enum HTTPAuthMethod 
-{ 
-  BASIC_AUTH, 
-  DIGEST_AUTH 
-};
+  // Permit user to increase HTTP_UPLOAD_BUFLEN larger than default 2K
+  //#define HTTP_UPLOAD_BUFLEN 2048
+  #if !defined(HTTP_UPLOAD_BUFLEN)
+    #define HTTP_UPLOAD_BUFLEN 4096   //2048
+  #endif
 
-#define HTTP_DOWNLOAD_UNIT_SIZE 1460
+  #define HTTP_MAX_DATA_WAIT      3000 //ms to wait for the client to send the request
+  #define HTTP_MAX_POST_WAIT      3000 //ms to wait for POST data to arrive
+  #define HTTP_MAX_SEND_WAIT      3000 //ms to wait for data chunk to be ACKed
+  #define HTTP_MAX_CLOSE_WAIT     2000 //ms to wait for the client to close the connection
+  
+#else
 
-// Permit user to increase HTTP_UPLOAD_BUFLEN larger than default 2K
-//#define HTTP_UPLOAD_BUFLEN 2048
-#if !defined(HTTP_UPLOAD_BUFLEN)
-  #define HTTP_UPLOAD_BUFLEN 4096   //2048
-#endif
-
-#define HTTP_MAX_DATA_WAIT      3000 //ms to wait for the client to send the request
-#define HTTP_MAX_POST_WAIT      3000 //ms to wait for POST data to arrive
-#define HTTP_MAX_SEND_WAIT      3000 //ms to wait for data chunk to be ACKed
-#define HTTP_MAX_CLOSE_WAIT     2000 //ms to wait for the client to close the connection
+  #if ESP32
+    #warning ESP32 __has_include WebServer.h
+  #else
+    #warning ESP8266 __has_include ESP8266WebServer.h
+  #endif
+  
+#endif    // #if !(( ESP32 || ESP8266) && (__has_include("WebServer.h") || __has_include("ESP8266WebServer.h")) )
 
 #define CONTENT_LENGTH_UNKNOWN  ((size_t) -1)
 #define CONTENT_LENGTH_NOT_SET  ((size_t) -2)
@@ -277,7 +293,7 @@ typedef struct
   size_t  currentSize;    // size of data currently in buf
   size_t  contentLength;  // size of entire post request, file size + headers and other request data.
   uint8_t buf[HTTP_UPLOAD_BUFLEN];
-} HTTPUpload;
+} ethernetHTTPUpload;
 
 #include "detail/RequestHandler.h"
 #if (ESP32 || ESP8266)
@@ -306,7 +322,7 @@ class EthernetWebServer
     void on(const String &uri, THandlerFunction handler);
     void on(const String &uri, HTTPMethod method, THandlerFunction fn);
     void on(const String &uri, HTTPMethod method, THandlerFunction fn, THandlerFunction ufn);
-    void addHandler(RequestHandler* handler);
+    void addHandler(ethernetRequestHandler* handler);
     void onNotFound(THandlerFunction fn);  //called when handler is not assigned
     void onFileUpload(THandlerFunction fn); //handle file uploads
 
@@ -326,12 +342,12 @@ class EthernetWebServer
     }
     
     #if USE_NEW_WEBSERVER_VERSION
-    HTTPUpload& upload() 
+    ethernetHTTPUpload& upload() 
     {
       return *_currentUpload;
     }
     #else
-    HTTPUpload& upload() 
+    ethernetHTTPUpload& upload() 
     {
       return _currentUpload;
     }
@@ -416,7 +432,7 @@ class EthernetWebServer
     #endif
 
   protected:
-    void _addRequestHandler(RequestHandler* handler);
+    void _addRequestHandler(ethernetRequestHandler* handler);
     void _handleRequest();
     void _finalizeResponse();
     bool _parseRequest(EthernetClient& client);
@@ -477,9 +493,9 @@ class EthernetWebServer
     HTTPClientStatus  _currentStatus;
     unsigned long     _statusChange;
 
-    RequestHandler*   _currentHandler;
-    RequestHandler*   _firstHandler;
-    RequestHandler*   _lastHandler;
+    ethernetRequestHandler*   _currentHandler;
+    ethernetRequestHandler*   _firstHandler;
+    ethernetRequestHandler*   _lastHandler;
     THandlerFunction  _notFoundHandler;
     THandlerFunction  _fileUploadHandler;
 
@@ -488,12 +504,12 @@ class EthernetWebServer
     
     //KH
     #if USE_NEW_WEBSERVER_VERSION
-    HTTPUpload*       _currentUpload;
-    int               _postArgsLen;
-    RequestArgument*  _postArgs;
+    ethernetHTTPUpload*   _currentUpload;
+    int                   _postArgsLen;
+    RequestArgument*      _postArgs;
     
     #else
-    HTTPUpload        _currentUpload;
+    ethernetHTTPUpload    _currentUpload;
     #endif
     
     int               _headerKeysCount;
@@ -505,6 +521,7 @@ class EthernetWebServer
     bool              _chunked;
 
 };
+
 
 /////////////////////////////////////////////////////////////////////////
 

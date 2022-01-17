@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.6
+  Version: 2.0.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   1.8.4   K Hoang      11/01/2022 Fix libb64 compile error for ESP8266
   1.8.5   K Hoang      11/01/2022 Restore support to AVR Mega2560 and add megaAVR boards. Fix libb64 fallthrough compile warning
   1.8.6   K Hoang      12/01/2022 Fix bug not supporting boards
+  2.0.0   K Hoang      16/01/2022 To coexist with ESP32 WebServer and ESP8266 ESP8266WebServer
  *************************************************************************************************************************************/
 
 #pragma once
@@ -36,12 +37,11 @@
   #define ETW_UNUSED(x) (void)(x)
 #endif
 
-
-class RequestHandler
+class ethernetRequestHandler
 {
   public:
 
-    virtual ~RequestHandler() { }
+    virtual ~ethernetRequestHandler() { }
 
     virtual bool canHandle(const HTTPMethod& method, const String& uri)
     {
@@ -67,25 +67,25 @@ class RequestHandler
       return false;
     }
 
-    virtual void upload(EthernetWebServer& server, const String& requestUri, const HTTPUpload& upload) 
+    virtual void upload(EthernetWebServer& server, const String& requestUri, const ethernetHTTPUpload& upload) 
     {
       ETW_UNUSED(server);
       ETW_UNUSED(requestUri);
       ETW_UNUSED(upload);
     }
 
-    RequestHandler* next()
+    ethernetRequestHandler* next()
     {
       return _next;
     }
 
-    void next(RequestHandler* r)
+    void next(ethernetRequestHandler* r)
     {
       _next = r;
     }
 
   private:
 
-    RequestHandler* _next = nullptr;
+    ethernetRequestHandler* _next = nullptr;
 };
 

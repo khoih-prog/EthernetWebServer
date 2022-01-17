@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Major Releases v2.0.0](#major-releases-v200)
   * [Releases v1.8.6](#releases-v186)
   * [Releases v1.8.5](#releases-v185)
   * [Releases v1.8.4](#releases-v184)
@@ -45,6 +46,11 @@
 ---
 
 ## Changelog
+
+### Major Releases v2.0.0
+
+1. Make **breaking** changes to permit coexistence with `ESP32 WebServer` and `ESP8266 ESP8266WebServer` libraries
+2. Add and modified examples
 
 ### Releases v1.8.6
 

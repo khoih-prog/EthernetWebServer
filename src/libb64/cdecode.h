@@ -11,7 +11,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.6
+  Version: 2.0.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -27,6 +27,7 @@
   1.8.4   K Hoang      11/01/2022 Fix libb64 compile error for ESP8266
   1.8.5   K Hoang      11/01/2022 Restore support to AVR Mega2560 and add megaAVR boards. Fix libb64 fallthrough compile warning
   1.8.6   K Hoang      12/01/2022 Fix bug not supporting boards
+  2.0.0   K Hoang      16/01/2022 To coexist with ESP32 WebServer and ESP8266 ESP8266WebServer
  *****************************************************************************************************************************/
 
 #pragma once

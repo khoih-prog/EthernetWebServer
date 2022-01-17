@@ -11,7 +11,7 @@
 
 ## Table of Contents
 
-
+* [Important Breaking Change from v2.0.0](#Important-Breaking-Change-from-v200)
 * [Why do we need this EthernetWebServer library](#why-do-we-need-this-ethernetwebserver-library)
   * [Features](#features)
   * [Currently supported Boards](#currently-supported-boards)
@@ -107,6 +107,9 @@
     * [ 2. **MQTTClient_Auth**](examples/QNEthernet/MQTTClient_Auth)
     * [ 3. **MQTTClient_Basic**](examples/QNEthernet/MQTTClient_Basic) 
     * [ 4. **MQTT_ThingStream**](examples/QNEthernet/MQTT_ThingStream) 
+  * [New Examples for ESP32 and ESP8266 using with WebServer or ESP8266WebServer](#New-Examples-for-ESP32-and-ESP8266-using-with-WebServer-or-ESP8266WebServer)
+    * [ 1. **WiFi_Ethernet_Complex_ESP32**](examples/WiFi_Ethernet_Complex_ESP32)
+    * [ 2. **WiFi_Ethernet_Complex_ESP8266**](examples/WiFi_Ethernet_Complex_ESP8266) 
 * [Example AdvancedWebServer](#example-advancedwebserver)
   * [1. File AdvancedWebServer.ino](#1-file-advancedwebserverino)
   * [2. File defines.h](#2-file-definesh) 
@@ -129,6 +132,8 @@
   * [16. AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#16-advancedwebserver-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
   * [17. SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#17-simplewebsocket-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
   * [18. MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#18-mqttclient_auth-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
+  * [19. WiFi_Ethernet_Complex_ESP32 on ESP32_DEV](#19-WiFi-Ethernet_Complex_ESP32-on-ESP32_DEV)
+  * [20. WiFi_Ethernet_Complex_ESP8266 on ESP8266_NODEMCU_ESP12E](#20-WiFi_Ethernet_Complex_ESP8266-on-ESP8266_NODEMCU_ESP12E)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -141,6 +146,43 @@
 
 
 ---
+---
+
+### Important Breaking Change from v2.0.0
+
+From v2.0.0, **breaking** changes were made to permit coexistence with `ESP32 WebServer` and `ESP8266 ESP8266WebServer` libraries.
+
+The changes will affect only ESP32 and ESP8266 code.
+
+#### Using `ethernetHTTPUpload` instead of `HTTPUpload`
+
+If `server` using `EthernetWebServer`, then use `ethernetHTTPUpload` instead of `HTTPUpload`. `HTTPUpload` can be used only with `server` using WiFi `WebServer` or `ESP8266WebServer`
+
+For example, in these examples, `server` is using `EthernetWebServer`
+
+- [ESP32_FS_EthernetWebServer.ino#L238](https://github.com/khoih-prog/EthernetWebServer/blob/master/examples/ESP32_FS_EthernetWebServer/ESP32_FS_EthernetWebServer.ino#L238)
+- [FS_EthernetWebServer.ino#L235](https://github.com/khoih-prog/EthernetWebServer/blob/master/examples/FS_EthernetWebServer/FS_EthernetWebServer.ino#L235)
+
+just change from
+
+```
+HTTPUpload& upload = server.upload();
+```
+
+to
+
+```
+ethernetHTTPUpload& upload = server.upload();
+```
+
+---
+
+
+Please check these new examples to see how to use the new features
+
+1. [WiFi_Ethernet_Complex_ESP32](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/WiFi_Ethernet_Complex_ESP32)
+2. [WiFi_Ethernet_Complex_ESP8266](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/WiFi_Ethernet_Complex_ESP8266)
+
 ---
 
 ### Why do we need this [EthernetWebServer library](https://github.com/khoih-prog/EthernetWebServer)
@@ -214,10 +256,10 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
- 3. [`Teensy core v1.55+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
+ 3. [`Teensy core v1.56+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.12+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 6. [`Adafruit SAMD core 1.7.6+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 6. [`Adafruit SAMD core 1.7.7+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  7. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  8. [`Adafruit nRF52 v1.3.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
  9. [`ESP32 Core 2.0.2+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
@@ -1120,6 +1162,11 @@ Example:
  3. [**MQTTClient_Basic**](examples/QNEthernet/MQTTClient_Basic)
  4. [**MQTT_ThingStream**](examples/QNEthernet/MQTT_ThingStream)
 
+#### New Examples for ESP32 and ESP8266 using with WebServer or ESP8266WebServer
+
+ 1. [**WiFi_Ethernet_Complex_ESP32**](examples/WiFi_Ethernet_Complex_ESP32)
+ 2. [**WiFi_Ethernet_Complex_ESP8266**](examples/WiFi_Ethernet_Complex_ESP8266)
+ 
 ---
 ---
 
@@ -2010,7 +2057,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [ETHERNET_WEBSERVER] =========================
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2191,7 +2238,7 @@ The terminal output of **SAM DUE with W5x00 using EthernetLarge Library** runnin
 
 ```
 Starting SimpleWebSocket on SAM DUE with W5x00 using EthernetLarge Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET_LARGE ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 75
@@ -2282,7 +2329,7 @@ The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet3 Library** r
 
 ```
 Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet3 Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET3 ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 25
@@ -2317,7 +2364,7 @@ The terminal output of **ESP32 with W5x00 using Ethernet Library** running [ESP3
 
 ```
 Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 23
@@ -2368,7 +2415,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [FS
 
 ```
 Starting FS_EthernetWebServer on ESP8266 using LittleFS with W5x00 using Ethernet Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2424,7 +2471,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet Library** running [se
 ```
 Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
 With W5x00 using Ethernet Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [ETHERNET_WEBSERVER] =========== USE_ETHERNET ===========
 [ETHERNET_WEBSERVER] Default SPI pinout:
 [ETHERNET_WEBSERVER] MOSI: 13
@@ -2467,7 +2514,7 @@ The following are debug terminal output and screen shot when running example [Si
 
 ```
 SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 Debug Level = 3
 Connected! IP address: 192.168.2.127
 [EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
@@ -2523,7 +2570,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet3 Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] =========== USE_ETHERNET3 ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2556,7 +2603,7 @@ The following are debug terminal output when running example [MQTTClient_Auth](e
 
 ```
 Start MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] =========== USE_ETHERNET ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 3
@@ -2591,7 +2638,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2625,7 +2672,7 @@ The following are debug terminal output and screen shot when running example [Ud
 
 ```
 Start UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using EthernetLarge Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] =========== USE_ETHERNET_LARGE ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2670,7 +2717,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2692,7 +2739,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2710,7 +2757,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on TEENSY 4.1 using QNEthernet
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2733,7 +2780,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 6
 Connected! IP address: 192.168.2.222
@@ -2752,7 +2799,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Starting SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 4
 Connected! IP address: 192.168.2.132
@@ -2800,7 +2847,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v1.8.6
+EthernetWebServer v2.0.0
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 7
 Connected! IP address: 192.168.2.132
@@ -2817,6 +2864,55 @@ Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Eth
 Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
 Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
 Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
+```
+
+---
+
+
+#### 19. WiFi_Ethernet_Complex_ESP32 on ESP32_DEV
+
+The following are debug terminal output when running example [WiFi_Ethernet_Complex_ESP32](examples/WiFi_Ethernet_Complex_ESP32) on **ESP32_DEV** using both EthernetWebServer and WebServer Library simultaneously.
+
+
+```
+Starting WiFi_Ethernet_Complex_ESP32 on ESP32_DEV
+Connecting to HueNet1
+.......
+WiFi connected
+IP address: 
+192.168.2.105
+[EWS] ESP32 setCsPin: 22
+_pinCS = 0
+W5100 init, using SS_PIN_DEFAULT = 22, new ss_pin = 10, W5100Class::ss_pin = 22
+W5100::init: W5500, SSIZE =8192
+HTTP EthernetWebServer is @ IP : 192.168.2.114
+HTTP WiFiWebServer is @ IP : 192.168.2.105
+```
+
+---
+
+
+#### 20. WiFi_Ethernet_Complex_ESP8266 on ESP8266_NODEMCU_ESP12E
+
+The following are debug terminal output when running example [WiFi_Ethernet_Complex_ESP8266](examples/WiFi_Ethernet_Complex_ESP8266) on **ESP8266_NODEMCU_ESP12E** using both EthernetWebServer and WebServer Library simultaneously.
+
+
+```
+Starting WiFi_Ethernet_Complex_ESP8266 on ESP8266_NODEMCU_ESP12E
+Connecting to HueNet1
+...........
+WiFi connected
+IP address: 
+192.168.2.109
+[EWS] ESP8266 setCsPin: 4
+=========================
+Currently Used SPI pinout:
+MOSI:13
+MISO:12
+SCK:14
+SS:15
+HTTP EthernetWebServer is @ IP : 192.168.2.111
+HTTP WiFiWebServer is @ IP : 192.168.2.109
 ```
 
 
@@ -2842,52 +2938,6 @@ Debug is enabled by default on Serial. Debug Level from 0 to 4. To disable, chan
 If you get compilation errors, more often than not, you may need to install a newer version of the board's core, applying Libraries' Patches, Packages' Patches or this library latest version.
 
 ---
----
-
-#### Supported Boards
-
-This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebServer) currently supports these following boards:
-
- 1. **nRF52 boards**, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.**
- 2. **SAM DUE**
- 3. **SAMD21**
-  - Arduino SAMD21: ZERO, MKRs, NANO_33_IOT, etc.
-  - Adafruit SAMD21 (M0): ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, Hallowing M0, Crickit M0, etc.
-  - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
-  
- 4. **SAMD51**
-  - Adafruit SAMD51 (M4): Metro M4, Grand Central M4, ItsyBitsy M4, Feather M4 Express, Trellis M4, Metro M4 AirLift Lite, MONSTER M4SK Express, Hallowing M4, etc.
-  - Seeeduino: Wio Terminal, Grove UI Wireless
-  
- 5. **Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)**
- 6. **AVR Mega1280, 2560, ADK.**
- 7. ESP32
- 8. ESP8266
- 
- 9. RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core v1.3.1+](https://github.com/earlephilhower/arduino-pico).
- 
-11. **Portenta_H7**
-
----
- 
-#### Supported Ethernet shields/modules:
-
-1. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
-2. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
-3. Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
-4. Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
-
-5. Portenta_H7 Ethernet using [`Portenta_Ethernet`](https://github.com/arduino/ArduinoCore-mbed/tree/master/libraries/Ethernet) library
-
-
-The library provides these features:
-
-1. TCP Server and Client
-2. UDP Server and Client
-3. HTTP Server and Client
-4. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
-5. **High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client**. From v1.1.0.
-
 ---
 
 ### Issues ###
@@ -2925,6 +2975,7 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 17. Add support to **Portenta_H7 boards**, using [**Arduino-mbed mbed_portenta** core](https://github.com/arduino/ArduinoCore-mbed).
 18. Reduce usage of Arduino String with std::string
 19. Optimize library code and examples by using **reference-passing instead of value-passing**.
+20. Make **breaking** changes in v2.0.0 to permit coexistence with `ESP32 WebServer` and `ESP8266 ESP8266WebServer` libraries
 
 ---
 ---
