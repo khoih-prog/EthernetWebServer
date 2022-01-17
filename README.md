@@ -132,7 +132,7 @@
   * [16. AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#16-advancedwebserver-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
   * [17. SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#17-simplewebsocket-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
   * [18. MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#18-mqttclient_auth-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
-  * [19. WiFi_Ethernet_Complex_ESP32 on ESP32_DEV](#19-WiFi-Ethernet_Complex_ESP32-on-ESP32_DEV)
+  * [19. WiFi_Ethernet_Complex_ESP32 on ESP32_DEV](#19-WiFi_Ethernet_Complex_ESP32-on-ESP32_DEV)
   * [20. WiFi_Ethernet_Complex_ESP8266 on ESP8266_NODEMCU_ESP12E](#20-WiFi_Ethernet_Complex_ESP8266-on-ESP8266_NODEMCU_ESP12E)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
