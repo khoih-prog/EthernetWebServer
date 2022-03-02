@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.0.0
+  Version: 2.0.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,17 +29,18 @@
   1.8.5   K Hoang      11/01/2022 Restore support to AVR Mega2560 and add megaAVR boards. Fix libb64 fallthrough compile warning
   1.8.6   K Hoang      12/01/2022 Fix bug not supporting boards
   2.0.0   K Hoang      16/01/2022 To coexist with ESP32 WebServer and ESP8266 ESP8266WebServer
+  2.0.1   K Hoang      02/03/2022 Fix decoding error bug
  *************************************************************************************************************************************/
 
 #pragma once
 
-#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.0.0"
+#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.0.1"
 
 #define ETHERNET_WEBSERVER_VERSION_MAJOR    2
 #define ETHERNET_WEBSERVER_VERSION_MINOR    0
-#define ETHERNET_WEBSERVER_VERSION_PATCH    0
+#define ETHERNET_WEBSERVER_VERSION_PATCH    1
 
-#define ETHERNET_WEBSERVER_VERSION_INT      2000000
+#define ETHERNET_WEBSERVER_VERSION_INT      2000001
 
 #define USE_NEW_WEBSERVER_VERSION       true
 

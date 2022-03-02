@@ -47,6 +47,11 @@
 
 ## Changelog
 
+### Releases v2.0.1
+
+1. Fix decoding error bug when using special `&` in data fields. Check [Decoding Error. two times called urlDecode in Parsing-impl.h. #17](https://github.com/khoih-prog/WiFiWebServer/issues/17)
+2. Update `Packages' Patches`
+
 ### Major Releases v2.0.0
 
 1. Make **breaking** changes to permit coexistence with `ESP32 WebServer` and `ESP8266 ESP8266WebServer` libraries
