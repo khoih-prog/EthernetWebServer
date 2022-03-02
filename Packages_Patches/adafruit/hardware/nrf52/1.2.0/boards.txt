@@ -206,7 +206,7 @@ itsybitsy52840.upload.maximum_data_size=237568
 # Build
 itsybitsy52840.build.mcu=cortex-m4
 itsybitsy52840.build.f_cpu=64000000
-itsybitsy52840.build.board=NRF52840_ITSYBITSY -DARDUINO_NRF52_ITSYBITSY
+itsybitsy52840.build.board=NRF52840_ITSYBITSY
 itsybitsy52840.build.core=nRF5
 itsybitsy52840.build.variant=itsybitsy_nrf52840_express
 itsybitsy52840.build.usb_manufacturer="Adafruit"
