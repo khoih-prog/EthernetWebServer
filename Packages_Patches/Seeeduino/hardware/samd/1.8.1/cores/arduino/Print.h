@@ -20,6 +20,7 @@
 
 #include <inttypes.h>
 #include <stdio.h> // for size_t
+#include <stdarg.h> // for printf
 
 #include "WString.h"
 #include "Printable.h"
