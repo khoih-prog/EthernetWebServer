@@ -161,9 +161,13 @@ void setup()
   // Static IP
   //Ethernet.begin(mac, ip, gateway, subnet);
   Ethernet.begin(mac, ip);
+
+  delay(2000);
 #else
   // DHCP
   Ethernet.begin(mac);
+
+  delay(1000);
 #endif
 
   server.begin();

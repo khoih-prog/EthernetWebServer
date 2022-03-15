@@ -182,6 +182,8 @@ void setup()
     // Start the Ethernet connection, using DHCP
     Serial.print("Initialize Ethernet using DHCP => ");
     Ethernet.begin();
+    // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
+    delay(1000);
   #else   
     // Start the Ethernet connection, using static IP
     Serial.print("Initialize Ethernet using static IP => ");
@@ -209,6 +211,9 @@ void setup()
     Serial.print("IP Address = ");
     Serial.println(Ethernet.localIP());
   }
+
+  // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
+  delay(2000);
 
 #endif
 

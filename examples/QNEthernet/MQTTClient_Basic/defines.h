@@ -86,7 +86,7 @@
 
 #else
 
-  #define USING_DHCP    false   //true
+  #define USING_DHCP    true
   
   #if !USING_DHCP
     // Set the static IP address to use if the DHCP fails to assign

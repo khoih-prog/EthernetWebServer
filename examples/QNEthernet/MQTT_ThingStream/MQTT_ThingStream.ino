@@ -31,7 +31,7 @@
 const char my_cert[]  = "FIXME";
 const char my_key[]   = "FIXME";
 
-#define USING_THINGSTREAM_IO      true
+#define USING_THINGSTREAM_IO      false   //true
 
 #if USING_THINGSTREAM_IO
 
@@ -52,9 +52,11 @@ String subTopic = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
 
 const char* MQTT_SERVER = "broker.emqx.io";        // Broker address
 
+//IPAddress MQTT_SERVER(52, 32, 182, 17);
+
 const char*  ID         = "MQTTClient_SSL-Client";  // Name of our device, must be unique
-String      topic       = "STM32_Pub";              // Topic to subcribe to
-String      subTopic    = "STM32_Sub";              // Topic to subcribe to
+String      topic       = "Teensy41_Pub";              // Topic to subcribe to
+String      subTopic    = "Teensy41_Sub";              // Topic to subcribe to
 
 #endif
 
@@ -181,6 +183,8 @@ void setup()
     // Start the Ethernet connection, using DHCP
     Serial.print("Initialize Ethernet using DHCP => ");
     Ethernet.begin();
+    // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
+    delay(1000);
   #else   
     // Start the Ethernet connection, using static IP
     Serial.print("Initialize Ethernet using static IP => ");
@@ -208,6 +212,9 @@ void setup()
     Serial.print("IP Address = ");
     Serial.println(Ethernet.localIP());
   }
+
+  // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
+  delay(2000);
 
 #endif
 

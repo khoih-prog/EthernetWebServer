@@ -34,7 +34,7 @@ const char *ID        = "MQTTClient_SSL-Client";  // Name of our device, must be
 const char *TOPIC     = "MQTT_Pub";               // Topic to subcribe to
 const char *subTopic  = "MQTT_Sub";               // Topic to subcribe to
 
-//IPAddress mqttServer(172, 16, 0, 2);
+//IPAddress mqttServer(52, 32, 182, 17);
 
 void callback(char* topic, byte* payload, unsigned int length) 
 {
@@ -137,6 +137,8 @@ void setup()
     // Start the Ethernet connection, using DHCP
     Serial.print("Initialize Ethernet using DHCP => ");
     Ethernet.begin();
+    // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
+    delay(1000);
   #else   
     // Start the Ethernet connection, using static IP
     Serial.print("Initialize Ethernet using static IP => ");
@@ -164,6 +166,9 @@ void setup()
     Serial.print("IP Address = ");
     Serial.println(Ethernet.localIP());
   }
+
+  // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
+  delay(2000);
 
 #endif
   
