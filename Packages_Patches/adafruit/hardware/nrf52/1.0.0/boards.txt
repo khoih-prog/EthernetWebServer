@@ -645,3 +645,72 @@ ninab112.menu.debug.l2.build.debug_flags=-DCFG_DEBUG=2
 ninab112.menu.debug.l3=Level 3 (Segger SystemView)
 ninab112.menu.debug.l3.build.debug_flags=-DCFG_DEBUG=3
 ninab112.menu.debug.l3.build.sysview_flags=-DCFG_SYSVIEW=1
+
+##################################################################
+## KH Add SparkFun Pro nRF52840 Mini
+##################################################################
+#**********************************************
+# SparkFun Pro nRF52840 Mini
+#**********************************************
+sparkfunnrf52840mini.name=SparkFun Pro nRF52840 Mini
+
+# DFU Mode with CDC only
+sparkfunnrf52840mini.vid.0=0x1B4F
+sparkfunnrf52840mini.pid.0=0x002A
+
+# DFU Mode with CDC + MSC (UF2)
+sparkfunnrf52840mini.vid.1=0x1B4F
+sparkfunnrf52840mini.pid.1=0x0029
+
+# Application with CDC + MSC
+sparkfunnrf52840mini.vid.2=0x1B4F
+sparkfunnrf52840mini.pid.2=0x8029
+
+# CircuitPython
+sparkfunnrf52840mini.vid.2=0x1B4F
+sparkfunnrf52840mini.pid.2=0x802A
+
+sparkfunnrf52840mini.bootloader.tool=bootburn
+
+# Upload
+sparkfunnrf52840mini.upload.tool=nrfutil
+sparkfunnrf52840mini.upload.protocol=nrfutil
+sparkfunnrf52840mini.upload.use_1200bps_touch=true
+sparkfunnrf52840mini.upload.wait_for_upload_port=true
+#sparkfunnrf52840mini.upload.native_usb=true
+
+# Build
+sparkfunnrf52840mini.build.mcu=cortex-m4
+sparkfunnrf52840mini.build.f_cpu=64000000
+sparkfunnrf52840mini.build.board=NRF52840_FEATHER
+sparkfunnrf52840mini.build.core=nRF5
+sparkfunnrf52840mini.build.variant=sparkfun_nrf52840_mini
+sparkfunnrf52840mini.build.extra_flags=-DNRF52840_XXAA {build.flags.usb}
+sparkfunnrf52840mini.build.vid=0x1B4F
+sparkfunnrf52840mini.build.pid=0x5284
+sparkfunnrf52840mini.build.usb_manufacturer="SparkFun"
+sparkfunnrf52840mini.build.usb_product="nRF52840 Mini Breakout"
+
+# SofDevice Menu
+# Ram & ROM size varies depending on SoftDevice (check linker script)
+
+sparkfunnrf52840mini.menu.softdevice.s140v6=s140 6.1.1 r0
+sparkfunnrf52840mini.menu.softdevice.s140v6.build.sd_flags=-DS140
+sparkfunnrf52840mini.menu.softdevice.s140v6.build.sd_name=s140
+sparkfunnrf52840mini.menu.softdevice.s140v6.build.sd_version=6.1.1
+sparkfunnrf52840mini.menu.softdevice.s140v6.build.sd_fwid=0x00B6
+sparkfunnrf52840mini.menu.softdevice.s140v6.build.ldscript=nrf52840_s140_v6.ld
+sparkfunnrf52840mini.menu.softdevice.s140v6.upload.maximum_size=815104
+sparkfunnrf52840mini.menu.softdevice.s140v6.upload.maximum_data_size=248832
+
+# Debug Menu
+sparkfunnrf52840mini.menu.debug.l0=Level 0 (Release)
+sparkfunnrf52840mini.menu.debug.l0.build.debug_flags=-DCFG_DEBUG=0 -Os
+sparkfunnrf52840mini.menu.debug.l1=Level 1 (Error Message)
+sparkfunnrf52840mini.menu.debug.l1.build.debug_flags=-DCFG_DEBUG=1 -Os
+sparkfunnrf52840mini.menu.debug.l2=Level 2 (Full Debug)
+sparkfunnrf52840mini.menu.debug.l2.build.debug_flags=-DCFG_DEBUG=2 -Os
+sparkfunnrf52840mini.menu.debug.l3=Level 3 (Segger SystemView)
+sparkfunnrf52840mini.menu.debug.l3.build.debug_flags=-DCFG_DEBUG=3 -Os
+
+##################################################################
