@@ -63,6 +63,7 @@
   * [3. How to use W5x00 with ESP8266](#3-how-to-use-w5x00-with-esp8266)
   * [4. How to increase W5x00 TX/RX buffer](#4-how-to-increase-w5x00-txrx-buffer)
   * [5. How to adjust sendContent_P() and send_P() buffer size](#5-how-to-adjust-sendcontent_p-and-send_p-buffer-size)
+  * [6. How to use SPI2 for ESP32 using W5x00 and Ethernet_Generic Library](#6-How-to-use-SPI2-for-ESP32-using-W5x00-and-Ethernet_Generic-Library)
 * [Usage](#usage)
   * [Init the CS/SS pin if use EthernetWrapper](#init-the-csss-pin-if-use-ethernetwrapper) 
   * [Class Constructor](#class-constructor)
@@ -142,6 +143,7 @@
   * [18. MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library](#18-mqttclient_auth-on-portenta_h7_m7-with-ethernet-using-portenta_ethernet-library)
   * [19. WiFi_Ethernet_Complex_ESP32 on ESP32_DEV](#19-WiFi_Ethernet_Complex_ESP32-on-ESP32_DEV)
   * [20. WiFi_Ethernet_Complex_ESP8266 on ESP8266_NODEMCU_ESP12E](#20-WiFi_Ethernet_Complex_ESP8266-on-ESP8266_NODEMCU_ESP12E)
+  * [21. AdvancedWebServer_ESP32_SPI2 on ESP32_DEV with W5x00 using Ethernet_Generic Library on SPI2](#21-AdvancedWebServer_ESP32_SPI2-on-ESP32_DEV-with-W5x00-using-Ethernet_Generic-Library-on-SPI2)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -951,6 +953,16 @@ sendContent_P() and send_P() buffer size is set default at 4 Kbytes, and minimum
 
 Note that the buffer size must be larger than 256 bytes. See [Sending GZIP HTML ~ 120kb+ (suggested enhancement)](https://github.com/khoih-prog/EthernetWebServer_STM32/issues/3).
 
+
+### 6. How to use SPI2 for ESP32 using W5x00 and Ethernet_Generic Library
+
+- For **Ethernet_Generic** library only,  simply use as follows to SPI2 for ESP32
+```
+#define USING_SPI2                          true
+```
+
+
+
 ---
 ---
 
@@ -1180,14 +1192,14 @@ Example:
 
 #### 1. File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
 
-https://github.com/khoih-prog/EthernetWebServer/blob/e49b06a27bdb668de4936bed3c8063e3e0a725b4/examples/AdvancedWebServer/AdvancedWebServer.ino#L44-L454
+https://github.com/khoih-prog/EthernetWebServer/blob/e5456c1d3e1cbd36b7a138381a884314626bff01/examples/AdvancedWebServer/AdvancedWebServer.ino#L44-L451
 
 
 ---
 
 #### 2. File [defines.h](examples/AdvancedWebServer/defines.h)
 
-https://github.com/khoih-prog/EthernetWebServer/blob/e49b06a27bdb668de4936bed3c8063e3e0a725b4/examples/AdvancedWebServer/defines.h#L10-L451
+https://github.com/khoih-prog/EthernetWebServer/blob/e5456c1d3e1cbd36b7a138381a884314626bff01/examples/AdvancedWebServer/defines.h#L10-L474
 
 
 ---
@@ -2137,8 +2149,8 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 21. Add support to SAMD21/SAMD51 boards using [Fab_SAM_Arduino core](https://github.com/qbolsee/ArduinoCore-fab-sam)
 22. Fix bug when using `QNEthernet` staticIP. 
 23. Add staticIP option to `NativeEthernet` examples
-24. Use new [Ethernet_Generic library](https://github.com/khoih-prog/Ethernet_Generic) as default for W5x00.
-25. Support SPI2 for ESP32
+24. Use new [**Ethernet_Generic** library](https://github.com/khoih-prog/Ethernet_Generic) as default for W5x00.
+25. Support **SPI2 for ESP32**
 
 
 ---
