@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.0.2
+  Version: 2.1.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -31,6 +31,7 @@
   2.0.0   K Hoang      16/01/2022 To coexist with ESP32 WebServer and ESP8266 ESP8266WebServer
   2.0.1   K Hoang      02/03/2022 Fix decoding error bug
   2.0.2   K Hoang      14/03/2022 Fix bug when using QNEthernet staticIP. Add staticIP option to NativeEthernet
+  2.1.0   K Hoang      03/04/2022 Use Ethernet_Generic library as default. Support SPI2 for ESP32
  *************************************************************************************************************************************/
 #ifndef EthernetWrapper_h
 #define EthernetWrapper_h
@@ -49,7 +50,12 @@
   // Note: To rename ESP628266 Ethernet lib files to Ethernet_ESP8266.h and Ethernet_ESP8266.cpp
   #if ( !defined(USE_UIP_ETHERNET) || !USE_UIP_ETHERNET )
 
-    // Only one if the following to be true. Default to USE_ETHERNET 
+    // Only one if the following to be true. Default to USE_ETHERNET
+    
+    #ifndef USE_ETHERNET_GENERIC
+      #define USE_ETHERNET_GENERIC         false
+    #endif
+    
     #ifndef USE_ETHERNET2
       #define USE_ETHERNET2         false
     #endif
@@ -74,7 +80,8 @@
       #define USE_NATIVE_ETHERNET      false
     #endif
 
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET)
+    #if ( USE_ETHERNET_GENERIC || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || \
+          USE_ETHERNET_ENC || USE_NATIVE_ETHERNET)
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET
       #endif
@@ -85,6 +92,10 @@
       #include "NativeEthernet.h"
       #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
       #define SHIELD_TYPE           "Custom Ethernet using Teensy 4.1 NativeEthernet Library"
+    #elif USE_ETHERNET_GENERIC
+      #include "Ethernet_Generic.h"
+      #warning Using Ethernet_Generic lib
+      #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library"  
     #elif USE_ETHERNET3
       #include "Ethernet3.h"
       #warning Using Ethernet3 lib
@@ -137,6 +148,8 @@
 
     #if USE_NATIVE_ETHERNET
       ET_LOGWARN(F("======== USE_NATIVE_ETHERNET ========"));
+    #elif USE_ETHERNET_GENERIC
+      ET_LOGWARN(F("=========== USE_ETHERNET_GENERIC ==========="));  
     #elif USE_ETHERNET
       ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
     #elif USE_ETHERNET2
@@ -168,7 +181,7 @@
       
       ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
       
-      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+      #if ( USE_ETHERNET_GENERIC|| USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         // For ESP8266
         // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
         // Ethernet           0                 X            X            X            X        0
@@ -196,7 +209,7 @@
         // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
         Ethernet.init(USE_THIS_SS_PIN);  
 
-      #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+      #endif  //( USE_ETHERNET_GENERIC|| USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         
     #elif defined(ESP32)
 
@@ -215,7 +228,7 @@
       ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
       
       // For other boards, to change if necessary
-      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+      #if ( USE_ETHERNET_GENERIC|| USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
         // Must use library patch for Ethernet, EthernetLarge libraries
         // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
         // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
@@ -238,7 +251,7 @@
         // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
         Ethernet.init(USE_THIS_SS_PIN);  
               
-      #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+      #endif  //( USE_ETHERNET_GENERIC|| USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
 
     #elif ETHERNET_USE_RPIPICO
 
@@ -257,7 +270,7 @@
         ET_LOGWARN1(F("RPIPICO setCsPin:"), USE_THIS_SS_PIN);
 
         // For other boards, to change if necessary
-        #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+        #if ( USE_ETHERNET_GENERIC|| USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
           // Must use library patch for Ethernet, EthernetLarge libraries
           // For RPI Pico using Arduino Mbed RP2040 core
           // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
@@ -277,7 +290,7 @@
           Ethernet.setCsPin (USE_THIS_SS_PIN);
           Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
           
-        #endif    //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+        #endif    //( USE_ETHERNET_GENERIC|| USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
 
       #else   //defined(ESP8266)
       // unknown board, do nothing, use default SS = 10
@@ -292,7 +305,8 @@
       #endif
 
       // For other boards, to change if necessary
-      #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
+      #if ( USE_ETHERNET_GENERIC || USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || \
+            USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
         // Must use library patch for Ethernet, Ethernet2, EthernetLarge libraries
 
         Ethernet.init (USE_THIS_SS_PIN);
@@ -312,7 +326,7 @@
         // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
         Ethernet.init(USE_THIS_SS_PIN);  
                         
-      #endif  //( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+      #endif  //( USE_ETHERNET_GENERIC | USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
       
     #endif    //defined(ESP8266)
 #endif  //#if !USE_UIP_ETHERNET

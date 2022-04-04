@@ -49,6 +49,13 @@
 
 ## Changelog
 
+### Releases v2.1.0
+
+1. Use new [Ethernet_Generic library](https://github.com/khoih-prog/Ethernet_Generic) as default for W5x00.
+2. Support SPI2 for ESP32
+3. Add examples and rewrite all the examples to support new features
+4. Update `Packages' Patches`
+
 ### Releases v2.0.2
 
 1. Fix bug when using `QNEthernet` staticIP. Check [QNEthernet and NativeEthernet staticIP not working with WS Server #39](https://github.com/khoih-prog/WebSockets2_Generic/issues/39)
