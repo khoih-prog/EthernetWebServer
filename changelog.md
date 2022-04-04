@@ -13,6 +13,8 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v2.1.1](#releases-v211)
+  * [Releases v2.1.0](#releases-v210)
 	* [Releases v2.0.2](#releases-v202)
 	* [Releases v2.0.1](#releases-v201)
   * [Major Releases v2.0.0](#major-releases-v200)
@@ -48,6 +50,10 @@
 ---
 
 ## Changelog
+
+### Releases v2.1.1
+
+1. Fix compiler error for Portenta_H7 using Portenta Ethernet
 
 ### Releases v2.1.0
 

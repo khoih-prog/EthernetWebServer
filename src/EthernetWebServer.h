@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.1.0
+  Version: 2.1.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -32,17 +32,18 @@
   2.0.1   K Hoang      02/03/2022 Fix decoding error bug
   2.0.2   K Hoang      14/03/2022 Fix bug when using QNEthernet staticIP. Add staticIP option to NativeEthernet
   2.1.0   K Hoang      03/04/2022 Use Ethernet_Generic library as default. Support SPI2 for ESP32
+  2.1.1   K Hoang      04/04/2022 Fix compiler error for Portenta_H7 using Portenta Ethernet
  *************************************************************************************************************************************/
 
 #pragma once
 
-#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.1.0"
+#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.1.1"
 
 #define ETHERNET_WEBSERVER_VERSION_MAJOR    2
 #define ETHERNET_WEBSERVER_VERSION_MINOR    1
-#define ETHERNET_WEBSERVER_VERSION_PATCH    0
+#define ETHERNET_WEBSERVER_VERSION_PATCH    1
 
-#define ETHERNET_WEBSERVER_VERSION_INT      2001000
+#define ETHERNET_WEBSERVER_VERSION_INT      2001001
 
 #define USE_NEW_WEBSERVER_VERSION       true
 
@@ -151,7 +152,7 @@
   #warning Using UIPEthernet library from EthernetWebServer
 #elif USE_CUSTOM_ETHERNET
   #warning Using Custom Ethernet library from EthernetWebServer. You must include a library or error.
-#elif !( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || \
+#elif !( ETHERNET_USE_PORTENTA_H7 || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || \
          USE_NATIVE_ETHERNET || USE_QN_ETHERNET)
   #include <Ethernet_Generic.h>
   #warning Using Ethernet_Generic library from EthernetWebServer

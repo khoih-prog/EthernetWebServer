@@ -1217,7 +1217,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========================
 [EWS] Default SPI pinout:
 [EWS] MOSI: 25
@@ -1398,7 +1398,7 @@ The terminal output of **SAM DUE with W5x00 using Ethernet_Generic Library** run
 
 ```
 Starting SimpleWebSocket on SAM DUE with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 75
@@ -1489,7 +1489,7 @@ The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet_Generic Libr
 
 ```
 Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 25
@@ -1523,7 +1523,7 @@ The terminal output of **ESP32 with W5x00 using Ethernet_Generic Library** runni
 ```
 Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS
 With W5x00 using Ethernet_Generic Library on SPI
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 23
@@ -1571,7 +1571,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet_Generic Library** run
 ```
 Starting FS_EthernetWebServer on ESP8266 using LittleFS
 With W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 13
@@ -1624,7 +1624,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet_Generic Library** run
 ```
 Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
 With W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 13
@@ -1664,7 +1664,7 @@ The following are debug terminal output and screen shot when running example [Si
 
 ```
 SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 Debug Level = 3
 Connected! IP address: 192.168.2.127
 [EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
@@ -1720,7 +1720,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -1752,7 +1752,7 @@ The following are debug terminal output when running example [MQTTClient_Auth](e
 
 ```
 Start MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -1787,7 +1787,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -1818,7 +1818,7 @@ The following are debug terminal output and screen shot when running example [Ud
 
 ```
 Start UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -1860,7 +1860,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -1882,7 +1882,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -1900,7 +1900,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1923,7 +1923,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 6
 Connected! IP address: 192.168.2.222
@@ -1942,7 +1942,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Starting SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 4
 Connected! IP address: 192.168.2.132
@@ -1990,7 +1990,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 7
 Connected! IP address: 192.168.2.132
@@ -2070,7 +2070,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer_ESP32_SPI2 on ESP32_DEV with W5x00 using Ethernet_Generic Library on SPI2
-EthernetWebServer v2.1.0
+EthernetWebServer v2.1.1
 =========================
 Currently Used SPI pinout:
 MOSI:13
