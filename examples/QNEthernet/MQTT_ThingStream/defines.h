@@ -35,10 +35,7 @@
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 
 #define USE_UIP_ETHERNET      false
-#define USE_ETHERNET          false
-#define USE_ETHERNET2         false
-#define USE_ETHERNET3         false
-#define USE_ETHERNET_LARGE    false
+#define USE_ETHERNET_GENERIC  false
 #define USE_ETHERNET_ESP8266  false 
 #define USE_ETHERNET_ENC      false
 #define USE_CUSTOM_ETHERNET   false

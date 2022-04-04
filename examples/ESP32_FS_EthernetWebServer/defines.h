@@ -27,16 +27,30 @@
   //LittleFS has higher priority
   #include "FS.h"
   
-  // The library will be depreciated after being merged to future major Arduino esp32 core release 2.x
-  // At that time, just remove this library inclusion
-  #include <LITTLEFS.h>             // https://github.com/lorol/LITTLEFS
-  
-  FS* filesystem =          &LITTLEFS;
-  #define CurrentFileFS     "LittleFS"
-  #define FileFS            LITTLEFS
-  
-  #ifdef USE_SPIFFS
-    #undef USE_SPIFFS
+    // Check cores/esp32/esp_arduino_version.h and cores/esp32/core_version.h
+    //#if ( ESP_ARDUINO_VERSION >= ESP_ARDUINO_VERSION_VAL(2, 0, 0) )  //(ESP_ARDUINO_VERSION_MAJOR >= 2)
+    #if ( defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 2) )
+      #if (_WIFIMGR_LOGLEVEL_ > 3)
+        #warning Using ESP32 Core 1.0.6 or 2.0.0+
+      #endif
+      
+      // The library has been merged into esp32 core from release 1.0.6
+      #include <LittleFS.h>       // https://github.com/espressif/arduino-esp32/tree/master/libraries/LittleFS
+      
+      FS* filesystem =      &LittleFS;
+      #define FileFS        LittleFS
+      #define FS_Name       "LittleFS"
+    #else
+      #if (_WIFIMGR_LOGLEVEL_ > 3)
+        #warning Using ESP32 Core 1.0.5-. You must install LITTLEFS library
+      #endif
+      
+    // The library has been merged into esp32 core from release 1.0.6
+    #include <LITTLEFS.h>       // https://github.com/lorol/LITTLEFS
+    
+    FS* filesystem =      &LITTLEFS;
+    #define FileFS        LITTLEFS
+    #define FS_Name       "LittleFS"
   #endif
   
   #define USE_SPIFFS                  false
@@ -80,43 +94,51 @@
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET          true
-  #define USE_ETHERNET2         false
-  #define USE_ETHERNET3         false
-  #define USE_ETHERNET_LARGE    false
-  #define USE_ETHERNET_ESP8266  false 
+  #define USE_ETHERNET_GENERIC  true
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
   
   #if !USE_ETHERNET_WRAPPER
   
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
+    #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET
       #endif
       #define USE_CUSTOM_ETHERNET   false
     #endif
 
-    #if USE_NATIVE_ETHERNET
-      #include "NativeEthernet.h"
-      #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
-      #define SHIELD_TYPE           "Custom Ethernet using Teensy 4.1 NativeEthernet Library"
-    #elif USE_ETHERNET3
-      #include "Ethernet3.h"
-      #warning Using Ethernet3 lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet3 Library"
-    #elif USE_ETHERNET2
-      #include "Ethernet2.h"
-      #warning Using Ethernet2 lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet2 Library"
-    #elif USE_ETHERNET_LARGE
-      #include "EthernetLarge.h"
-      #warning Using EthernetLarge lib
-      #define SHIELD_TYPE           "W5x00 using EthernetLarge Library"
-    #elif USE_ETHERNET_ESP8266
-      #include "Ethernet_ESP8266.h"
-      #warning Using Ethernet_ESP8266 lib 
-      #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library" 
+    #if USE_ETHERNET_GENERIC
+      #include <soc/spi_pins.h>
+        
+      // Optional SPI2
+      //#define USING_SPI2                          true
+
+      #if USING_SPI2
+        #define PIN_MISO          HSPI_IOMUX_PIN_NUM_MISO
+        #define PIN_MOSI          HSPI_IOMUX_PIN_NUM_MOSI
+        #define PIN_SCK           HSPI_IOMUX_PIN_NUM_CLK
+        #define PIN_SS            HSPI_IOMUX_PIN_NUM_CS
+      
+        #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
+        
+      #else
+      
+        #define PIN_MISO          MISO
+        #define PIN_MOSI          MOSI
+        #define PIN_SCK           SCK
+        #define PIN_SS            SS
+      
+        #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI"
+        
+      #endif
+
+      #define ETHERNET_LARGE_BUFFERS
+
+      #define _ETG_LOGLEVEL_                      1
+      
+      #include "Ethernet_Generic.h"
+      #warning Using Ethernet_Generic lib
+     
     #elif USE_ETHERNET_ENC
       #include "EthernetENC.h"
       #warning Using EthernetENC lib
@@ -127,13 +149,13 @@
       #warning Using Custom Ethernet library. You must include a library and initialize.
       #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
     #else
-      #ifdef USE_ETHERNET
-        #undef USE_ETHERNET
+      #ifdef USE_ETHERNET_GENERIC
+        #undef USE_ETHERNET_GENERIC
       #endif
-      #define USE_ETHERNET   true
-      #include "Ethernet.h"
-      #warning Using Ethernet lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet Library"
+      #define USE_ETHERNET_GENERIC   true
+      #include "Ethernet_Generic.h"
+      #warning Using default Ethernet_Generic lib
+      #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
     #endif
     
     // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
@@ -152,6 +174,8 @@
 #ifndef SHIELD_TYPE
   #define SHIELD_TYPE     "Unknown Ethernet shield/library" 
 #endif
+
+//#define BOARD_NAME    ARDUINO_BOARD
 
 // Enter a MAC address and IP address for your controller below.
 #define NUMBER_OF_MAC      20

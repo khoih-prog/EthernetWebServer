@@ -62,14 +62,8 @@ void setup()
   Serial.println(" with " + String(SHIELD_TYPE));
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
-#if USE_ETHERNET
-  ET_LOGWARN(F("=========== USE_ETHERNET ==========="));
-#elif USE_ETHERNET2
-  ET_LOGWARN(F("=========== USE_ETHERNET2 ==========="));
-#elif USE_ETHERNET3
-  ET_LOGWARN(F("=========== USE_ETHERNET3 ==========="));
-#elif USE_ETHERNET_LARGE
-  ET_LOGWARN(F("=========== USE_ETHERNET_LARGE ==========="));
+#if USE_ETHERNET_GENERIC
+  ET_LOGWARN(F("=========== USE_ETHERNET_GENERIC ==========="));  
 #elif USE_ETHERNET_ESP8266
   ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
 #elif USE_ETHERNET_ENC
@@ -93,7 +87,7 @@ void setup()
 
   ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
 
-  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
     // For ESP8266
     // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
     // Ethernet           0                 X            X            X            X        0
@@ -105,29 +99,16 @@ void setup()
     // Must use library patch for Ethernet, EthernetLarge libraries
     Ethernet.init (USE_THIS_SS_PIN);
 
-  #elif USE_ETHERNET3
-    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-    #ifndef ETHERNET3_MAX_SOCK_NUM
-      #define ETHERNET3_MAX_SOCK_NUM      4
-    #endif
-  
-    Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
-
   #elif USE_CUSTOM_ETHERNET
   
     // You have to add initialization for your Custom Ethernet here
     // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
     Ethernet.init(USE_THIS_SS_PIN);
   
-  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  #endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
 
 #elif defined(ESP32)
 
-  #define PIN_D18           18        // Pin D18 mapped to pin GPIO18/VSPI_SCK of ESP32
-  #define PIN_D19           19        // Pin D19 mapped to pin GPIO19/VSPI_MISO of ESP32
-  #define PIN_D23           23        // Pin D23 mapped to pin GPIO23/VSPI_MOSI of ESP32
-   
   // You can use Ethernet.init(pin) to configure the CS pin
   //Ethernet.init(10);  // Most Arduino shields
   //Ethernet.init(5);   // MKR ETH shield
@@ -136,38 +117,20 @@ void setup()
   //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
   //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
 
-  // Connection for ESP32
-  // MOSI: GPIO23, MISP: GPIO19, SCK: GPIO18, CS/SS: GPIO22
-  
   #ifndef USE_THIS_SS_PIN
-    #define USING_M5STACK_W5500     false
-    #if USING_M5STACK_W5500
-      #warning Using M5Stack_Core_ESP32 with W5500 mudule
-      #define USE_THIS_SS_PIN   26    // For M5Stack_Core_ESP32 with W5500 mudule
-    #else
-      #define USE_THIS_SS_PIN   5   //22    // For ESP32
-    #endif
+    #define USE_THIS_SS_PIN   5   //22    // For ESP32
   #endif
 
   ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
 
   // For other boards, to change if necessary
-  #if ( USE_ETHERNET || USE_ETHERNET_LARGE || USE_ETHERNET2 || USE_ETHERNET_ENC )
+  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
     // Must use library patch for Ethernet, EthernetLarge libraries
     // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
     // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
   
     //Ethernet.setCsPin (USE_THIS_SS_PIN);
     Ethernet.init (USE_THIS_SS_PIN);
-  
-  #elif USE_ETHERNET3
-    // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-    #ifndef ETHERNET3_MAX_SOCK_NUM
-      #define ETHERNET3_MAX_SOCK_NUM      4
-    #endif
-  
-    Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
 
   #elif USE_CUSTOM_ETHERNET
   
@@ -175,7 +138,7 @@ void setup()
     // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
     Ethernet.init(USE_THIS_SS_PIN); 
   
-  #endif  //( USE_ETHERNET || USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE )
+  #endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
 
 #endif    //defined(ESP8266)
 
@@ -197,10 +160,6 @@ void setup()
   Serial.println(SCK);
   Serial.print("CS/SS:");
   Serial.println(USE_THIS_SS_PIN);
-#if USE_ETHERNET3
-  Serial.print("SPI_CS:");
-  Serial.println(SPI_CS);
-#endif
   Serial.println(F("========================="));
 
   Serial.print(F("Using mac index = "));

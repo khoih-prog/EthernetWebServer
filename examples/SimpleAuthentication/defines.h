@@ -17,8 +17,6 @@
 
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
 
-  #error Not working yet for ARDUINO_PORTENTA_H7_M7
-  
   #if defined(BOARD_NAME)
     #undef BOARD_NAME
   #endif
@@ -258,13 +256,13 @@
   #warning Use ESP8266 architecture
   #include <ESP8266mDNS.h>
   #define ETHERNET_USE_ESP8266
-  #define BOARD_TYPE      "ESP8266"
+  #define BOARD_TYPE      ARDUINO_BOARD
 
 #elif ( defined(ESP32) )
   // For ESP32
   #warning Use ESP32 architecture
   #define ETHERNET_USE_ESP32
-  #define BOARD_TYPE      "ESP32"
+  #define BOARD_TYPE      ARDUINO_BOARD
   
   #define W5500_RST_PORT   21
 
@@ -275,7 +273,7 @@
     // For RPI Pico using Arduino Mbed RP2040 core
     // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
     
-    #define USE_THIS_SS_PIN       5
+    #define USE_THIS_SS_PIN       17    //5
 
     #if defined(BOARD_NAME)
       #undef BOARD_NAME
@@ -339,17 +337,15 @@
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET          false
-  #define USE_ETHERNET2         false
-  #define USE_ETHERNET3         false
-  #define USE_ETHERNET_LARGE    true
+  #define USE_ETHERNET_GENERIC  true
   #define USE_ETHERNET_ESP8266  false 
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
   
   #if !USE_ETHERNET_WRAPPER
   
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7 )
+    #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || \
+          USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7 )
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET
       #endif
@@ -365,18 +361,43 @@
       #include "NativeEthernet.h"
       #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
       #define SHIELD_TYPE           "Custom Ethernet using Teensy 4.1 NativeEthernet Library"
-    #elif USE_ETHERNET3
-      #include "Ethernet3.h"
-      #warning Using Ethernet3 lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet3 Library"
-    #elif USE_ETHERNET2
-      #include "Ethernet2.h"
-      #warning Using Ethernet2 lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet2 Library"
-    #elif USE_ETHERNET_LARGE
-      #include "EthernetLarge.h"
-      #warning Using EthernetLarge lib
-      #define SHIELD_TYPE           "W5x00 using EthernetLarge Library"
+    #elif USE_ETHERNET_GENERIC
+      #if (ESP32)
+        #include <soc/spi_pins.h>
+          
+        // Optional SPI2
+        #define USING_SPI2                          true
+  
+        #if USING_SPI2
+          #define PIN_MISO          HSPI_IOMUX_PIN_NUM_MISO
+          #define PIN_MOSI          HSPI_IOMUX_PIN_NUM_MOSI
+          #define PIN_SCK           HSPI_IOMUX_PIN_NUM_CLK
+          #define PIN_SS            HSPI_IOMUX_PIN_NUM_CS
+        
+          #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
+          
+        #else
+        
+          #define PIN_MISO          MISO
+          #define PIN_MOSI          MOSI
+          #define PIN_SCK           SCK
+          #define PIN_SS            SS
+        
+          #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI"
+          
+        #endif
+
+      #else
+        #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library"  
+      #endif
+
+      #define ETHERNET_LARGE_BUFFERS
+
+      #define _ETG_LOGLEVEL_                      1
+      
+      #include "Ethernet_Generic.h"
+      #warning Using Ethernet_Generic lib
+
     #elif USE_ETHERNET_ESP8266
       #include "Ethernet_ESP8266.h"
       #warning Using Ethernet_ESP8266 lib 
@@ -391,13 +412,13 @@
       #warning Using Custom Ethernet library. You must include a library and initialize.
       #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
     #else
-      #ifdef USE_ETHERNET
-        #undef USE_ETHERNET
+      #ifdef USE_ETHERNET_GENERIC
+        #undef USE_ETHERNET_GENERIC
       #endif
-      #define USE_ETHERNET   true
-      #include "Ethernet.h"
-      #warning Using Ethernet lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet Library"
+      #define USE_ETHERNET_GENERIC   true
+      #include "Ethernet_Generic.h"
+      #warning Using default Ethernet_Generic lib
+      #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
     #endif
     
     // Ethernet_Shield_W5200, EtherCard, EtherSia not supported

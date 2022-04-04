@@ -25,7 +25,7 @@
 #if USE_LITTLEFS
   #include <LittleFS.h>
   //LittleFS has higher priority
-  #define CurrentFileFS     "LittleFS"
+  #define FS_Name           "LittleFS"
   FS* filesystem = &LittleFS;
   #define FileFS            LittleFS
   #ifdef USE_SPIFFS
@@ -35,7 +35,7 @@
 #elif USE_SPIFFS
   FS* filesystem = &SPIFFS;
   #define FileFS            SPIFFS
-  #define CurrentFileFS     "SPIFFS"
+  #define FS_Name           SPIFFS"
 #endif
 
 // For ESP8266
@@ -72,39 +72,31 @@
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET          true
-  #define USE_ETHERNET2         false
-  #define USE_ETHERNET3         false
-  #define USE_ETHERNET_LARGE    false
+  #define USE_ETHERNET_GENERIC  true
   #define USE_ETHERNET_ESP8266  false 
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
   
   #if !USE_ETHERNET_WRAPPER
   
-    #if ( USE_ETHERNET2 || USE_ETHERNET3 || USE_ETHERNET_LARGE || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || USE_NATIVE_ETHERNET )
+    #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
       #ifdef USE_CUSTOM_ETHERNET
         #undef USE_CUSTOM_ETHERNET
       #endif
       #define USE_CUSTOM_ETHERNET   false
     #endif
 
-    #if USE_NATIVE_ETHERNET
-      #include "NativeEthernet.h"
-      #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
-      #define SHIELD_TYPE           "Custom Ethernet using Teensy 4.1 NativeEthernet Library"
-    #elif USE_ETHERNET3
-      #include "Ethernet3.h"
-      #warning Using Ethernet3 lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet3 Library"
-    #elif USE_ETHERNET2
-      #include "Ethernet2.h"
-      #warning Using Ethernet2 lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet2 Library"
-    #elif USE_ETHERNET_LARGE
-      #include "EthernetLarge.h"
-      #warning Using EthernetLarge lib
-      #define SHIELD_TYPE           "W5x00 using EthernetLarge Library"
+    #if USE_ETHERNET_GENERIC
+
+      #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library"  
+
+      #define ETHERNET_LARGE_BUFFERS
+
+      #define _ETG_LOGLEVEL_                      1
+      
+      #include "Ethernet_Generic.h"
+      #warning Using Ethernet_Generic lib
+     
     #elif USE_ETHERNET_ESP8266
       #include "Ethernet_ESP8266.h"
       #warning Using Ethernet_ESP8266 lib 
@@ -119,13 +111,13 @@
       #warning Using Custom Ethernet library. You must include a library and initialize.
       #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
     #else
-      #ifdef USE_ETHERNET
-        #undef USE_ETHERNET
+      #ifdef USE_ETHERNET_GENERIC
+        #undef USE_ETHERNET_GENERIC
       #endif
-      #define USE_ETHERNET   true
-      #include "Ethernet.h"
-      #warning Using Ethernet lib
-      #define SHIELD_TYPE           "W5x00 using Ethernet Library"
+      #define USE_ETHERNET_GENERIC   true
+      #include "Ethernet_Generic.h"
+      #warning Using default Ethernet_Generic lib
+      #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
     #endif
     
     // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
