@@ -65,6 +65,7 @@
   * [4. How to increase W5x00 TX/RX buffer](#4-how-to-increase-w5x00-txrx-buffer)
   * [5. How to adjust sendContent_P() and send_P() buffer size](#5-how-to-adjust-sendcontent_p-and-send_p-buffer-size)
   * [6. How to use SPI2 for ESP32 using W5x00 and Ethernet_Generic Library](#6-How-to-use-SPI2-for-ESP32-using-W5x00-and-Ethernet_Generic-Library)
+  * [7. How to use SPI1 for RP2040 using W5x00 and Ethernet_Generic Library](#7-How-to-use-SPI1-for-RP2040-using-W5x00-and-Ethernet_Generic-Library)
 * [Usage](#usage)
   * [Init the CS/SS pin if use EthernetWrapper](#init-the-csss-pin-if-use-ethernetwrapper) 
   * [Class Constructor](#class-constructor)
@@ -146,6 +147,7 @@
   * [19. WiFi_Ethernet_Complex_ESP32 on ESP32_DEV](#19-WiFi_Ethernet_Complex_ESP32-on-ESP32_DEV)
   * [20. WiFi_Ethernet_Complex_ESP8266 on ESP8266_NODEMCU_ESP12E](#20-WiFi_Ethernet_Complex_ESP8266-on-ESP8266_NODEMCU_ESP12E)
   * [21. AdvancedWebServer_ESP32_SPI2 on ESP32_DEV with W5x00 using Ethernet_Generic Library on SPI2](#21-AdvancedWebServer_ESP32_SPI2-on-ESP32_DEV-with-W5x00-using-Ethernet_Generic-Library-on-SPI2)
+  * [22. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1](#22-AdvancedWebServer-on-RASPBERRY_PI_PICO-with-W5x00-using-Ethernet_Generic-Library-on-SPI1)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -2131,7 +2133,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.102
 
 ---
 
-#### 21. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1
+#### 22. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1
 
 The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on RASPBERRY_PI_PICO with W5500 using Ethernet_Generic Library on SPI1 and [arduino-pico core](https://github.com/earlephilhower/arduino-pico)
 
