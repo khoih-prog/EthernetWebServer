@@ -1,0 +1,84 @@
+menu.split=Flash split
+Seeed_XIAO_RP2040.name=SEEED XIAO RP2040
+Seeed_XIAO_RP2040.build.core=arduino
+Seeed_XIAO_RP2040.build.crossprefix=arm-none-eabi-
+Seeed_XIAO_RP2040.build.compiler_path={runtime.tools.arm-none-eabi-gcc-7-2017q4.path}/bin/
+
+# KH fix for Linux case-sensitive path
+#Seeed_XIAO_RP2040.build.variant=SEEED_XIAO_RP2040
+Seeed_XIAO_RP2040.build.variant=Seeed_XIAO_RP2040
+######
+
+Seeed_XIAO_RP2040.build.mcu=cortex-m0plus
+Seeed_XIAO_RP2040.build.extra_flags=
+Seeed_XIAO_RP2040.build.fpu=
+Seeed_XIAO_RP2040.build.float-abi=
+Seeed_XIAO_RP2040.build.architecture=cortex-m0plus
+Seeed_XIAO_RP2040.build.board=SEEED_XIAO_RP2040
+Seeed_XIAO_RP2040.build.ldscript=linker_script.ld
+Seeed_XIAO_RP2040.compiler.mbed.arch.define=-DARDUINO_ARCH_RP2040
+Seeed_XIAO_RP2040.compiler.mbed.defines={build.variant.path}/defines.txt
+Seeed_XIAO_RP2040.compiler.mbed.ldflags={build.variant.path}/ldflags.txt
+Seeed_XIAO_RP2040.compiler.mbed.cflags={build.variant.path}/cflags.txt
+Seeed_XIAO_RP2040.compiler.mbed.cxxflags={build.variant.path}/cxxflags.txt
+Seeed_XIAO_RP2040.compiler.mbed.includes={build.variant.path}/includes.txt
+Seeed_XIAO_RP2040.compiler.mbed.extra_ldflags=-lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
+Seeed_XIAO_RP2040.compiler.mbed="{build.variant.path}/libs/libmbed.a"
+Seeed_XIAO_RP2040.vid.0=0x2886
+Seeed_XIAO_RP2040.pid.0=0x8042
+Seeed_XIAO_RP2040.upload_port.0.vid=0x2886
+Seeed_XIAO_RP2040.upload_port.0.pid=0x8042
+Seeed_XIAO_RP2040.upload.tool=picotool
+Seeed_XIAO_RP2040.upload.tool.default=picotool
+Seeed_XIAO_RP2040.upload.protocol=
+Seeed_XIAO_RP2040.upload.transport=
+Seeed_XIAO_RP2040.upload.use_1200bps_touch=true
+Seeed_XIAO_RP2040.upload.wait_for_upload_port=false
+Seeed_XIAO_RP2040.upload.native_usb=true
+Seeed_XIAO_RP2040.upload.maximum_size=16777216
+Seeed_XIAO_RP2040.upload.maximum_data_size=270336
+Seeed_XIAO_RP2040.bootloader.tool=openocd
+Seeed_XIAO_RP2040.bootloader.tool.default=openocd
+Seeed_XIAO_RP2040.bootloader.config=-f target/rp2040.cfg
+Seeed_XIAO_RP2040.bootloader.programmer=-f interface/cmsis-dap.cfg
+
+##############################################################
+
+menu.split=Flash split
+WIO_RP2040_MINI_DEV_BOARD.name=Wio RP2040 Mini Dev Board
+WIO_RP2040_MINI_DEV_BOARD.build.core=arduino
+WIO_RP2040_MINI_DEV_BOARD.build.crossprefix=arm-none-eabi-
+WIO_RP2040_MINI_DEV_BOARD.build.compiler_path={runtime.tools.arm-none-eabi-gcc-7-2017q4.path}/bin/
+WIO_RP2040_MINI_DEV_BOARD.build.variant=WIO_RP2040_MINI_DEV_BOARD
+WIO_RP2040_MINI_DEV_BOARD.build.mcu=cortex-m0plus
+WIO_RP2040_MINI_DEV_BOARD.build.extra_flags=
+WIO_RP2040_MINI_DEV_BOARD.build.fpu=
+WIO_RP2040_MINI_DEV_BOARD.build.float-abi=
+WIO_RP2040_MINI_DEV_BOARD.build.architecture=cortex-m0plus
+WIO_RP2040_MINI_DEV_BOARD.build.board=WIO_RP2040_MINI_DEV_BOARD
+WIO_RP2040_MINI_DEV_BOARD.build.ldscript=linker_script.ld
+WIO_RP2040_MINI_DEV_BOARD.compiler.mbed.arch.define=-DARDUINO_ARCH_RP2040
+WIO_RP2040_MINI_DEV_BOARD.compiler.mbed.defines={build.variant.path}/defines.txt
+WIO_RP2040_MINI_DEV_BOARD.compiler.mbed.ldflags={build.variant.path}/ldflags.txt
+WIO_RP2040_MINI_DEV_BOARD.compiler.mbed.cflags={build.variant.path}/cflags.txt
+WIO_RP2040_MINI_DEV_BOARD.compiler.mbed.cxxflags={build.variant.path}/cxxflags.txt
+WIO_RP2040_MINI_DEV_BOARD.compiler.mbed.includes={build.variant.path}/includes.txt
+WIO_RP2040_MINI_DEV_BOARD.compiler.mbed.extra_ldflags=-lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
+WIO_RP2040_MINI_DEV_BOARD.compiler.mbed="{build.variant.path}/libs/libmbed.a"
+WIO_RP2040_MINI_DEV_BOARD.vid.0=0x2886
+WIO_RP2040_MINI_DEV_BOARD.pid.0=0x8043
+WIO_RP2040_MINI_DEV_BOARD.upload_port.0.vid=0x2886
+WIO_RP2040_MINI_DEV_BOARD.upload_port.0.pid=0x8043
+WIO_RP2040_MINI_DEV_BOARD.upload.tool=picotool
+WIO_RP2040_MINI_DEV_BOARD.upload.tool.default=picotool
+WIO_RP2040_MINI_DEV_BOARD.upload.protocol=
+WIO_RP2040_MINI_DEV_BOARD.upload.transport=
+WIO_RP2040_MINI_DEV_BOARD.upload.use_1200bps_touch=true
+WIO_RP2040_MINI_DEV_BOARD.upload.wait_for_upload_port=false
+WIO_RP2040_MINI_DEV_BOARD.upload.native_usb=true
+WIO_RP2040_MINI_DEV_BOARD.upload.maximum_size=16777216
+WIO_RP2040_MINI_DEV_BOARD.upload.maximum_data_size=270336
+WIO_RP2040_MINI_DEV_BOARD.bootloader.tool=openocd
+WIO_RP2040_MINI_DEV_BOARD.bootloader.tool.default=openocd
+WIO_RP2040_MINI_DEV_BOARD.bootloader.config=-f target/rp2040.cfg
+WIO_RP2040_MINI_DEV_BOARD.bootloader.programmer=-f interface/cmsis-dap.cfg
