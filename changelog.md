@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v2.1.2](#releases-v212)
   * [Releases v2.1.1](#releases-v211)
   * [Releases v2.1.0](#releases-v210)
   * [Releases v2.0.2](#releases-v202)
@@ -50,6 +51,14 @@
 ---
 
 ## Changelog
+
+### Releases v2.1.2
+
+1. Add support to SPI1 for RP2040 using [arduino-pico core](https://github.com/earlephilhower/arduino-pico)
+2. Drop `EthernetWrapper`
+3. Rewrite all the examples to support new features
+4. Add example [multiFileProject](examples/multiFileProject) to demo how to avoid `multiple-definitions` linker error for multiple-file project
+5. Update `Packages' Patches`
 
 ### Releases v2.1.1
 

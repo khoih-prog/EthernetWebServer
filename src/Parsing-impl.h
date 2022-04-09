@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.1.1
+  Version: 2.1.2
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -33,19 +33,27 @@
   2.0.2   K Hoang      14/03/2022 Fix bug when using QNEthernet staticIP. Add staticIP option to NativeEthernet
   2.1.0   K Hoang      03/04/2022 Use Ethernet_Generic library as default. Support SPI2 for ESP32
   2.1.1   K Hoang      04/04/2022 Fix compiler error for Portenta_H7 using Portenta Ethernet
+  2.1.2   K Hoang      08/04/2022 Add support to SPI1 for RP2040 using arduino-pico core
  **********************************************************************************************************************************/
 
 #pragma once
 
+#ifndef ETHERNET_WEBSERVER_PARSING_IMPL_H
+#define ETHERNET_WEBSERVER_PARSING_IMPL_H
+
 #include <Arduino.h>
-#include "EthernetWebServer.h"
+#include "EthernetWebServer.hpp"
 
 #ifndef WEBSERVER_MAX_POST_ARGS
-#define WEBSERVER_MAX_POST_ARGS 32
+  #define WEBSERVER_MAX_POST_ARGS 32
 #endif
+
+/////////////////////////////////////////////////////////////////////////
 
 // KH
 #if USE_NEW_WEBSERVER_VERSION
+
+/////////////////////////////////////////////////////////////////////////
 
 static bool readBytesWithTimeout(EthernetClient& client, size_t maxLength, String& data, int timeout_ms)
 {
@@ -75,9 +83,15 @@ static bool readBytesWithTimeout(EthernetClient& client, size_t maxLength, Strin
   return data.length() == maxLength;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 #else
 
+/////////////////////////////////////////////////////////////////////////
+
 #if !(ETHERNET_USE_PORTENTA_H7)
+
+/////////////////////////////////////////////////////////////////////////
 
 static char* readBytesWithTimeout(EthernetClient& client, size_t maxLength, size_t& dataLength, int timeout_ms)
 {
@@ -129,7 +143,11 @@ static char* readBytesWithTimeout(EthernetClient& client, size_t maxLength, size
 
 #endif    // #if !(ETHERNET_USE_PORTENTA_H7)
 
+/////////////////////////////////////////////////////////////////////////
+
 #endif    // #if USE_NEW_WEBSERVER_VERSION
+
+/////////////////////////////////////////////////////////////////////////
 
 bool EthernetWebServer::_parseRequest(EthernetClient& client)
 {
@@ -223,7 +241,6 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
 
   _currentMethod = method;
 
-
   ET_LOGDEBUG1(F("method: "), methodStr);
   ET_LOGDEBUG1(F("url: "), url);
   ET_LOGDEBUG1(F("search: "), searchStr);
@@ -247,13 +264,13 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
     String boundaryStr;
     String headerName;
     String headerValue;
-    
+
 #if USE_NEW_WEBSERVER_VERSION
     bool isEncoded  = false;
-#endif    
-    
+#endif
+
     bool isForm     = false;
-    
+
     uint32_t contentLength = 0;
 
     //parse headers
@@ -274,7 +291,7 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
 
       headerName  = req.substring(0, headerDiv);
       headerValue = req.substring(headerDiv + 1);
-      
+
       headerValue.trim();
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
@@ -285,7 +302,7 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
       if (headerName.equalsIgnoreCase("Content-Type"))
       {
         using namespace mime;
-        
+
         if (headerValue.startsWith(mimeTable[txt].mimeType))
         {
           isForm = false;
@@ -293,9 +310,9 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
         else if (headerValue.startsWith("application/x-www-form-urlencoded"))
         {
           isForm = false;
-#if USE_NEW_WEBSERVER_VERSION          
+#if USE_NEW_WEBSERVER_VERSION
           isEncoded = true;
-#endif          
+#endif
         }
         else if (headerValue.startsWith("multipart/"))
         {
@@ -322,11 +339,11 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
 #if USE_NEW_WEBSERVER_VERSION
     String plainBuf;
 
-    if (   !isForm
-           && // read content into plainBuf
-           (   !readBytesWithTimeout(client, contentLength, plainBuf, HTTP_MAX_POST_WAIT)
-               || (plainBuf.length() < contentLength)
-           )
+    if ( !isForm
+         && // read content into plainBuf
+         (   !readBytesWithTimeout(client, contentLength, plainBuf, HTTP_MAX_POST_WAIT)
+             || (plainBuf.length() < contentLength)
+         )
        )
     {
       return false;
@@ -475,6 +492,8 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
 #endif
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 bool EthernetWebServer::_collectHeader(const char* headerName, const char* headerValue)
 {
   for (int i = 0; i < _headerKeysCount; i++)
@@ -490,7 +509,11 @@ bool EthernetWebServer::_collectHeader(const char* headerName, const char* heade
   return false;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 #if USE_NEW_WEBSERVER_VERSION
+
+/////////////////////////////////////////////////////////////////////////
 
 struct storeArgHandler
 {
@@ -503,6 +526,8 @@ struct storeArgHandler
   }
 };
 
+/////////////////////////////////////////////////////////////////////////
+
 struct nullArgHandler
 {
   void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos, int next_index)
@@ -511,6 +536,8 @@ struct nullArgHandler
     // do nothing
   }
 };
+
+/////////////////////////////////////////////////////////////////////////
 
 void EthernetWebServer::_parseArguments(const String& data)
 {
@@ -525,9 +552,10 @@ void EthernetWebServer::_parseArguments(const String& data)
   (void)_parseArgumentsPrivate(data, storeArgHandler());
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 int EthernetWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(String&, String&, const String&, int, int, int, int)> handler)
 {
-
   ET_LOGDEBUG1(F("args: "), data);
 
   size_t pos    = 0;
@@ -574,6 +602,8 @@ int EthernetWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(
   return arg_total;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void EthernetWebServer::_uploadWriteByte(uint8_t b)
 {
   if (_currentUpload->currentSize == HTTP_UPLOAD_BUFLEN)
@@ -587,6 +617,8 @@ void EthernetWebServer::_uploadWriteByte(uint8_t b)
 
   _currentUpload->buf[_currentUpload->currentSize++] = b;
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 uint8_t EthernetWebServer::_uploadReadByte(EthernetClient& client)
 {
@@ -603,11 +635,14 @@ uint8_t EthernetWebServer::_uploadReadByte(EthernetClient& client)
   return (uint8_t)res;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 #else
+
+/////////////////////////////////////////////////////////////////////////
 
 void EthernetWebServer::_parseArguments(const String& data)
 {
-
   ET_LOGDEBUG1(F("args: "), data);
 
   if (_currentArgs)
@@ -639,7 +674,7 @@ void EthernetWebServer::_parseArguments(const String& data)
   ET_LOGDEBUG1(F("args count: "), _currentArgCount);
 
   _currentArgs = new RequestArgument[_currentArgCount + 1];
-  
+
   int pos = 0;
   int iarg;
 
@@ -686,6 +721,8 @@ void EthernetWebServer::_parseArguments(const String& data)
   ET_LOGDEBUG1(F("args count: "), _currentArgCount);
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void EthernetWebServer::_uploadWriteByte(uint8_t b)
 {
   if (_currentUpload.currentSize == HTTP_UPLOAD_BUFLEN)
@@ -699,6 +736,8 @@ void EthernetWebServer::_uploadWriteByte(uint8_t b)
 
   _currentUpload.buf[_currentUpload.currentSize++] = b;
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 uint8_t EthernetWebServer::_uploadReadByte(EthernetClient& client)
 {
@@ -715,9 +754,15 @@ uint8_t EthernetWebServer::_uploadReadByte(EthernetClient& client)
   return (uint8_t)res;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 #endif
 
+/////////////////////////////////////////////////////////////////////////
+
 #if USE_NEW_WEBSERVER_VERSION
+
+/////////////////////////////////////////////////////////////////////////
 
 bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundary, uint32_t len)
 {
@@ -736,9 +781,9 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundar
   } while (line.length() == 0 && retry < 3);
 
   client.readStringUntil('\n');
-  
+
   //start reading the form
-  if (line == ("--" + boundary)) 
+  if (line == ("--" + boundary))
   {
     if (_postArgs)
       delete[] _postArgs;
@@ -752,7 +797,7 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundar
       String argValue;
       String argType;
       String argFilename;
-      
+
       bool argIsFile = false;
 
       line = client.readStringUntil('\r');
@@ -787,7 +832,7 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundar
           ET_LOGDEBUG1(F("PostArg Name: "), argName);
 
           using namespace mime;
-          
+
           argType = mimeTable[txt].mimeType;
           line    = client.readStringUntil('\r');
           client.readStringUntil('\n');
@@ -853,7 +898,7 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundar
 
             _currentUpload->status = UPLOAD_FILE_WRITE;
             uint8_t argByte = _uploadReadByte(client);
-            
+
 readfile:
             while (argByte != 0x0D)
             {
@@ -926,7 +971,7 @@ readfile:
                   ET_LOGDEBUG(F("Done Parsing POST"));
                   break;
                 }
-                
+
                 continue;
               }
               else
@@ -935,7 +980,7 @@ readfile:
                 _uploadWriteByte(0x0A);
                 _uploadWriteByte((uint8_t)('-'));
                 _uploadWriteByte((uint8_t)('-'));
-                
+
                 uint32_t i = 0;
 
                 while (i < boundary.length())
@@ -989,7 +1034,7 @@ readfile:
       _postArgs = nullptr;
       _postArgsLen = 0;
     }
-    
+
     return true;
   }
 
@@ -997,6 +1042,8 @@ readfile:
 
   return false;
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 bool EthernetWebServer::_parseFormUploadAborted()
 {
@@ -1008,10 +1055,13 @@ bool EthernetWebServer::_parseFormUploadAborted()
   return false;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 #else
 
+/////////////////////////////////////////////////////////////////////////
 
-bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundary, uint32_t len) 
+bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundary, uint32_t len)
 {
 
   ET_LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
@@ -1040,7 +1090,7 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundar
       String argValue;
       String argType;
       String argFilename;
-      
+
       bool argIsFile = false;
 
       line = client.readStringUntil('\r');
@@ -1216,7 +1266,7 @@ readfile:
                 _uploadWriteByte(0x0A);
                 _uploadWriteByte((uint8_t)('-'));
                 _uploadWriteByte((uint8_t)('-'));
-                
+
                 uint32_t i = 0;
 
                 while (i < boundary.length())
@@ -1273,6 +1323,8 @@ readfile:
   return false;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 bool EthernetWebServer::_parseFormUploadAborted()
 {
   _currentUpload.status = UPLOAD_FILE_ABORTED;
@@ -1283,7 +1335,11 @@ bool EthernetWebServer::_parseFormUploadAborted()
   return false;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 #endif
+
+/////////////////////////////////////////////////////////////////////////
 
 String EthernetWebServer::urlDecode(const String& text)
 {
@@ -1322,3 +1378,6 @@ String EthernetWebServer::urlDecode(const String& text)
   return decoded;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
+#endif  // ETHERNET_WEBSERVER_PARSING_IMPL_H

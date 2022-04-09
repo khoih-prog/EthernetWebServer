@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.1.1
+  Version: 2.1.2
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -33,6 +33,7 @@
   2.0.2   K Hoang      14/03/2022 Fix bug when using QNEthernet staticIP. Add staticIP option to NativeEthernet
   2.1.0   K Hoang      03/04/2022 Use Ethernet_Generic library as default. Support SPI2 for ESP32
   2.1.1   K Hoang      04/04/2022 Fix compiler error for Portenta_H7 using Portenta Ethernet
+  2.1.2   K Hoang      08/04/2022 Add support to SPI1 for RP2040 using arduino-pico core
  *************************************************************************************************************************************/
 
 // Class to simplify HTTP fetching on Arduino
@@ -40,6 +41,9 @@
 // Released under Apache License, version 2.0
 
 #pragma once
+
+#ifndef ETHERNET_HTTP_CLIENT_H
+#define ETHERNET_HTTP_CLIENT_H
 
 #include <Arduino.h>
 #include <IPAddress.h>
@@ -505,3 +509,5 @@ class EthernetHttpClient : public Client
     bool iSendDefaultRequestHeaders;
     String iHeaderLine;
 };
+
+#endif  // ETHERNET_HTTP_CLIENT_H
