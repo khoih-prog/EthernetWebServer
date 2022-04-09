@@ -119,12 +119,24 @@ void setup()
   // Just info to know how to connect correctly
   Serial.println("=========================");
   Serial.println("Currently Used SPI pinout:");
+
+#if defined(ESP32)
+  Serial.print("MOSI:");
+  Serial.println(PIN_MOSI);
+  Serial.print("MISO:");
+  Serial.println(PIN_MISO);
+  Serial.print("SCK:");
+  Serial.println(PIN_SCK);
+#else  
+  Serial.print("SS:");
   Serial.print("MOSI:");
   Serial.println(MOSI);
   Serial.print("MISO:");
   Serial.println(MISO);
   Serial.print("SCK:");
   Serial.println(SCK);
+#endif
+  
   Serial.print("CS/SS:");
   Serial.println(USE_THIS_SS_PIN);
   Serial.println(F("========================="));

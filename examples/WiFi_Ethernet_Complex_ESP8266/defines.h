@@ -53,9 +53,6 @@
 
 #include <SPI.h>
 
-//#define USE_ETHERNET_WRAPPER    true
-#define USE_ETHERNET_WRAPPER    false
-
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 
@@ -76,55 +73,52 @@
   #define USE_ETHERNET_ESP8266  false 
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
-  
-  #if !USE_ETHERNET_WRAPPER
-  
-    #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
-      #ifdef USE_CUSTOM_ETHERNET
-        #undef USE_CUSTOM_ETHERNET
-      #endif
-      #define USE_CUSTOM_ETHERNET   false
-    #endif
-
-    #if USE_ETHERNET_GENERIC
-
-      #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library"  
-
-      #define ETHERNET_LARGE_BUFFERS
-
-      #define _ETG_LOGLEVEL_                      1
-      
-      #include "Ethernet_Generic.h"
-      #warning Using Ethernet_Generic lib
-     
-    #elif USE_ETHERNET_ESP8266
-      #include "Ethernet_ESP8266.h"
-      #warning Using Ethernet_ESP8266 lib 
-      #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library" 
-    #elif USE_ETHERNET_ENC
-      #include "EthernetENC.h"
-      #warning Using EthernetENC lib
-      #define SHIELD_TYPE           "ENC28J60 using EthernetENC Library"
-    #elif USE_CUSTOM_ETHERNET
-      //#include "Ethernet_XYZ.h"
-      #include "EthernetENC.h"
-      #warning Using Custom Ethernet library. You must include a library and initialize.
-      #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
-    #else
-      #ifdef USE_ETHERNET_GENERIC
-        #undef USE_ETHERNET_GENERIC
-      #endif
-      #define USE_ETHERNET_GENERIC   true
-      #include "Ethernet_Generic.h"
-      #warning Using default Ethernet_Generic lib
-      #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
-    #endif
     
-    // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
-    // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
-    // Otherwise, standard Ethernet library will be used for W5x00
+  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
+    #ifdef USE_CUSTOM_ETHERNET
+      #undef USE_CUSTOM_ETHERNET
+    #endif
+    #define USE_CUSTOM_ETHERNET   false
+  #endif
+
+  #if USE_ETHERNET_GENERIC
+
+    #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library"  
+
+    #define ETHERNET_LARGE_BUFFERS
+
+    #define _ETG_LOGLEVEL_                      1
+    
+    #include "Ethernet_Generic.h"
+    #warning Using Ethernet_Generic lib
+   
+  #elif USE_ETHERNET_ESP8266
+    #include "Ethernet_ESP8266.h"
+    #warning Using Ethernet_ESP8266 lib 
+    #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library" 
+  #elif USE_ETHERNET_ENC
+    #include "EthernetENC.h"
+    #warning Using EthernetENC lib
+    #define SHIELD_TYPE           "ENC28J60 using EthernetENC Library"
+  #elif USE_CUSTOM_ETHERNET
+    //#include "Ethernet_XYZ.h"
+    #include "EthernetENC.h"
+    #warning Using Custom Ethernet library. You must include a library and initialize.
+    #define SHIELD_TYPE           "Custom Ethernet using Ethernet_XYZ Library"
+  #else
+    #ifdef USE_ETHERNET_GENERIC
+      #undef USE_ETHERNET_GENERIC
+    #endif
+    #define USE_ETHERNET_GENERIC   true
+    #include "Ethernet_Generic.h"
+    #warning Using default Ethernet_Generic lib
+    #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
+  #endif
   
-  #endif    //  USE_ETHERNET_WRAPPER
+  // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
+  // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
+  // Otherwise, standard Ethernet library will be used for W5x00
+
 #elif USE_UIP_ETHERNET
     #include "UIPEthernet.h"
     #warning Using UIPEthernet library

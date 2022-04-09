@@ -29,8 +29,6 @@
   #define BOARD_NAME    BOARD_TYPE
 #endif
 
-#define USE_ETHERNET_WRAPPER    false
-
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
 

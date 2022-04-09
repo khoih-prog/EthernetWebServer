@@ -20,6 +20,9 @@
 #define _ETHERNET_WEBSERVER_LOGLEVEL_       3
 #define _ETG_LOGLEVEL_                      1
 
+// Optional SPI2
+#define USING_SPI2                          true
+
 // For ESP32
 #warning Use ESP32 architecture
 //#define ETHERNET_USE_ESP32
@@ -28,9 +31,6 @@
 #define W5500_RST_PORT   21
 
 #include <SPI.h>
-
-//#define USE_ETHERNET_WRAPPER    true
-#define USE_ETHERNET_WRAPPER    false
 
 // Use true  for ENC28J60 and UIPEthernet library (https://github.com/UIPEthernet/UIPEthernet)
 // Use false for W5x00 and Ethernetx library      (https://www.arduino.cc/en/Reference/Ethernet)
@@ -49,43 +49,37 @@
   
   // Only one if the following to be true
   #define USE_ETHERNET_GENERIC  true
-  
-  #if !USE_ETHERNET_WRAPPER
-  
-    #include <soc/spi_pins.h>
-      
-    // Optional SPI2
-    #define USING_SPI2                          true
+   
+  #include <soc/spi_pins.h>
 
-    #if USING_SPI2
-      #define PIN_MISO          HSPI_IOMUX_PIN_NUM_MISO
-      #define PIN_MOSI          HSPI_IOMUX_PIN_NUM_MOSI
-      #define PIN_SCK           HSPI_IOMUX_PIN_NUM_CLK
-      #define PIN_SS            HSPI_IOMUX_PIN_NUM_CS
-    
-      #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
-      
-    #else
-    
-      #define PIN_MISO          MISO
-      #define PIN_MOSI          MOSI
-      #define PIN_SCK           SCK
-      #define PIN_SS            SS
-    
-      #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI"
-      
-    #endif
-
-    #define ETHERNET_LARGE_BUFFERS
-    
-    #include "Ethernet_Generic.h"
-    #warning Using Ethernet_Generic lib
-    
-    // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
-    // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
-    // Otherwise, standard Ethernet library will be used for W5x00
+  #if USING_SPI2
+    #define PIN_MISO          HSPI_IOMUX_PIN_NUM_MISO
+    #define PIN_MOSI          HSPI_IOMUX_PIN_NUM_MOSI
+    #define PIN_SCK           HSPI_IOMUX_PIN_NUM_CLK
+    #define PIN_SS            HSPI_IOMUX_PIN_NUM_CS
   
-  #endif    //  USE_ETHERNET_WRAPPER
+    #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
+    
+  #else
+  
+    #define PIN_MISO          MISO
+    #define PIN_MOSI          MOSI
+    #define PIN_SCK           SCK
+    #define PIN_SS            SS
+  
+    #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI"
+    
+  #endif
+
+  #define ETHERNET_LARGE_BUFFERS
+  
+  #include "Ethernet_Generic.h"
+  #warning Using Ethernet_Generic lib
+  
+  // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
+  // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
+  // Otherwise, standard Ethernet library will be used for W5x00
+  
 #endif      // #if !USE_UIP_ETHERNET
 
 #include <EthernetWebServer.h>
