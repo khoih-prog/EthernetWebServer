@@ -339,9 +339,9 @@
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
   
   // Only one if the following to be true
-  #define USE_ETHERNET_GENERIC  true
+  #define USE_ETHERNET_GENERIC  false
   #define USE_ETHERNET_ESP8266  false 
-  #define USE_ETHERNET_ENC      false
+  #define USE_ETHERNET_ENC      true
   #define USE_CUSTOM_ETHERNET   false
   
   ////////////////////////////

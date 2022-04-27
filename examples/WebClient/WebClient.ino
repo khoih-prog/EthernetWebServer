@@ -15,7 +15,7 @@
 
 #include "defines.h"
 
-char server[] = "arduino.cc";
+char server[] = "";
 
 // Initialize the Ethernet client object
 EthernetClient client;
@@ -68,7 +68,7 @@ void setup()
 #if defined(ESP8266)
   // For ESP8266, change for other boards if necessary
   #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   D2    // For ESP8266
+    #define USE_THIS_SS_PIN   16    //D2    // For ESP8266
   #endif
 
   ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
@@ -251,7 +251,7 @@ void setup()
     Serial.println(F("Connected to server"));
     // Make a HTTP request
     client.println(F("GET /asciilogo.txt HTTP/1.1"));
-    client.println(F("Host: arduino.cc"));
+    client.println(F("Host: "));
     client.println(F("Connection: close"));
     client.println();
   }

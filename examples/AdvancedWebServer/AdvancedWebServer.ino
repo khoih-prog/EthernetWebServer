@@ -147,17 +147,8 @@ void drawGraph()
   }
 }
 
-void setup()
-{
-  Serial.begin(115200);
-  while (!Serial);
-
-  delay(1000);
-
-  Serial.print("\nStarting AdvancedWebServer on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
-
+void initEthernet()
+{ 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
 #elif USE_NATIVE_ETHERNET
@@ -314,7 +305,7 @@ void setup()
   // Use DHCP dynamic IP and random mac
   uint16_t index = millis() % NUMBER_OF_MAC;
   // Use Static IP
-  //Ethernet.begin(mac[index], ip);
+  //Ethernet.begin(mac[0], ip);
   Ethernet.begin(mac[index]);
 
 #if !(USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7)
@@ -368,6 +359,20 @@ void setup()
 
   Serial.print(F("Connected! IP address: "));
   Serial.println(Ethernet.localIP());
+}
+
+void setup()
+{   
+  Serial.begin(115200);
+  while (!Serial);
+
+  delay(1000);
+
+  Serial.print("\nStarting AdvancedWebServer on "); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
+  Serial.println(ETHERNET_WEBSERVER_VERSION);
+
+  initEthernet();
 
   server.on(F("/"), handleRoot);
   server.on(F("/test.svg"), drawGraph);

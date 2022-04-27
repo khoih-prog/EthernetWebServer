@@ -15,7 +15,7 @@
 
 #include "defines.h"
 
-char server[] = "arduino.cc";
+char server[] = "arduino.tips";
 
 unsigned long lastConnectionTime = 0;         // last time you connected to the server, in milliseconds
 const unsigned long postingInterval = 10000L; // delay between updates, in milliseconds
@@ -39,7 +39,7 @@ void httpRequest()
 
     // send the HTTP PUT request
     client.println(F("GET /asciilogo.txt HTTP/1.1"));
-    client.println(F("Host: arduino.cc"));
+    client.println(F("Host: arduino.tips"));
     client.println(F("Connection: close"));
     client.println();
 
@@ -99,7 +99,7 @@ void setup()
 #if defined(ESP8266)
   // For ESP8266, change for other boards if necessary
   #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   D2    // For ESP8266
+    #define USE_THIS_SS_PIN   16    //D2    // For ESP8266
   #endif
 
   ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
