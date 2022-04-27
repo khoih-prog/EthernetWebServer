@@ -15,7 +15,7 @@
 
 // This example downloads the URL "http://arduino.cc/"
 // Name of the server we want to connect to
-const char kHostname[] = "arduino.cc";
+const char kHostname[] = "arduino.tips";
 
 // Path to download (this is the bit after the hostname in the URL
 // that you want to download
