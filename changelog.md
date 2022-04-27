@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v2.1.3](#releases-v213)
   * [Releases v2.1.2](#releases-v212)
   * [Releases v2.1.1](#releases-v211)
   * [Releases v2.1.0](#releases-v210)
@@ -51,6 +52,10 @@
 ---
 
 ## Changelog
+
+### Releases v2.1.3
+
+1. Change from `arduino.cc` to `arduino.tips` in examples
 
 ### Releases v2.1.2
 
