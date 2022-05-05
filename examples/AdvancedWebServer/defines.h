@@ -226,7 +226,7 @@
     #if defined(ARDUINO_TEENSY41)
       #define BOARD_TYPE      "TEENSY 4.1"
       // Use true for NativeEthernet Library, false if using other Ethernet libraries
-      #define USE_NATIVE_ETHERNET     true
+      #define USE_NATIVE_ETHERNET     false   //true
     #elif defined(ARDUINO_TEENSY40)
       #define BOARD_TYPE      "TEENSY 4.0"
     #else
