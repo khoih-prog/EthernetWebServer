@@ -72,8 +72,13 @@
 
 #if defined(ETHERNET_USE_SAMD)
   // For SAMD
-  // Default pin 10 to SS/CS
-  #define USE_THIS_SS_PIN       10
+  // Default pin SS/CS,if no SS pin, use pin 10
+  #if defined(PIN_SPI_MOSI)
+    #warning Using SS pin
+    #define USE_THIS_SS_PIN       SS
+  #else  
+    #define USE_THIS_SS_PIN       10
+  #endif  
   
   #if ( defined(ARDUINO_SAMD_ZERO) && !defined(SEEED_XIAO_M0) )
     #define BOARD_TYPE      "SAMD Zero"
@@ -180,13 +185,20 @@
   #endif
 
 #elif (ETHERNET_USE_SAM_DUE)
+  
   // Default pin 10 to SS/CS
   #define USE_THIS_SS_PIN       10
   #define BOARD_TYPE      "SAM DUE"
 
 #elif (ETHERNET_USE_NRF528XX)
-  // Default pin 10 to SS/CS
-  #define USE_THIS_SS_PIN       10
+  // For Adafruit nRF52
+  // Default pin SS/CS,if no SS pin, use pin 10
+  #if defined(PIN_SPI_MOSI)
+    #warning Using SS pin
+    #define USE_THIS_SS_PIN       SS
+  #else  
+    #define USE_THIS_SS_PIN       10
+  #endif  
 
   #if defined(NRF52840_FEATHER)
     #define BOARD_TYPE      "NRF52840_FEATHER"
@@ -219,7 +231,7 @@
 
 #elif ( defined(CORE_TEENSY) )
   // Default pin 10 to SS/CS
-  #define USE_THIS_SS_PIN       10
+  #define USE_THIS_SS_PIN       SS    //10
   
   #if defined(__IMXRT1062__)
     // For Teensy 4.1/4.0
@@ -268,12 +280,12 @@
 
 #elif ETHERNET_USE_RPIPICO
   
-  // Default pin 5 (in Mbed) or 17 to SS/CS
+  // Default pin 17 to SS/CS
   #if defined(ARDUINO_ARCH_MBED)
-    // For RPI Pico using Arduino Mbed RP2040 core
-    // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
+    // For RPI Pico using newer Arduino Mbed RP2040 core
+    // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
     
-    #define USE_THIS_SS_PIN       17
+    #define USE_THIS_SS_PIN         PIN_SPI_SS    //17
 
     #if defined(BOARD_NAME)
       #undef BOARD_NAME
@@ -282,7 +294,7 @@
     #if defined(ARDUINO_RASPBERRY_PI_PICO) 
       #define BOARD_TYPE      "MBED RASPBERRY_PI_PICO"
     #elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
-      #define BOARD_TYPE      "MBED DAFRUIT_FEATHER_RP2040"
+      #define BOARD_TYPE      "MBED ADAFRUIT_FEATHER_RP2040"
     #elif defined(ARDUINO_GENERIC_RP2040)
       #define BOARD_TYPE      "MBED GENERIC_RP2040"
     #else
@@ -293,10 +305,10 @@
     // For RPI Pico using E. Philhower RP2040 core
     #if (USING_SPI2)
       // SCK: GPIO14,  MOSI: GPIO15, MISO: GPIO12, SS/CS: GPIO13 for SPI1
-      #define USE_THIS_SS_PIN       13
+      #define USE_THIS_SS_PIN       PIN_SPI1_SS   //13
     #else
       // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17 for SPI0
-      #define USE_THIS_SS_PIN       17
+      #define USE_THIS_SS_PIN       PIN_SPI0_SS   //17
     #endif
 
   #endif
@@ -307,8 +319,8 @@
   #warning Use RPI-Pico RP2040 architecture
 
 #else
-  // For Mega
-  // Default pin 10 to SS/CS
+  // For Mega, etc.
+  // Default pin SS/CS,if no SS pin, use pin 10
   #define USE_THIS_SS_PIN       10
 
   // Reduce size for Mega
