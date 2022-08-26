@@ -1301,14 +1301,14 @@ Example:
 
 #### 1. File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
 
-https://github.com/khoih-prog/EthernetWebServer/blob/a8ec9e3f8f0bb3385e4200c78edd4dd2448e59db/examples/AdvancedWebServer/AdvancedWebServer.ino#L44-L426
+https://github.com/khoih-prog/EthernetWebServer/blob/983864283f7c7e87fb0fa1869c75583c711ed1c1/examples/AdvancedWebServer/AdvancedWebServer.ino#L38-L426
 
 
 ---
 
 #### 2. File [defines.h](examples/AdvancedWebServer/defines.h)
 
-https://github.com/khoih-prog/EthernetWebServer/blob/a8ec9e3f8f0bb3385e4200c78edd4dd2448e59db/examples/AdvancedWebServer/defines.h#L10-L481
+https://github.com/khoih-prog/EthernetWebServer/blob/983864283f7c7e87fb0fa1869c75583c711ed1c1/examples/AdvancedWebServer/defines.h#L10-L493
 
 ---
 ---
