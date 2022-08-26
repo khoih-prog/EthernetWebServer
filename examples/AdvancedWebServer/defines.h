@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   defines.h
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-
+  
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -19,21 +19,21 @@
 
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
 
-#if defined(BOARD_NAME)
-  #undef BOARD_NAME
-#endif
+  #if defined(BOARD_NAME)
+    #undef BOARD_NAME
+  #endif
 
-#if defined(CORE_CM7)
-  #warning Using Portenta H7 M7 core
-  #define BOARD_NAME              "PORTENTA_H7_M7"
-#else
-  #warning Using Portenta H7 M4 core
-  #define BOARD_NAME              "PORTENTA_H7_M4"
-#endif
+  #if defined(CORE_CM7)
+    #warning Using Portenta H7 M7 core
+    #define BOARD_NAME              "PORTENTA_H7_M7"
+  #else
+    #warning Using Portenta H7 M4 core
+    #define BOARD_NAME              "PORTENTA_H7_M4"
+  #endif
 
-#define ETHERNET_USE_PORTENTA_H7  true
-#define USE_ETHERNET_PORTENTA_H7  true
-
+  #define ETHERNET_USE_PORTENTA_H7  true
+  #define USE_ETHERNET_PORTENTA_H7  true
+  
 #endif
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
@@ -72,8 +72,13 @@
 
 #if defined(ETHERNET_USE_SAMD)
   // For SAMD
-  // Default pin 10 to SS/CS
-  #define USE_THIS_SS_PIN       10
+  // Default pin SS/CS,if no SS pin, use pin 10
+  #if defined(PIN_SPI_MOSI)
+    #warning Using SS pin
+    #define USE_THIS_SS_PIN       SS
+  #else  
+    #define USE_THIS_SS_PIN       10
+  #endif  
   
   #if ( defined(ARDUINO_SAMD_ZERO) && !defined(SEEED_XIAO_M0) )
     #define BOARD_TYPE      "SAMD Zero"
@@ -180,14 +185,21 @@
   #endif
 
 #elif (ETHERNET_USE_SAM_DUE)
+  
   // Default pin 10 to SS/CS
   #define USE_THIS_SS_PIN       10
   #define BOARD_TYPE      "SAM DUE"
 
 #elif (ETHERNET_USE_NRF528XX)
-  // Default pin 10 to SS/CS
-  #define USE_THIS_SS_PIN       10
-  
+  // For Adafruit nRF52
+  // Default pin SS/CS,if no SS pin, use pin 10
+  #if defined(PIN_SPI_MOSI)
+    #warning Using SS pin
+    #define USE_THIS_SS_PIN       SS
+  #else  
+    #define USE_THIS_SS_PIN       10
+  #endif  
+
   #if defined(NRF52840_FEATHER)
     #define BOARD_TYPE      "NRF52840_FEATHER"
   #elif defined(NRF52832_FEATHER)
@@ -219,19 +231,19 @@
 
 #elif ( defined(CORE_TEENSY) )
   // Default pin 10 to SS/CS
-  #define USE_THIS_SS_PIN       10
+  #define USE_THIS_SS_PIN       SS    //10
   
   #if defined(__IMXRT1062__)
     // For Teensy 4.1/4.0
     #if defined(ARDUINO_TEENSY41)
       #define BOARD_TYPE      "TEENSY 4.1"
       // Use true for NativeEthernet Library, false if using other Ethernet libraries
-      #define USE_NATIVE_ETHERNET     false   //true
+      #define USE_NATIVE_ETHERNET     true
     #elif defined(ARDUINO_TEENSY40)
       #define BOARD_TYPE      "TEENSY 4.0"
     #else
       #define BOARD_TYPE      "TEENSY 4.x"
-    #endif
+    #endif      
   #elif defined(__MK66FX1M0__)
     #define BOARD_TYPE "Teensy 3.6"
   #elif defined(__MK64FX512__)
@@ -267,50 +279,50 @@
   #define W5500_RST_PORT   21
 
 #elif ETHERNET_USE_RPIPICO
-
-  // Default pin 5 (in Mbed) or 17 to SS/CS
+  
+  // Default pin 17 to SS/CS
   #if defined(ARDUINO_ARCH_MBED)
-    // For RPI Pico using Arduino Mbed RP2040 core
-    // SCK: GPIO2,  MOSI: GPIO3, MISO: GPIO4, SS/CS: GPIO5
+    // For RPI Pico using newer Arduino Mbed RP2040 core
+    // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17
     
-    #define USE_THIS_SS_PIN       17
-    
+    #define USE_THIS_SS_PIN         PIN_SPI_SS    //17
+
     #if defined(BOARD_NAME)
       #undef BOARD_NAME
     #endif
-    
-    #if defined(ARDUINO_RASPBERRY_PI_PICO)
+
+    #if defined(ARDUINO_RASPBERRY_PI_PICO) 
       #define BOARD_TYPE      "MBED RASPBERRY_PI_PICO"
     #elif defined(ARDUINO_ADAFRUIT_FEATHER_RP2040)
-      #define BOARD_TYPE      "MBED DAFRUIT_FEATHER_RP2040"
+      #define BOARD_TYPE      "MBED ADAFRUIT_FEATHER_RP2040"
     #elif defined(ARDUINO_GENERIC_RP2040)
       #define BOARD_TYPE      "MBED GENERIC_RP2040"
     #else
       #define BOARD_TYPE      "MBED Unknown RP2040"
     #endif
-  
+    
   #else
     // For RPI Pico using E. Philhower RP2040 core
     #if (USING_SPI2)
       // SCK: GPIO14,  MOSI: GPIO15, MISO: GPIO12, SS/CS: GPIO13 for SPI1
-      #define USE_THIS_SS_PIN       13
+      #define USE_THIS_SS_PIN       PIN_SPI1_SS   //13
     #else
       // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17 for SPI0
-      #define USE_THIS_SS_PIN       17
+      #define USE_THIS_SS_PIN       PIN_SPI0_SS   //17
     #endif
-  
+
   #endif
-  
+   
   #define SS_PIN_DEFAULT        USE_THIS_SS_PIN
-  
+
   // For RPI Pico
   #warning Use RPI-Pico RP2040 architecture
 
 #else
-  // For Mega
-  // Default pin 10 to SS/CS
+  // For Mega, etc.
+  // Default pin SS/CS,if no SS pin, use pin 10
   #define USE_THIS_SS_PIN       10
-  
+
   // Reduce size for Mega
   #define SENDCONTENT_P_BUFFER_SZ     512
   
@@ -340,20 +352,20 @@
   
   // Only one if the following to be true
   #define USE_ETHERNET_GENERIC  true
-  #define USE_ETHERNET_ESP8266  false
+  #define USE_ETHERNET_ESP8266  false 
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
   
   ////////////////////////////
   
   #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || \
-          USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7 )
+        USE_NATIVE_ETHERNET || USE_ETHERNET_PORTENTA_H7 )
     #ifdef USE_CUSTOM_ETHERNET
       #undef USE_CUSTOM_ETHERNET
     #endif
     #define USE_CUSTOM_ETHERNET   false
   #endif
-  
+
   #if USE_ETHERNET_PORTENTA_H7
     #include <Portenta_Ethernet.h>
     #include <Ethernet.h>
@@ -366,48 +378,48 @@
   #elif USE_ETHERNET_GENERIC
     #if (ESP32)
       #include <soc/spi_pins.h>
-      
+        
       // Optional SPI2
       //#define USING_SPI2                          true
-      
+
       #if USING_SPI2
         #define PIN_MISO          HSPI_IOMUX_PIN_NUM_MISO
         #define PIN_MOSI          HSPI_IOMUX_PIN_NUM_MOSI
         #define PIN_SCK           HSPI_IOMUX_PIN_NUM_CLK
         #define PIN_SS            HSPI_IOMUX_PIN_NUM_CS
-        
-        #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
       
+        #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
+        
       #else
       
         #define PIN_MISO          MISO
         #define PIN_MOSI          MOSI
         #define PIN_SCK           SCK
         #define PIN_SS            SS
-        
-        #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI"
       
+        #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI"
+        
       #endif
-    
+
     #else
       #if USING_SPI2
         #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library on SPI1"
       #else
         #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library on SPI0/SPI"
-      #endif
+      #endif 
     #endif
-      
+
     #define ETHERNET_LARGE_BUFFERS
-    
-    #define _ETG_LOGLEVEL_                      2
+
+    #define _ETG_LOGLEVEL_                      1
     
     #include "Ethernet_Generic.h"
     #warning Using Ethernet_Generic lib
-  
+
   #elif USE_ETHERNET_ESP8266
     #include "Ethernet_ESP8266.h"
-    #warning Using Ethernet_ESP8266 lib
-    #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library"
+    #warning Using Ethernet_ESP8266 lib 
+    #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library" 
   #elif USE_ETHERNET_ENC
     #include "EthernetENC.h"
     #warning Using EthernetENC lib
@@ -434,15 +446,15 @@
   ////////////////////////////
   
 #elif USE_UIP_ETHERNET
-  #include "UIPEthernet.h"
-  #warning Using UIPEthernet library
-  #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
+    #include "UIPEthernet.h"
+    #warning Using UIPEthernet library
+    #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
 #endif      // #if !USE_UIP_ETHERNET
 
 #include <EthernetWebServer.h>
 
 #ifndef SHIELD_TYPE
-  #define SHIELD_TYPE     "Unknown Ethernet shield/library"
+  #define SHIELD_TYPE     "Unknown Ethernet shield/library" 
 #endif
 
 // Enter a MAC address and IP address for your controller below.

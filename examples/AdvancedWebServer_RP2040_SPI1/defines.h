@@ -79,17 +79,17 @@
      
   #else
     // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17 for SPI0
-    #define USE_THIS_SS_PIN       17
+    #define USE_THIS_SS_PIN       PIN_SPI_SS    //17
   #endif
 
 #else
   // For RPI Pico using E. Philhower RP2040 core
   #if (USING_SPI2)
     // SCK: GPIO14,  MOSI: GPIO15, MISO: GPIO12, SS/CS: GPIO13 for SPI1
-    #define USE_THIS_SS_PIN       13
+    #define USE_THIS_SS_PIN       PIN_SPI1_SS   //13
   #else
     // SCK: GPIO18,  MOSI: GPIO19, MISO: GPIO16, SS/CS: GPIO17 for SPI0
-    #define USE_THIS_SS_PIN       17
+    #define USE_THIS_SS_PIN       PIN_SPI0_SS   //17
   #endif
 
 #endif

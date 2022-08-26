@@ -25,7 +25,7 @@
 
 #if ( defined(CORE_TEENSY) )
   // Default pin 10 to SS/CS
-  #define USE_THIS_SS_PIN       10
+  #define USE_THIS_SS_PIN       SS    //10
   
   #if defined(__IMXRT1062__)
     // For Teensy 4.1/4.0
