@@ -232,7 +232,7 @@ in voltage and temperature.  */
 //#define LAN8742A_PHY_ADDRESS            0x00U
 /* Section 2: PHY configuration section */
 #if !defined  (LAN8742A_PHY_ADDRESS)
-  /* KH, LAN8742A PHY Address*/
+  /* LAN8742A PHY Address*/
   #define LAN8742A_PHY_ADDRESS            0x00U
 #endif
 ////////////////////////////////
