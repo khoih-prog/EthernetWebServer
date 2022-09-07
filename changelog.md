@@ -60,6 +60,7 @@
 
 1. Slow SPI clock for old W5100 shield or SAMD Zero
 2. Use correct Debug Terminal `Serial` for so-called **SAMD21 Zero** boards from Arduino as well as Adafruit
+3. Update `Packages' Patches`
 
 ### Releases v2.2.1
 
