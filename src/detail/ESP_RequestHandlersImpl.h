@@ -13,7 +13,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.1
+  Version: 2.2.2
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   2.1.3   K Hoang      27/04/2022 Change from `arduino.cc` to `arduino.tips` in examples
   2.2.0   K Hoang      05/05/2022 Add support to custom SPI for Teensy, Mbed RP2040, Portenta_H7, etc.
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
+  2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
  *************************************************************************************************************************************/
 
 #pragma once

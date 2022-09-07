@@ -33,7 +33,7 @@ OS: Ubuntu 20.04 LTS
 Linux xy-Inspiron-3593 5.15.0-46-generic #49~20.04.1-Ubuntu SMP Thu Aug 4 19:15:44 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
 
 Context:
-I encountered a crash while trying to use the Timer Interrupt.
+I encountered a crash while trying to use the library
 
 Steps to reproduce:
 1. ...
