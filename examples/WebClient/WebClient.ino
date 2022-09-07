@@ -15,7 +15,7 @@
 
 #include "defines.h"
 
-char server[] = "";
+char server[] = "arduino.tips";
 
 // Initialize the Ethernet client object
 EthernetClient client;
