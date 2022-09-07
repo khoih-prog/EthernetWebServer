@@ -74,14 +74,25 @@
   // For SAMD
   // Default pin SS/CS,if no SS pin, use pin 10
   #if defined(PIN_SPI_MOSI)
-    #warning Using SS pin
-    #define USE_THIS_SS_PIN       SS
+    //#warning Using SS pin
+    #define USE_THIS_SS_PIN       10    //SS
   #else  
     #define USE_THIS_SS_PIN       10
   #endif  
   
   #if ( defined(ARDUINO_SAMD_ZERO) && !defined(SEEED_XIAO_M0) )
     #define BOARD_TYPE      "SAMD Zero"
+    
+    // Default to use W5100. Must change to false for W5500, W5100S, for faster SPI clock
+    // Must use true for SAMD21, such as Zero, SAMD_FEATHER_M0_EXPRESS, etc.
+    #define USE_W5100                           true
+    
+    // Use this for ARDUINO_SAMD_ZERO, etc. if can't print to terminal with Serial.print
+    #if defined(SERIAL_PORT_USBVIRTUAL)
+      #define Serial          SERIAL_PORT_USBVIRTUAL
+      #warning Using SAMD Zero SerialUSB
+    #endif
+   
   #elif defined(ARDUINO_SAMD_MKR1000)
     #define BOARD_TYPE      "SAMD MKR1000"
   #elif defined(ARDUINO_SAMD_MKRWIFI1010)
