@@ -153,7 +153,7 @@
 #elif USE_CUSTOM_ETHERNET
   // Do nothing here
 #elif !( ETHERNET_USE_PORTENTA_H7 || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC || \
-         USE_NATIVE_ETHERNET || USE_QN_ETHERNET)
+         USE_NATIVE_ETHERNET || USE_QN_ETHERNET || USE_ETHERNET)
   #include <Ethernet_Generic.hpp>
 #endif
 
