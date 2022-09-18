@@ -26,7 +26,7 @@ EthernetClient client;
 // this method makes a HTTP connection to the server
 void httpRequest()
 {
-  Serial.println();
+  SerialDebug.println();
 
   // close any connection before send a new request
   // this will free the socket on the WiFi shield
@@ -35,7 +35,7 @@ void httpRequest()
   // if there's a successful connection
   if (client.connect(server, 80))
   {
-    Serial.println(F("Connecting..."));
+    SerialDebug.println(F("Connecting..."));
 
     // send the HTTP PUT request
     client.println(F("GET /asciilogo.txt HTTP/1.1"));
@@ -49,18 +49,18 @@ void httpRequest()
   else
   {
     // if you couldn't make a connection
-    Serial.println(F("Connection failed"));
+    SerialDebug.println(F("Connection failed"));
   }
 }
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStarting WebClientRepeating on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting WebClientRepeating on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -253,7 +253,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -263,15 +263,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void loop()
@@ -281,10 +281,10 @@ void loop()
   while (client.available())
   {
     char c = client.read();
-    Serial.write(c);
+    SerialDebug.write(c);
 
 #if !USE_ETHERNET_PORTENTA_H7    
-    Serial.flush();
+    SerialDebug.flush();
  #endif   
   }
 

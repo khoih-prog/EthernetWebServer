@@ -340,7 +340,7 @@ void initEthernet()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -350,27 +350,27 @@ void initEthernet()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void setup()
 {   
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
   delay(1000);
 
-  Serial.print("\nStarting AdvancedWebServer on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting AdvancedWebServer on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
   initEthernet();
 
@@ -384,24 +384,24 @@ void setup()
   server.onNotFound(handleNotFound);
   server.begin();
 
-  Serial.print(F("HTTP EthernetWebServer is @ IP : "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("HTTP EthernetWebServer is @ IP : "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void heartBeatPrint()
 {
   static int num = 1;
 
-  Serial.print(F("."));
+  SerialDebug.print(F("."));
 
   if (num == 80)
   {
-    Serial.println();
+    SerialDebug.println();
     num = 1;
   }
   else if (num++ % 10 == 0)
   {
-    Serial.print(F(" "));
+    SerialDebug.print(F(" "));
   }
 }
 

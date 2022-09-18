@@ -19,23 +19,23 @@
 
 void setup() 
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
   delay(500);
   
-  Serial.println("\nStart multiFileProject");
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.println("\nStart multiFileProject");
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if defined(ETHERNET_WEBSERVER_VERSION_MIN)
   if (ETHERNET_WEBSERVER_VERSION_INT < ETHERNET_WEBSERVER_VERSION_MIN)
   {
-    Serial.print("Warning. Must use this example on Version equal or later than : ");
-    Serial.println(ETHERNET_WEBSERVER_VERSION_MIN_TARGET);
+    SerialDebug.print("Warning. Must use this example on Version equal or later than : ");
+    SerialDebug.println(ETHERNET_WEBSERVER_VERSION_MIN_TARGET);
   }
 #endif
 
-  Serial.print("You're OK now");
+  SerialDebug.print("You're OK now");
 }
 
 void loop() 

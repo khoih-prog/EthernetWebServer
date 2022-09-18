@@ -22,14 +22,14 @@ EthernetClient client;
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
   delay(500);
 
-  Serial.print("\nStarting WebClient on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting WebClient on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -222,7 +222,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -232,23 +232,23 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 
-  Serial.println();
-  Serial.println(F("Starting connection to server..."));
+  SerialDebug.println();
+  SerialDebug.println(F("Starting connection to server..."));
 
   // if you get a connection, report back via serial
   if (client.connect(server, 80))
   {
-    Serial.println(F("Connected to server"));
+    SerialDebug.println(F("Connected to server"));
     // Make a HTTP request
     client.println(F("GET /asciilogo.txt HTTP/1.1"));
     client.println(F("Host: "));
@@ -264,10 +264,10 @@ void printoutData()
   while (client.available())
   {
     char c = client.read();
-    Serial.write(c);
+    SerialDebug.write(c);
 
 #if !USE_ETHERNET_PORTENTA_H7    
-    Serial.flush();
+    SerialDebug.flush();
  #endif     
   }
 }
@@ -279,8 +279,8 @@ void loop()
   // if the server's disconnected, stop the client
   if (!client.connected())
   {
-    Serial.println();
-    Serial.println(F("Disconnecting from server..."));
+    SerialDebug.println();
+    SerialDebug.println(F("Disconnecting from server..."));
     client.stop();
 
     // do nothing forevermore

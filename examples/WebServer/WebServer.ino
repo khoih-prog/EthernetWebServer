@@ -21,12 +21,12 @@ EthernetServer server(80);
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStarting WebServer on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting WebServer on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -219,7 +219,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -229,15 +229,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 
   // start the web server on port 80
   server.begin();
@@ -250,7 +250,7 @@ void loop()
 
   if (client)
   {
-    Serial.println(F("New client"));
+    SerialDebug.println(F("New client"));
     // an http request ends with a blank line
     bool currentLineIsBlank = true;
 
@@ -259,13 +259,13 @@ void loop()
       if (client.available())
       {
         char c = client.read();
-        Serial.write(c);
+        SerialDebug.write(c);
         // if you've gotten to the end of the line (received a newline
         // character) and the line is blank, the http request has ended,
         // so you can send a reply
         if (c == '\n' && currentLineIsBlank)
         {
-          Serial.println(F("Sending response"));
+          SerialDebug.println(F("Sending response"));
 
           // send a standard http response header
           // use \r\n instead of many println statements to speedup data send
@@ -307,6 +307,6 @@ void loop()
 
     // close the connection:
     client.stop();
-    Serial.println(F("Client disconnected"));
+    SerialDebug.println(F("Client disconnected"));
   }
 }

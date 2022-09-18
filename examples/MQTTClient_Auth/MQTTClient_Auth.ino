@@ -38,16 +38,16 @@ const char *subTopic  = "MQTT_Sub";               // Topic to subcribe to
 
 void callback(char* topic, byte* payload, unsigned int length) 
 {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
+  SerialDebug.print("Message arrived [");
+  SerialDebug.print(topic);
+  SerialDebug.print("] ");
   
   for (unsigned int i = 0; i < length; i++) 
   {
-    Serial.print((char)payload[i]);
+    SerialDebug.print((char)payload[i]);
   }
   
-  Serial.println();
+  SerialDebug.println();
 }
 
 EthernetClient  ethClient;
@@ -58,22 +58,22 @@ void reconnect()
   // Loop until we're reconnected
   while (!client.connected())
   {
-    Serial.print("Attempting MQTT connection to ");
-    Serial.print(mqttServer);
+    SerialDebug.print("Attempting MQTT connection to ");
+    SerialDebug.print(mqttServer);
 
     // Attempt to connect
     if (client.connect("arduino", "try", "try"))
     {
-      Serial.println("...connected");
+      SerialDebug.println("...connected");
       
       // Once connected, publish an announcement...
       String data = "Hello from MQTTClient_SSL on " + String(BOARD_NAME);
 
       client.publish(TOPIC, data.c_str());
 
-      //Serial.println("Published connection message successfully!");
-      //Serial.print("Subcribed to: ");
-      //Serial.println(subTopic);
+      //SerialDebug.println("Published connection message successfully!");
+      //SerialDebug.print("Subcribed to: ");
+      //SerialDebug.println(subTopic);
       
       // ... and resubscribe
       client.subscribe(subTopic);
@@ -82,9 +82,9 @@ void reconnect()
     }
     else
     {
-      Serial.print("...failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
+      SerialDebug.print("...failed, rc=");
+      SerialDebug.print(client.state());
+      SerialDebug.println(" try again in 5 seconds");
 
       // Wait 5 seconds before retrying
       delay(5000);
@@ -95,12 +95,12 @@ void reconnect()
 void setup()
 {
   // Open serial communications and wait for port to open:
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStart MQTTClient_Auth on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStart MQTTClient_Auth on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -293,7 +293,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -303,15 +303,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 
   // Note - the default maximum packet size is 128 bytes. If the
   // combined length of clientId, username and password exceed this use the
@@ -344,11 +344,11 @@ void loop()
 
     if (!client.publish(TOPIC, pubData))
     {
-      Serial.println("Message failed to send.");
+      SerialDebug.println("Message failed to send.");
     }
 
-    Serial.print("Message Send : " + String(TOPIC) + " => ");
-    Serial.println(data);
+    SerialDebug.print("Message Send : " + String(TOPIC) + " => ");
+    SerialDebug.println(data);
   }
   
   client.loop();

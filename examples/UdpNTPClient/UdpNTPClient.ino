@@ -54,12 +54,12 @@ void sendNTPpacket(char *ntpSrv)
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStart UdpNTPClient on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStart UdpNTPClient on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -252,7 +252,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -262,15 +262,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 
   Udp.begin(localPort);
 }
@@ -288,13 +288,13 @@ void loop()
 
   if (packetSize)
   {
-    Serial.print(F("UDP Packet received, size "));
-    Serial.println(packetSize);
-    Serial.print(F("From "));
+    SerialDebug.print(F("UDP Packet received, size "));
+    SerialDebug.println(packetSize);
+    SerialDebug.print(F("From "));
     IPAddress remoteIp = Udp.remoteIP();
-    Serial.print(remoteIp);
-    Serial.print(F(", port "));
-    Serial.println(Udp.remotePort());
+    SerialDebug.print(remoteIp);
+    SerialDebug.print(F(", port "));
+    SerialDebug.println(Udp.remotePort());
 
     // We've received a packet, read the data from it into the buffer
     Udp.read(packetBuffer, NTP_PACKET_SIZE);
@@ -309,39 +309,39 @@ void loop()
     // this is NTP time (seconds since Jan 1 1900):
     unsigned long secsSince1900 = highWord << 16 | lowWord;
     
-    Serial.print(F("Seconds since Jan 1 1900 = "));
-    Serial.println(secsSince1900);
+    SerialDebug.print(F("Seconds since Jan 1 1900 = "));
+    SerialDebug.println(secsSince1900);
 
     // now convert NTP time into )everyday time:
-    Serial.print(F("Unix time = "));
+    SerialDebug.print(F("Unix time = "));
     // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
     const unsigned long seventyYears = 2208988800UL;
     // subtract seventy years:
     unsigned long epoch = secsSince1900 - seventyYears;
     // print Unix time:
-    Serial.println(epoch);
+    SerialDebug.println(epoch);
 
     // print the hour, minute and second:
-    Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
-    Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
-    Serial.print(F(":"));
+    SerialDebug.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
+    SerialDebug.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
+    SerialDebug.print(F(":"));
     
     if (((epoch % 3600) / 60) < 10) 
     {
       // In the first 10 minutes of each hour, we'll want a leading '0'
-      Serial.print(F("0"));
+      SerialDebug.print(F("0"));
     }
     
-    Serial.print((epoch  % 3600) / 60); // print the minute (3600 equals secs per minute)
-    Serial.print(F(":"));
+    SerialDebug.print((epoch  % 3600) / 60); // print the minute (3600 equals secs per minute)
+    SerialDebug.print(F(":"));
     
     if ((epoch % 60) < 10) 
     {
       // In the first 10 seconds of each minute, we'll want a leading '0'
-      Serial.print(F("0"));
+      SerialDebug.print(F("0"));
     }
     
-    Serial.println(epoch % 60); // print the second
+    SerialDebug.println(epoch % 60); // print the second
   }
   
   // wait ten seconds before asking for the time again

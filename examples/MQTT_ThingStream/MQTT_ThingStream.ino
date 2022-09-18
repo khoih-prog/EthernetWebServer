@@ -77,16 +77,16 @@ PubSubClient client(MQTT_SERVER, MQTT_PORT, mqtt_receive_callback, ethClient);
 */
 void mqtt_receive_callback(char* topic, byte* payload, unsigned int length) 
 {
-  Serial.print("MQTT Message receive [");
-  Serial.print(topic);
-  Serial.print("] ");
+  SerialDebug.print("MQTT Message receive [");
+  SerialDebug.print(topic);
+  SerialDebug.print("] ");
   
   for (unsigned int i = 0; i < length; i++) 
   {
-    Serial.print((char)payload[i]);
+    SerialDebug.print((char)payload[i]);
   }
   
-  Serial.println();
+  SerialDebug.println();
 }
 
 void reconnect() 
@@ -94,8 +94,8 @@ void reconnect()
   // Loop until we're reconnected
   while (!client.connected()) 
   {
-    Serial.print("Attempting MQTT connection to ");
-    Serial.println(MQTT_SERVER);
+    SerialDebug.print("Attempting MQTT connection to ");
+    SerialDebug.println(MQTT_SERVER);
 
     // Attempt to connect
 
@@ -107,17 +107,17 @@ void reconnect()
 
     if (connect_status)                                
     {
-      Serial.println("...connected");
+      SerialDebug.println("...connected");
       
       // Once connected, publish an announcement...
       String data = "Hello from MQTTClient_SSL on " + String(BOARD_NAME);
 
       client.publish(topic.c_str(), data.c_str());
 
-      Serial.println("Published connection message successfully!");
+      SerialDebug.println("Published connection message successfully!");
      
-      Serial.print("Subcribed to: ");
-      Serial.println(subTopic);
+      SerialDebug.print("Subcribed to: ");
+      SerialDebug.println(subTopic);
       
       // ... and resubscribe
       client.subscribe(subTopic.c_str());
@@ -126,9 +126,9 @@ void reconnect()
     } 
     else 
     {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
+      SerialDebug.print("failed, rc=");
+      SerialDebug.print(client.state());
+      SerialDebug.println(" try again in 5 seconds");
       
       // Wait 5 seconds before retrying
       delay(5000);
@@ -139,12 +139,12 @@ void reconnect()
 void setup()
 {
   // Open serial communications and wait for port to open:
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStart MQTT_ThingStream on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStart MQTT_ThingStream on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -337,7 +337,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -347,24 +347,24 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 
   // Note - the default maximum packet size is 256 bytes. If the
   // combined length of clientId, username and password exceed this use the
   // following to increase the buffer size:
   //client.setBufferSize(256);
   
-  Serial.println("***************************************");
-  Serial.println(topic);
-  Serial.println("***************************************");
+  SerialDebug.println("***************************************");
+  SerialDebug.println(topic);
+  SerialDebug.println("***************************************");
 }
 
 #define MQTT_PUBLISH_INTERVAL_MS      5000L
@@ -390,11 +390,11 @@ void loop()
 
     if (!client.publish(topic.c_str(), pubData))
     {
-      Serial.println("Message failed to send.");
+      SerialDebug.println("Message failed to send.");
     }
 
-    Serial.print("MQTT Message Send : " + topic + " => ");
-    Serial.println(data);
+    SerialDebug.print("MQTT Message Send : " + topic + " => ");
+    SerialDebug.println(data);
   }
   
   client.loop();

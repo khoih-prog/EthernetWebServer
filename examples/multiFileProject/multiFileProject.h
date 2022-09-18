@@ -11,6 +11,15 @@
 
 #pragma once
 
+#if defined(__AVR_AVR128DA48__) 
+  #define SerialDebug   Serial1
+#elif defined(__AVR_AVR128DB48__) 
+  #define SerialDebug   Serial3
+#else
+  // standard Serial
+  #define SerialDebug   Serial
+#endif
+
 #define _ETHERNET_WEBSERVER_LOGLEVEL_       1
 
 // Can be included as many times as necessary, without `Multiple Definitions` Linker Error

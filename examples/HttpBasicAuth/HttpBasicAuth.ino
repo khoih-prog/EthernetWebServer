@@ -22,12 +22,12 @@ const char* www_password = "http_auth";
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStarting HTTPBasicAuth on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting HTTPBasicAuth on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE);
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -220,7 +220,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -230,15 +230,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 
   server.on(F("/"), []()
   {
@@ -251,10 +251,10 @@ void setup()
 
   server.begin();
 
-  Serial.print(F("Open http://")); Serial.print(Ethernet.localIP());
-  Serial.println(F("/ in your browser to see it working"));
-  Serial.print(F("Using username : ")); Serial.print(www_username);
-  Serial.print(F(" and password : "));  Serial.println(www_password);
+  SerialDebug.print(F("Open http://")); SerialDebug.print(Ethernet.localIP());
+  SerialDebug.println(F("/ in your browser to see it working"));
+  SerialDebug.print(F("Using username : ")); SerialDebug.print(www_username);
+  SerialDebug.print(F(" and password : "));  SerialDebug.println(www_password);
 }
 
 void loop()

@@ -20,19 +20,19 @@ EthernetWebServer server(80);
 //Check if header is present and correct
 bool is_authenticated()
 {
-  Serial.println(F("Enter is_authenticated"));
+  SerialDebug.println(F("Enter is_authenticated"));
   if (server.hasHeader(F("Cookie")))
   {
-    Serial.print(F("Found cookie: "));
+    SerialDebug.print(F("Found cookie: "));
     String cookie = server.header(F("Cookie"));
-    Serial.println(cookie);
+    SerialDebug.println(cookie);
     if (cookie.indexOf(F("ESPSESSIONID=1")) != -1)
     {
-      Serial.println(F("Authentication Successful"));
+      SerialDebug.println(F("Authentication Successful"));
       return true;
     }
   }
-  Serial.println(F("Authentication Failed"));
+  SerialDebug.println(F("Authentication Failed"));
   return false;
 }
 
@@ -43,14 +43,14 @@ void handleLogin()
 
   if (server.hasHeader(F("Cookie")))
   {
-    Serial.print(F("Found cookie: "));
+    SerialDebug.print(F("Found cookie: "));
     String cookie = server.header(F("Cookie"));
-    Serial.println(cookie);
+    SerialDebug.println(cookie);
   }
 
   if (server.hasArg(F("DISCONNECT")))
   {
-    Serial.println(F("Disconnection"));
+    SerialDebug.println(F("Disconnection"));
     server.sendHeader(F("Location"), F("/login"));
     server.sendHeader(F("Cache-Control"), F("no-cache"));
     server.sendHeader(F("Set-Cookie"), F("ESPSESSIONID=0"));
@@ -66,12 +66,12 @@ void handleLogin()
       server.sendHeader(F("Cache-Control"), F("no-cache"));
       server.sendHeader(F("Set-Cookie"), F("ESPSESSIONID=1"));
       server.send(301);
-      Serial.println(F("Log in Successful"));
+      SerialDebug.println(F("Log in Successful"));
       return;
     }
     
     msg = F("Wrong username/password! try again.");
-    Serial.println(F("Log in Failed"));
+    SerialDebug.println(F("Log in Failed"));
   }
 
   String content = F("<html><body><form action='/login' method='POST'>To log in, please use : admin/password<br>");
@@ -89,7 +89,7 @@ void handleRoot()
 {
   String header;
 
-  Serial.println(F("Enter handleRoot"));
+  SerialDebug.println(F("Enter handleRoot"));
 
   if (!is_authenticated())
   {
@@ -138,13 +138,13 @@ void handleNotFound()
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
   //delay(1000);
-  Serial.print("\nStarting SimpleAuthentication on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting SimpleAuthentication on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -337,7 +337,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -347,15 +347,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
   server.on(F("/"), handleRoot);
   
   server.on(F("/login"), handleLogin);
@@ -375,8 +375,8 @@ void setup()
   server.collectHeaders(headerkeys, headerkeyssize);
   server.begin();
 
-  Serial.print(F("HTTP SimpleAuthentication is @ IP : "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("HTTP SimpleAuthentication is @ IP : "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void loop()
