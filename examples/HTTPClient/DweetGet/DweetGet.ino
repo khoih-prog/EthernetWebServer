@@ -30,12 +30,12 @@ EthernetHttpClient  httpClient(client, serverAddress, port);
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStarting DweetGet on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting DweetGet on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -228,7 +228,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -238,15 +238,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void loop()
@@ -255,16 +255,16 @@ void loop()
   String path = "/get/latest/dweet/for/" + dweetName;
 
   // send the GET request
-  Serial.println("Making GET request");
+  SerialDebug.println("Making GET request");
   httpClient.get(path);
 
   // read the status code and body of the response
   int statusCode = httpClient.responseStatusCode();
   String response = httpClient.responseBody();
-  Serial.print("Status code: ");
-  Serial.println(statusCode);
-  Serial.print("Response: ");
-  Serial.println(response);
+  SerialDebug.print("Status code: ");
+  SerialDebug.println(statusCode);
+  SerialDebug.print("Response: ");
+  SerialDebug.println(response);
 
   /*
     Typical response is:
@@ -284,17 +284,17 @@ void loop()
   // find the following } and get what's between the braces:
   int contentEnd = response.indexOf("}", labelStart);
   String content = response.substring(contentStart + 1, contentEnd);
-  Serial.println(content);
+  SerialDebug.println(content);
 
   // now get the value after the colon, and convert to an int:
   int valueStart = content.indexOf(":");
   String valueString = content.substring(valueStart + 1);
   int number = valueString.toInt();
-  Serial.print("Value string: ");
-  Serial.println(valueString);
-  Serial.print("Actual value: ");
-  Serial.println(number);
+  SerialDebug.print("Value string: ");
+  SerialDebug.println(valueString);
+  SerialDebug.print("Actual value: ");
+  SerialDebug.println(number);
 
-  Serial.println("Wait ten seconds\n");
+  SerialDebug.println("Wait ten seconds\n");
   delay(10000);
 }

@@ -26,12 +26,12 @@ EthernetHttpClient  httpClient(client, serverAddress, port);
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStarting SimpleDelete on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting SimpleDelete on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -224,7 +224,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -234,20 +234,20 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void loop() 
 {
-  Serial.println("making DELETE request");
+  SerialDebug.println("making DELETE request");
   String contentType = "application/x-www-form-urlencoded";
   String delData = "name=light&age=46";
 
@@ -257,11 +257,11 @@ void loop()
   int statusCode = httpClient.responseStatusCode();
   String response = httpClient.responseBody();
 
-  Serial.print("Status code: ");
-  Serial.println(statusCode);
-  Serial.print("Response: ");
-  Serial.println(response);
+  SerialDebug.print("Status code: ");
+  SerialDebug.println(statusCode);
+  SerialDebug.print("Response: ");
+  SerialDebug.println(response);
 
-  Serial.println("Wait five seconds");
+  SerialDebug.println("Wait five seconds");
   delay(5000);
 }

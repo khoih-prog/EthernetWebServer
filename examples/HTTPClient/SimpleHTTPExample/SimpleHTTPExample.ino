@@ -32,12 +32,12 @@ EthernetHttpClient  httpClient(client, kHostname);
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStarting SimpleHTTPExample on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting SimpleHTTPExample on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -230,7 +230,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -240,15 +240,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void loop()
@@ -259,14 +259,14 @@ void loop()
 
   if (err == 0)
   {
-    Serial.println("startedRequest ok");
+    SerialDebug.println("startedRequest ok");
 
     err = httpClient.responseStatusCode();
 
     if (err >= 0)
     {
-      Serial.print("Got status code: ");
-      Serial.println(err);
+      SerialDebug.print("Got status code: ");
+      SerialDebug.println(err);
 
       // Usually you'd check that the response code is 200 or a
       // similar "success" code (200-299) before carrying on,
@@ -277,10 +277,10 @@ void loop()
       if (err >= 0)
       {
         int bodyLen = httpClient.contentLength();
-        Serial.print("Content length is: ");
-        Serial.println(bodyLen);
-        Serial.println();
-        Serial.println("Body returned follows:");
+        SerialDebug.print("Content length is: ");
+        SerialDebug.println(bodyLen);
+        SerialDebug.println();
+        SerialDebug.println("Body returned follows:");
 
         // Now we've got to the body, so we can print it out
         unsigned long timeoutStart = millis();
@@ -291,7 +291,7 @@ void loop()
         {
           if (httpClient.available())
           {
-            Serial.print((char) httpClient.read());
+            SerialDebug.print((char) httpClient.read());
 
             bodyLen--;
 
@@ -308,20 +308,20 @@ void loop()
       }
       else
       {
-        Serial.print("Failed to skip response headers: ");
-        Serial.println(err);
+        SerialDebug.print("Failed to skip response headers: ");
+        SerialDebug.println(err);
       }
     }
     else
     {
-      Serial.print("Getting response failed: ");
-      Serial.println(err);
+      SerialDebug.print("Getting response failed: ");
+      SerialDebug.println(err);
     }
   }
   else
   {
-    Serial.print("Connect failed: ");
-    Serial.println(err);
+    SerialDebug.print("Connect failed: ");
+    SerialDebug.println(err);
   }
 
   httpClient.stop();

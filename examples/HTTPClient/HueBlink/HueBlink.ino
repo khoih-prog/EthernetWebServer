@@ -34,12 +34,12 @@ EthernetHttpClient  httpClient(client, hueHubIP);
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStarting HueBlink on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting HueBlink on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -232,7 +232,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -242,15 +242,15 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void sendRequest(int light, String cmd, String value) 
@@ -270,9 +270,9 @@ void sendRequest(int light, String cmd, String value)
   hueCmd += "}";
   
   // see what you assembled to send:
-  Serial.print("PUT request to server: ");
-  Serial.println(request);
-  Serial.print("JSON command to server: ");
+  SerialDebug.print("PUT request to server: ");
+  SerialDebug.println(request);
+  SerialDebug.print("JSON command to server: ");
 
   // make the PUT request to the hub:
   httpClient.put(request, contentType, hueCmd);
@@ -281,12 +281,12 @@ void sendRequest(int light, String cmd, String value)
   int statusCode = httpClient.responseStatusCode();
   String response = httpClient.responseBody();
 
-  Serial.println(hueCmd);
-  Serial.print("Status code from server: ");
-  Serial.println(statusCode);
-  Serial.print("Server response: ");
-  Serial.println(response);
-  Serial.println();
+  SerialDebug.println(hueCmd);
+  SerialDebug.print("Status code from server: ");
+  SerialDebug.println(statusCode);
+  SerialDebug.print("Server response: ");
+  SerialDebug.println(response);
+  SerialDebug.println();
 }
 
 void loop()

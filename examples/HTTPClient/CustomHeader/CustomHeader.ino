@@ -27,12 +27,12 @@ EthernetHttpClient  httpClient(client, serverAddress, port);
 
 void setup()
 {
-  Serial.begin(115200);
-  while (!Serial);
+  SerialDebug.begin(115200);
+  while (!SerialDebug && millis() < 5000);
 
-  Serial.print("\nStarting CustomHeader on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(ETHERNET_WEBSERVER_VERSION);
+  SerialDebug.print("\nStarting CustomHeader on "); SerialDebug.print(BOARD_NAME);
+  SerialDebug.print(F(" with ")); SerialDebug.println(SHIELD_TYPE); 
+  SerialDebug.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_PORTENTA_H7
   ET_LOGWARN(F("======== USE_PORTENTA_H7_ETHERNET ========"));
@@ -225,7 +225,7 @@ void setup()
 #elif (USE_ETHERNET_PORTENTA_H7)
   if (Ethernet.hardwareStatus() == EthernetNoHardware) 
   {
-    Serial.println("No Ethernet found. Stay here forever");
+    SerialDebug.println("No Ethernet found. Stay here forever");
     
     while (true) 
     {
@@ -235,20 +235,20 @@ void setup()
   
   if (Ethernet.linkStatus() == LinkOFF) 
   {
-    Serial.println("Not connected Ethernet cable");
+    SerialDebug.println("Not connected Ethernet cable");
   }
 #endif
 
-  Serial.print(F("Using mac index = "));
-  Serial.println(index);
+  SerialDebug.print(F("Using mac index = "));
+  SerialDebug.println(index);
 
-  Serial.print(F("Connected! IP address: "));
-  Serial.println(Ethernet.localIP());
+  SerialDebug.print(F("Connected! IP address: "));
+  SerialDebug.println(Ethernet.localIP());
 }
 
 void loop() 
 {
-  Serial.println("Making GET request");
+  SerialDebug.println("Making GET request");
   httpClient.beginRequest();
   
   httpClient.get("/");
@@ -259,15 +259,15 @@ void loop()
   int statusCode = httpClient.responseStatusCode();
   String response = httpClient.responseBody();
 
-  Serial.print("GET Status code: ");
-  Serial.println(statusCode);
-  Serial.print("GET Response: ");
-  Serial.println(response);
+  SerialDebug.print("GET Status code: ");
+  SerialDebug.println(statusCode);
+  SerialDebug.print("GET Response: ");
+  SerialDebug.println(response);
 
-  Serial.println("Wait five seconds");
+  SerialDebug.println("Wait five seconds");
   delay(5000);
 
-  Serial.println("Making POST request");
+  SerialDebug.println("Making POST request");
   String postData = "name=Alice&age=12";
   httpClient.beginRequest();
   httpClient.post("/");
@@ -283,11 +283,11 @@ void loop()
   statusCode = httpClient.responseStatusCode();
   response = httpClient.responseBody();
 
-  Serial.print("POST Status code: ");
-  Serial.println(statusCode);
-  Serial.print("POST Response: ");
-  Serial.println(response);
+  SerialDebug.print("POST Status code: ");
+  SerialDebug.println(statusCode);
+  SerialDebug.print("POST Response: ");
+  SerialDebug.println(response);
 
-  Serial.println("Wait five seconds");
+  SerialDebug.println("Wait five seconds");
   delay(5000);
 }
