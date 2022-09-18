@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.2
+  Version: 2.2.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   2.2.0   K Hoang      05/05/2022 Add support to custom SPI for Teensy, Mbed RP2040, Portenta_H7, etc.
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
+  2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
  *************************************************************************************************************************************/
 
 #pragma once
@@ -37,13 +38,13 @@
 
 /////////////////////////////////////////////////////////////////////////
 
-#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.2.2"
+#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.2.3"
 
 #define ETHERNET_WEBSERVER_VERSION_MAJOR    2
 #define ETHERNET_WEBSERVER_VERSION_MINOR    2
-#define ETHERNET_WEBSERVER_VERSION_PATCH    2
+#define ETHERNET_WEBSERVER_VERSION_PATCH    3
 
-#define ETHERNET_WEBSERVER_VERSION_INT      2002002
+#define ETHERNET_WEBSERVER_VERSION_INT      2002003
 
 /////////////////////////////////////////////////////////////////////////
 

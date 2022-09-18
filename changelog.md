@@ -13,6 +13,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v2.2.3](#releases-v223)
   * [Releases v2.2.2](#releases-v222)
   * [Releases v2.2.1](#releases-v221)
   * [Releases v2.2.0](#releases-v220)
@@ -55,6 +56,11 @@
 ---
 
 ## Changelog
+
+### Releases v2.2.3
+
+1. Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using [DxCore](https://github.com/SpenceKonde/DxCore)
+2. Update `Packages' Patches`
 
 ### Releases v2.2.2
 

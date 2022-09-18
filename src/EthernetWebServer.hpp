@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.2
+  Version: 2.2.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   2.2.0   K Hoang      05/05/2022 Add support to custom SPI for Teensy, Mbed RP2040, Portenta_H7, etc.
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
+  2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
  *************************************************************************************************************************************/
 
 #pragma once
@@ -111,6 +112,17 @@
 
 /////////////////////////////////////////////////////////////////////////
 
+#if defined(DXCORE)
+  #if defined(ETHERNET_USE_DXCORE)
+    #undef ETHERNET_USE_DXCORE
+  #endif
+  #define ETHERNET_USE_DXCORE      true
+  #warning Using DXCORE architecture from EthernetWebServer
+
+#endif
+
+/////////////////////////////////////////////////////////////////////////
+
 #if ( defined(__AVR_ATmega4809__) || defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) )
 
   #if defined(ETHERNET_USE_MEGA_AVR)
@@ -123,7 +135,7 @@
 
 /////////////////////////////////////////////////////////////////////////
 
-#if (ESP32)
+#if defined(ESP32)
 
   #if defined(ETHERNET_USE_ESP)
     #undef ETHERNET_USE_ESP32
@@ -135,7 +147,7 @@
 
 /////////////////////////////////////////////////////////////////////////
 
-#if (ESP8266)
+#if defined(ESP8266)
 
   #if defined(ETHERNET_USE_ESP8266)
     #undef ETHERNET_USE_ESP8266
@@ -163,7 +175,7 @@
 
 // KH, For PROGMEM commands
 // ESP32/ESP8266 includes <pgmspace.h> by default, and memccpy_P was already defined there
-#if !(ESP32 || ESP8266)
+#if !( defined(ESP32) || defined(ESP8266) )
   #include <avr/pgmspace.h>
   #define memccpy_P(dest, src, c, n) memccpy((dest), (src), (c), (n))
 #endif
@@ -189,7 +201,7 @@
 /////////////////////////////////////////////////////////////////////////
 
 // New definitions only when not using ESP32 WebServer.h
-#if !(( ESP32 || ESP8266) && (__has_include("WebServer.h") || __has_include("ESP8266WebServer.h")) )
+#if !(( defined(ESP32) || defined(ESP8266) ) && (__has_include("WebServer.h") || __has_include("ESP8266WebServer.h")) )
 
   enum HTTPMethod
   {
@@ -242,13 +254,13 @@
 
 #else
 
-  #if ESP32
+  #if defined(ESP32)
     #warning ESP32 __has_include WebServer.h
   #else
     #warning ESP8266 __has_include ESP8266WebServer.h
   #endif
 
-#endif    // #if !(( ESP32 || ESP8266) && (__has_include("WebServer.h") || __has_include("ESP8266WebServer.h")) )
+#endif    // #if !(( defined(ESP32) || defined(ESP8266)) && (__has_include("WebServer.h") || __has_include("ESP8266WebServer.h")) )
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -261,7 +273,7 @@
 
 #include <Arduino.h>
 
-#if ( ETHERNET_USE_AVR_MEGA || ETHERNET_USE_MEGA_AVR )
+#if ( ETHERNET_USE_AVR_MEGA || ETHERNET_USE_MEGA_AVR || ETHERNET_USE_DXCORE )
   typedef String EWString;
 #else
   #include <string>
@@ -286,7 +298,7 @@ typedef struct
 
 #include "detail/RequestHandler.h"
 
-#if (ESP32 || ESP8266)
+#if (defined(ESP32) || defined(ESP8266))
   #include "FS.h"
 #endif
 
@@ -386,7 +398,7 @@ class EthernetWebServer
 
     static String urlDecode(const String& text);
 
-#if !(ESP32 || ESP8266)
+#if !(defined(ESP32) || defined(ESP8266))
     template<typename T> size_t streamFile(T &file, const String& contentType)
     {
       using namespace mime;
@@ -449,12 +461,12 @@ class EthernetWebServer
     uint8_t _uploadReadByte(EthernetClient& client);
     void _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
 
-#if ! ( ETHERNET_USE_AVR_MEGA || ETHERNET_USE_MEGA_AVR )
+#if ! ( ETHERNET_USE_AVR_MEGA || ETHERNET_USE_MEGA_AVR || ETHERNET_USE_DXCORE )
     void _prepareHeader(EWString& response, int code, const char* content_type, size_t contentLength);
 #endif
     bool _collectHeader(const char* headerName, const char* headerValue);
 
-#if (ESP32 || ESP8266)
+#if (defined(ESP32) || defined(ESP8266))
     void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
 
     template<typename T>

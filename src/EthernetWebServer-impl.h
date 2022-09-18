@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.2
+  Version: 2.2.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,6 +28,7 @@
   2.2.0   K Hoang      05/05/2022 Add support to custom SPI for Teensy, Mbed RP2040, Portenta_H7, etc.
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
+  2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
  *************************************************************************************************************************************/
 
 #pragma once
@@ -540,7 +541,7 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
 
 /////////////////////////////////////////////////////////////////////////
 
-#if ! ( ETHERNET_USE_AVR_MEGA || ETHERNET_USE_MEGA_AVR )
+#if ! ( ETHERNET_USE_AVR_MEGA || ETHERNET_USE_MEGA_AVR || ETHERNET_USE_DXCORE )
 void EthernetWebServer::_prepareHeader(EWString& response, int code, const char* content_type, size_t contentLength)
 {
   response = "HTTP/1." + fromString(String(_currentVersion)) + " ";
@@ -821,7 +822,7 @@ void EthernetWebServer::sendContent_P(PGM_P content, size_t size)
 
 /////////////////////////////////////////////////////////////////////////
 
-#if (ESP32 || ESP8266)
+#if (defined(ESP32) || defined(ESP8266))
 
 #include "FS.h"
 void EthernetWebServer::serveStatic(const char* uri, FS& fs, const char* path, const char* cache_header)
