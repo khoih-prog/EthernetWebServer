@@ -156,6 +156,7 @@
   * [22. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1](#22-AdvancedWebServer-on-RASPBERRY_PI_PICO-with-W5x00-using-Ethernet_Generic-Library-on-SPI1)
   * [23. AdvancedWebServer_RP2040_SPI1 on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1](#23-AdvancedWebServer_RP2040_SPI1-on-MBED-RASPBERRY_PI_PICO-with-W5x00-using-Ethernet_Generic-Library-on-SPI1)
   * [24. AdvancedWebServer_Teensy4x_SPI1 on TEENSY 4.1 with W5x00 using Ethernet_Generic Library on SPI1](#24-AdvancedWebServer_Teensy4x_SPI1-on-TEENSY-41-with-W5x00-using-Ethernet_Generic-Library-on-SPI1)
+  * [25. AdvancedWebServer on Curiosity AVR_AVR128DA48 with W5x00 using Ethernet_Generic Library on SPI](#25-AdvancedWebServer-on-Curiosity-AVR_AVR128DA48-with-W5x00-using-Ethernet_Generic-Library-on-SPI)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
