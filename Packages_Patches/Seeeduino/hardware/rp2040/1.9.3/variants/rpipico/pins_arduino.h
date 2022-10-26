@@ -53,7 +53,7 @@ static const int A2  = PIN_A2;
 static const int A3  = PIN_A3;
 
 // D0 - D10
-#define D26 (26u)  
+#define D26 (26u)
 #define D1 (27u)
 #define D2 (28u)
 #define D3 (29u)

@@ -6,7 +6,7 @@
 #define __PINS_ARDUINO__
 
 #ifdef __cplusplus
-extern "C" unsigned int PINCOUNT_fn();
+	extern "C" unsigned int PINCOUNT_fn();
 #endif
 
 // Pin count
@@ -25,7 +25,7 @@ extern PinName digitalPinToPinName(pin_size_t P);
 
 // Digital pins
 // ----
-#define PIN_D0 (26u)  
+#define PIN_D0 (26u)
 #define PIN_D1 (27u)
 #define PIN_D2 (28u)
 #define PIN_D3 (29u)
@@ -89,35 +89,35 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #define SDA        (6u)
 #define SCL        (7u)
 
-#define SERIAL_HOWMANY		1
-#define SERIAL1_TX			(digitalPinToPinName(PIN_SERIAL_TX))
-#define SERIAL1_RX			(digitalPinToPinName(PIN_SERIAL_RX))
+#define SERIAL_HOWMANY    1
+#define SERIAL1_TX      (digitalPinToPinName(PIN_SERIAL_TX))
+#define SERIAL1_RX      (digitalPinToPinName(PIN_SERIAL_RX))
 
-#define SERIAL_CDC			1
+#define SERIAL_CDC      1
 #define HAS_UNIQUE_ISERIAL_DESCRIPTOR
-#define BOARD_VENDORID		0x2886
-#define BOARD_PRODUCTID		0x8042
-#define BOARD_NAME			"RaspberryPi Pico"
+#define BOARD_VENDORID    0x2886
+#define BOARD_PRODUCTID   0x8042
+#define BOARD_NAME      "RaspberryPi Pico"
 
 uint8_t getUniqueSerialNumber(uint8_t* name);
 void _ontouch1200bps_();
 
-#define SPI_HOWMANY		(1)
-#define SPI_MISO		(digitalPinToPinName(PIN_SPI_MISO))
-#define SPI_MOSI		(digitalPinToPinName(PIN_SPI_MOSI))
-#define SPI_SCK			(digitalPinToPinName(PIN_SPI_SCK))
+#define SPI_HOWMANY   (1)
+#define SPI_MISO    (digitalPinToPinName(PIN_SPI_MISO))
+#define SPI_MOSI    (digitalPinToPinName(PIN_SPI_MOSI))
+#define SPI_SCK     (digitalPinToPinName(PIN_SPI_SCK))
 
-#define WIRE_HOWMANY	(1)
-#define I2C_SDA			(digitalPinToPinName(SDA))
-#define I2C_SCL			(digitalPinToPinName(SCL))
+#define WIRE_HOWMANY  (1)
+#define I2C_SDA     (digitalPinToPinName(SDA))
+#define I2C_SCL     (digitalPinToPinName(SCL))
 
-#define digitalPinToPort(P)		(digitalPinToPinName(P)/32)
+#define digitalPinToPort(P)   (digitalPinToPinName(P)/32)
 
 #define SERIAL_PORT_USBVIRTUAL      SerialUSB
 #define SERIAL_PORT_MONITOR         SerialUSB
 #define SERIAL_PORT_HARDWARE        Serial1
 #define SERIAL_PORT_HARDWARE_OPEN   Serial1
 
-#define USB_MAX_POWER	(500)
+#define USB_MAX_POWER (500)
 
 #endif //__PINS_ARDUINO__
