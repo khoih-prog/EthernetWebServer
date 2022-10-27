@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,8 +29,9 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
- 
+
 // (c) Copyright Arduino. 2016
 // Released under Apache License, version 2.0
 
@@ -67,7 +68,7 @@ int EthernetWebSocketClient::begin(const char* aPath)
   // start the GET request
   beginRequest();
   connectionKeepAlive();
-  
+
   int status = get(aPath);
 
   if (status == 0)
@@ -80,7 +81,7 @@ int EthernetWebSocketClient::begin(const char* aPath)
     {
       randomKey[i] = random(0x01, 0xff);
     }
-    
+
     memset(base64RandomKey, 0x00, sizeof(base64RandomKey));
     base64_encode(randomKey, sizeof(randomKey), (unsigned char*)base64RandomKey, sizeof(base64RandomKey));
 
@@ -168,11 +169,11 @@ int EthernetWebSocketClient::endMessage()
   {
     maskKey[i] = random(0xff);
   }
-  
+
   EthernetHttpClient::write(maskKey, sizeof(maskKey));
 
   // mask the data and send
-  for (int i = 0; i < (int)iTxSize; i++) 
+  for (int i = 0; i < (int)iTxSize; i++)
   {
     iTxBuffer[i] ^= maskKey[i % sizeof(maskKey)];
   }
@@ -287,12 +288,12 @@ int EthernetWebSocketClient::parseMessage()
   else if (TYPE_PING == messageType())
   {
     beginMessage(TYPE_PONG);
-    
+
     while (available())
     {
       write(read());
     }
-    
+
     endMessage();
 
     iRxSize = 0;
@@ -346,7 +347,7 @@ int EthernetWebSocketClient::ping()
 
   beginMessage(TYPE_PING);
   write(pingData, sizeof(pingData));
-  
+
   return endMessage();
 }
 

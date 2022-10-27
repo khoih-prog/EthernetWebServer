@@ -11,7 +11,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,8 +28,9 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
- 
+
 #pragma once
 
 #ifndef BASE64_H
@@ -37,4 +38,4 @@
 
 int base64_encode(const unsigned char* aInput, int aInputLen, unsigned char* aOutput, int aOutputLen);
 
-#endif		// BASE64_H
+#endif    // BASE64_H

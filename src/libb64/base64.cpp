@@ -11,7 +11,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,14 +28,15 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
 
 #include "base64.h"
 
 /* Simple test program
-#include <stdio.h>
-void main()
-{
+  #include <stdio.h>
+  void main()
+  {
     char* in = "amcewen";
     char out[22];
 
@@ -43,58 +44,61 @@ void main()
     out[21] = '\0';
 
     printf(out);
-}
+  }
 */
 
 int base64_encode(const unsigned char* aInput, int aInputLen, unsigned char* aOutput, int aOutputLen)
 {
-    // Work out if we've got enough space to encode the input
-    // Every 6 bits of input becomes a byte of output
-    if (aOutputLen < (aInputLen*8)/6)
+  // Work out if we've got enough space to encode the input
+  // Every 6 bits of input becomes a byte of output
+  if (aOutputLen < (aInputLen * 8) / 6)
+  {
+    // FIXME Should we return an error here, or just the length
+    return (aInputLen * 8) / 6;
+  }
+
+  // If we get here we've got enough space to do the encoding
+
+  const char* b64_dictionary = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+  if (aInputLen == 3)
+  {
+    aOutput[0] = b64_dictionary[aInput[0] >> 2];
+    aOutput[1] = b64_dictionary[(aInput[0] & 0x3) << 4 | (aInput[1] >> 4)];
+    aOutput[2] = b64_dictionary[(aInput[1] & 0x0F) << 2 | (aInput[2] >> 6)];
+    aOutput[3] = b64_dictionary[aInput[2] & 0x3F];
+  }
+  else if (aInputLen == 2)
+  {
+    aOutput[0] = b64_dictionary[aInput[0] >> 2];
+    aOutput[1] = b64_dictionary[(aInput[0] & 0x3) << 4 | (aInput[1] >> 4)];
+    aOutput[2] = b64_dictionary[(aInput[1] & 0x0F) << 2];
+    aOutput[3] = '=';
+  }
+  else if (aInputLen == 1)
+  {
+    aOutput[0] = b64_dictionary[aInput[0] >> 2];
+    aOutput[1] = b64_dictionary[(aInput[0] & 0x3) << 4];
+    aOutput[2] = '=';
+    aOutput[3] = '=';
+  }
+  else
+  {
+    // Break the input into 3-byte chunks and process each of them
+    int i;
+
+    for (i = 0; i < aInputLen / 3; i++)
     {
-        // FIXME Should we return an error here, or just the length
-        return (aInputLen*8)/6;
+      base64_encode(&aInput[i * 3], 3, &aOutput[i * 4], 4);
     }
 
-    // If we get here we've got enough space to do the encoding
+    if (aInputLen % 3 > 0)
+    {
+      // It doesn't fit neatly into a 3-byte chunk, so process what's left
+      base64_encode(&aInput[i * 3], aInputLen % 3, &aOutput[i * 4], aOutputLen - (i * 4));
+    }
+  }
 
-    const char* b64_dictionary = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    if (aInputLen == 3)
-    {
-        aOutput[0] = b64_dictionary[aInput[0] >> 2];
-        aOutput[1] = b64_dictionary[(aInput[0] & 0x3)<<4|(aInput[1]>>4)];
-        aOutput[2] = b64_dictionary[(aInput[1]&0x0F)<<2|(aInput[2]>>6)];
-        aOutput[3] = b64_dictionary[aInput[2]&0x3F];
-    }
-    else if (aInputLen == 2)
-    {
-        aOutput[0] = b64_dictionary[aInput[0] >> 2];
-        aOutput[1] = b64_dictionary[(aInput[0] & 0x3)<<4|(aInput[1]>>4)];
-        aOutput[2] = b64_dictionary[(aInput[1]&0x0F)<<2];
-        aOutput[3] = '=';
-    }
-    else if (aInputLen == 1)
-    {
-        aOutput[0] = b64_dictionary[aInput[0] >> 2];
-        aOutput[1] = b64_dictionary[(aInput[0] & 0x3)<<4];
-        aOutput[2] = '=';
-        aOutput[3] = '=';
-    }
-    else
-    {
-        // Break the input into 3-byte chunks and process each of them
-        int i;
-        for (i = 0; i < aInputLen/3; i++)
-        {
-            base64_encode(&aInput[i*3], 3, &aOutput[i*4], 4);
-        }
-        if (aInputLen % 3 > 0)
-        {
-            // It doesn't fit neatly into a 3-byte chunk, so process what's left
-            base64_encode(&aInput[i*3], aInputLen % 3, &aOutput[i*4], aOutputLen - (i*4));
-        }
-    }
-
-    return ((aInputLen+2)/3)*4;
+  return ((aInputLen + 2) / 3) * 4;
 }
 

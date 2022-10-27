@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +29,7 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  **********************************************************************************************************************************/
 
 #pragma once
@@ -187,6 +188,7 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
 
   // KH
 #if USE_NEW_WEBSERVER_VERSION
+
   if (methodStr == "HEAD")
   {
     method = HTTP_HEAD;
@@ -211,12 +213,15 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
   {
     method = HTTP_PATCH;
   }
+
 #else
+
   if (methodStr == "POST")
   {
     method = HTTP_POST;
   }
-  else if (methodStr == "DELETE") {
+  else if (methodStr == "DELETE")
+  {
 
     method = HTTP_DELETE;
   }
@@ -232,6 +237,7 @@ bool EthernetWebServer::_parseRequest(EthernetClient& client)
   {
     method = HTTP_PATCH;
   }
+
 #endif
 
   _currentMethod = method;
@@ -512,7 +518,8 @@ bool EthernetWebServer::_collectHeader(const char* headerName, const char* heade
 
 struct storeArgHandler
 {
-  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos, int next_index)
+  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos,
+                   int next_index)
   {
     key = EthernetWebServer::urlDecode(data.substring(pos, key_end_pos));
 
@@ -525,9 +532,16 @@ struct storeArgHandler
 
 struct nullArgHandler
 {
-  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos, int next_index)
+  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos,
+                   int next_index)
   {
-    (void)key; (void)value; (void)data; (void)equal_index; (void)pos; (void)key_end_pos; (void)next_index;
+    (void)key;
+    (void)value;
+    (void)data;
+    (void)equal_index;
+    (void)pos;
+    (void)key_end_pos;
+    (void)next_index;
     // do nothing
   }
 };
@@ -549,7 +563,8 @@ void EthernetWebServer::_parseArguments(const String& data)
 
 /////////////////////////////////////////////////////////////////////////
 
-int EthernetWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(String&, String&, const String&, int, int, int, int)> handler)
+int EthernetWebServer::_parseArgumentsPrivate(const String& data,
+                                              vl::Func<void(String&, String&, const String&, int, int, int, int)> handler)
 {
   ET_LOGDEBUG1(F("args: "), data);
 
@@ -895,6 +910,7 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundar
             uint8_t argByte = _uploadReadByte(client);
 
 readfile:
+
             while (argByte != 0x0D)
             {
               if (!client.connected())
@@ -1000,7 +1016,8 @@ readfile:
     }
 
     int iarg;
-    int totalArgs = ((WEBSERVER_MAX_POST_ARGS - _postArgsLen) < _currentArgCount) ? (WEBSERVER_MAX_POST_ARGS - _postArgsLen) : _currentArgCount;
+    int totalArgs = ((WEBSERVER_MAX_POST_ARGS - _postArgsLen) < _currentArgCount) ? (WEBSERVER_MAX_POST_ARGS - _postArgsLen)
+                    : _currentArgCount;
 
     for (iarg = 0; iarg < totalArgs; iarg++)
     {
@@ -1181,6 +1198,7 @@ bool EthernetWebServer::_parseForm(EthernetClient& client, const String& boundar
             uint8_t argByte       = _uploadReadByte(client);
 
 readfile:
+
             while (argByte != 0x0D)
             {
               if (!client.connected())
@@ -1253,6 +1271,7 @@ readfile:
 
                   break;
                 }
+
                 continue;
               }
               else
@@ -1295,7 +1314,9 @@ readfile:
       arg.value = _currentArgs[iarg].value;
     }
 
-    if (_currentArgs) delete[] _currentArgs;
+    if (_currentArgs)
+      delete[] _currentArgs;
+
     _currentArgs = new RequestArgument[postArgsLen];
 
     for (iarg = 0; iarg < postArgsLen; iarg++)

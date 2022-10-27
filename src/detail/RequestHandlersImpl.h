@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +29,7 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
 
 #pragma once
@@ -44,7 +45,8 @@ class ethernetFunctionRequestHandler : public ethernetRequestHandler
 {
   public:
 
-    ethernetFunctionRequestHandler(EthernetWebServer::THandlerFunction fn, EthernetWebServer::THandlerFunction ufn, const String &uri, const HTTPMethod& method)
+    ethernetFunctionRequestHandler(EthernetWebServer::THandlerFunction fn, EthernetWebServer::THandlerFunction ufn,
+                                   const String &uri, const HTTPMethod& method)
       : _fn(fn)
       , _ufn(ufn)
       , _uri(uri)
@@ -83,7 +85,7 @@ class ethernetFunctionRequestHandler : public ethernetRequestHandler
     bool handle(EthernetWebServer& server, const HTTPMethod& requestMethod, const String& requestUri) override
     {
       ETW_UNUSED(server);
-      
+
       if (!canHandle(requestMethod, requestUri))
         return false;
 
@@ -95,7 +97,7 @@ class ethernetFunctionRequestHandler : public ethernetRequestHandler
     {
       ETW_UNUSED(server);
       ETW_UNUSED(upload);
-      
+
       if (canUpload(requestUri))
         _ufn();
     }
@@ -145,8 +147,8 @@ class ethernetStaticRequestHandler : public ethernetRequestHandler
       strcpy(buff, mimeTable[sizeof(mimeTable) / sizeof(mimeTable[0]) - 1].mimeType);
       return String(buff);
     }
-    
-    
+
+
 #if USING_NAME_SPACE
 }
 #endif
@@ -155,44 +157,65 @@ class ethernetStaticRequestHandler : public ethernetRequestHandler
 
     static String getContentType(const String& path)
     {
-      if (path.endsWith(".html"))           return "text/html";
-      else if (path.endsWith(".htm"))       return "text/html";
-      else if (path.endsWith(".css"))       return "text/css";
-      else if (path.endsWith(".txt"))       return "text/plain";
-      else if (path.endsWith(".js"))        return "application/javascript";
-      else if (path.endsWith(".png"))       return "image/png";
-      else if (path.endsWith(".gif"))       return "image/gif";
-      else if (path.endsWith(".jpg"))       return "image/jpeg";
-      else if (path.endsWith(".ico"))       return "image/x-icon";
-      else if (path.endsWith(".svg"))       return "image/svg+xml";
-      else if (path.endsWith(".ttf"))       return "application/x-font-ttf";
-      else if (path.endsWith(".otf"))       return "application/x-font-opentype";
-      else if (path.endsWith(".woff"))      return "application/font-woff";
-      else if (path.endsWith(".woff2"))     return "application/font-woff2";
-      else if (path.endsWith(".eot"))       return "application/vnd.ms-fontobject";
-      else if (path.endsWith(".sfnt"))      return "application/font-sfnt";
-      else if (path.endsWith(".xml"))       return "text/xml";
-      else if (path.endsWith(".pdf"))       return "application/pdf";
-      else if (path.endsWith(".zip"))       return "application/zip";
-      else if (path.endsWith(".gz"))        return "application/x-gzip";
-      else if (path.endsWith(".appcache"))  return "text/cache-manifest";
+      if (path.endsWith(".html"))
+        return "text/html";
+      else if (path.endsWith(".htm"))
+        return "text/html";
+      else if (path.endsWith(".css"))
+        return "text/css";
+      else if (path.endsWith(".txt"))
+        return "text/plain";
+      else if (path.endsWith(".js"))
+        return "application/javascript";
+      else if (path.endsWith(".png"))
+        return "image/png";
+      else if (path.endsWith(".gif"))
+        return "image/gif";
+      else if (path.endsWith(".jpg"))
+        return "image/jpeg";
+      else if (path.endsWith(".ico"))
+        return "image/x-icon";
+      else if (path.endsWith(".svg"))
+        return "image/svg+xml";
+      else if (path.endsWith(".ttf"))
+        return "application/x-font-ttf";
+      else if (path.endsWith(".otf"))
+        return "application/x-font-opentype";
+      else if (path.endsWith(".woff"))
+        return "application/font-woff";
+      else if (path.endsWith(".woff2"))
+        return "application/font-woff2";
+      else if (path.endsWith(".eot"))
+        return "application/vnd.ms-fontobject";
+      else if (path.endsWith(".sfnt"))
+        return "application/font-sfnt";
+      else if (path.endsWith(".xml"))
+        return "text/xml";
+      else if (path.endsWith(".pdf"))
+        return "application/pdf";
+      else if (path.endsWith(".zip"))
+        return "application/zip";
+      else if (path.endsWith(".gz"))
+        return "application/x-gzip";
+      else if (path.endsWith(".appcache"))
+        return "text/cache-manifest";
 
       return "application/octet-stream";
     }
 
 #endif
 
-  protected:
+protected:
 
-    String _uri;
-    String _path;
-    String _cache_header;
-    bool _isFile;
-    size_t _baseUriLength;
+String _uri;
+String _path;
+String _cache_header;
+bool _isFile;
+size_t _baseUriLength;
 };
 
 #else
-  #include "ESP_RequestHandlersImpl.h"
+#include "ESP_RequestHandlersImpl.h"
 #endif
 
 #endif  // REQUEST_HANDLER_IMPL_H

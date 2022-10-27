@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,8 +29,9 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
- 
+
 // (c) Copyright Arduino. 2016
 // Released under Apache License, version 2.0
 
@@ -56,8 +57,10 @@ class EthernetWebSocketClient : public EthernetHttpClient
 {
   public:
     EthernetWebSocketClient(Client& aClient, const char* aServerName, uint16_t aServerPort = EthernetHttpClient::kHttpPort);
-    EthernetWebSocketClient(Client& aClient, const String& aServerName, uint16_t aServerPort = EthernetHttpClient::kHttpPort);
-    EthernetWebSocketClient(Client& aClient, const IPAddress& aServerAddress, uint16_t aServerPort = EthernetHttpClient::kHttpPort);
+    EthernetWebSocketClient(Client& aClient, const String& aServerName,
+                            uint16_t aServerPort = EthernetHttpClient::kHttpPort);
+    EthernetWebSocketClient(Client& aClient, const IPAddress& aServerAddress,
+                            uint16_t aServerPort = EthernetHttpClient::kHttpPort);
 
     /** Start the Web Socket connection to the specified path
       @param aURLPath     Path to use in request (optional, "/" is used by default)
@@ -108,7 +111,7 @@ class EthernetWebSocketClient : public EthernetHttpClient
     // Inherited from Print
     virtual size_t write(uint8_t aByte);
     virtual size_t write(const uint8_t *aBuffer, size_t aSize);
-    
+
     // Inherited from Stream
     virtual int   available();
     /** Read the next byte from the server.

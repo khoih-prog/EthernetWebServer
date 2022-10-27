@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,8 +29,9 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
- 
+
 #pragma once
 
 #ifndef __MIMETABLE_H__
@@ -39,68 +40,68 @@
 namespace mime
 {
 
-  enum type
-  {
-    html,
-    htm,
-    css,
-    txt,
-    js,
-    json,
-    png,
-    gif,
-    jpg,
-    ico,
-    svg,
-    ttf,
-    otf,
-    woff,
-    woff2,
-    eot,
-    sfnt,
-    xml,
-    pdf,
-    zip,
-    gz,
-    appcache,
-    none,
-    maxType
-  };
+enum type
+{
+  html,
+  htm,
+  css,
+  txt,
+  js,
+  json,
+  png,
+  gif,
+  jpg,
+  ico,
+  svg,
+  ttf,
+  otf,
+  woff,
+  woff2,
+  eot,
+  sfnt,
+  xml,
+  pdf,
+  zip,
+  gz,
+  appcache,
+  none,
+  maxType
+};
 
-  struct Entry
-  {
-    const char endsWith[16]; 
-    const char mimeType[32];
-  };
+struct Entry
+{
+  const char endsWith[16];
+  const char mimeType[32];
+};
 
-  // Table of extension->MIME strings stored in PROGMEM, needs to be global due to GCC section typing rules
-  const Entry mimeTable[maxType] = 
-  {
-      { ".html",      "text/html" },
-      { ".htm",       "text/html" },
-      { ".css",       "text/css" },
-      { ".txt",       "text/plain" },
-      { ".js",        "application/javascript" },
-      { ".json",      "application/json" },
-      { ".png",       "image/png" },
-      { ".gif",       "image/gif" },
-      { ".jpg",       "image/jpeg" },
-      { ".ico",       "image/x-icon" },
-      { ".svg",       "image/svg+xml" },
-      { ".ttf",       "application/x-font-ttf" },
-      { ".otf",       "application/x-font-opentype" },
-      { ".woff",      "application/font-woff" },
-      { ".woff2",     "application/font-woff2" },
-      { ".eot",       "application/vnd.ms-fontobject" },
-      { ".sfnt",      "application/font-sfnt" },
-      { ".xml",       "text/xml" },
-      { ".pdf",       "application/pdf" },
-      { ".zip",       "application/zip" },
-      { ".gz",        "application/x-gzip" },
-      { ".appcache",  "text/cache-manifest" },
-      { "",           "application/octet-stream" } 
-  };
-  //extern const Entry mimeTable[maxType];
+// Table of extension->MIME strings stored in PROGMEM, needs to be global due to GCC section typing rules
+const Entry mimeTable[maxType] =
+{
+  { ".html",      "text/html" },
+  { ".htm",       "text/html" },
+  { ".css",       "text/css" },
+  { ".txt",       "text/plain" },
+  { ".js",        "application/javascript" },
+  { ".json",      "application/json" },
+  { ".png",       "image/png" },
+  { ".gif",       "image/gif" },
+  { ".jpg",       "image/jpeg" },
+  { ".ico",       "image/x-icon" },
+  { ".svg",       "image/svg+xml" },
+  { ".ttf",       "application/x-font-ttf" },
+  { ".otf",       "application/x-font-opentype" },
+  { ".woff",      "application/font-woff" },
+  { ".woff2",     "application/font-woff2" },
+  { ".eot",       "application/vnd.ms-fontobject" },
+  { ".sfnt",      "application/font-sfnt" },
+  { ".xml",       "text/xml" },
+  { ".pdf",       "application/pdf" },
+  { ".zip",       "application/zip" },
+  { ".gz",        "application/x-gzip" },
+  { ".appcache",  "text/cache-manifest" },
+  { "",           "application/octet-stream" }
+};
+//extern const Entry mimeTable[maxType];
 } // namespace mime
 
 #endif    // #ifndef __MIMETABLE_H__

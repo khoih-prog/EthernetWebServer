@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +29,7 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
 
 #pragma once
@@ -55,7 +56,9 @@
   #endif
   #define USE_NEW_WEBSERVER_VERSION   false
   
-  #warning Use mbed-portenta architecture for PORTENTA_H7 from EthernetWebServer
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Use mbed-portenta architecture for PORTENTA_H7 from EthernetWebServer
+  #endif
 
 #endif
 
@@ -70,20 +73,29 @@
     #undef ETHERNET_USE_SAMD
   #endif
   #define ETHERNET_USE_SAMD      true
-  #warning Using SAMD architecture from EthernetWebServer
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Using SAMD architecture from EthernetWebServer
+  #endif
 
 #endif
 
 /////////////////////////////////////////////////////////////////////////
 
-#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
-        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
-        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
+#if (defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+     defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || \
+     defined(NRF52840_CLUE) || defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || \
+     defined(NRF52840_LED_GLASSES) || defined(MDBT50Q_RX) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) || \
+     defined(ARDUINO_Seeed_XIAO_nRF52840) || defined(ARDUINO_Seeed_XIAO_nRF52840_Sense) || \
+     defined(ARDUINO_SEEED_XIAO_NRF52840) || defined(ARDUINO_SEEED_XIAO_NRF52840_SENSE) )
   #if defined(ETHERNET_USE_NRF528XX)
     #undef ETHERNET_USE_NRF528XX
   #endif
   #define ETHERNET_USE_NRF528XX      true
-  #warning Using nFR52 architecture from EthernetWebServer
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Using nFR52 architecture from EthernetWebServer
+  #endif
 
 #endif
 
@@ -94,7 +106,10 @@
     #undef ETHERNET_USE_SAM_DUE
   #endif
   #define ETHERNET_USE_SAM_DUE      true
-  #warning Using SAM_DUE architecture from EthernetWebServer
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Using SAM_DUE architecture from EthernetWebServer
+  #endif
 
 #endif
 
@@ -106,7 +121,10 @@
     #undef ETHERNET_USE_AVR_MEGA
   #endif
   #define ETHERNET_USE_AVR_MEGA      true
-  #warning Using AVR_MEGA architecture from EthernetWebServer
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Using AVR_MEGA architecture from EthernetWebServer
+  #endif
 
 #endif
 
@@ -117,7 +135,10 @@
     #undef ETHERNET_USE_DXCORE
   #endif
   #define ETHERNET_USE_DXCORE      true
-  #warning Using DXCORE architecture from EthernetWebServer
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Using DXCORE architecture from EthernetWebServer
+  #endif
 
 #endif
 
@@ -129,7 +150,10 @@
     #undef ETHERNET_USE_MEGA_AVR
   #endif
   #define ETHERNET_USE_MEGA_AVR      true
-  #warning Using MEGA_AVR architecture from EthernetWebServer
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Using MEGA_AVR architecture from EthernetWebServer
+  #endif
 
 #endif
 
@@ -141,7 +165,10 @@
     #undef ETHERNET_USE_ESP32
   #endif
   #define ETHERNET_USE_ESP32        true
-  #warning Using ESP32 architecture from EthernetWebServer
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Using ESP32 architecture from EthernetWebServer
+  #endif
   
 #endif
 
@@ -153,7 +180,10 @@
     #undef ETHERNET_USE_ESP8266
   #endif
   #define ETHERNET_USE_ESP8266      true
-  #warning Using ESP8266 architecture from EthernetWebServer  
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning Using ESP8266 architecture from EthernetWebServer
+  #endif
 
 #endif
 
@@ -185,12 +215,18 @@
 // Permit redefinition of SENDCONTENT_P_BUFFER_SZ in sketch, default is 4K, minimum is 256 bytes
 #ifndef SENDCONTENT_P_BUFFER_SZ
   #define SENDCONTENT_P_BUFFER_SZ     4096
-  #warning SENDCONTENT_P_BUFFER_SZ using default 4 Kbytes
+  
+  #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+  	#warning SENDCONTENT_P_BUFFER_SZ using default 4 Kbytes
+  #endif
 #else
   #if (SENDCONTENT_P_BUFFER_SZ < 256)
     #undef SENDCONTENT_P_BUFFER_SZ
     #define SENDCONTENT_P_BUFFER_SZ   256
-    #warning SENDCONTENT_P_BUFFER_SZ reset to min 256 bytes
+    
+    #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+    	#warning SENDCONTENT_P_BUFFER_SZ reset to min 256 bytes
+    #endif
   #endif
 #endif
 
@@ -253,11 +289,12 @@
   #define HTTP_MAX_CLOSE_WAIT     2000 //ms to wait for the client to close the connection
 
 #else
-
-  #if defined(ESP32)
-    #warning ESP32 __has_include WebServer.h
-  #else
-    #warning ESP8266 __has_include ESP8266WebServer.h
+	#if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
+		#if defined(ESP32)
+		  #warning ESP32 __has_include WebServer.h
+		#else
+		  #warning ESP8266 __has_include ESP8266WebServer.h
+		#endif
   #endif
 
 #endif    // #if !(( defined(ESP32) || defined(ESP8266)) && (__has_include("WebServer.h") || __has_include("ESP8266WebServer.h")) )

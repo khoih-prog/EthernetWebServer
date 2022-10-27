@@ -13,7 +13,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
 
 #pragma once
@@ -43,46 +44,46 @@
 
 namespace mime_esp
 {
-  enum type
-  {
-    html,
-    htm,
-    txt,
-  #ifndef MIMETYPE_MINIMAL    // allow to compile with only the strict minimum of mime-types
-    css,
-    js,
-    json,
-    png,
-    gif,
-    jpg,
-    jpeg,
-    ico,
-    svg,
-    ttf,
-    otf,
-    woff,
-    woff2,
-    eot,
-    sfnt,
-    xml,
-    pdf,
-    zip,
-    appcache,
-  #endif // MIMETYPE_MINIMAL
-    gz,
-    none,
-    maxType
-  };
-  
-  struct Entry
-  {
-    const char * endsWith;
-    const char * mimeType;
-  };
-  
-  extern const Entry mimeTable[maxType];
-  
-  String getContentType(const String& path);
+enum type
+{
+  html,
+  htm,
+  txt,
+#ifndef MIMETYPE_MINIMAL    // allow to compile with only the strict minimum of mime-types
+  css,
+  js,
+  json,
+  png,
+  gif,
+  jpg,
+  jpeg,
+  ico,
+  svg,
+  ttf,
+  otf,
+  woff,
+  woff2,
+  eot,
+  sfnt,
+  xml,
+  pdf,
+  zip,
+  appcache,
+#endif // MIMETYPE_MINIMAL
+  gz,
+  none,
+  maxType
+};
+
+struct Entry
+{
+  const char * endsWith;
+  const char * mimeType;
+};
+
+extern const Entry mimeTable[maxType];
+
+String getContentType(const String& path);
 }
 
 #endif    // #if (defined(ESP32) || defined(ESP8266))

@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +29,7 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
 
 #pragma once
@@ -199,7 +200,8 @@ void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServ
 
 /////////////////////////////////////////////////////////////////////////
 
-void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServer::THandlerFunction fn, EthernetWebServer::THandlerFunction ufn)
+void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServer::THandlerFunction fn,
+                           EthernetWebServer::THandlerFunction ufn)
 {
   _addRequestHandler(new ethernetFunctionRequestHandler(fn, ufn, uri, method));
 }
@@ -263,7 +265,9 @@ void EthernetWebServer::handleClient()
       case HC_NONE:
         // No-op to avoid C++ compiler warning
         break;
+
       case HC_WAIT_READ:
+
         // Wait for data from client to become available
         if (_currentClient.available())
         {
@@ -282,7 +286,8 @@ void EthernetWebServer::handleClient()
           }
         }
         else
-        { // !_currentClient.available()
+        {
+          // !_currentClient.available()
           if (millis() - _statusChange <= HTTP_MAX_DATA_WAIT)
           {
             keepCurrentClient = true;
@@ -292,7 +297,9 @@ void EthernetWebServer::handleClient()
         }
 
         break;
+
       case HC_WAIT_CLOSE:
+
         // Wait for client to close the connection
         if (millis() - _statusChange <= HTTP_MAX_CLOSE_WAIT)
         {
@@ -1060,47 +1067,128 @@ String EthernetWebServer::_responseCodeToString(int code)
 {
   switch (code)
   {
-    case 100: return F("Continue");
-    case 101: return F("Switching Protocols");
-    case 200: return F("OK");
-    case 201: return F("Created");
-    case 202: return F("Accepted");
-    case 203: return F("Non-Authoritative Information");
-    case 204: return F("No Content");
-    case 205: return F("Reset Content");
-    case 206: return F("Partial Content");
-    case 300: return F("Multiple Choices");
-    case 301: return F("Moved Permanently");
-    case 302: return F("Found");
-    case 303: return F("See Other");
-    case 304: return F("Not Modified");
-    case 305: return F("Use Proxy");
-    case 307: return F("Temporary Redirect");
-    case 400: return F("Bad Request");
-    case 401: return F("Unauthorized");
-    case 402: return F("Payment Required");
-    case 403: return F("Forbidden");
-    case 404: return F("Not Found");
-    case 405: return F("Method Not Allowed");
-    case 406: return F("Not Acceptable");
-    case 407: return F("Proxy Authentication Required");
-    case 408: return F("Request Time-out");
-    case 409: return F("Conflict");
-    case 410: return F("Gone");
-    case 411: return F("Length Required");
-    case 412: return F("Precondition Failed");
-    case 413: return F("Request Entity Too Large");
-    case 414: return F("Request-URI Too Large");
-    case 415: return F("Unsupported Media Type");
-    case 416: return F("Requested range not satisfiable");
-    case 417: return F("Expectation Failed");
-    case 500: return F("Internal Server Error");
-    case 501: return F("Not Implemented");
-    case 502: return F("Bad Gateway");
-    case 503: return F("Service Unavailable");
-    case 504: return F("Gateway Time-out");
-    case 505: return F("HTTP Version not supported");
-    default:  return "";
+    case 100:
+      return F("Continue");
+
+    case 101:
+      return F("Switching Protocols");
+
+    case 200:
+      return F("OK");
+
+    case 201:
+      return F("Created");
+
+    case 202:
+      return F("Accepted");
+
+    case 203:
+      return F("Non-Authoritative Information");
+
+    case 204:
+      return F("No Content");
+
+    case 205:
+      return F("Reset Content");
+
+    case 206:
+      return F("Partial Content");
+
+    case 300:
+      return F("Multiple Choices");
+
+    case 301:
+      return F("Moved Permanently");
+
+    case 302:
+      return F("Found");
+
+    case 303:
+      return F("See Other");
+
+    case 304:
+      return F("Not Modified");
+
+    case 305:
+      return F("Use Proxy");
+
+    case 307:
+      return F("Temporary Redirect");
+
+    case 400:
+      return F("Bad Request");
+
+    case 401:
+      return F("Unauthorized");
+
+    case 402:
+      return F("Payment Required");
+
+    case 403:
+      return F("Forbidden");
+
+    case 404:
+      return F("Not Found");
+
+    case 405:
+      return F("Method Not Allowed");
+
+    case 406:
+      return F("Not Acceptable");
+
+    case 407:
+      return F("Proxy Authentication Required");
+
+    case 408:
+      return F("Request Time-out");
+
+    case 409:
+      return F("Conflict");
+
+    case 410:
+      return F("Gone");
+
+    case 411:
+      return F("Length Required");
+
+    case 412:
+      return F("Precondition Failed");
+
+    case 413:
+      return F("Request Entity Too Large");
+
+    case 414:
+      return F("Request-URI Too Large");
+
+    case 415:
+      return F("Unsupported Media Type");
+
+    case 416:
+      return F("Requested range not satisfiable");
+
+    case 417:
+      return F("Expectation Failed");
+
+    case 500:
+      return F("Internal Server Error");
+
+    case 501:
+      return F("Not Implemented");
+
+    case 502:
+      return F("Bad Gateway");
+
+    case 503:
+      return F("Service Unavailable");
+
+    case 504:
+      return F("Gateway Time-out");
+
+    case 505:
+      return F("HTTP Version not supported");
+
+    default:
+      return "";
   }
 }
 

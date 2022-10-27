@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.3
+  Version: 2.2.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,8 +29,9 @@
   2.2.1   K Hoang      25/08/2022 Auto-select SPI SS/CS pin according to board package
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
+  2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
  *************************************************************************************************************************************/
- 
+
 // Class to simplify HTTP fetching on Arduino
 // (c) Copyright 2010-2011 MCQN Ltd
 // Released under Apache License, version 2.0
@@ -72,11 +73,11 @@ void EthernetHttpClient::resetState()
   iState          = eIdle;
   iStatusCode     = 0;
   iContentLength  = kNoContentLengthHeader;
-  
+
   iBodyLengthConsumed   = 0;
   iContentLengthPtr     = kContentLengthPrefix;
   iTransferEncodingChunkedPtr = kTransferEncodingChunked;
-  
+
   iIsChunked            = false;
   iChunkLength          = 0;
   iHttpResponseTimeout  = kHttpResponseTimeout;
@@ -170,6 +171,7 @@ int EthernetHttpClient::startRequest(const char* aURLPath, const char* aHttpMeth
       // This was a simple version of the API, so terminate the headers now
       finishHeaders();
     }
+
     // else we'll call it in endRequest or in the first call to print, etc.
 
     if (hasBody)
@@ -199,13 +201,13 @@ int EthernetHttpClient::sendInitialHeaders(const char* aURLPath, const char* aHt
     {
       iClient->print("Host: ");
       iClient->print(iServerName);
-      
+
       if (iServerPort != kHttpPort)
       {
         iClient->print(":");
         iClient->print(iServerPort);
       }
-      
+
       iClient->println();
     }
 
@@ -223,7 +225,7 @@ int EthernetHttpClient::sendInitialHeaders(const char* aURLPath, const char* aHt
 
   // Everything has gone well
   iState = eRequestStarted;
-  
+
   return HTTP_SUCCESS;
 }
 
@@ -259,11 +261,11 @@ void EthernetHttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
   // In Base64, each 3 bytes of unencoded data become 4 bytes of encoded data
   unsigned char input[3];
   unsigned char output[5]; // Leave space for a '\0' terminator so we can easily print
-  
+
   int userLen     = strlen(aUser);
   int passwordLen = strlen(aPassword);
   int inputOffset = 0;
-  
+
   for (int i = 0; i < (userLen + 1 + passwordLen); i++)
   {
     // Copy the relevant input byte into the input
@@ -279,7 +281,7 @@ void EthernetHttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
     {
       input[inputOffset++] = aPassword[i - (userLen + 1)];
     }
-    
+
     // See if we've got a chunk to encode
     if ( (inputOffset == 3) || (i == userLen + passwordLen) )
     {
@@ -294,7 +296,7 @@ void EthernetHttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
       inputOffset = 0;
     }
   }
-  
+
   // And end the header we've sent
   iClient->println();
 }
@@ -325,6 +327,7 @@ void EthernetHttpClient::beginBody()
     // We still need to finish off the headers
     finishHeaders();
   }
+
   // else the end of headers has already been sent, so nothing to do here
 }
 
@@ -444,13 +447,14 @@ int EthernetHttpClient::responseStatusCode()
   {
     return HTTP_ERROR_API;
   }
-  
+
   // The first line will be of the form Status-Line:
   //   HTTP-Version SP Status-Code SP Reason-Phrase CRLF
   // Where HTTP-Version is of the form:
   //   HTTP-Version   = "HTTP" "/" 1*DIGIT "." 1*DIGIT
 
   int c = '\0';
+
   do
   {
     // Make sure the status code is reset, and likewise the state.  This
@@ -460,11 +464,11 @@ int EthernetHttpClient::responseStatusCode()
     iState      = eRequestSent;
 
     unsigned long timeoutStart = millis();
-    
+
     // Psuedo-regexp we're expecting before the status-code
     const char* statusPrefix  = "HTTP/*.* ";
     const char* statusPtr     = statusPrefix;
-    
+
     // Whilst we haven't timed out & haven't reached the end of the headers
     while ((c != '\n') && ( (millis() - timeoutStart) < iHttpResponseTimeout ))
     {
@@ -481,12 +485,13 @@ int EthernetHttpClient::responseStatusCode()
           switch (iState)
           {
             case eRequestSent:
+
               // We haven't reached the status code yet
               if ( (*statusPtr == '*') || (*statusPtr == c) )
               {
                 // This character matches, just move along
                 statusPtr++;
-                
+
                 if (*statusPtr == '\0')
                 {
                   // We've reached the end of the prefix
@@ -497,8 +502,9 @@ int EthernetHttpClient::responseStatusCode()
               {
                 return HTTP_ERROR_INVALID_RESPONSE;
               }
-              
+
               break;
+
             case eReadingStatusCode:
               if (isdigit(c))
               {
@@ -513,8 +519,9 @@ int EthernetHttpClient::responseStatusCode()
                 // rather than anything else, but let's be lenient
                 iState = eStatusCodeRead;
               }
-              
+
               break;
+
             case eStatusCodeRead:
               // We're just waiting for the end of the line now
               break;
@@ -522,7 +529,7 @@ int EthernetHttpClient::responseStatusCode()
             default:
               break;
           };
-          
+
           // We read something, reset the timeout counter
           timeoutStart = millis();
         }
@@ -534,14 +541,14 @@ int EthernetHttpClient::responseStatusCode()
         delay(kHttpWaitForDataDelay);
       }
     }
-    
+
     if ( (c == '\n') && (iStatusCode < 200 && iStatusCode != 101) )
     {
       // We've reached the end of an informational status line
       c = '\0'; // Clear c so we'll go back into the data reading loop
     }
   }
-  
+
   // If we've read a status code successfully but it's informational (1xx)
   // loop back to the start
   while ( (iState == eStatusCodeRead) && (iStatusCode < 200 && iStatusCode != 101) );
@@ -568,7 +575,7 @@ int EthernetHttpClient::skipResponseHeaders()
 {
   // Just keep reading until we finish reading the headers or time out
   unsigned long timeoutStart = millis();
-  
+
   // Whilst we haven't timed out & haven't reached the end of the headers
   while ((!endOfHeadersReached()) && ( (millis() - timeoutStart) < iHttpResponseTimeout ))
   {
@@ -585,7 +592,7 @@ int EthernetHttpClient::skipResponseHeaders()
       delay(kHttpWaitForDataDelay);
     }
   }
-  
+
   if (endOfHeadersReached())
   {
     // Success
@@ -624,7 +631,7 @@ String EthernetHttpClient::responseBody()
   if (bodyLength > 0)
   {
     // try to reserve bodyLength bytes
-    if (response.reserve(bodyLength) == 0) 
+    if (response.reserve(bodyLength) == 0)
     {
       // String reserve failed
       return String((const char*)NULL);
@@ -640,24 +647,24 @@ String EthernetHttpClient::responseBody()
     // KH test
     int c = timedRead();
     //int c = iClient->read();
-    
+
     ET_LOGDEBUG1(F("EthernetHttpClient::responseBody => c ="), String(c));
     //////
 
-    if (c == -1) 
+    if (c == -1)
     {
       // read timed out, done
       break;
     }
 
-    if (!response.concat((char)c)) 
+    if (!response.concat((char)c))
     {
       // adding char failed
       return String((const char*)NULL);
     }
   }
 
-  if (bodyLength > 0 && (unsigned int)bodyLength != response.length()) 
+  if (bodyLength > 0 && (unsigned int)bodyLength != response.length())
   {
     // failure, we did not read in reponse content length bytes
     return String((const char*)NULL);
@@ -673,7 +680,7 @@ bool EthernetHttpClient::endOfBodyReached()
     // We've got to the body and we know how long it will be
     return (iBodyLengthConsumed >= contentLength());
   }
-  
+
   return false;
 }
 
@@ -734,7 +741,7 @@ int EthernetHttpClient::read()
   }
 
   int ret = iClient->read();
-  
+
   if (ret >= 0)
   {
     if (endOfHeadersReached() && iContentLength > 0)
@@ -754,7 +761,7 @@ int EthernetHttpClient::read()
       }
     }
   }
-  
+
   return ret;
 }
 
@@ -823,7 +830,7 @@ String EthernetHttpClient::readHeaderValue()
 int EthernetHttpClient::read(uint8_t *buf, size_t size)
 {
   int ret = iClient->read(buf, size);
-  
+
   if (endOfHeadersReached() && iContentLength > 0)
   {
     // We're outputting the body now and we've seen a Content-Length header
@@ -833,7 +840,7 @@ int EthernetHttpClient::read(uint8_t *buf, size_t size)
       iBodyLengthConsumed += ret;
     }
   }
-  
+
   return ret;
 }
 
@@ -853,13 +860,14 @@ int EthernetHttpClient::readHeader()
   switch (iState)
   {
     case eStatusCodeRead:
+
       // We're at the start of a line, or somewhere in the middle of reading
       // the Content-Length prefix
       if (*iContentLengthPtr == c)
       {
         // This character matches, just move along
         iContentLengthPtr++;
-        
+
         if (*iContentLengthPtr == '\0')
         {
           // We've reached the end of the prefix
@@ -874,7 +882,7 @@ int EthernetHttpClient::readHeader()
       {
         // This character matches, just move along
         iTransferEncodingChunkedPtr++;
-        
+
         if (*iTransferEncodingChunkedPtr == '\0')
         {
           // We've reached the end of the Transfer Encoding: chunked header
@@ -882,7 +890,8 @@ int EthernetHttpClient::readHeader()
           iState = eSkipToEndOfHeader;
         }
       }
-      else if (((iContentLengthPtr == kContentLengthPrefix) && (iTransferEncodingChunkedPtr == kTransferEncodingChunked)) && (c == '\r'))
+      else if (((iContentLengthPtr == kContentLengthPrefix) && (iTransferEncodingChunkedPtr == kTransferEncodingChunked))
+               && (c == '\r'))
       {
         // We've found a '\r' at the start of a line, so this is probably
         // the end of the headers
@@ -893,8 +902,9 @@ int EthernetHttpClient::readHeader()
         // This isn't the Content-Length or Transfer Encoding chunked header, skip to the end of the line
         iState = eSkipToEndOfHeader;
       }
-      
+
       break;
+
     case eReadingContentLength:
       if (isdigit(c))
       {
@@ -907,8 +917,9 @@ int EthernetHttpClient::readHeader()
         // rather than anything else, but let's be lenient
         iState = eSkipToEndOfHeader;
       }
-      
+
       break;
+
     case eLineStartingCRFound:
       if (c == '\n')
       {
@@ -922,8 +933,9 @@ int EthernetHttpClient::readHeader()
           iState = eReadingBody;
         }
       }
-      
+
       break;
+
     default:
       // We're just waiting for the end of the line now
       break;
@@ -936,7 +948,7 @@ int EthernetHttpClient::readHeader()
     iContentLengthPtr = kContentLengthPrefix;
     iTransferEncodingChunkedPtr = kTransferEncodingChunked;
   }
-  
+
   // And return the character read to whoever wants it
   return c;
 }
