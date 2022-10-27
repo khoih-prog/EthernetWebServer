@@ -39,13 +39,13 @@
 
 /////////////////////////////////////////////////////////////////////////
 
-#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.2.3"
+#define ETHERNET_WEBSERVER_VERSION          "EthernetWebServer v2.2.4"
 
 #define ETHERNET_WEBSERVER_VERSION_MAJOR    2
 #define ETHERNET_WEBSERVER_VERSION_MINOR    2
-#define ETHERNET_WEBSERVER_VERSION_PATCH    3
+#define ETHERNET_WEBSERVER_VERSION_PATCH    4
 
-#define ETHERNET_WEBSERVER_VERSION_INT      2002003
+#define ETHERNET_WEBSERVER_VERSION_INT      2002004
 
 /////////////////////////////////////////////////////////////////////////
 
