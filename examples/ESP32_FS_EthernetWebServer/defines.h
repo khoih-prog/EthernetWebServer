@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   defines.h
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -30,38 +30,38 @@
 #if USE_LITTLEFS
   //LittleFS has higher priority
   #include "FS.h"
-  
-    // Check cores/esp32/esp_arduino_version.h and cores/esp32/core_version.h
-    //#if ( ESP_ARDUINO_VERSION >= ESP_ARDUINO_VERSION_VAL(2, 0, 0) )  //(ESP_ARDUINO_VERSION_MAJOR >= 2)
-    #if ( defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 2) )
-      #if (_WIFIMGR_LOGLEVEL_ > 3)
-        #warning Using ESP32 Core 1.0.6 or 2.0.0+
-      #endif
-      
-      // The library has been merged into esp32 core from release 1.0.6
-      #include <LittleFS.h>       // https://github.com/espressif/arduino-esp32/tree/master/libraries/LittleFS
-      
-      FS* filesystem =      &LittleFS;
-      #define FileFS        LittleFS
-      #define FS_Name       "LittleFS"
-    #else
-      #if (_WIFIMGR_LOGLEVEL_ > 3)
-        #warning Using ESP32 Core 1.0.5-. You must install LITTLEFS library
-      #endif
-      
+
+  // Check cores/esp32/esp_arduino_version.h and cores/esp32/core_version.h
+  //#if ( ESP_ARDUINO_VERSION >= ESP_ARDUINO_VERSION_VAL(2, 0, 0) )  //(ESP_ARDUINO_VERSION_MAJOR >= 2)
+  #if ( defined(ESP_ARDUINO_VERSION_MAJOR) && (ESP_ARDUINO_VERSION_MAJOR >= 2) )
+    #if (_WIFIMGR_LOGLEVEL_ > 3)
+      #warning Using ESP32 Core 1.0.6 or 2.0.0+
+    #endif
+
+    // The library has been merged into esp32 core from release 1.0.6
+    #include <LittleFS.h>       // https://github.com/espressif/arduino-esp32/tree/master/libraries/LittleFS
+
+    FS* filesystem =      &LittleFS;
+    #define FileFS        LittleFS
+    #define FS_Name       "LittleFS"
+  #else
+    #if (_WIFIMGR_LOGLEVEL_ > 3)
+      #warning Using ESP32 Core 1.0.5-. You must install LITTLEFS library
+    #endif
+
     // The library has been merged into esp32 core from release 1.0.6
     #include <LITTLEFS.h>       // https://github.com/lorol/LITTLEFS
-    
+
     FS* filesystem =      &LITTLEFS;
     #define FileFS        LITTLEFS
     #define FS_Name       "LittleFS"
   #endif
-  
+
   #define USE_SPIFFS                  false
 #elif USE_SPIFFS
   #include "FS.h"
   #include <SPIFFS.h>
-  
+
   FS* filesystem =          &SPIFFS;
   #define FileFS            SPIFFS
   #define CurrentFileFS     "SPIFFS"
@@ -93,12 +93,12 @@
   // You can define here or customize for each board at same place with BOARD_TYPE
   // Check @ defined(SEEED_XIAO_M0)
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
-  
+
   // Only one if the following to be true
   #define USE_ETHERNET_GENERIC  true
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
-   
+
   #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
     #ifdef USE_CUSTOM_ETHERNET
       #undef USE_CUSTOM_ETHERNET
@@ -108,7 +108,7 @@
 
   #if USE_ETHERNET_GENERIC
     #include <soc/spi_pins.h>
-      
+
     // Optional SPI2
     //#define USING_SPI2                          true
 
@@ -117,27 +117,27 @@
       #define PIN_MOSI          HSPI_IOMUX_PIN_NUM_MOSI
       #define PIN_SCK           HSPI_IOMUX_PIN_NUM_CLK
       #define PIN_SS            HSPI_IOMUX_PIN_NUM_CS
-    
+
       #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
-      
+
     #else
-    
+
       #define PIN_MISO          MISO
       #define PIN_MOSI          MOSI
       #define PIN_SCK           SCK
       #define PIN_SS            SS
-    
+
       #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI"
-      
+
     #endif
 
     #define ETHERNET_LARGE_BUFFERS
 
     #define _ETG_LOGLEVEL_                      1
-    
+
     #include "Ethernet_Generic.h"
     #warning Using Ethernet_Generic lib
-   
+
   #elif USE_ETHERNET_ENC
     #include "EthernetENC.h"
     #warning Using EthernetENC lib
@@ -156,21 +156,21 @@
     #warning Using default Ethernet_Generic lib
     #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
   #endif
-  
+
   // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
   // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
   // Otherwise, standard Ethernet library will be used for W5x00
-  
+
 #elif USE_UIP_ETHERNET
-    #include "UIPEthernet.h"
-    #warning Using UIPEthernet library
-    #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
+  #include "UIPEthernet.h"
+  #warning Using UIPEthernet library
+  #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
 #endif      // #if !USE_UIP_ETHERNET
 
 #include <EthernetWebServer.h>
 
 #ifndef SHIELD_TYPE
-  #define SHIELD_TYPE     "Unknown Ethernet shield/library" 
+  #define SHIELD_TYPE     "Unknown Ethernet shield/library"
 #endif
 
 //#define BOARD_NAME    ARDUINO_BOARD

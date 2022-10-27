@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   defines.h
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -16,13 +16,13 @@
 #define _ETHERNET_WEBSERVER_LOGLEVEL_       3
 
 #if ( defined(CORE_TEENSY) && defined(__IMXRT1062__) )
- 
+
   #define USE_NATIVE_ETHERNET     true
   #define BOARD_NAME              "TEENSY 4.1"
-  
+
   #warning Using NativeEthernet lib for Teensy 4.1. Must also use Teensy Packages Patch or error
   #define SHIELD_TYPE             "NativeEthernet Library"
-  
+
 #else
   #error For Teensy 4.1 and NativeEthernet only
 #endif

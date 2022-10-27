@@ -2,7 +2,7 @@
   MQTTClient_Basic.ino - Dead simple MQTT Client for Ethernet shields
 
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -16,7 +16,7 @@
   - publishes "hello world" to the topic "outTopic"
   - subscribes to the topic "inTopic", printing out any messages
     it receives. NB - it assumes the received payloads are strings not binary
-    
+
   It will reconnect to the server if the connection is lost using a blocking
   reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
   achieve the same result without blocking the main loop.
@@ -37,17 +37,17 @@ const char *subTopic  = "MQTT_Sub";               // Topic to subcribe to
 
 //IPAddress mqttServer(52, 32, 182, 17);
 
-void callback(char* topic, byte* payload, unsigned int length) 
+void callback(char* topic, byte* payload, unsigned int length)
 {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
-  
-  for (unsigned int i = 0; i < length; i++) 
+
+  for (unsigned int i = 0; i < length; i++)
   {
     Serial.print((char)payload[i]);
   }
-  
+
   Serial.println();
 }
 
@@ -66,7 +66,7 @@ void reconnect()
     if (client.connect(ID, "try", "try"))
     {
       Serial.println("...connected");
-      
+
       // Once connected, publish an announcement...
       String data = "Hello from MQTTClient_SSL on " + String(BOARD_NAME);
 
@@ -75,7 +75,7 @@ void reconnect()
       //Serial.println("Published connection message successfully!");
       //Serial.print("Subcribed to: ");
       //Serial.println(subTopic);
-      
+
       // This is a workaround to address https://github.com/OPEnSLab-OSU/SSLClient/issues/9
       //ethClientSSL.flush();
       // ... and resubscribe
@@ -101,10 +101,13 @@ void setup()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
+
   while (!Serial);
 
-  Serial.print("\nStarting MQTTClient_Basic on "); Serial.print(BOARD_NAME);
-  Serial.print(" " ); Serial.println(SHIELD_TYPE);
+  Serial.print("\nStarting MQTTClient_Basic on ");
+  Serial.print(BOARD_NAME);
+  Serial.print(" " );
+  Serial.println(SHIELD_TYPE);
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_NATIVE_ETHERNET
@@ -134,18 +137,18 @@ void setup()
 
 #else
 
-  #if USING_DHCP
-    // Start the Ethernet connection, using DHCP
-    Serial.print("Initialize Ethernet using DHCP => ");
-    Ethernet.begin();
-    // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
-    delay(1000);
-  #else   
-    // Start the Ethernet connection, using static IP
-    Serial.print("Initialize Ethernet using static IP => ");
-    Ethernet.begin(myIP, myNetmask, myGW);
-    Ethernet.setDNSServerIP(mydnsServer);
-  #endif
+#if USING_DHCP
+  // Start the Ethernet connection, using DHCP
+  Serial.print("Initialize Ethernet using DHCP => ");
+  Ethernet.begin();
+  // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
+  delay(1000);
+#else
+  // Start the Ethernet connection, using static IP
+  Serial.print("Initialize Ethernet using static IP => ");
+  Ethernet.begin(myIP, myNetmask, myGW);
+  Ethernet.setDNSServerIP(mydnsServer);
+#endif
 
   if (!Ethernet.waitForLocalIP(5000))
   {
@@ -187,18 +190,18 @@ const char *pubData = data.c_str();
 
 unsigned long lastMsg = 0;
 
-void loop() 
+void loop()
 {
   static unsigned long now;
-  
-  if (!client.connected()) 
+
+  if (!client.connected())
   {
     reconnect();
   }
 
   // Sending Data
   now = millis();
-  
+
   if (now - lastMsg > MQTT_PUBLISH_INTERVAL_MS)
   {
     lastMsg = now;
@@ -211,6 +214,6 @@ void loop()
     Serial.print("Message Send : " + String(TOPIC) + " => ");
     Serial.println(data);
   }
-  
+
   client.loop();
 }

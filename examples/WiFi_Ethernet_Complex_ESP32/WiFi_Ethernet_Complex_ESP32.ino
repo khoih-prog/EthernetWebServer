@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   WiFi_Ethernet_Complex_ESP32.ino
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -25,12 +25,12 @@ WebServer wifiServer(80);
 
 const int led = 13;
 
-void handleEthernetRoot() 
+void handleEthernetRoot()
 {
   ethernetServer.send(200, "text/plain", "Hello from ESP32 Ethernet!");
 }
 
-void handleWiFiRoot() 
+void handleWiFiRoot()
 {
   wifiServer.send(200, "text/plain", "Hello from ESP32 WiFi!");
 }
@@ -63,11 +63,11 @@ void setup()
   /////////////////////////////////////////////
 
 #if USE_ETHERNET_GENERIC
-  ET_LOGWARN(F("=========== USE_ETHERNET_GENERIC ==========="));  
+  ET_LOGWARN(F("=========== USE_ETHERNET_GENERIC ==========="));
 #elif USE_ETHERNET_ESP8266
   ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
 #elif USE_ETHERNET_ENC
-  ET_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));  
+  ET_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));
 #else
   ET_LOGWARN(F("========================="));
 #endif
@@ -81,31 +81,31 @@ void setup()
 
 #if defined(ESP8266)
   // For ESP8266, change for other boards if necessary
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   D2    // For ESP8266
-  #endif
+#ifndef USE_THIS_SS_PIN
+#define USE_THIS_SS_PIN   D2    // For ESP8266
+#endif
 
   ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
 
-  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
-    // For ESP8266
-    // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
-    // Ethernet           0                 X            X            X            X        0
-    // Ethernet2          X                 X            X            X            X        0
-    // Ethernet3          X                 X            X            X            X        0
-    // EthernetLarge      X                 X            X            X            X        0
-    // Ethernet_ESP8266   0                 0            0            0            0        0
-    // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
-    // Must use library patch for Ethernet, EthernetLarge libraries
-    Ethernet.init (USE_THIS_SS_PIN);
+#if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+  // For ESP8266
+  // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+  // Ethernet           0                 X            X            X            X        0
+  // Ethernet2          X                 X            X            X            X        0
+  // Ethernet3          X                 X            X            X            X        0
+  // EthernetLarge      X                 X            X            X            X        0
+  // Ethernet_ESP8266   0                 0            0            0            0        0
+  // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+  // Must use library patch for Ethernet, EthernetLarge libraries
+  Ethernet.init (USE_THIS_SS_PIN);
 
-  #elif USE_CUSTOM_ETHERNET
-  
-    // You have to add initialization for your Custom Ethernet here
-    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    Ethernet.init(USE_THIS_SS_PIN);
-  
-  #endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+#elif USE_CUSTOM_ETHERNET
+
+  // You have to add initialization for your Custom Ethernet here
+  // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+  Ethernet.init(USE_THIS_SS_PIN);
+
+#endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
 
 #elif defined(ESP32)
 
@@ -117,28 +117,28 @@ void setup()
   //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
   //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
 
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   5   //22    // For ESP32
-  #endif
+#ifndef USE_THIS_SS_PIN
+#define USE_THIS_SS_PIN   5   //22    // For ESP32
+#endif
 
   ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
 
   // For other boards, to change if necessary
-  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
-    // Must use library patch for Ethernet, EthernetLarge libraries
-    // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
-    // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
-  
-    //Ethernet.setCsPin (USE_THIS_SS_PIN);
-    Ethernet.init (USE_THIS_SS_PIN);
+#if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+  // Must use library patch for Ethernet, EthernetLarge libraries
+  // ESP32 => GPIO2,4,5,13,15,21,22 OK with Ethernet, Ethernet2, EthernetLarge
+  // ESP32 => GPIO2,4,5,15,21,22 OK with Ethernet3
 
-  #elif USE_CUSTOM_ETHERNET
-  
-    // You have to add initialization for your Custom Ethernet here
-    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    Ethernet.init(USE_THIS_SS_PIN); 
-  
-  #endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+  //Ethernet.setCsPin (USE_THIS_SS_PIN);
+  Ethernet.init (USE_THIS_SS_PIN);
+
+#elif USE_CUSTOM_ETHERNET
+
+  // You have to add initialization for your Custom Ethernet here
+  // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+  Ethernet.init(USE_THIS_SS_PIN);
+
+#endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
 
 #endif    //defined(ESP8266)
 
@@ -175,17 +175,17 @@ void setup()
   //////////////////////////////////
 
   wifiServer.on("/", handleWiFiRoot);
-  
+
   wifiServer.begin();
 
   Serial.print(F("HTTP WiFiWebServer is @ IP : "));
   Serial.println(WiFi.localIP());
 }
 
-void loop() 
+void loop()
 {
   // listen for incoming clients
   ethernetServer.handleClient();
-  
+
   wifiServer.handleClient();
 }

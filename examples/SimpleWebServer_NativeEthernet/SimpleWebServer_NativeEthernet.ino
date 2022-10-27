@@ -46,9 +46,9 @@
 byte mac[] = { 0xFE, 0xED, 0xDE, 0xAD, 0xBE, 0xEF }; //physical mac address
 
 #if USING_STATIC_IP
-IPAddress ip        (192, 168, 2, 222);
-IPAddress gateway   (192, 168, 2, 1);
-IPAddress subnet    (255, 255, 255, 0);
+  IPAddress ip        (192, 168, 2, 222);
+  IPAddress gateway   (192, 168, 2, 1);
+  IPAddress subnet    (255, 255, 255, 0);
 #endif
 
 EthernetServer server(80); //server port
@@ -66,7 +66,7 @@ String readString;
 void handleRoot()
 {
 #define BUFFER_SIZE     512
-  
+
   char temp[BUFFER_SIZE];
   int sec = millis() / 1000;
   int min = sec / 60;
@@ -103,7 +103,8 @@ void drawGraph()
 
   if (out.length() == 0)
   {
-    Serial.print(F("String Len = 0, extend to")); Serial.println(ORIGINAL_STR_LEN);
+    Serial.print(F("String Len = 0, extend to"));
+    Serial.println(ORIGINAL_STR_LEN);
     out.reserve(ORIGINAL_STR_LEN);
   }
 
@@ -112,7 +113,7 @@ void drawGraph()
            "<g stroke=\"blue\">\n");
 
   char temp[70];
-  
+
   int y = rand() % 130;
 
   for (int x = 10; x < 300; x += 10)
@@ -122,22 +123,25 @@ void drawGraph()
     out += temp;
     y = y2;
   }
-  
+
   out += F("</g>\n</svg>\n");
 
 #if (LOCAL_DEBUG > 1)
-  Serial.print(F("String Len = ")); Serial.println(out.length());
+  Serial.print(F("String Len = "));
+  Serial.println(out.length());
 #endif
 
   if (out.length() > previousStrLen)
   {
-#if LOCAL_DEBUG    
-    Serial.print(F("String Len > ")); Serial.print(previousStrLen);
-    Serial.print(F(", extend to")); Serial.println(out.length() + 48);
+#if LOCAL_DEBUG
+    Serial.print(F("String Len > "));
+    Serial.print(previousStrLen);
+    Serial.print(F(", extend to"));
+    Serial.println(out.length() + 48);
 #endif
 
     previousStrLen = out.length() + 48;
-    
+
     out.reserve(previousStrLen);
   }
   else
@@ -152,6 +156,7 @@ void setup()
 {
   //enable serial data print
   Serial.begin(115200);
+
   while (!Serial);
 
   Serial.print("SimpleWebServer_NativeEthernet on ");

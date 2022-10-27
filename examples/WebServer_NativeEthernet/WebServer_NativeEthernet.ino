@@ -1,8 +1,8 @@
 /****************************************************************************************************************************
   WebServer_NativeEthernet.ino - Simple Arduino web server sample for Ethernet shield
-  
+
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -26,6 +26,7 @@ EthernetServer server(80);
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial);
 
   Serial.print("\nStarting WebServer_NativeEthernet on " + String(BOARD_NAME));
@@ -38,19 +39,19 @@ void setup()
 
   Serial.print(F("Using mac index = "));
   Serial.println(index);
-  
+
 #if USING_STATIC_IP
   // Static IP
   //Ethernet.begin(mac, ip, gateway, subnet);
   Ethernet.begin(mac[index], ip);
-  
+
   delay(2000);
 #else
   // DHCP
   Ethernet.begin(mac[index]);
 
   delay(1000);
-#endif  
+#endif
 
   Serial.print(F("EthernetWebServer started @ IP address: "));
   Serial.println(Ethernet.localIP());
@@ -78,6 +79,7 @@ void loop()
       {
         char c = client.read();
         Serial.write(c);
+
         // if you've gotten to the end of the line (received a newline
         // character) and the line is blank, the http request has ended,
         // so you can send a reply
@@ -120,6 +122,7 @@ void loop()
         }
       }
     }
+
     // give the web browser time to receive the data
     delay(10);
 

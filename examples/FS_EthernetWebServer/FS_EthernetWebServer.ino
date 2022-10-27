@@ -52,7 +52,7 @@ void check_status()
 #define HEARTBEAT_INTERVAL    10000L
 
   current_millis = millis();
-  
+
   // Print hearbeat every HEARTBEAT_INTERVAL (10) seconds.
   if ((current_millis > checkstatus_timeout) || (checkstatus_timeout == 0))
   {
@@ -136,12 +136,14 @@ String getContentType(const String& filename)
   {
     return "application/x-gzip";
   }
+
   return "text/plain";
 }
 
 bool handleFileRead(String path)
 {
   Serial.println("handleFileRead: " + path);
+
   if (path.endsWith("/"))
   {
     path += "index.htm";
@@ -162,6 +164,7 @@ bool handleFileRead(String path)
     file.close();
     return true;
   }
+
   return false;
 }
 
@@ -243,7 +246,8 @@ void handleFileUpload()
       filename = "/" + filename;
     }
 
-    Serial.print(F("handleFileUpload Name: ")); Serial.println(filename);
+    Serial.print(F("handleFileUpload Name: "));
+    Serial.println(filename);
     fsUploadFile = filesystem->open(filename, "w");
     filename.clear();
   }
@@ -263,13 +267,14 @@ void handleFileUpload()
       fsUploadFile.close();
     }
 
-    Serial.print(F("handleFileUpload Size: ")); Serial.println(upload.totalSize);
+    Serial.print(F("handleFileUpload Size: "));
+    Serial.println(upload.totalSize);
   }
 }
 
-void handleFileList() 
+void handleFileList()
 {
-  if (!server.hasArg("dir")) 
+  if (!server.hasArg("dir"))
   {
     server.send(500, "text/plain", "BAD ARGS");
     return;
@@ -281,30 +286,30 @@ void handleFileList()
   path.clear();
 
   String output = "[";
-  
-  while (dir.next()) 
+
+  while (dir.next())
   {
     File entry = dir.openFile("r");
-    
-    if (output != "[") 
+
+    if (output != "[")
     {
       output += ',';
     }
-    
+
     bool isDir = false;
     output += "{\"type\":\"";
     output += (isDir) ? "dir" : "file";
     output += "\",\"name\":\"";
-    
-    if (entry.name()[0] == '/') 
+
+    if (entry.name()[0] == '/')
     {
       output += &(entry.name()[1]);
-    } 
-    else 
+    }
+    else
     {
       output += entry.name();
     }
-    
+
     output += "\"}";
     entry.close();
   }
@@ -340,14 +345,14 @@ void listDir()
 {
   Dir dir = filesystem->openDir("/");
   Serial.println(F("Opening / directory"));
-  
-  while (dir.next()) 
+
+  while (dir.next())
   {
     String fileName = dir.fileName();
     size_t fileSize = dir.fileSize();
     Serial.printf("FS File: %s, size: %s\n", fileName.c_str(), formatBytes(fileSize).c_str());
   }
-  
+
   Serial.println();
 }
 
@@ -381,16 +386,16 @@ void initWebserver()
 
   //called when the url is not defined here
   //use it to load content from SPIFFS
-  server.onNotFound([]() 
+  server.onNotFound([]()
   {
-    if (!handleFileRead(server.uri())) 
+    if (!handleFileRead(server.uri()))
     {
       server.send(404, "text/plain", "FileNotFound");
     }
   });
 
   //get heap status, analog input value and all GPIO statuses in one json call
-  server.on("/all", HTTP_GET, []() 
+  server.on("/all", HTTP_GET, []()
   {
     String json('{');
     json += "\"heap\":" + String(ESP.getFreeHeap());
@@ -422,21 +427,23 @@ void initWebserver()
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial);
 
   delay(200);
 
   Serial.print("\nStarting FS_EthernetWebServer on " + String(BOARD_TYPE));
-  Serial.print(" using "); Serial.println(FS_Name);
+  Serial.print(" using ");
+  Serial.println(FS_Name);
   Serial.println("With " + String(SHIELD_TYPE));
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_ETHERNET_GENERIC
-  ET_LOGWARN(F("=========== USE_ETHERNET_GENERIC ==========="));  
+  ET_LOGWARN(F("=========== USE_ETHERNET_GENERIC ==========="));
 #elif USE_ETHERNET_ESP8266
   ET_LOGWARN(F("=========== USE_ETHERNET_ESP8266 ==========="));
 #elif USE_ETHERNET_ENC
-  ET_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));  
+  ET_LOGWARN(F("=========== USE_ETHERNET_ENC ==========="));
 #else
   ET_LOGWARN(F("========================="));
 #endif
@@ -449,31 +456,31 @@ void setup()
   ET_LOGWARN(F("========================="));
 
   // For ESP8266, change for other boards if necessary
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   D2    // For ESP8266
-  #endif
+#ifndef USE_THIS_SS_PIN
+#define USE_THIS_SS_PIN   D2    // For ESP8266
+#endif
 
   ET_LOGWARN1(F("ESP8266 setCsPin:"), USE_THIS_SS_PIN);
 
-  #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
-    // For ESP8266
-    // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
-    // Ethernet           0                 X            X            X            X        0
-    // Ethernet2          X                 X            X            X            X        0
-    // Ethernet3          X                 X            X            X            X        0
-    // EthernetLarge      X                 X            X            X            X        0
-    // Ethernet_ESP8266   0                 0            0            0            0        0
-    // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
-    // Must use library patch for Ethernet, EthernetLarge libraries
-    Ethernet.init (USE_THIS_SS_PIN);
+#if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+  // For ESP8266
+  // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+  // Ethernet           0                 X            X            X            X        0
+  // Ethernet2          X                 X            X            X            X        0
+  // Ethernet3          X                 X            X            X            X        0
+  // EthernetLarge      X                 X            X            X            X        0
+  // Ethernet_ESP8266   0                 0            0            0            0        0
+  // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+  // Must use library patch for Ethernet, EthernetLarge libraries
+  Ethernet.init (USE_THIS_SS_PIN);
 
-  #elif USE_CUSTOM_ETHERNET
-  
-    // You have to add initialization for your Custom Ethernet here
-    // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
-    Ethernet.init(USE_THIS_SS_PIN);
-  
-  #endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
+#elif USE_CUSTOM_ETHERNET
+
+  // You have to add initialization for your Custom Ethernet here
+  // This is just an example to setCSPin to USE_THIS_SS_PIN, and can be not correct and enough
+  Ethernet.init(USE_THIS_SS_PIN);
+
+#endif  //( USE_ETHERNET_GENERIC || USE_ETHERNET_ENC )
 
   // start the ethernet connection and the server:
   // Use DHCP dynamic IP and random mac

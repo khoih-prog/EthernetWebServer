@@ -1,29 +1,29 @@
 /****************************************************************************************************************************
   AdvancedWebServer_ESP32_SPI2.h - Dead simple web-server for Ethernet shields
-  
+
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
-  
+
   Copyright (c) 2015, Majenko Technologies
   All rights reserved.
-  
+
   Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
-  
+
   Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
-  
+
   Redistributions in binary form must reproduce the above copyright notice, this
   list of conditions and the following disclaimer in the documentation and/or
   other materials provided with the distribution.
-  
+
   Neither the name of Majenko Technologies nor the names of its
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
-  
+
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
   WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -50,7 +50,7 @@ int reqCount = 0;                // number of requests received
 void handleRoot()
 {
 #define BUFFER_SIZE     512
-  
+
   char temp[BUFFER_SIZE];
   int sec = millis() / 1000;
   int min = sec / 60;
@@ -83,7 +83,7 @@ body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Col
 void handleNotFound()
 {
   String message = F("File Not Found\n\n");
-  
+
   message += F("URI: ");
   message += server.uri();
   message += F("\nMethod: ");
@@ -91,12 +91,12 @@ void handleNotFound()
   message += F("\nArguments: ");
   message += server.args();
   message += F("\n");
-  
+
   for (uint8_t i = 0; i < server.args(); i++)
   {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
-  
+
   server.send(404, F("text/plain"), message);
 }
 
@@ -118,7 +118,7 @@ void drawGraph()
            "<g stroke=\"blue\">\n");
 
   char temp[70];
-  
+
   int y = rand() % 130;
 
   for (int x = 10; x < 300; x += 10)
@@ -128,7 +128,7 @@ void drawGraph()
     out += temp;
     y = y2;
   }
-  
+
   out += F("</g>\n</svg>\n");
 
   ET_LOGDEBUG1(F("String Len = "), out.length());
@@ -138,7 +138,7 @@ void drawGraph()
     ET_LOGERROR3(F("String Len > "), previousStrLen, F(", extend to"), out.length() + 48);
 
     previousStrLen = out.length() + 48;
-    
+
     out.reserve(previousStrLen);
   }
   else
@@ -150,12 +150,15 @@ void drawGraph()
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial);
 
   delay(1000);
 
-  Serial.print("\nStarting AdvancedWebServer_ESP32_SPI2 on "); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
+  Serial.print("\nStarting AdvancedWebServer_ESP32_SPI2 on ");
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
   // You can use Ethernet.init(pin) to configure the CS pin
@@ -166,9 +169,9 @@ void setup()
   //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
   //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
 
-  #ifndef USE_THIS_SS_PIN
-    #define USE_THIS_SS_PIN   5   //22    // For ESP32
-  #endif
+#ifndef USE_THIS_SS_PIN
+#define USE_THIS_SS_PIN   5   //22    // For ESP32
+#endif
 
   ETG_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);
 
@@ -178,7 +181,7 @@ void setup()
 
   //Ethernet.setCsPin (USE_THIS_SS_PIN);
   Ethernet.init (USE_THIS_SS_PIN);
-  
+
   // start the ethernet connection and the server:
   // Use DHCP dynamic IP and random mac
   uint16_t index = millis() % NUMBER_OF_MAC;
@@ -208,9 +211,12 @@ void setup()
 
   if (Ethernet.getChip() == w5500)
   {
-    Serial.print(F("Speed: "));    Serial.print(Ethernet.speedReport());
-    Serial.print(F(", Duplex: ")); Serial.print(Ethernet.duplexReport());
-    Serial.print(F(", Link status: ")); Serial.println(Ethernet.linkReport());
+    Serial.print(F("Speed: "));
+    Serial.print(Ethernet.speedReport());
+    Serial.print(F(", Duplex: "));
+    Serial.print(Ethernet.duplexReport());
+    Serial.print(F(", Link status: "));
+    Serial.println(Ethernet.linkReport());
   }
 
   server.on(F("/"), handleRoot);

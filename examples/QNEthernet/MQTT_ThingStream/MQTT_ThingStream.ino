@@ -2,7 +2,7 @@
   MQTT_ThingStream.ino - Dead simple MQTT Client for Ethernet shields
 
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -35,28 +35,28 @@ const char my_key[]   = "FIXME";
 
 #if USING_THINGSTREAM_IO
 
-const char *MQTT_PREFIX_TOPIC   = "esp32-sniffer/";
-const char *MQTT_ANNOUNCE_TOPIC = "/status";
-const char *MQTT_CONTROL_TOPIC  = "/control";
-const char *MQTT_BLE_TOPIC      = "/ble";
+  const char *MQTT_PREFIX_TOPIC   = "esp32-sniffer/";
+  const char *MQTT_ANNOUNCE_TOPIC = "/status";
+  const char *MQTT_CONTROL_TOPIC  = "/control";
+  const char *MQTT_BLE_TOPIC      = "/ble";
 
-const char *MQTT_SERVER     = "mqtt.thingstream.io";
-const char *MQTT_USER       = "MQTT_USER";
-const char *MQTT_PASS       = "MQTT_PASS";
-const char *MQTT_CLIENT_ID  = "MQTT_CLIENT_ID";
+  const char *MQTT_SERVER     = "mqtt.thingstream.io";
+  const char *MQTT_USER       = "MQTT_USER";
+  const char *MQTT_PASS       = "MQTT_PASS";
+  const char *MQTT_CLIENT_ID  = "MQTT_CLIENT_ID";
 
-String topic    = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
-String subTopic = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
+  String topic    = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
+  String subTopic = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
 
 #else
 
-const char* MQTT_SERVER = "broker.emqx.io";        // Broker address
+  const char* MQTT_SERVER = "broker.emqx.io";        // Broker address
 
-//IPAddress MQTT_SERVER(52, 32, 182, 17);
+  //IPAddress MQTT_SERVER(52, 32, 182, 17);
 
-const char*  ID         = "MQTTClient_SSL-Client";  // Name of our device, must be unique
-String      topic       = "Teensy41_Pub";              // Topic to subcribe to
-String      subTopic    = "Teensy41_Sub";              // Topic to subcribe to
+  const char*  ID         = "MQTTClient_SSL-Client";  // Name of our device, must be unique
+  String      topic       = "Teensy41_Pub";              // Topic to subcribe to
+  String      subTopic    = "Teensy41_Sub";              // Topic to subcribe to
 
 #endif
 
@@ -77,24 +77,24 @@ PubSubClient client(MQTT_SERVER, MQTT_PORT, mqtt_receive_callback, ethClient);
 /*
    Called whenever a payload is received from a subscribed MQTT topic
 */
-void mqtt_receive_callback(char* topic, byte* payload, unsigned int length) 
+void mqtt_receive_callback(char* topic, byte* payload, unsigned int length)
 {
   Serial.print("MQTT Message receive [");
   Serial.print(topic);
   Serial.print("] ");
-  
-  for (unsigned int i = 0; i < length; i++) 
+
+  for (unsigned int i = 0; i < length; i++)
   {
     Serial.print((char)payload[i]);
   }
-  
+
   Serial.println();
 }
 
-void reconnect() 
+void reconnect()
 {
   // Loop until we're reconnected
-  while (!client.connected()) 
+  while (!client.connected())
   {
     Serial.print("Attempting MQTT connection to ");
     Serial.println(MQTT_SERVER);
@@ -107,20 +107,20 @@ void reconnect()
     int connect_status = client.connect(ID);
 #endif
 
-    if (connect_status)                                
+    if (connect_status)
     {
       Serial.println("...connected");
-      
+
       // Once connected, publish an announcement...
       String data = "Hello from MQTTClient_SSL on " + String(BOARD_NAME);
 
       client.publish(topic.c_str(), data.c_str());
 
       Serial.println("Published connection message successfully!");
-     
+
       Serial.print("Subcribed to: ");
       Serial.println(subTopic);
-      
+
       // This is a workaround to address https://github.com/OPEnSLab-OSU/SSLClient/issues/9
       //ethClientSSL.flush();
       // ... and resubscribe
@@ -129,13 +129,13 @@ void reconnect()
       client.subscribe(topic.c_str());
       // This is a workaround to address https://github.com/OPEnSLab-OSU/SSLClient/issues/9
       //ethClientSSL.flush();
-    } 
-    else 
+    }
+    else
     {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
-      
+
       // Wait 5 seconds before retrying
       delay(5000);
     }
@@ -146,10 +146,13 @@ void setup()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
+
   while (!Serial);
 
-  Serial.print("\nStarting MQTT_ThingStream on "); Serial.print(BOARD_NAME);
-  Serial.print(" " ); Serial.println(SHIELD_TYPE);
+  Serial.print("\nStarting MQTT_ThingStream on ");
+  Serial.print(BOARD_NAME);
+  Serial.print(" " );
+  Serial.println(SHIELD_TYPE);
   Serial.println(ETHERNET_WEBSERVER_VERSION);
 
 #if USE_NATIVE_ETHERNET
@@ -179,18 +182,18 @@ void setup()
 
 #else
 
-  #if USING_DHCP
-    // Start the Ethernet connection, using DHCP
-    Serial.print("Initialize Ethernet using DHCP => ");
-    Ethernet.begin();
-    // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
-    delay(1000);
-  #else   
-    // Start the Ethernet connection, using static IP
-    Serial.print("Initialize Ethernet using static IP => ");
-    Ethernet.begin(myIP, myNetmask, myGW);
-    Ethernet.setDNSServerIP(mydnsServer);
-  #endif
+#if USING_DHCP
+  // Start the Ethernet connection, using DHCP
+  Serial.print("Initialize Ethernet using DHCP => ");
+  Ethernet.begin();
+  // give the Ethernet shield minimum 1 sec for DHCP and 2 secs for staticP to initialize:
+  delay(1000);
+#else
+  // Start the Ethernet connection, using static IP
+  Serial.print("Initialize Ethernet using static IP => ");
+  Ethernet.begin(myIP, myNetmask, myGW);
+  Ethernet.setDNSServerIP(mydnsServer);
+#endif
 
   if (!Ethernet.waitForLocalIP(5000))
   {
@@ -222,7 +225,7 @@ void setup()
   // combined length of clientId, username and password exceed this use the
   // following to increase the buffer size:
   //client.setBufferSize(256);
-  
+
   Serial.println("***************************************");
   Serial.println(topic);
   Serial.println("***************************************");
@@ -233,18 +236,18 @@ void setup()
 String data         = "Hello from MQTT_ThingStream on " + String(BOARD_NAME) + " with " + String(SHIELD_TYPE);
 const char *pubData = data.c_str();
 
-void loop() 
+void loop()
 {
   static unsigned long now;
-  
-  if (!client.connected()) 
+
+  if (!client.connected())
   {
     reconnect();
   }
 
   // Sending Data
   now = millis();
-  
+
   if (now - lastMsg > MQTT_PUBLISH_INTERVAL_MS)
   {
     lastMsg = now;
@@ -257,6 +260,6 @@ void loop()
     Serial.print("MQTT Message Send : " + topic + " => ");
     Serial.println(data);
   }
-  
+
   client.loop();
 }

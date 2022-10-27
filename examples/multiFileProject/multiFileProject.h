@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   multiFileProject.h
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -11,9 +11,9 @@
 
 #pragma once
 
-#if defined(__AVR_AVR128DA48__) 
+#if defined(__AVR_AVR128DA48__)
   #define SerialDebug   Serial1
-#elif defined(__AVR_AVR128DB48__) 
+#elif defined(__AVR_AVR128DB48__)
   #define SerialDebug   Serial3
 #else
   // standard Serial

@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   defines.h
   EthernetWebServer is a library for the Ethernet shields to run WebServer
-  
+
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
@@ -67,13 +67,13 @@
   // You can define here or customize for each board at same place with BOARD_TYPE
   // Check @ defined(SEEED_XIAO_M0)
   //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
-  
+
   // Only one if the following to be true
   #define USE_ETHERNET_GENERIC  true
-  #define USE_ETHERNET_ESP8266  false 
+  #define USE_ETHERNET_ESP8266  false
   #define USE_ETHERNET_ENC      false
   #define USE_CUSTOM_ETHERNET   false
-    
+
   #if ( USE_ETHERNET_GENERIC || USE_ETHERNET_ESP8266 || USE_ETHERNET_ENC )
     #ifdef USE_CUSTOM_ETHERNET
       #undef USE_CUSTOM_ETHERNET
@@ -83,19 +83,19 @@
 
   #if USE_ETHERNET_GENERIC
 
-    #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library"  
+    #define SHIELD_TYPE           "W5x00 using Ethernet_Generic Library"
 
     #define ETHERNET_LARGE_BUFFERS
 
     #define _ETG_LOGLEVEL_                      1
-    
+
     #include "Ethernet_Generic.h"
     #warning Using Ethernet_Generic lib
-   
+
   #elif USE_ETHERNET_ESP8266
     #include "Ethernet_ESP8266.h"
-    #warning Using Ethernet_ESP8266 lib 
-    #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library" 
+    #warning Using Ethernet_ESP8266 lib
+    #define SHIELD_TYPE           "W5x00 using Ethernet_ESP8266 Library"
   #elif USE_ETHERNET_ENC
     #include "EthernetENC.h"
     #warning Using EthernetENC lib
@@ -114,21 +114,21 @@
     #warning Using default Ethernet_Generic lib
     #define SHIELD_TYPE           "W5x00 using default Ethernet_Generic Library"
   #endif
-  
+
   // Ethernet_Shield_W5200, EtherCard, EtherSia not supported
   // Select just 1 of the following #include if uncomment #define USE_CUSTOM_ETHERNET
   // Otherwise, standard Ethernet library will be used for W5x00
 
 #elif USE_UIP_ETHERNET
-    #include "UIPEthernet.h"
-    #warning Using UIPEthernet library
-    #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
+  #include "UIPEthernet.h"
+  #warning Using UIPEthernet library
+  #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
 #endif      // #if !USE_UIP_ETHERNET
 
 #include <EthernetWebServer.h>
 
 #ifndef SHIELD_TYPE
-  #define SHIELD_TYPE     "Unknown Ethernet shield/library" 
+  #define SHIELD_TYPE     "Unknown Ethernet shield/library"
 #endif
 
 // Enter a MAC address and IP address for your controller below.
