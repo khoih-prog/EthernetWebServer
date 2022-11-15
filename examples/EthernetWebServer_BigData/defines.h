@@ -29,9 +29,7 @@
 #define USING_SPI2                          false   //true
 
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
-
-  #define MULTIPLY_FACTOR       4
-  
+ 
 	#if defined(BOARD_NAME)
 		#undef BOARD_NAME
 	#endif
@@ -59,9 +57,7 @@
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
       || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
-
-  #define MULTIPLY_FACTOR       2
-      
+     
   #if defined(ETHERNET_USE_SAMD)
   	#undef ETHERNET_USE_SAMD
   #endif
@@ -74,9 +70,7 @@
      defined(NRF52840_LED_GLASSES) || defined(MDBT50Q_RX) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) || \
      defined(ARDUINO_Seeed_XIAO_nRF52840) || defined(ARDUINO_Seeed_XIAO_nRF52840_Sense) || \
      defined(ARDUINO_SEEED_XIAO_NRF52840) || defined(ARDUINO_SEEED_XIAO_NRF52840_SENSE) )
-
-  #define MULTIPLY_FACTOR       2
-     
+    
   #if defined(ETHERNET_USE_NRF528XX)
   	#undef ETHERNET_USE_NRF528XX
   #endif
@@ -91,9 +85,7 @@
 #endif
 
 #if ( defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) )
-
-  #define MULTIPLY_FACTOR       4
-  
+ 
 	#if defined(ETHERNET_USE_RPIPICO)
 		#undef ETHERNET_USE_RPIPICO
 	#endif
@@ -287,9 +279,7 @@
 	#endif
 
 #elif ( defined(CORE_TEENSY) )
-
-  #define MULTIPLY_FACTOR       4
-  
+ 
 	// Default pin 10 to SS/CS
 	#define USE_THIS_SS_PIN       SS    //10
 
@@ -324,8 +314,6 @@
 	#endif
 
 #elif ( defined(ESP8266) )
-
-  #define MULTIPLY_FACTOR       6   //4
   
 	// For ESP8266
   #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
@@ -336,8 +324,6 @@
 	#define BOARD_TYPE      ARDUINO_BOARD
 
 #elif ( defined(ESP32) )
-
-  #define MULTIPLY_FACTOR       4
   
 	// For ESP32
   #if (_ETHERNET_WEBSERVER_LOGLEVEL_ > 3)
@@ -349,8 +335,6 @@
 	#define W5500_RST_PORT   21
 
 #elif ETHERNET_USE_RPIPICO
-
-  #define MULTIPLY_FACTOR       4
 
 	// Default pin 17 to SS/CS
 	#if defined(ARDUINO_ARCH_MBED)
@@ -394,8 +378,6 @@
 
 #elif defined(DXCORE)
 
-  #define MULTIPLY_FACTOR       1
-
 	// Default pin 10 to SS/CS
 	#define USE_THIS_SS_PIN       SS
 
@@ -408,9 +390,7 @@
 	#endif
 
 #else
-
-  #define MULTIPLY_FACTOR       1
-  
+ 
 	// For Mega, etc.
 	// Default pin SS/CS,if no SS pin, use pin 10
 	#define USE_THIS_SS_PIN       10
@@ -564,16 +544,6 @@
 #endif
 #define SHIELD_TYPE           "ENC28J60 using UIPEthernet Library"
 #endif      // #if !USE_UIP_ETHERNET
-
-////////////////////////////
-
-#if !defined(MULTIPLY_FACTOR)
-  #define MULTIPLY_FACTOR       1
-#elif (MULTIPLY_FACTOR > 6)
-  // Limit to max 4, for Ethernet W5500 buffer of 8K
-  #undef  MULTIPLY_FACTOR
-  #define MULTIPLY_FACTOR       6
-#endif
 
 ////////////////////////////
 

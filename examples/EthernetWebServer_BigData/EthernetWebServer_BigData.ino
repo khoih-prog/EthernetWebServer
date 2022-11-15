@@ -1,83 +1,83 @@
 /****************************************************************************************************************************
-  AdvancedWebServer.h - Dead simple web-server for Ethernet shields
+  EthernetWebServer_BigData.ino
 
   EthernetWebServer is a library for the Ethernet shields to run WebServer
 
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Built by Khoi Hoang https://github.com/khoih-prog/EthernetWebServer
   Licensed under MIT license
-
-  Copyright (c) 2015, Majenko Technologies
-  All rights reserved.
-
-  Redistribution and use in source and binary forms, with or without modification,
-  are permitted provided that the following conditions are met:
-
-  Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-
-  Redistributions in binary form must reproduce the above copyright notice, this
-  list of conditions and the following disclaimer in the documentation and/or
-  other materials provided with the distribution.
-
-  Neither the name of Majenko Technologies nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
-
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************************************************************/
-/*
-   The Arduino board communicates with the shield using the SPI bus. This is on digital pins 11, 12, and 13 on the Uno
-   and pins 50, 51, and 52 on the Mega. On both boards, pin 10 is used as SS. On the Mega, the hardware SS pin, 53,
-   is not used to select the Ethernet controller chip, but it must be kept as an output or the SPI interface won't work.
-*/
 
 #include "defines.h"
 
 EthernetWebServer server(80);
 
-int reqCount = 0;                // number of requests received
+// Adjust according to your board's heap size. Too large => crash
+#if (ESP32 || ESP8266) || (ETHERNET_USE_NRF528XX) || (ETHERNET_USE_RPIPICO)
+  #define MULTIPLY_FACTOR       3.0f
+  
+#else
+  #define MULTIPLY_FACTOR       1.0f
+#endif
 
-void handleRoot()
+// In bytes
+#define STRING_SIZE         (8192 * MULTIPLY_FACTOR)
+
+#define BUFFER_SIZE         512
+char temp[BUFFER_SIZE];
+
+void createPage(String &pageInput)
 {
-#define BUFFER_SIZE     512
-
-  char temp[BUFFER_SIZE];
   int sec = millis() / 1000;
   int min = sec / 60;
   int hr = min / 60;
   int day = hr / 24;
 
-  hr = hr % 24;
-
   snprintf(temp, BUFFER_SIZE - 1,
            "<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
-<title>%s</title>\
+<title>EthernetWebServer_BigData-%s</title>\
 <style>\
 body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
 </style>\
 </head>\
 <body>\
-<h1>Hello from %s</h1>\
-<h3>running EthernetWebServer</h3>\
-<h3>on %s</h3>\
+<h2>EthernetWebServer_W5500!</h2>\
+<h3>running on %s</h3>\
 <p>Uptime: %d d %02d:%02d:%02d</p>\
-<img src=\"/test.svg\" />\
 </body>\
-</html>", BOARD_NAME, BOARD_NAME, SHIELD_TYPE, day, hr, min % 60, sec % 60);
+</html>", BOARD_NAME, BOARD_NAME, day, hr % 24, min % 60, sec % 60);
 
-  server.send(200, F("text/html"), temp);
+  pageInput = temp;
+}
+
+String out;
+
+void handleRoot()
+{
+  //out.reserve(STRING_SIZE);
+
+  // clear the String to start over
+  out = String();
+
+  createPage(out);
+
+  out += "<html><body>\r\n<table><tr><th>INDEX</th><th>DATA</th></tr>";
+
+  for (uint16_t lineIndex = 0; lineIndex < (100 * MULTIPLY_FACTOR); lineIndex++)
+  {
+    out += "<tr><td>";
+    out += String(lineIndex);
+    out += "</td><td>";
+    out += "WiFiWebServer_BigData_ABCDEFGHIJKLMNOPQRSTUVWXYZ</td></tr>";
+  }
+
+  out += "</table></body></html>\r\n";
+
+  Serial.print(F("String Len = ")); Serial.println(out.length());
+
+  server.send(200, F("text/html"), out);
 }
 
 void handleNotFound()
@@ -98,77 +98,6 @@ void handleNotFound()
   }
 
   server.send(404, F("text/plain"), message);
-}
-
-#define ORIGINAL_STR_LEN        (2048 * MULTIPLY_FACTOR)
-
-void drawGraph()
-{
-  static String out;
-  static uint16_t previousStrLen = ORIGINAL_STR_LEN;
-
-  if (out.length() == 0)
-  {
-    ET_LOGWARN1(F("String Len = 0, extend to"), ORIGINAL_STR_LEN);
-    out.reserve(ORIGINAL_STR_LEN);
-  }
-
-                 
-#if (MULTIPLY_FACTOR == 2)
-
-  out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"610\" height=\"150\">\n" \
-           "<rect width=\"610\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-           "<g stroke=\"blue\">\n");
-
-#elif (MULTIPLY_FACTOR == 4)
-
-  out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"1210\" height=\"150\">\n" \
-           "<rect width=\"1210\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-           "<g stroke=\"blue\">\n");            
-
-#elif (MULTIPLY_FACTOR == 6)
-
-  out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"1810\" height=\"150\">\n" \
-           "<rect width=\"1810\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-           "<g stroke=\"blue\">\n");  
-
-#else   // (MULTIPLY_FACTOR == 1)
-
-  out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n" \
-           "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-           "<g stroke=\"blue\">\n");  
-           
-#endif
-
-  char temp[70];
-
-  int y = rand() % 130;
-
-  //for (int x = 10; x < 300; x += 10)
-  for (int x = 10; x < (300 * MULTIPLY_FACTOR); x += 10)
-  {
-    int y2 = rand() % 130;
-    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"2\" />\n", x, 140 - y, x + 10, 140 - y2);
-    out += temp;
-    y = y2;
-  }
-
-  out += F("</g>\n</svg>\n");
-
-  ET_LOGERROR1(F("String Len = "), out.length());
-
-  if (out.length() > previousStrLen)
-  {
-    ET_LOGERROR3(F("String Len > "), previousStrLen, F(", extend to"), out.length() + 48);
-
-    previousStrLen = out.length() + 48;
-
-    out.reserve(previousStrLen);
-  }
-  else
-  {
-    server.send(200, "image/svg+xml", out);
-  }
 }
 
 void initEthernet()
@@ -389,13 +318,16 @@ void initEthernet()
 
 void setup()
 {
-  SerialDebug.begin(115200);
+  out.reserve(STRING_SIZE);
 
-  while (!SerialDebug && millis() < 5000);
+  //Initialize serial and wait for port to open:
+  Serial.begin(115200);
 
-  delay(1000);
+  while (!Serial && millis() < 5000);
 
-  SerialDebug.print("\nStarting AdvancedWebServer on ");
+  delay(200);
+
+  Serial.print(F("\nStart EthernetWebServer_BigData on "));
   SerialDebug.print(BOARD_NAME);
   SerialDebug.print(F(" with "));
   SerialDebug.println(SHIELD_TYPE);
@@ -404,52 +336,18 @@ void setup()
   initEthernet();
 
   server.on(F("/"), handleRoot);
-  server.on(F("/test.svg"), drawGraph);
+
   server.on(F("/inline"), []()
   {
     server.send(200, F("text/plain"), F("This works as well"));
   });
 
   server.onNotFound(handleNotFound);
+
   server.begin();
-
-  SerialDebug.print(F("HTTP EthernetWebServer is @ IP : "));
-  SerialDebug.println(Ethernet.localIP());
-}
-
-void heartBeatPrint()
-{
-  static int num = 1;
-
-  SerialDebug.print(F("."));
-
-  if (num == 80)
-  {
-    SerialDebug.println();
-    num = 1;
-  }
-  else if (num++ % 10 == 0)
-  {
-    SerialDebug.print(F(" "));
-  }
-}
-
-void check_status()
-{
-  static unsigned long checkstatus_timeout = 0;
-
-#define STATUS_CHECK_INTERVAL     10000L
-
-  // Send status report every STATUS_REPORT_INTERVAL (60) seconds: we don't need to send updates frequently if there is no status change.
-  if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
-  {
-    heartBeatPrint();
-    checkstatus_timeout = millis() + STATUS_CHECK_INTERVAL;
-  }
 }
 
 void loop()
 {
   server.handleClient();
-  check_status();
 }
