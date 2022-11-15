@@ -6,6 +6,11 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/EthernetWebServer.svg)](http://github.com/khoih-prog/EthernetWebServer/issues)
 
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-EthernetWebServer/count.svg" title="EthernetWebServer Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-EthernetWebServer/count.svg" style="height: 30px;width: 200px;"></a>
+
 ---
 ---
 
@@ -13,6 +18,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v2.3.0](#releases-v230)
   * [Releases v2.2.4](#releases-v224)
   * [Releases v2.2.3](#releases-v223)
   * [Releases v2.2.2](#releases-v222)
@@ -57,6 +63,14 @@
 ---
 
 ## Changelog
+
+### Releases v2.3.0
+
+1. Add new features, such as `CORS`, etc.
+2. Add example [EthernetWebServer_BigData](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/EthernetWebServer_BigData) to demo how to send larger data than `2/4/8/16K` buffer
+3. Modify example [AdvancedWebServer](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/AdvancedWebServer) to demo how to send larger data than `2/4/8/16K` buffer
+4. Update code
+5. Update `Packages' Patches`
 
 ### Releases v2.2.4
 

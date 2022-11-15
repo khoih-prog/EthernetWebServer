@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.4
+  Version: 2.3.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
   2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
+  2.3.0   K Hoang      15/11/2022 Add new features, such as CORS. Update code and examples to send big data
  *************************************************************************************************************************************/
 
 #pragma once
@@ -48,39 +49,40 @@ const char * ETHERNET_AUTHORIZATION_HEADER = "Authorization";
 
 // New to use EWString
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 EWString fromString(const String& str)
 {
   return str.c_str();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 EWString fromString(const String&& str)
 {
   return str.c_str();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String fromEWString(const EWString& str)
 {
   return str.c_str();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String fromEWString(const EWString&& str)
 {
   return str.c_str();
 }
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
+////////////////////////////////////////
 
 EthernetWebServer::EthernetWebServer(int port)
-  : _server(port)
+  : _corsEnabled(false)
+  , _server(port)
   , _currentMethod(HTTP_ANY)
   , _currentVersion(0)
   , _currentHandler(0)
@@ -91,11 +93,12 @@ EthernetWebServer::EthernetWebServer(int port)
   , _headerKeysCount(0)
   , _currentHeaders(0)
   , _contentLength(0)
+  , _clientContentLength(0)
   , _chunked(false)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 EthernetWebServer::~EthernetWebServer()
 {
@@ -115,7 +118,7 @@ EthernetWebServer::~EthernetWebServer()
   close();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::begin()
 {
@@ -126,7 +129,7 @@ void EthernetWebServer::begin()
     collectHeaders(0, 0);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 bool EthernetWebServer::authenticate(const char * username, const char * password)
 {
@@ -153,6 +156,7 @@ bool EthernetWebServer::authenticate(const char * username, const char * passwor
       {
         authReq = String();
         delete[] toencode;
+
         return false;
       }
 
@@ -163,6 +167,7 @@ bool EthernetWebServer::authenticate(const char * username, const char * passwor
         authReq = String();
         delete[] toencode;
         delete[] encoded;
+
         return true;
       }
 
@@ -176,7 +181,7 @@ bool EthernetWebServer::authenticate(const char * username, const char * passwor
   return false;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::requestAuthentication()
 {
@@ -184,21 +189,21 @@ void EthernetWebServer::requestAuthentication()
   send(401);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::on(const String &uri, EthernetWebServer::THandlerFunction handler)
 {
   on(uri, HTTP_ANY, handler);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServer::THandlerFunction fn)
 {
   on(uri, method, fn, _fileUploadHandler);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServer::THandlerFunction fn,
                            EthernetWebServer::THandlerFunction ufn)
@@ -206,14 +211,14 @@ void EthernetWebServer::on(const String &uri, HTTPMethod method, EthernetWebServ
   _addRequestHandler(new ethernetFunctionRequestHandler(fn, ufn, uri, method));
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::addHandler(ethernetRequestHandler* handler)
 {
   _addRequestHandler(handler);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::_addRequestHandler(ethernetRequestHandler* handler)
 {
@@ -229,12 +234,12 @@ void EthernetWebServer::_addRequestHandler(ethernetRequestHandler* handler)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 //KH
 #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::handleClient()
 {
@@ -244,7 +249,6 @@ void EthernetWebServer::handleClient()
 
     if (!client)
     {
-      //ET_LOGDEBUG(F("handleClient: No Client"));
       return;
     }
 
@@ -277,12 +281,17 @@ void EthernetWebServer::handleClient()
             _contentLength = CONTENT_LENGTH_NOT_SET;
             _handleRequest();
 
+#if 0
+
+            // Fix for issue with Chrome based browsers: https://github.com/espressif/arduino-esp32/issues/3652
             if (_currentClient.connected())
             {
               _currentStatus = HC_WAIT_CLOSE;
               _statusChange = millis();
               keepCurrentClient = true;
             }
+
+#endif
           }
         }
         else
@@ -328,11 +337,11 @@ void EthernetWebServer::handleClient()
   //ET_LOGDEBUG(F("handleClient: Client disconnected"));
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #else   // USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 // KH, rewritten for Portenta H7 from v1.7.0
 
@@ -368,12 +377,8 @@ void EthernetWebServer::handleClient()
   // Wait for data from client to become available
   if (_currentStatus == HC_WAIT_READ)
   {
-    //ET_LOGDEBUG(F("handleClient: _currentStatus = HC_WAIT_READ"));
-
     if (!_currentClient.available())
     {
-      //ET_LOGDEBUG(F("handleClient: Client not available"));
-
       if (millis() - _statusChange > HTTP_MAX_DATA_WAIT)
       {
         ET_LOGDEBUG(F("handleClient: HTTP_MAX_DATA_WAIT Timeout"));
@@ -385,6 +390,7 @@ void EthernetWebServer::handleClient()
       }
 
       yield();
+
       return;
     }
 
@@ -421,6 +427,7 @@ void EthernetWebServer::handleClient()
     {
       _currentStatus = HC_WAIT_CLOSE;
       _statusChange = millis();
+
       return;
     }
   }
@@ -439,6 +446,7 @@ void EthernetWebServer::handleClient()
     else
     {
       yield();
+
       return;
     }
   }
@@ -450,26 +458,34 @@ stopClient:
   ET_LOGDEBUG(F("handleClient: Client disconnected"));
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #endif   // USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::close()
 {
   // TODO: Write close method for Ethernet library and uncomment this
   //_server.close();
+
+  // KH, New v2.3.0
+  _currentStatus = HC_NONE;
+
+  if (!_headerKeysCount)
+    collectHeaders(0, 0);
+
+  //////
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::stop()
 {
   close();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::sendHeader(const String& name, const String& value, bool first)
 {
@@ -489,14 +505,14 @@ void EthernetWebServer::sendHeader(const String& name, const String& value, bool
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::setContentLength(size_t contentLength)
 {
   _contentLength = contentLength;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::_prepareHeader(String& response, int code, const char* content_type, size_t contentLength)
 {
@@ -534,6 +550,13 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
     sendHeader("Transfer-Encoding", "chunked");
   }
 
+  if (_corsEnabled)
+  {
+    sendHeader("Access-Control-Allow-Origin",  "*");
+    sendHeader("Access-Control-Allow-Methods", "*");
+    sendHeader("Access-Control-Allow-Headers", "*");
+  }
+
   ET_LOGDEBUG(F("_prepareHeader sendHeader Conn close"));
 
   sendHeader("Connection", "close");
@@ -546,7 +569,7 @@ void EthernetWebServer::_prepareHeader(String& response, int code, const char* c
   _responseHeaders = String("");
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #if ! ( ETHERNET_USE_AVR_MEGA || ETHERNET_USE_MEGA_AVR || ETHERNET_USE_DXCORE )
 void EthernetWebServer::_prepareHeader(EWString& response, int code, const char* content_type, size_t contentLength)
@@ -557,7 +580,7 @@ void EthernetWebServer::_prepareHeader(EWString& response, int code, const char*
   response += fromString(_responseCodeToString(code));
   response += RETURN_NEWLINE;
 
-  ET_LOGDEBUG1(F("_prepareHeader response ="), fromEWString(response));
+  //ET_LOGDEBUG1(F("_prepareHeader response ="), fromEWString(response));
 
   using namespace mime;
 
@@ -583,6 +606,13 @@ void EthernetWebServer::_prepareHeader(EWString& response, int code, const char*
     sendHeader("Transfer-Encoding", "chunked");
   }
 
+  if (_corsEnabled)
+  {
+    sendHeader("Access-Control-Allow-Origin",  "*");
+    sendHeader("Access-Control-Allow-Methods", "*");
+    sendHeader("Access-Control-Allow-Headers", "*");
+  }
+
   ET_LOGDEBUG(F("_prepareHeader sendHeader Conn close"));
 
   sendHeader("Connection", "close");
@@ -594,18 +624,11 @@ void EthernetWebServer::_prepareHeader(EWString& response, int code, const char*
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::send(int code, const char* content_type, const String& content)
 {
   EWString header;
-
-  // Can we asume the following?
-  //if(code == 200 && content.length() == 0 && _contentLength == CONTENT_LENGTH_NOT_SET)
-  //  _contentLength = CONTENT_LENGTH_UNKNOWN;
-
-  ET_LOGDEBUG1(F("send1: len = "), content.length());
-  ET_LOGDEBUG1(F("content = "), content);
 
   _prepareHeader(header, code, content_type, content.length());
 
@@ -613,28 +636,20 @@ void EthernetWebServer::send(int code, const char* content_type, const String& c
 
   if (content.length())
   {
-    ET_LOGDEBUG1(F("send1: write header = "), fromEWString(header));
-    //sendContent(content);
     sendContent(content, content.length());
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::send(int code, char* content_type, const String& content, size_t contentLength)
 {
   EWString header;
 
-  ET_LOGDEBUG1(F("send2: len = "), contentLength);
-  ET_LOGDEBUG1(F("content = "), content);
-
   char type[64];
 
   memccpy((void*)type, content_type, 0, sizeof(type));
   _prepareHeader(header, code, (const char* )type, contentLength);
-
-  ET_LOGDEBUG1(F("send2: hdrlen = "), header.length());
-  ET_LOGDEBUG1(F("header = "), fromEWString(header));
 
   _currentClient.write((const uint8_t *) header.c_str(), header.length());
 
@@ -644,78 +659,89 @@ void EthernetWebServer::send(int code, char* content_type, const String& content
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::send(int code, char* content_type, const String& content)
 {
   send(code, (const char*)content_type, content);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::send(int code, const String& content_type, const String& content)
 {
   send(code, (const char*)content_type.c_str(), content);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
+
+// KH New
+
+void EthernetWebServer::send(int code, const char* content_type, const char* content)
+{
+  send(code, content_type, content, content ? strlen(content) : 0);
+}
+
+////////////////////////////////////////
+
+void EthernetWebServer::send(int code, const char* content_type, const char* content, size_t contentLength)
+{
+  String header;
+
+  _prepareHeader(header, code, content_type, contentLength);
+
+  _currentClient.write((const uint8_t *) header.c_str(), header.length());
+
+  if (contentLength)
+  {
+    sendContent(content, contentLength);
+  }
+}
+
+////////////////////////////////////////
+
+void EthernetWebServer::sendContent(const char* content, size_t contentLength)
+{
+  const char * footer = RETURN_NEWLINE;
+
+  if (_chunked)
+  {
+    char chunkSize[11];
+
+    ET_LOGDEBUG1(F("sendContent_char: _chunked, _currentVersion ="), _currentVersion);
+
+    sprintf(chunkSize, "%x%s", contentLength, footer);
+    _currentClient.write(chunkSize, strlen(chunkSize));
+  }
+
+  _currentClient.write(content, contentLength);
+
+  if (_chunked)
+  {
+    _currentClient.write(footer, 2);
+
+    if (contentLength == 0)
+    {
+      _chunked = false;
+    }
+  }
+}
+
+////////////////////////////////////////
 
 void EthernetWebServer::sendContent(const String& content)
 {
-  const char * footer = RETURN_NEWLINE;
-  size_t len = content.length();
-
-  if (_chunked)
-  {
-    char * chunkSize = (char *) malloc(11);
-
-    if (chunkSize)
-    {
-      sprintf(chunkSize, "%x%s", len, footer);
-      _currentClient.write(chunkSize, strlen(chunkSize));
-      free(chunkSize);
-    }
-  }
-
-  _currentClient.write(content.c_str(), len);
-
-  if (_chunked)
-  {
-    _currentClient.write(footer, 2);
-  }
+  sendContent(content.c_str(), content.length());
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-void EthernetWebServer::sendContent(const String& content, size_t size)
+void EthernetWebServer::sendContent(const String& content, size_t contentLength)
 {
-  const char * footer = RETURN_NEWLINE;
-
-  if (_chunked)
-  {
-    char * chunkSize = (char *) malloc(11);
-
-    if (chunkSize)
-    {
-      ET_LOGDEBUG(F("sendContent: _chunked"));
-
-      sprintf(chunkSize, "%x%s", size, footer);
-      _currentClient.write(chunkSize, strlen(chunkSize));
-      free(chunkSize);
-    }
-  }
-
-  ET_LOGDEBUG1(F("sendContent: Client.write content: "), content);
-
-  _currentClient.write(content.c_str(), size);
-
-  if (_chunked)
-  {
-    _currentClient.write(footer, 2);
-  }
+  sendContent(content.c_str(), contentLength);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 // KH, Restore PROGMEM commands
 void EthernetWebServer::send_P(int code, PGM_P content_type, PGM_P content)
@@ -746,7 +772,7 @@ void EthernetWebServer::send_P(int code, PGM_P content_type, PGM_P content)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength)
 {
@@ -770,74 +796,81 @@ void EthernetWebServer::send_P(int code, PGM_P content_type, PGM_P content, size
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::sendContent_P(PGM_P content)
 {
   sendContent_P(content, strlen_P(content));
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-void EthernetWebServer::sendContent_P(PGM_P content, size_t size)
+void EthernetWebServer::sendContent_P(PGM_P content, size_t contentLength)
 {
   const char * footer = RETURN_NEWLINE;
 
   if (_chunked)
   {
-    char * chunkSize = (char *) malloc(11);
+    char chunkSize[11];
 
-    if (chunkSize)
-    {
-      sprintf(chunkSize, "%x%s", size, footer);
-      _currentClient.write(chunkSize, strlen(chunkSize));
-      free(chunkSize);
-    }
+    ET_LOGDEBUG1(F("sendContent_P: _chunked, _currentVersion ="), _currentVersion);
+
+    sprintf(chunkSize, "%x%s", contentLength, footer);
+    _currentClient.write(chunkSize, strlen(chunkSize));
   }
 
-  uint8_t* buffer = new uint8_t[SENDCONTENT_P_BUFFER_SZ];
+  uint8_t* _sendContentBuffer = new uint8_t[SENDCONTENT_P_BUFFER_SZ];
 
-  if (buffer)
+  if (_sendContentBuffer)
   {
-    uint16_t count = size / SENDCONTENT_P_BUFFER_SZ;
-    uint16_t remainder = size % SENDCONTENT_P_BUFFER_SZ;
+    uint16_t count = contentLength / SENDCONTENT_P_BUFFER_SZ;
+    uint16_t remainder = contentLength % SENDCONTENT_P_BUFFER_SZ;
     uint16_t i = 0;
 
     for (i = 0; i < count; i++)
     {
       /* code */
-      memcpy_P(buffer, &content[i * SENDCONTENT_P_BUFFER_SZ], SENDCONTENT_P_BUFFER_SZ);
-      _currentClient.write(buffer, SENDCONTENT_P_BUFFER_SZ);
+      memcpy_P(_sendContentBuffer, &content[i * SENDCONTENT_P_BUFFER_SZ], SENDCONTENT_P_BUFFER_SZ);
+      _currentClient.write(_sendContentBuffer, SENDCONTENT_P_BUFFER_SZ);
     }
 
-    memcpy_P(buffer, &content[i * SENDCONTENT_P_BUFFER_SZ], remainder);
-    _currentClient.write(buffer, remainder);
+    memcpy_P(_sendContentBuffer, &content[i * SENDCONTENT_P_BUFFER_SZ], remainder);
+    _currentClient.write(_sendContentBuffer, remainder);
 
-    delete [] buffer;
+    delete [] _sendContentBuffer;
   }
   else
   {
-    ET_LOGERROR1(F("sendContent_P: Error, can't allocate buffer, Sz ="), SENDCONTENT_P_BUFFER_SZ);
+    ET_LOGERROR1(F("sendContent_P: Error, can't allocate _sendContentBuffer, Sz ="), SENDCONTENT_P_BUFFER_SZ);
+
     return;
   }
 
   if (_chunked)
   {
     _currentClient.write(footer, 2);
+
+    _chunked = false;
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #if (defined(ESP32) || defined(ESP8266))
 
 #include "FS.h"
+
+////////////////////////////////////////
+
 void EthernetWebServer::serveStatic(const char* uri, FS& fs, const char* path, const char* cache_header)
 {
   _addRequestHandler(new StaticFileRequestHandler(fs, path, uri, cache_header));
 }
 
-void EthernetWebServer::_streamFileCore(const size_t fileSize, const String &fileName, const String &contentType)
+////////////////////////////////////////
+
+void EthernetWebServer::_streamFileCore(const size_t fileSize, const String &fileName, const String &contentType,
+                                        const int code)
 {
   using namespace mime;
 
@@ -850,11 +883,11 @@ void EthernetWebServer::_streamFileCore(const size_t fileSize, const String &fil
     sendHeader(F("Content-Encoding"), F("gzip"));
   }
 
-  send(200, contentType, emptyString);
+  send(code, contentType, emptyString);
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String EthernetWebServer::arg(const String& name)
 {
@@ -867,7 +900,7 @@ String EthernetWebServer::arg(const String& name)
   return String();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String EthernetWebServer::arg(int i)
 {
@@ -877,7 +910,7 @@ String EthernetWebServer::arg(int i)
   return String();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String EthernetWebServer::argName(int i)
 {
@@ -887,12 +920,14 @@ String EthernetWebServer::argName(int i)
   return String();
 }
 
+////////////////////////////////////////
+
 int EthernetWebServer::args()
 {
   return _currentArgCount;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 bool EthernetWebServer::hasArg(const String& name)
 {
@@ -905,7 +940,7 @@ bool EthernetWebServer::hasArg(const String& name)
   return false;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String EthernetWebServer::header(const String& name)
 {
@@ -918,7 +953,7 @@ String EthernetWebServer::header(const String& name)
   return String();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::collectHeaders(const char* headerKeys[], const size_t headerKeysCount)
 {
@@ -936,7 +971,7 @@ void EthernetWebServer::collectHeaders(const char* headerKeys[], const size_t he
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String EthernetWebServer::header(int i)
 {
@@ -946,7 +981,7 @@ String EthernetWebServer::header(int i)
   return String();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String EthernetWebServer::headerName(int i)
 {
@@ -956,14 +991,14 @@ String EthernetWebServer::headerName(int i)
   return String();
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 int EthernetWebServer::headers()
 {
   return _headerKeysCount;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 bool EthernetWebServer::hasHeader(const String& name)
 {
@@ -976,28 +1011,28 @@ bool EthernetWebServer::hasHeader(const String& name)
   return false;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String EthernetWebServer::hostHeader()
 {
   return _hostHeader;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::onFileUpload(THandlerFunction fn)
 {
   _fileUploadHandler = fn;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::onNotFound(THandlerFunction fn)
 {
   _notFoundHandler = fn;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::_handleRequest()
 {
@@ -1051,7 +1086,7 @@ void EthernetWebServer::_handleRequest()
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void EthernetWebServer::_finalizeResponse()
 {
@@ -1061,7 +1096,7 @@ void EthernetWebServer::_finalizeResponse()
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String EthernetWebServer::_responseCodeToString(int code)
 {
@@ -1192,7 +1227,7 @@ String EthernetWebServer::_responseCodeToString(int code)
   }
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #endif  // ETHERNET_WEBSERVER_IMPL_H
 

@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.2.4
+  Version: 2.3.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   2.2.2   K Hoang      06/09/2022 Slow SPI clock for old W5100 shield or SAMD Zero. Improve support for SAMD21
   2.2.3   K Hoang      17/09/2022 Add support to AVR Dx (AVR128Dx, AVR64Dx, AVR32Dx, etc.) using DxCore
   2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
+  2.3.0   K Hoang      15/11/2022 Add new features, such as CORS. Update code and examples to send big data
  *************************************************************************************************************************************/
 
 #pragma once
@@ -416,15 +417,44 @@ class EthernetWebServer
     void send(int code, const char* content_type = NULL, const String& content = String(""));
     void send(int code, char* content_type, const String& content);
     void send(int code, const String& content_type, const String& content);
-    //KH
-    void send(int code, char*  content_type, const String& content, size_t contentLength);
 
+    void send(int code, char* content_type, const String& content, size_t contentLength);
+    void send(int code, const char* content_type, const char* content);
+    void send(int code, const char* content_type, const char* content, size_t contentLength);
+
+		////////////////////////////////////////
+    
+    inline void enableDelay(bool value)
+    {
+    	_nullDelay = value;
+    }
+
+		////////////////////////////////////////
+        
+		inline void enableCORS(bool value = true) 
+		{
+  		_corsEnabled = value;
+		}
+
+		////////////////////////////////////////
+    
+		inline void enableCrossOrigin(bool value = true) 
+		{
+			enableCORS(value);
+		}
+
+		////////////////////////////////////////
+		
     void setContentLength(size_t contentLength);
     void sendHeader(const String& name, const String& value, bool first = false);
     //void sendHeader(const EWString& name, const EWString& value, bool first = false);
     void sendContent(const String& content);
     void sendContent(const String& content, size_t size);
 
+		// New
+    void sendContent(const char* content, size_t contentLength);
+    //////
+    
     // KH, Restore PROGMEM commands
     void send_P(int code, PGM_P content_type, PGM_P content);
     void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
@@ -451,32 +481,48 @@ class EthernetWebServer
 
       return _currentClient.write(file);
     }
+
+		////////////////////////////////////////
+        
 #else
-    void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); // serve static pages from file system
+
+		////////////////////////////////////////
+    
+    // serve static pages from file system
+    void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); 
 
     // Handle a GET request by sending a response header and stream file content to response body
-    template<typename T> size_t streamFile(T &file, const String& contentType)
-    {
-      return streamFile(file, contentType, HTTP_GET);
-    }
+    //template<typename T> 
+    //size_t streamFile(T &file, const String& contentType)
+    //{
+    //  return streamFile(file, contentType, HTTP_GET);
+    //}
 
     // Implement GET and HEAD requests for files.
     // Stream body on HTTP_GET but not on HTTP_HEAD requests.
-    template<typename T> size_t streamFile(T &file, const String& contentType, HTTPMethod requestMethod)
-    {
-      size_t contentLength = 0;
-      _streamFileCore(file.size(), file.name(), contentType);
-
-      if (requestMethod == HTTP_GET)
+    template<typename T> 
+    size_t streamFile(T &file, const String& contentType, const int code = 200)
       {
-        contentLength = _customClientWrite(file);
+				_streamFileCore(file.size(), file.name(), contentType, code);
+				
+    		return _currentClient.write(file);     
       }
 
-      return contentLength;
-    }
+		////////////////////////////////////////
+            
 #endif
 
   protected:
+  
+  	////////////////////////////////////////
+  
+		virtual size_t _currentClientWrite(const char* buffer, size_t length) 
+		{ 
+			return _currentClient.write( buffer, length ); 
+		}
+
+		////////////////////////////////////////
+	
     void _addRequestHandler(ethernetRequestHandler* handler);
     void _handleRequest();
     void _finalizeResponse();
@@ -504,7 +550,7 @@ class EthernetWebServer
     bool _collectHeader(const char* headerName, const char* headerValue);
 
 #if (defined(ESP32) || defined(ESP8266))
-    void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
+    void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType, const int code = 200);
 
     template<typename T>
     size_t _customClientWrite(T &file)
@@ -529,8 +575,10 @@ class EthernetWebServer
       String key;
       String value;
     };
+    
+    bool    					_corsEnabled;
 
-    EthernetServer  _server;
+    EthernetServer  	_server;
 
     EthernetClient    _currentClient;
     HTTPMethod        _currentMethod;
@@ -538,31 +586,32 @@ class EthernetWebServer
     uint8_t           _currentVersion;
     HTTPClientStatus  _currentStatus;
     unsigned long     _statusChange;
+    
+    bool     					_nullDelay;
 
-    ethernetRequestHandler*   _currentHandler;
-    ethernetRequestHandler*   _firstHandler;
-    ethernetRequestHandler*   _lastHandler;
-    THandlerFunction  _notFoundHandler;
-    THandlerFunction  _fileUploadHandler;
+    ethernetRequestHandler*   _currentHandler   = nullptr;
+    ethernetRequestHandler*   _firstHandler   	= nullptr;
+    ethernetRequestHandler*   _lastHandler   		= nullptr;
+    THandlerFunction  				_notFoundHandler;
+    THandlerFunction  				_fileUploadHandler;
 
     int               _currentArgCount;
-    RequestArgument*  _currentArgs;
+    RequestArgument*  _currentArgs   						= nullptr;
 
     //KH
 #if USE_NEW_WEBSERVER_VERSION
-    ethernetHTTPUpload*   _currentUpload;
+    ethernetHTTPUpload*   _currentUpload   			= nullptr;
     int                   _postArgsLen;
-    RequestArgument*      _postArgs;
-
+    RequestArgument*      _postArgs   					= nullptr;
 #else
     ethernetHTTPUpload    _currentUpload;
 #endif
 
     int               _headerKeysCount;
-    RequestArgument*  _currentHeaders;
+    RequestArgument*  _currentHeaders   				= nullptr;
     size_t            _contentLength;
+    int              	_clientContentLength;				// "Content-Length" from header of incoming POST or GET request
     String            _responseHeaders;
-
     String            _hostHeader;
     bool              _chunked;
 };
