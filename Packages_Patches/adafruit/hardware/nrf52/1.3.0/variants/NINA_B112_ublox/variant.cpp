@@ -27,12 +27,13 @@
 //https://www.u-blox.com/sites/default/files/NINA-B1_DataSheet_UBX-15019243.pdf
 //https://www.u-blox.com/sites/default/files/EVK-NINA-B1_UserGuide_%28UBX-15028120%29_C1-Public.pdf
 
-const uint32_t g_ADigitalPinMap[] = {
-   // D0 .. D13
+const uint32_t g_ADigitalPinMap[] =
+{
+  // D0 .. D13
   5,   // D0  is P0.05 (UART RX)
-  6,   // D1  is P0.06 (UART TX) 
-  7,   // D2  is P0.07 
-  31,  // D3  is P0.31 
+  6,   // D1  is P0.06 (UART TX)
+  7,   // D2  is P0.07
+  31,  // D3  is P0.31
   18,  // D4  is P0.18 (LED Blue)
   99,  // D5  (NC)
   9,   // D6  is P0.09 NFC1

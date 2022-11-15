@@ -37,26 +37,42 @@ class Print
     size_t printULLNumber(unsigned long long, uint8_t);
     size_t printFloat(double, int);
   protected:
-    void setWriteError(int err = 1) { write_error = err; }
+    void setWriteError(int err = 1)
+    {
+      write_error = err;
+    }
   public:
     Print() : write_error(0) {}
 
-    int getWriteError() { return write_error; }
-    void clearWriteError() { setWriteError(0); }
+    int getWriteError()
+    {
+      return write_error;
+    }
+    void clearWriteError()
+    {
+      setWriteError(0);
+    }
 
     virtual size_t write(uint8_t) = 0;
-    size_t write(const char *str) {
-      if (str == NULL) return 0;
+    size_t write(const char *str)
+    {
+      if (str == NULL)
+        return 0;
+
       return write((const uint8_t *)str, strlen(str));
     }
     virtual size_t write(const uint8_t *buffer, size_t size);
-    size_t write(const char *buffer, size_t size) {
+    size_t write(const char *buffer, size_t size)
+    {
       return write((const uint8_t *)buffer, size);
     }
 
     // default to zero, meaning "a single write may block"
     // should be overridden by subclasses with buffering
-    virtual int availableForWrite() { return 0; }
+    virtual int availableForWrite()
+    {
+      return 0;
+    }
 
     size_t print(const __FlashStringHelper *);
     size_t print(const String &);
@@ -86,17 +102,17 @@ class Print
     size_t println(double, int = 2);
     size_t println(const Printable&);
     size_t println(void);
-    
+
     size_t printf(const char * format, ...);
-    
-    size_t printBuffer(uint8_t const buffer[], int len, char delim=' ', int byteline = 0);
-    size_t printBuffer(char const buffer[], int size, char delim=' ', int byteline = 0)
+
+    size_t printBuffer(uint8_t const buffer[], int len, char delim = ' ', int byteline = 0);
+    size_t printBuffer(char const buffer[], int size, char delim = ' ', int byteline = 0)
     {
       return printBuffer((uint8_t const*) buffer, size, delim, byteline);
     }
 
-    size_t printBufferReverse(uint8_t const buffer[], int len, char delim=' ', int byteline = 0);
-    size_t printBufferReverse(char const buffer[], int size, char delim=' ', int byteline = 0)
+    size_t printBufferReverse(uint8_t const buffer[], int len, char delim = ' ', int byteline = 0);
+    size_t printBufferReverse(char const buffer[], int size, char delim = ' ', int byteline = 0)
     {
       return printBufferReverse((uint8_t const*) buffer, size, delim, byteline);
     }

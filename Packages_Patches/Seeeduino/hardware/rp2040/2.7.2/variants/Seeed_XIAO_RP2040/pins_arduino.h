@@ -6,7 +6,7 @@
 #define __PINS_ARDUINO__
 
 #ifdef __cplusplus
-	extern "C" unsigned int PINCOUNT_fn();
+  extern "C" unsigned int PINCOUNT_fn();
 #endif
 
 // Pin count

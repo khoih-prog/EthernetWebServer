@@ -1,4 +1,4 @@
- /*
+/*
   Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
   Copyright (c) 2016 Sandeep Mistry All right reserved.
   Copyright (c) 2018, Adafruit Industries (adafruit.com)
@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// Thanks to great work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip). 
+// Thanks to great work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip).
 // See [u-blox nina b](https://github.com/khoih-prog/WiFiNINA_Generic/issues/1)
 
 #ifndef _VARIANT_NINA_B302_UBLOX_
@@ -29,8 +29,8 @@
 // define USE_LFRC    // Board uses RC for LF
 
 /*----------------------------------------------------------------------------
- *        Headers
- *----------------------------------------------------------------------------*/
+          Headers
+  ----------------------------------------------------------------------------*/
 
 #include "WVariant.h"
 
@@ -41,7 +41,7 @@ extern "C"
 // Number of pins defined in PinDescription array
 #define PINS_COUNT           (40)
 #define NUM_DIGITAL_PINS     (34)
-#define NUM_ANALOG_INPUTS    (6) 
+#define NUM_ANALOG_INPUTS    (6)
 #define NUM_ANALOG_OUTPUTS   (0)
 
 // LEDs
@@ -57,13 +57,13 @@ extern "C"
 #define LED_STATE_ON         1         // State when LED is litted
 
 /*
- * Buttons
- */
+   Buttons
+*/
 #define PIN_BUTTON1             (7)
 
 /*
- * Analog pins
- */
+   Analog pins
+*/
 #define PIN_A0               (14)
 #define PIN_A1               (15)
 #define PIN_A2               (16)
@@ -99,14 +99,14 @@ static const uint8_t A5  = PIN_A5 ;
 #define PIN_NFC2           (2)
 
 /*
- * Serial interfaces
- */
+   Serial interfaces
+*/
 #define PIN_SERIAL1_RX       (0)
 #define PIN_SERIAL1_TX       (1)
 
 /*
- * SPI Interfaces
- */
+   SPI Interfaces
+*/
 #define SPI_INTERFACES_COUNT 1
 
 #define PIN_SPI_MISO         (22)    //24 original
@@ -119,8 +119,8 @@ static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
 
 /*
- * Wire Interfaces
- */
+   Wire Interfaces
+*/
 #define WIRE_INTERFACES_COUNT 1
 
 #define PIN_WIRE_SDA         (20)
@@ -143,7 +143,7 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #endif
 
 /*----------------------------------------------------------------------------
- *        Arduino objects - C++ only
- *----------------------------------------------------------------------------*/
+          Arduino objects - C++ only
+  ----------------------------------------------------------------------------*/
 
 #endif    //_VARIANT_NINA_B302_UBLOX_

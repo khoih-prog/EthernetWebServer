@@ -1,4 +1,4 @@
- /*
+/*
   Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
   Copyright (c) 2016 Sandeep Mistry All right reserved.
   Copyright (c) 2018, Adafruit Industries (adafruit.com)
@@ -26,8 +26,8 @@
 // define USE_LFRC    // Board uses RC for LF
 
 /*----------------------------------------------------------------------------
- *        Headers
- *----------------------------------------------------------------------------*/
+          Headers
+  ----------------------------------------------------------------------------*/
 
 #include "WVariant.h"
 
@@ -56,15 +56,15 @@ extern "C"
 
 // Buttons
 /*
-#define PIN_BUTTON1             (2)
-#define PIN_BUTTON2             (3)
-#define PIN_BUTTON3             (4)
-#define PIN_BUTTON4             (5)
+  #define PIN_BUTTON1             (2)
+  #define PIN_BUTTON2             (3)
+  #define PIN_BUTTON3             (4)
+  #define PIN_BUTTON4             (5)
 */
 
 /*
- * Analog pins
- */
+   Analog pins
+*/
 #define PIN_A0               (2)
 #define PIN_A1               (3)
 #define PIN_A2               (4)
@@ -93,8 +93,8 @@ static const uint8_t A7  = PIN_A7 ;
 static const uint8_t AREF = PIN_AREF;
 
 /*
- * Serial interfaces
- */
+   Serial interfaces
+*/
 // Serial
 //Previous Hardware UART definition for nRF52 Arduino Core, below 0.16.0
 //Feel free to comment out these two lines below if there are conflicts with latest release
@@ -106,8 +106,8 @@ static const uint8_t AREF = PIN_AREF;
 #define PIN_SERIAL1_TX      (17)
 
 /*
- * SPI Interfaces
- */
+   SPI Interfaces
+*/
 #define SPI_INTERFACES_COUNT 1
 
 #define PIN_SPI_MISO         (31)
@@ -120,16 +120,16 @@ static const uint8_t MISO = PIN_SPI_MISO ;
 static const uint8_t SCK  = PIN_SPI_SCK ;
 
 /*
- * Wire Interfaces
- */
+   Wire Interfaces
+*/
 #define WIRE_INTERFACES_COUNT 1
 
 #define PIN_WIRE_SDA         (8)
 #define PIN_WIRE_SCL         (11)
 
 /*
- * QSPI interface for external flash
- */
+   QSPI interface for external flash
+*/
 #define PIN_QSPI_SCK         32
 #define PIN_QSPI_CS          33
 #define PIN_QSPI_DATA0       34
@@ -146,7 +146,7 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
 #endif
 
 /*----------------------------------------------------------------------------
- *        Arduino objects - C++ only
- *----------------------------------------------------------------------------*/
+          Arduino objects - C++ only
+  ----------------------------------------------------------------------------*/
 
 #endif

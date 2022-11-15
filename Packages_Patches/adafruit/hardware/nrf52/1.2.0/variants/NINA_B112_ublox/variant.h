@@ -34,8 +34,8 @@
 // define USE_LFRC    // Board uses RC for LF
 
 /*----------------------------------------------------------------------------
- *        Headers
- *----------------------------------------------------------------------------*/
+          Headers
+  ----------------------------------------------------------------------------*/
 
 #include "WVariant.h"
 
@@ -66,12 +66,12 @@ extern "C"
 #define SW2 (19)
 
 // NFC
-#define PIN_NFC_1	(6)  // P0.9
-#define PIN_NFC_2	(7)  // P0.10
+#define PIN_NFC_1 (6)  // P0.9
+#define PIN_NFC_2 (7)  // P0.10
 
 /*
- * Analog pins
- */
+   Analog pins
+*/
 #define PIN_A0               (16) // P0.03
 #define PIN_A1               (17) // P0.02
 #define PIN_A2               (18) // P0.04
@@ -125,8 +125,8 @@ static const uint8_t D15  = PIN_D15 ;
 //#define PIN_VBAT           PIN_A7
 
 /*
- * Serial interfaces
- */
+   Serial interfaces
+*/
 #define PIN_SERIAL_RX       (0) // P0.05
 #define PIN_SERIAL_TX       (1) // P0.06
 #define PIN_SERIAL_CTS      (2) // P0.07
@@ -135,8 +135,8 @@ static const uint8_t D15  = PIN_D15 ;
 #define PIN_SERIAL_DSR      (29) // P0.29
 
 /*
- * SPI Interfaces
- */
+   SPI Interfaces
+*/
 #define SPI_INTERFACES_COUNT 1
 
 #define PIN_SPI_MISO         (12) // P0.12
@@ -149,8 +149,8 @@ static const uint8_t MISO = PIN_SPI_MISO ;
 static const uint8_t SCK  = PIN_SPI_SCK ;
 
 /*
- * Wire Interfaces
- */
+   Wire Interfaces
+*/
 #define WIRE_INTERFACES_COUNT 1
 
 #define PIN_WIRE_SDA         (14) // P0.02
@@ -165,8 +165,8 @@ static const uint8_t SCL = PIN_WIRE_SCL;
 #endif
 
 /*----------------------------------------------------------------------------
- *        Arduino objects - C++ only
- *----------------------------------------------------------------------------*/
+          Arduino objects - C++ only
+  ----------------------------------------------------------------------------*/
 
 
 #endif    //_VARIANT_NINA_B112_UBLOX_

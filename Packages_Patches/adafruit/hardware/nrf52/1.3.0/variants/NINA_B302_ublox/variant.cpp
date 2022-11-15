@@ -17,7 +17,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-// Thanks to great work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip). 
+// Thanks to great work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip).
 // See [u-blox nina b](https://github.com/khoih-prog/WiFiNINA_Generic/issues/1)
 
 #include "variant.h"
@@ -27,16 +27,16 @@
 
 const uint32_t g_ADigitalPinMap[] =
 {
-   // D0 .. D13
+  // D0 .. D13
   29,  // D0  is P0.29 (UART RX)
-  45,  // D1  is P1.13 (UART TX) 
+  45,  // D1  is P1.13 (UART TX)
   44,  // D2  is P1.12 (NFC2)
   31,  // D3  is P0.31 (LED1)
   13,  // D4  is P0.13 (LED2)
   11,  // D5  is P0.11
   9,   // D6  is P0.09
   10,  // D7  is P0.10 (Button)
-  41,  // D8  is P1.09 
+  41,  // D8  is P1.09
   12,  // D9  is P0.12
   14,  // D10 is P0.14
   15,  // D11 is P0.15
@@ -54,7 +54,7 @@ const uint32_t g_ADigitalPinMap[] =
   // D20 .. D21 (aka I2C pins)
   16,  // D20 is P0.16 (SDA)
   24,  // D21 is P0.24 (SCL)
-   
+
   // QSPI pins (not exposed via any header / test point)
   19,  // D22 is P0.19 (QSPI CLK)
   17,  // D23 is P0.17 (QSPI CS)
@@ -62,7 +62,7 @@ const uint32_t g_ADigitalPinMap[] =
   21,  // D25 is P0.21 (QSPI Data 1)
   22,  // D26 is P0.22 (QSPI Data 2)
   26,  // D27 is P0.23 (QSPI Data 3)
-  
+
   40,  // D28 is P1.08 - IO34
   41,  // D29 is P1.01 - IO35
   44,  // D30 is P1.02 - IO36
@@ -70,10 +70,10 @@ const uint32_t g_ADigitalPinMap[] =
   42, // D32 is P1.10 - IO38
   43, // D33 is P1.11 - IO39
   47, // D34 is P1.15 - IO40
-  46, // D35 is P1.14 - IO41 
+  46, // D35 is P1.14 - IO41
   26, // D36 is P0.26 - IO42
   6,  // D37 is P0.6  - IO43
-  27, // D38 is P0.27 - IO44  
+  27, // D38 is P0.27 - IO44
 };
 
 void initVariant()
