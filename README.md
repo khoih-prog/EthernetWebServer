@@ -361,7 +361,7 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
    - [`EthernetENC library v2.0.3+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.12+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
    - [`NativeEthernet Library version stable111+`](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1 built-in Ethernet.
-   - [`QNEthernet Library version v0.17.0+`](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet. [![GitHub release](https://img.shields.io/github/release/ssilverman/QNEthernet.svg)](https://github.com/ssilverman/QNEthernet/releases/latest)
+   - [`QNEthernet Library version v0.17.0+`](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet.
 
 ---
 ---
