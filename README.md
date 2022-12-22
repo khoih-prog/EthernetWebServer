@@ -9,6 +9,7 @@
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
+
 ---
 ---
 
@@ -178,7 +179,7 @@
 
 ### Important Note from v2.3.0
 
-The new [EthernetWebServer v2.3.0+](https://github.com/khoih-prog/EthernetWebServer/releases/tag/v2.3.0) combined with the new [Ethernet_Generic v2.7.0+](https://github.com/khoih-prog/Ethernet_Generic/releases/tag/v2.7.0) fixes severe limitation to permit sending much larger data than total than **2/4/8/16K** buffer of **W5x00 Ethernet**.
+The new [EthernetWebServer v2.4.0+](https://github.com/khoih-prog/EthernetWebServer/releases/tag/v2.3.0) combined with the new [Ethernet_Generic v2.7.0+](https://github.com/khoih-prog/Ethernet_Generic/releases/tag/v2.7.0) fixes severe limitation to permit sending much larger data than total than **2/4/8/16K** buffer of **W5x00 Ethernet**.
 
 ---
 
@@ -340,27 +341,27 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
  2. [`Arduino AVR core 1.8.6+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
- 3. [`Teensy core v1.57+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
+ 3. [`Teensy core v1.57+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards. [![GitHub release](https://img.shields.io/github/release/PaulStoffregen/cores.svg)](https://github.com/PaulStoffregen/cores/releases/latest)
  4. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.13+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
  6. [`Adafruit SAMD core 1.7.11+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  7. [`Seeeduino SAMD core 1.8.3+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  8. [`Adafruit nRF52 v1.3.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
- 9. [`ESP32 Core 2.0.5+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
+ 9. [`ESP32 Core 2.0.6+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
 10. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS.
-11. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 3.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-12. [`Earle Philhower's arduino-pico core v2.6.3+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
-13. [`Arduino megaAVR core 1.8.7+`](https://github.com/arduino/ArduinoCore-megaavr/releases) for Arduino megaAVR boards such as **Arduino UNO WiFi Rev2, AVR_NANO_EVERY, etc.**
-14. [`SpenceKonde DxCore core 1.4.10+`](https://github.com/SpenceKonde/DxCore) for Arduino AVRDx boards.  [![GitHub release](https://img.shields.io/github/release/SpenceKonde/DxCore.svg)](https://github.com/SpenceKonde/DxCore/releases/latest). Follow [**DxCore Installation**](https://github.com/SpenceKonde/DxCore/blob/master/Installation.md).
+11. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 3.5.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+12. [`Earle Philhower's arduino-pico core v2.6.5+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+13. [`Arduino megaAVR core 1.8.7+`](https://github.com/arduino/ArduinoCore-megaavr/releases) for Arduino megaAVR boards such as **Arduino UNO WiFi Rev2, AVR_NANO_EVERY, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-megaavr.svg)](https://github.com/arduino/ArduinoCore-megaavr/releases/latest)
+14. [`SpenceKonde DxCore core 1.5.1+`](https://github.com/SpenceKonde/DxCore) for Arduino AVRDx boards.  [![GitHub release](https://img.shields.io/github/release/SpenceKonde/DxCore.svg)](https://github.com/SpenceKonde/DxCore/releases/latest). Follow [**DxCore Installation**](https://github.com/SpenceKonde/DxCore/blob/master/Installation.md).
 15. [`Seeeduino nRF52 core 1.0.0+`](https://github.com/Seeed-Studio/Adafruit_nRF52_Arduino) for Seeed nRF52840-based boards such as **Seeed_XIAO_NRF52840 and Seeed_XIAO_NRF52840_SENSE**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Adafruit_nRF52_Arduino.svg)](https://github.com/Seeed-Studio/Adafruit_nRF52_Arduino/releases/latest)
 16. `Seeeduino mbed core 2.7.2+` for Seeed nRF52840-based boards such as **SEEED_XIAO_NRF52840 and SEEED_XIAO_NRF52840_SENSE**
 17. [`Functional-Vlpp library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 18. Depending on which Ethernet card you're using:
-   - [`Ethernet_Generic library v2.7.0+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
+   - [`Ethernet_Generic library v2.7.1+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
    - [`EthernetENC library v2.0.3+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.12+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
    - [`NativeEthernet Library version stable111+`](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1 built-in Ethernet.
-   - [`QNEthernet Library version v0.16.0+`](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet. **New**
+   - [`QNEthernet Library version v0.17.0+`](https://github.com/ssilverman/QNEthernet) for Teensy 4.1 built-in Ethernet. [![GitHub release](https://img.shields.io/github/release/ssilverman/QNEthernet.svg)](https://github.com/ssilverman/QNEthernet/releases/latest)
 
 ---
 ---
@@ -531,6 +532,10 @@ These files must be copied into the directory:
 #### 7. For STM32 boards
 
 #### 7.1 For STM32 boards to use LAN8720
+
+For `Generic STM32F4 series` boards, such as `STM32F407VE`, using `LAN8720`, please use STM32 core `v2.2.0` as breaking core `v2.3.0` creates the compile error.
+
+---
 
 To use LAN8720 on some STM32 boards 
 
@@ -788,8 +793,8 @@ Please have a look at [**ESP_WiFiManager Issue 39: Not able to read analog port 
 
 #### 2. ESP32 ADCs functions
 
-- ADC1 controls ADC function for pins **GPIO32-GPIO39**
-- ADC2 controls ADC function for pins **GPIO0, 2, 4, 12-15, 25-27**
+- `ADC1` controls ADC function for pins **GPIO32-GPIO39**
+- `ADC2` controls ADC function for pins **GPIO0, 2, 4, 12-15, 25-27**
 
 #### 3.. ESP32 WiFi uses ADC2 for WiFi functions
 
@@ -811,10 +816,10 @@ Look in file [**adc_common.c**](https://github.com/espressif/esp-idf/blob/master
 > adc2_spinlock should be acquired first, then adc2_wifi_lock or rtc_spinlock.
 
 
-- In order to use ADC2 for other functions, we have to **acquire complicated firmware locks and very difficult to do**
-- So, it's not advisable to use ADC2 with WiFi/BlueTooth (BT/BLE).
-- Use ADC1, and pins GPIO32-GPIO39
-- If somehow it's a must to use those pins serviced by ADC2 (**GPIO0, 2, 4, 12, 13, 14, 15, 25, 26 and 27**), use the **fix mentioned at the end** of [**ESP_WiFiManager Issue 39: Not able to read analog port when using the autoconnect example**](https://github.com/khoih-prog/ESP_WiFiManager/issues/39) to work with ESP32 WiFi/BlueTooth (BT/BLE).
+- In order to use `ADC2` for other functions, we have to **acquire complicated firmware locks and very difficult to do**
+- So, it's not advisable to use `ADC2` with WiFi/BlueTooth (BT/BLE).
+- Use `ADC1`, and pins GPIO32-GPIO39
+- If somehow it's a must to use those pins serviced by `ADC2` (**GPIO0, 2, 4, 12, 13, 14, 15, 25, 26 and 27**), use the **fix mentioned at the end** of [**ESP_WiFiManager Issue 39: Not able to read analog port when using the autoconnect example**](https://github.com/khoih-prog/ESP_WiFiManager/issues/39) to work with ESP32 WiFi/BlueTooth (BT/BLE).
 
 
 ---
@@ -914,18 +919,18 @@ For example, EthernetLarge library
 
 ```cpp
 #if defined(__IMXRT1062__)
-    // For Teensy 4.1/4.0
-    #if defined(ARDUINO_TEENSY41)
-      #define BOARD_TYPE      "TEENSY 4.1"
-      // Use true for NativeEthernet Library, false if using other Ethernet libraries
-      #define USE_NATIVE_ETHERNET     true
-      #define USE_QN_ETHERNET         false
-    #elif defined(ARDUINO_TEENSY40)
-      #define BOARD_TYPE      "TEENSY 4.0"
-    #else
-      #define BOARD_TYPE      "TEENSY 4.x"
-    #endif      
-  #elif defined(__MK66FX1M0__)
+  // For Teensy 4.1/4.0
+  #if defined(ARDUINO_TEENSY41)
+    #define BOARD_TYPE      "TEENSY 4.1"
+    // Use true for NativeEthernet Library, false if using other Ethernet libraries
+    #define USE_NATIVE_ETHERNET     true
+    #define USE_QN_ETHERNET         false
+  #elif defined(ARDUINO_TEENSY40)
+    #define BOARD_TYPE      "TEENSY 4.0"
+  #else
+    #define BOARD_TYPE      "TEENSY 4.x"
+  #endif      
+#elif defined(__MK66FX1M0__)
   ....
 ```
 
@@ -1019,18 +1024,17 @@ To avoid using the default but not-working Ethernet library of ESP8266, rename t
 These pins are tested OK with ESP8266 and W5x00
 
 ```cpp
-  // For ESP8266
-  // Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
-  // Ethernet           0                 X            X            X            X        0
-  // Ethernet2          X                 X            X            X            X        0
-  // Ethernet3          X                 X            X            X            X        0
-  // EthernetLarge      X                 X            X            X            X        0
-  // Ethernet_ESP8266   0                 0            0            0            0        0
-  // D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
-  // Must use library patch for Ethernet, EthernetLarge libraries
-  //Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (USE_THIS_SS_PIN);
-
+// For ESP8266
+// Pin                D0(GPIO16)    D1(GPIO5)    D2(GPIO4)    D3(GPIO0)    D4(GPIO2)    D8
+// Ethernet           0                 X            X            X            X        0
+// Ethernet2          X                 X            X            X            X        0
+// Ethernet3          X                 X            X            X            X        0
+// EthernetLarge      X                 X            X            X            X        0
+// Ethernet_ESP8266   0                 0            0            0            0        0
+// D2 is safe to used for Ethernet, Ethernet2, Ethernet3, EthernetLarge libs
+// Must use library patch for Ethernet, EthernetLarge libraries
+//Ethernet.setCsPin (USE_THIS_SS_PIN);
+Ethernet.init (USE_THIS_SS_PIN);
 ```
 
 #### 4. How to increase W5x00 TX/RX buffer
@@ -1044,13 +1048,13 @@ These pins are tested OK with ESP8266 and W5x00
 - For **Ethernet3** library only,  use as follows
 
 ```cpp
-  // Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
-  #ifndef ETHERNET3_MAX_SOCK_NUM
-    #define ETHERNET3_MAX_SOCK_NUM      4
-  #endif
-  
-  Ethernet.setCsPin (USE_THIS_SS_PIN);
-  Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
+// Use  MAX_SOCK_NUM = 4 for 4K, 2 for 8K, 1 for 16K RX/TX buffer
+#ifndef ETHERNET3_MAX_SOCK_NUM
+  #define ETHERNET3_MAX_SOCK_NUM      4
+#endif
+
+Ethernet.setCsPin (USE_THIS_SS_PIN);
+Ethernet.init (ETHERNET3_MAX_SOCK_NUM);
 ```
 
 ### 5. How to adjust sendContent_P() and send_P() buffer size
@@ -1237,7 +1241,7 @@ EthernetInit();
 #### Class Constructor
 
 ```cpp
-  EthernetWebServer server(80);
+EthernetWebServer server(80);
 ```
 
 Creates the EthernetWebServer class object.
@@ -1251,20 +1255,20 @@ host port number: ``int port`` (default is the standard HTTP port 80)
 **Starting the server**
 
 ```cpp
-  void begin();
+void begin();
 ```
 
 **Handling incoming client requests**
 
 ```cpp
-  void handleClient();
+void handleClient();
 ```
 
 **Disabling the server**
 
 ```cpp
-  void close();
-  void stop();
+void close();
+void stop();
 ```
 
 Both methods function the same
@@ -1272,25 +1276,25 @@ Both methods function the same
 **Client request handlers**
 
 ```cpp
-  void on();
-  void addHandler();
-  void onNotFound();
-  void onFileUpload();	
+void on();
+void addHandler();
+void onNotFound();
+void onFileUpload();	
 ```
 
 Example:
 
 ```cpp
-  server.on("/", handlerFunction);
-  server.onNotFound(handlerFunction);   // called when handler is not assigned
-  server.onFileUpload(handlerFunction); // handle file uploads
+server.on("/", handlerFunction);
+server.onNotFound(handlerFunction);   // called when handler is not assigned
+server.onFileUpload(handlerFunction); // handle file uploads
 ```
 
 **Sending responses to the client**
 
 ```cpp
-  void send();
-  void send_P();
+void send();
+void send_P();
 ```
 
 `Parameters:`
@@ -1306,10 +1310,10 @@ Example:
 **Getting information about request arguments**
 
 ```cpp
-  const String & arg();
-  const String & argName();
-  int args();
-  bool hasArg();
+const String & arg();
+const String & argName();
+int args();
+bool hasArg();
 ```
 
 `Function usage:`
@@ -1326,11 +1330,11 @@ Example:
 **Getting information about request headers**
 
 ```cpp
-  const String & header();
-  const String & headerName();
-  const String & hostHeader();
-  int headers();
-  bool hasHeader();
+const String & header();
+const String & headerName();
+const String & hostHeader();
+int headers();
+bool hasHeader();
 ``` 
 `Function usage:`
 
@@ -1348,8 +1352,8 @@ Example:
 **Authentication**
 
 ```cpp
-  bool authenticate();
-  void requestAuthentication();
+bool authenticate();
+void requestAuthentication();
 ```
 
 `Function usage:`
@@ -1361,26 +1365,26 @@ Example:
 `Example Usage:`
 
 ```cpp
-
-  if(!server.authenticate(username, password)){
-    server.requestAuthentication();
-  }
+if(!server.authenticate(username, password))
+{
+  server.requestAuthentication();
+}
 ```
 
 #### Other Function Calls
 
 ```cpp
-  const String & uri(); // get the current uri
-  HTTPMethod  method(); // get the current method 
-  WiFiClient client(); // get the current client
-  HTTPUpload & upload(); // get the current upload
-  void setContentLength(); // set content length
-  void sendHeader(); // send HTTP header
-  void sendContent(); // send content
-  void sendContent_P(); 
-  void collectHeaders(); // set the request headers to collect
-  void serveStatic();
-  size_t streamFile();
+const String & uri(); // get the current uri
+HTTPMethod  method(); // get the current method 
+WiFiClient client(); // get the current client
+HTTPUpload & upload(); // get the current upload
+void setContentLength(); // set content length
+void sendHeader(); // send HTTP header
+void sendContent(); // send content
+void sendContent_P(); 
+void collectHeaders(); // set the request headers to collect
+void serveStatic();
+size_t streamFile();
 ```
 ---
 ---
@@ -1461,14 +1465,14 @@ Example:
 
 #### 1. File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
 
-https://github.com/khoih-prog/EthernetWebServer/blob/537e3d08f3b002cb3953ae609ee8c4f94c36a89a/examples/AdvancedWebServer/AdvancedWebServer.ino#L44-L455
+https://github.com/khoih-prog/EthernetWebServer/blob/59a776687f575506b970939f4d64025e0a6a63b0/examples/AdvancedWebServer/AdvancedWebServer.ino#L44-L456
 
 
 ---
 
 #### 2. File [defines.h](examples/AdvancedWebServer/defines.h)
 
-https://github.com/khoih-prog/EthernetWebServer/blob/537e3d08f3b002cb3953ae609ee8c4f94c36a89a/examples/AdvancedWebServer/defines.h#L10-L580
+https://github.com/khoih-prog/EthernetWebServer/blob/59a776687f575506b970939f4d64025e0a6a63b0/examples/AdvancedWebServer/defines.h#L10-L621
 
 ---
 ---
@@ -1485,7 +1489,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========================
 [EWS] Default SPI pinout:
 [EWS] MOSI: 25
@@ -1666,7 +1670,7 @@ The terminal output of **SAM DUE with W5x00 using Ethernet_Generic Library** run
 
 ```
 Starting SimpleWebSocket on SAM DUE with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 75
@@ -1757,7 +1761,7 @@ The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet_Generic Libr
 
 ```
 Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 25
@@ -1791,7 +1795,7 @@ The terminal output of **ESP32 with W5x00 using Ethernet_Generic Library** runni
 ```
 Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS
 With W5x00 using Ethernet_Generic Library on SPI
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 23
@@ -1839,7 +1843,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet_Generic Library** run
 ```
 Starting FS_EthernetWebServer on ESP8266 using LittleFS
 With W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 13
@@ -1892,7 +1896,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet_Generic Library** run
 ```
 Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
 With W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 13
@@ -1932,7 +1936,7 @@ The following are debug terminal output and screen shot when running example [Si
 
 ```
 SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 Debug Level = 3
 Connected! IP address: 192.168.2.127
 [EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
@@ -1988,7 +1992,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2020,7 +2024,7 @@ The following are debug terminal output when running example [MQTTClient_Auth](e
 
 ```
 Start MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2055,7 +2059,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2086,7 +2090,7 @@ The following are debug terminal output and screen shot when running example [Ud
 
 ```
 Start UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2128,7 +2132,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2150,7 +2154,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2168,7 +2172,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2191,7 +2195,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 6
 Connected! IP address: 192.168.2.222
@@ -2210,7 +2214,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Starting SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 4
 Connected! IP address: 192.168.2.132
@@ -2258,7 +2262,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 7
 Connected! IP address: 192.168.2.132
@@ -2338,7 +2342,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer_ESP32_SPI2 on ESP32_DEV with W5x00 using Ethernet_Generic Library on SPI2
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 =========================
 Currently Used SPI pinout:
 MOSI:13
@@ -2367,7 +2371,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 15
@@ -2404,7 +2408,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer_RP2040_SPI1 on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library with Large Buffer
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 15
@@ -2442,7 +2446,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer_Teensy4x_SPI1 on TEENSY 4.1 with W5x00 using Ethernet_Generic Library with Large Buffer
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 26
@@ -2479,7 +2483,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on Curiosity AVR_AVR128DA48 with W5x00 using Ethernet_Generic Library on SPI0/SPI
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 4
@@ -2516,7 +2520,7 @@ The following is debug terminal output when running example [EthernetWebServer_B
 
 ```
 Start EthernetWebServer_BigData on NRF52840_FEATHER with W5x00 using Ethernet_Generic Library on SPI0/SPI
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [ETG] W5100 init, using W5100Class::ss_pin =  5 , whereas new ss_pin =  10 , SS_PIN_DEFAULT = 10
 [ETG] Chip is W5500
 [ETG] W5100::init: W5500, SSIZE = 8192
@@ -2563,7 +2567,7 @@ The following is debug terminal output when running example [EthernetWebServer_B
 
 ```
 Start EthernetWebServer_BigData on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI0/SPI
-EthernetWebServer v2.3.0
+EthernetWebServer v2.4.0
 [ETG] W5100 init, using W5100Class::ss_pin =  17 , whereas new ss_pin =  10 , SS_PIN_DEFAULT = 17
 [ETG] Chip is W5100S
 [ETG] W5100::init: W5100S, SSIZE = 4096
@@ -2687,7 +2691,7 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 39. Update `Packages' Patches` to add Seeeduino `nRF52` core
 40. Add examples [EthernetWebServer_BigData](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/EthernetWebServer_BigData) to demo how to send larger data than **2/4/8/16K** buffer
 41. Modify example [AdvancedWebServer](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/AdvancedWebServer) to demo how to send larger data than `2/4/8/16K` buffer
-
+42. Fix compile errors for new ESP32 core `v2.0.6`
 
 
 ---
