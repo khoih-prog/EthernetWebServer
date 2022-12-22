@@ -17,6 +17,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v2.4.0](#releases-v240)
   * [Releases v2.3.0](#releases-v230)
   * [Releases v2.2.4](#releases-v224)
   * [Releases v2.2.3](#releases-v223)
@@ -62,6 +63,10 @@
 ---
 
 ## Changelog
+
+### Releases v2.4.0
+
+1. Fix compile errors for new ESP32 core `v2.0.6`
 
 ### Releases v2.3.0
 
