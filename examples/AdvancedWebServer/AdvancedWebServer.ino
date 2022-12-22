@@ -113,7 +113,7 @@ void drawGraph()
     out.reserve(ORIGINAL_STR_LEN);
   }
 
-                 
+
 #if (MULTIPLY_FACTOR == 2)
 
   out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"610\" height=\"150\">\n" \
@@ -124,20 +124,20 @@ void drawGraph()
 
   out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"1210\" height=\"150\">\n" \
            "<rect width=\"1210\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-           "<g stroke=\"blue\">\n");            
+           "<g stroke=\"blue\">\n");
 
 #elif (MULTIPLY_FACTOR == 6)
 
   out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"1810\" height=\"150\">\n" \
            "<rect width=\"1810\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-           "<g stroke=\"blue\">\n");  
+           "<g stroke=\"blue\">\n");
 
 #else   // (MULTIPLY_FACTOR == 1)
 
   out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n" \
            "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-           "<g stroke=\"blue\">\n");  
-           
+           "<g stroke=\"blue\">\n");
+
 #endif
 
   char temp[70];
@@ -241,9 +241,10 @@ void initEthernet()
   //Ethernet.init(20);  // Teensy++ 2.0
   //Ethernet.init(15);  // ESP8266 with Adafruit Featherwing Ethernet
   //Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
+  //Ethernet.init(34);  // ESP32_S2 with W5500 Ethernet
 
 #ifndef USE_THIS_SS_PIN
-#define USE_THIS_SS_PIN   5   //22    // For ESP32
+#define USE_THIS_SS_PIN   SS    //7    //5     //10  //22    // For ESP32
 #endif
 
   ET_LOGWARN1(F("ESP32 setCsPin:"), USE_THIS_SS_PIN);

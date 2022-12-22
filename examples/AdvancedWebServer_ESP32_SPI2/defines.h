@@ -53,10 +53,12 @@
   #include <soc/spi_pins.h>
 
   #if USING_SPI2
-    #define PIN_MISO          HSPI_IOMUX_PIN_NUM_MISO
-    #define PIN_MOSI          HSPI_IOMUX_PIN_NUM_MOSI
-    #define PIN_SCK           HSPI_IOMUX_PIN_NUM_CLK
-    #define PIN_SS            HSPI_IOMUX_PIN_NUM_CS
+    // HSPI_IOMUX_PIN_NUM_???? deprecated from core v2.0.6+
+    // For ESP32 core v2.0.6+
+    #define PIN_MISO          SPI2_IOMUX_PIN_NUM_MISO
+    #define PIN_MOSI          SPI2_IOMUX_PIN_NUM_MOSI
+    #define PIN_SCK           SPI2_IOMUX_PIN_NUM_CLK
+    #define PIN_SS            SPI2_IOMUX_PIN_NUM_CS
 
     #define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
 

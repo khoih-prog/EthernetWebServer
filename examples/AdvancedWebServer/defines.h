@@ -23,8 +23,8 @@
 #define DEBUG_ETHERNET_WEBSERVER_PORT       SerialDebug
 
 // Debug Level from 0 to 4
-#define _ETG_LOGLEVEL_                      3
-#define _ETHERNET_WEBSERVER_LOGLEVEL_       1
+#define _ETG_LOGLEVEL_                      1
+#define _ETHERNET_WEBSERVER_LOGLEVEL_       3
 
 #define USING_SPI2                          false   //true
 
@@ -350,7 +350,7 @@
 
 #elif ETHERNET_USE_RPIPICO
 
-  #define MULTIPLY_FACTOR       4
+  #define MULTIPLY_FACTOR       6
 
 	// Default pin 17 to SS/CS
 	#if defined(ARDUINO_ARCH_MBED)
@@ -443,9 +443,9 @@
 //#define USE_THIS_SS_PIN   22  //21  //5 //4 //2 //15
 
 // Only one if the following to be true
-#define USE_ETHERNET_GENERIC  true
+#define USE_ETHERNET_GENERIC  false   //true
 #define USE_ETHERNET_ESP8266  false
-#define USE_ETHERNET_ENC      false
+#define USE_ETHERNET_ENC      true    //false
 #define USE_CUSTOM_ETHERNET   false
 
 ////////////////////////////
@@ -483,10 +483,12 @@
 		//#define USING_SPI2                          true
 
 		#if USING_SPI2
-			#define PIN_MISO          HSPI_IOMUX_PIN_NUM_MISO
-			#define PIN_MOSI          HSPI_IOMUX_PIN_NUM_MOSI
-			#define PIN_SCK           HSPI_IOMUX_PIN_NUM_CLK
-			#define PIN_SS            HSPI_IOMUX_PIN_NUM_CS
+			// HSPI_IOMUX_PIN_NUM_???? deprecated from core v2.0.6+
+      // For ESP32 core v2.0.6+
+      #define PIN_MISO          SPI2_IOMUX_PIN_NUM_MISO
+      #define PIN_MOSI          SPI2_IOMUX_PIN_NUM_MOSI
+      #define PIN_SCK           SPI2_IOMUX_PIN_NUM_CLK
+      #define PIN_SS            SPI2_IOMUX_PIN_NUM_CS
 
 			#define SHIELD_TYPE       "W5x00 using Ethernet_Generic Library on SPI2"
 
