@@ -36,16 +36,14 @@ If applicable, add screenshots to help explain your problem.
 Please ensure to specify the following:
 
 * Arduino IDE version (e.g. 1.8.19) or Platform.io version
-* Board Core Version (e.g. Arduino SAMDUE core v1.6.12, ESP32 core v2.0.6, ESP8266 core v3.0.2, ArduinoCore-mbed v3.4.1, etc.)
+* Board Core Version (e.g. Arduino SAMDUE core v1.6.12, ESP32 core v2.0.6, ESP8266 core v3.1.0, ArduinoCore-mbed v3.4.1, etc.)
 * Contextual information (e.g. what you were trying to achieve)
 * Simplest possible steps to reproduce
 * Anything that might be relevant in your opinion, such as:
   * Operating system (Windows, Ubuntu, etc.) and the output of `uname -a`
   * Network configuration
 
-
 Please be educated, civilized and constructive. Disrespective posts against [GitHub Code of Conduct](https://docs.github.com/en/site-policy/github-terms/github-event-code-of-conduct) will be ignored and deleted.
-
 
 ### Example
 
@@ -54,7 +52,7 @@ Arduino IDE version: 1.8.19
 RASPBERRY_PI_PICO board
 ArduinoCore-mbed v3.4.1
 OS: Ubuntu 20.04 LTS
-Linux xy-Inspiron-3593 5.15.0-56-generic #62~20.04.1-Ubuntu SMP Tue Nov 22 21:24:20 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+Linux xy-Inspiron-3593 5.15.0-57-generic #63~20.04.1-Ubuntu SMP Wed Nov 30 13:40:16 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
 
 Context:
 I encountered a crash while trying to use the library
