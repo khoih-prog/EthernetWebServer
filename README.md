@@ -163,6 +163,7 @@
   * [25. AdvancedWebServer on Curiosity AVR_AVR128DA48 with W5x00 using Ethernet_Generic Library on SPI](#25-AdvancedWebServer-on-Curiosity-AVR_AVR128DA48-with-W5x00-using-Ethernet_Generic-Library-on-SPI)
   * [26. EthernetWebServer_BigData on NRF52840_FEATHER](#26-EthernetWebServer_BigData-on-NRF52840_FEATHER)
   * [27. EthernetWebServer_BigData on RASPBERRY_PI_PICO](#27-EthernetWebServer_BigData-on-RASPBERRY_PI_PICO)
+  * [28. AdvancedWebServer on ESP32_DEV with W6100 using Ethernet_Generic Library on SPI](#28-AdvancedWebServer-on-ESP32_DEV-with-W6100-using-Ethernet_Generic-Library-on-SPI)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -179,7 +180,7 @@
 
 ### Important Note from v2.3.0
 
-The new [EthernetWebServer v2.4.0+](https://github.com/khoih-prog/EthernetWebServer/releases/tag/v2.3.0) combined with the new [Ethernet_Generic v2.7.0+](https://github.com/khoih-prog/Ethernet_Generic/releases/tag/v2.7.0) fixes severe limitation to permit sending much larger data than total than **2/4/8/16K** buffer of **W5x00 Ethernet**.
+The new [EthernetWebServer v2.4.1+](https://github.com/khoih-prog/EthernetWebServer/releases/tag/v2.3.0) combined with the new [Ethernet_Generic v2.7.0+](https://github.com/khoih-prog/Ethernet_Generic/releases/tag/v2.7.0) fixes severe limitation to permit sending much larger data than total than **2/4/8/16K** buffer of **W5x00 Ethernet**.
 
 ---
 
@@ -326,12 +327,19 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
 
 #### Currently supported Ethernet shields/modules
 
-1. W5x00 using [`Ethernet_Generic`](https://github.com/khoih-prog/Ethernet_Generic) library
-2. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
-3. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
-4. Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
-5. Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
-6. Portenta_H7 Ethernet using [`Portenta_Ethernet`](https://github.com/arduino/ArduinoCore-mbed/tree/master/libraries/Ethernet) library
+1. W5x00/W5100S using [`Ethernet_Generic`](https://github.com/khoih-prog/Ethernet_Generic) library
+
+2. W6100, such as such as [**WIZnet WIZ610MJ**](https://eshop.wiznet.io/shop/module/network-module/wiz610mj/), using [`Ethernet_Generic`](https://github.com/khoih-prog/Ethernet_Generic) library
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/Ethernet_Generic/raw/main/pics/W6100.png">
+</p>
+
+3. W5x00 using [`Ethernet`](https://www.arduino.cc/en/Reference/Ethernet), [`EthernetLarge`](https://github.com/OPEnSLab-OSU/EthernetLarge), [`Ethernet2`](https://github.com/adafruit/Ethernet2) or [`Ethernet3`](https://github.com/sstaub/Ethernet3) library
+4. ENC28J60 using [`EthernetENC`](https://github.com/jandrassy/EthernetENC) or [`UIPEthernet`](https://github.com/UIPEthernet/UIPEthernet) library
+5. Teensy 4.1 built-in Ethernet using [`NativeEthernet`](https://github.com/vjmuzik/NativeEthernet) library
+6. Teensy 4.1 built-in Ethernet using [`QNEthernet`](https://github.com/ssilverman/QNEthernet) library
+7. Portenta_H7 Ethernet using [`Portenta_Ethernet`](https://github.com/arduino/ArduinoCore-mbed/tree/master/libraries/Ethernet) library
 
 ---
 ---
@@ -348,16 +356,16 @@ This [**EthernetWebServer** library](https://github.com/khoih-prog/EthernetWebSe
  7. [`Seeeduino SAMD core 1.8.3+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  8. [`Adafruit nRF52 v1.3.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
  9. [`ESP32 Core 2.0.6+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
-10. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS.
+10. [`ESP8266 Core 3.1.0+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/). To use ESP8266 core 2.7.1+ for LittleFS.
 11. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 3.5.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-12. [`Earle Philhower's arduino-pico core v2.6.5+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+12. [`Earle Philhower's arduino-pico core v2.7.0+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
 13. [`Arduino megaAVR core 1.8.7+`](https://github.com/arduino/ArduinoCore-megaavr/releases) for Arduino megaAVR boards such as **Arduino UNO WiFi Rev2, AVR_NANO_EVERY, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-megaavr.svg)](https://github.com/arduino/ArduinoCore-megaavr/releases/latest)
-14. [`SpenceKonde DxCore core 1.5.1+`](https://github.com/SpenceKonde/DxCore) for Arduino AVRDx boards.  [![GitHub release](https://img.shields.io/github/release/SpenceKonde/DxCore.svg)](https://github.com/SpenceKonde/DxCore/releases/latest). Follow [**DxCore Installation**](https://github.com/SpenceKonde/DxCore/blob/master/Installation.md).
-15. [`Seeeduino nRF52 core 1.0.0+`](https://github.com/Seeed-Studio/Adafruit_nRF52_Arduino) for Seeed nRF52840-based boards such as **Seeed_XIAO_NRF52840 and Seeed_XIAO_NRF52840_SENSE**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Adafruit_nRF52_Arduino.svg)](https://github.com/Seeed-Studio/Adafruit_nRF52_Arduino/releases/latest)
-16. `Seeeduino mbed core 2.7.2+` for Seeed nRF52840-based boards such as **SEEED_XIAO_NRF52840 and SEEED_XIAO_NRF52840_SENSE**
+14. [`SpenceKonde DxCore core 1.5.2+`](https://github.com/SpenceKonde/DxCore) for Arduino AVRDx boards.  [![GitHub release](https://img.shields.io/github/release/SpenceKonde/DxCore.svg)](https://github.com/SpenceKonde/DxCore/releases/latest). Follow [**DxCore Installation**](https://github.com/SpenceKonde/DxCore/blob/master/Installation.md).
+15. [`Seeeduino nRF52 core 1.1.0+`](https://github.com/Seeed-Studio/Adafruit_nRF52_Arduino) for Seeed nRF52840-based boards such as **Seeed_XIAO_NRF52840 and Seeed_XIAO_NRF52840_SENSE**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/Adafruit_nRF52_Arduino.svg)](https://github.com/Seeed-Studio/Adafruit_nRF52_Arduino/releases/latest)
+16. [`Seeeduino mbed core 2.9.0+`](https://github.com/Seeed-Studio/ArduinoCore-mbed) for Seeed nRF52840-based boards such as **SEEED_XIAO_NRF52840 and SEEED_XIAO_NRF52840_SENSE**. [![GitHub release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-mbed.svg)](https://github.com/Seeed-Studio/ArduinoCore-mbed/releases/latest)
 17. [`Functional-Vlpp library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 18. Depending on which Ethernet card you're using:
-   - [`Ethernet_Generic library v2.7.1+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
+   - [`Ethernet_Generic library v2.8.1+`](https://github.com/khoih-prog/Ethernet_Generic) for W5100, W5200 and W5500/WIZ550io/WIZ850io/USR-ES1 with Wiznet W5500 chip.  [![GitHub release](https://img.shields.io/github/release/khoih-prog/Ethernet_Generic.svg)](https://github.com/khoih-prog/Ethernet_Generic/releases/latest)
    - [`EthernetENC library v2.0.3+`](https://github.com/jandrassy/EthernetENC) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/jandrassy/EthernetENC.svg)](https://github.com/jandrassy/EthernetENC/releases/latest). **New and Better**
    - [`UIPEthernet library v2.0.12+`](https://github.com/UIPEthernet/UIPEthernet) for ENC28J60. [![GitHub release](https://img.shields.io/github/release/UIPEthernet/UIPEthernet.svg)](https://github.com/UIPEthernet/UIPEthernet/releases/latest)
    - [`NativeEthernet Library version stable111+`](https://github.com/vjmuzik/NativeEthernet) for Teensy 4.1 built-in Ethernet.
@@ -837,7 +845,7 @@ The easiest way is to use
 
 then select **one and only one** Ethernet library to use as follows:
 
-- Standard W5x00 Ethernet_Generic library is used by default, in the sketch, just be sure to comment out or leave these #defines to be false :
+- Standard `W5x00/W5100S/W6100` [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) library is used by default, in the sketch, just be sure to comment out or leave these #defines to be false :
 
 ```cpp
 // Only one if the following to be true
@@ -851,7 +859,7 @@ then select **one and only one** Ethernet library to use as follows:
 #define USE_CUSTOM_ETHERNET       false
 ```
 
-To use W5x00 Ethernet, for example using Ethernet_Generic library
+To use `W5x00/W5100S/W6100` Ethernet, for example using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) library
 
 ```cpp
 // Only one if the following to be true
@@ -865,7 +873,7 @@ To use W5x00 Ethernet, for example using Ethernet_Generic library
 #define USE_CUSTOM_ETHERNET       false
 ```
 
-- To use ENC28J60 Ethernet, using EthernetENC library (**NEW and Better**)
+- To use `ENC28J60 Ethernet`, using EthernetENC library (**NEW and Better**)
 
 ```cpp
 // Only one if the following to be true
@@ -879,7 +887,7 @@ To use W5x00 Ethernet, for example using Ethernet_Generic library
 #define USE_CUSTOM_ETHERNET       false
 ```
 
-- To use ENC28J60 Ethernet, using UIPEthernet library:
+- To use `ENC28J60` Ethernet, using UIPEthernet library:
 
 ```cpp
 // Only one if the following to be true
@@ -915,7 +923,7 @@ For example, EthernetLarge library
 #include <EthernetWebServer.h>
 ```
 
-- Only for Teensy 4.1, to use NativeEthernet library
+- Only for Teensy 4.1, to use `NativeEthernet` library
 
 ```cpp
 #if defined(__IMXRT1062__)
@@ -934,7 +942,7 @@ For example, EthernetLarge library
   ....
 ```
 
-- Only for Teensy 4.1, to use another Ethernet library, for example Ethernet_Generic library
+- Only for Teensy 4.1, to use another Ethernet library, for example [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) library
 
 ```cpp
 #if defined(__IMXRT1062__)
@@ -961,7 +969,7 @@ For example, EthernetLarge library
 #define USE_CUSTOM_ETHERNET     false  
 ```
 
-- Only for Teensy 4.1, to use QNEthernet library
+- Only for Teensy 4.1, to use `QNEthernet` library
 
 ```cpp
 #if ( defined(CORE_TEENSY) && defined(__IMXRT1062__) && defined(ARDUINO_TEENSY41) ) 
@@ -1019,9 +1027,9 @@ If the default pin is not correct, the easiest way is to select the CS/SS pin (e
 
 #### 3. How to use W5x00 with ESP8266
 
-To avoid using the default but not-working Ethernet library of ESP8266, rename the Ethernet.h/cpp to Ethernet_ESP8266.h/cpp to avoid library conflict if you're using the Arduino Ethernet library. The Ethernet_Generic, Ethernet2, Ethernet3, EthernetLarge library can be used without conflict.
+To avoid using the default but not-working Ethernet library of ESP8266, rename the Ethernet.h/cpp to Ethernet_ESP8266.h/cpp to avoid library conflict if you're using the Arduino Ethernet library. The [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic), Ethernet2, Ethernet3, EthernetLarge library can be used without conflict.
 
-These pins are tested OK with ESP8266 and W5x00
+These pins are tested OK with ESP8266 and W5x00/W5100S/W6100
 
 ```cpp
 // For ESP8266
@@ -1039,7 +1047,7 @@ Ethernet.init (USE_THIS_SS_PIN);
 
 #### 4. How to increase W5x00 TX/RX buffer
 
-- For **Ethernet_Generic** library only,  simply use as follows to have large buffer similar to EthernetLarge library
+- For [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) library only,  simply use as follows to have large buffer similar to EthernetLarge library
 
 ```cpp
 #define ETHERNET_LARGE_BUFFERS
@@ -1070,7 +1078,7 @@ Note that the buffer size must be larger than 256 bytes. See [Sending GZIP HTML 
 
 ### 6. How to use SPI2 for ESP32 using W5x00 and Ethernet_Generic Library
 
-- For **Ethernet_Generic** library only, to use `SPI2` for ESP32
+- For [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) library only, to use `SPI2` for ESP32
 
 ```cpp
 #define USING_SPI2                          true
@@ -1087,7 +1095,7 @@ SS:    5
 
 ### 7. How to use SPI1 for RP2040 using W5x00 and Ethernet_Generic Library
 
-- For **Ethernet_Generic** library only, to use `SPI1` for RP2040 using [arduino-pico core](https://github.com/earlephilhower/arduino-pico) or [ArduinoCore-mbed](https://github.com/arduino/ArduinoCore-mbed)
+- For [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) library only, to use `SPI1` for RP2040 using [arduino-pico core](https://github.com/earlephilhower/arduino-pico) or [ArduinoCore-mbed](https://github.com/arduino/ArduinoCore-mbed)
 
 ```cpp
 #define USING_SPI2                          true
@@ -1104,7 +1112,7 @@ SS:    13
 
 ### 8. How to use SPI1/SPI2 for Teensy 4.x using W5x00 and Ethernet_Generic Library
 
-- For **Ethernet_Generic** library only, to use `SPI1/SPI2` for Teensy 4.x
+- For [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) library only, to use `SPI1/SPI2` for Teensy 4.x
 
 ```cpp
 #include <SPI.h>
@@ -1160,7 +1168,7 @@ SS:    44
 
 #### 9. Important Note for AVRDx using Arduino IDE
 
-With some Arduino IDE versions, such as v1.8.19, upload directly via USB to some boards, such as `Curiosity_AVR128DA48` or `Curiosity_AVR128DB48` can't be done without unknown-to-me fix. We'll get the following error when uploading
+With some Arduino IDE versions, such as `v1.8.19`, upload directly via USB to some boards, such as `Curiosity_AVR128DA48` or `Curiosity_AVR128DB48` can't be done without unknown-to-me fix. We'll get the following error when uploading
 
 ```
 avrdude: Version 6.3-20201216
@@ -1207,7 +1215,7 @@ After drag-and-drop the `Change_Interval.ino.hex` into `CURIOSITY` virtual drive
 
 ##### How to connect W5x00 to AVDDx
 
-This is example to demo how to connect W5x00 to Curiosity `AVR128DA48` or `AVR128DB48`
+This is example to demo how to connect `W5x00/W5100S/W6100` to Curiosity `AVR128DA48` or `AVR128DB48`
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/raw/master/pics/Curiosity_Dx48_pinout.png">
@@ -1244,7 +1252,7 @@ EthernetInit();
 EthernetWebServer server(80);
 ```
 
-Creates the EthernetWebServer class object.
+Creates the `EthernetWebServer` class object.
 
 *Parameters:* 
  
@@ -1489,7 +1497,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on NRF52840_FEATHER with ENC28J60 using EthernetENC Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========================
 [EWS] Default SPI pinout:
 [EWS] MOSI: 25
@@ -1670,7 +1678,7 @@ The terminal output of **SAM DUE with W5x00 using Ethernet_Generic Library** run
 
 ```
 Starting SimpleWebSocket on SAM DUE with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 75
@@ -1761,7 +1769,7 @@ The terminal output of **NRF52840_FEATHER with W5x00 using Ethernet_Generic Libr
 
 ```
 Starting DweetPost on NRF52840_FEATHER with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 25
@@ -1795,7 +1803,7 @@ The terminal output of **ESP32 with W5x00 using Ethernet_Generic Library** runni
 ```
 Starting ESP32_FS_EthernetWebServer on ESP32 using LittleFS
 With W5x00 using Ethernet_Generic Library on SPI
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 23
@@ -1843,7 +1851,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet_Generic Library** run
 ```
 Starting FS_EthernetWebServer on ESP8266 using LittleFS
 With W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 13
@@ -1896,7 +1904,7 @@ The terminal output of **ESP8266 with W5x00 using Ethernet_Generic Library** run
 ```
 Starting serveStatic demoing 'serveStatic' function on ESP8266 using LittleFS
 With W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 13
@@ -1936,7 +1944,7 @@ The following are debug terminal output and screen shot when running example [Si
 
 ```
 SimpleWebServer_NativeEthernet on Teensy 4.1 with NativeEthernet
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 Debug Level = 3
 Connected! IP address: 192.168.2.127
 [EWS] <html><head><meta http-equiv='refresh' content='5'/><title>AdvancedWebServer Teensy 4.1 with NativeEthernet</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h2>Hi from EthernetWebServer!</h2><h3>on Teensy 4.1 with NativeEthernet</h3><p>Uptime: 0 d 00:00:05</p></body></html>
@@ -1984,7 +1992,7 @@ Connected! IP address: 192.168.2.127
 
 #### 9. AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
 
-The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on **RASPBERRY_PI_PICO** with W5x00 using Ethernet_Generic Library and [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
+The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on **RASPBERRY_PI_PICO** with W5x00 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library and [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/raw/master/pics/AdvancedWebServer_Mbed_RPi_Pico.png">
@@ -1992,7 +2000,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2019,12 +2027,12 @@ HTTP EthernetWebServer is @ IP : 192.168.2.95
 
 #### 10. MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
 
-The following are debug terminal output when running example [MQTTClient_Auth](examples/MQTTClient_Auth) on **RASPBERRY_PI_PICO** with W5x00 using Ethernet_Generic Library and [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
+The following are debug terminal output when running example [MQTTClient_Auth](examples/MQTTClient_Auth) on **RASPBERRY_PI_PICO** with W5x00 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library and [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed)
 
 
 ```
 Start MQTTClient_Auth on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2051,7 +2059,7 @@ Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on MBED RASPBERRY_PI_PICO 
 
 #### 11. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
 
-The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on **RASPBERRY_PI_PICO** with W5x00 using Ethernet_Generic Library and [**Earle Philhower's arduino-pico core**](https://github.com/earlephilhower/arduino-pico)
+The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on **RASPBERRY_PI_PICO** with W5x00 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library and [**Earle Philhower's arduino-pico core**](https://github.com/earlephilhower/arduino-pico)
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/raw/master/pics/AdvancedWebServer_RPi_Pico.png">
@@ -2059,7 +2067,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2085,12 +2093,12 @@ HTTP EthernetWebServer is @ IP : 192.168.2.117
 
 #### 12. UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
 
-The following are debug terminal output and screen shot when running example [UdpNTPClient](examples/UdpNTPClient) on **RASPBERRY_PI_PICO** with W5x00 using Ethernet_Generic Library and [**Earle Philhower's arduino-pico core**](https://github.com/earlephilhower/arduino-pico)
+The following are debug terminal output and screen shot when running example [UdpNTPClient](examples/UdpNTPClient) on **RASPBERRY_PI_PICO** with W5x00 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library and [**Earle Philhower's arduino-pico core**](https://github.com/earlephilhower/arduino-pico)
 
 
 ```
 Start UdpNTPClient on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 19
@@ -2132,7 +2140,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2154,7 +2162,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 HTTP EthernetWebServer is @ IP : 192.168.2.222
@@ -2172,7 +2180,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on TEENSY 4.1 using QNEthernet
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_QN_ETHERNET ===========
 Initialize Ethernet using static IP => IP Address = 192.168.2.222
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2195,7 +2203,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 6
 Connected! IP address: 192.168.2.222
@@ -2214,7 +2222,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Starting SimpleWebSocket on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 4
 Connected! IP address: 192.168.2.132
@@ -2262,7 +2270,7 @@ The following is the debug terminal output when running example [MQTTClient_Auth
 
 ```
 Start MQTTClient_Auth on PORTENTA_H7_M7 with Ethernet using Portenta_Ethernet Library
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] ======== USE_PORTENTA_H7_ETHERNET ========
 Using mac index = 7
 Connected! IP address: 192.168.2.132
@@ -2334,7 +2342,7 @@ HTTP WiFiWebServer is @ IP : 192.168.2.109
 
 #### 21. AdvancedWebServer_ESP32_SPI2 on ESP32_DEV with W5x00 using Ethernet_Generic Library on SPI2
 
-The following are debug terminal output and screen shot when running example [AdvancedWebServer_ESP32_SPI2](examples/AdvancedWebServer_ESP32_SPI2) on ESP32_DEV with W5500 using Ethernet_Generic Library on SPI2
+The following are debug terminal output and screen shot when running example [AdvancedWebServer_ESP32_SPI2](examples/AdvancedWebServer_ESP32_SPI2) on ESP32_DEV with W5500 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library on SPI2
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/raw/master/pics/AdvancedWebServer_ESP32_SPI2.png">
@@ -2342,7 +2350,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer_ESP32_SPI2 on ESP32_DEV with W5x00 using Ethernet_Generic Library on SPI2
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 =========================
 Currently Used SPI pinout:
 MOSI:13
@@ -2362,7 +2370,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.102
 
 #### 22. AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1
 
-The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on RASPBERRY_PI_PICO with W5500 using Ethernet_Generic Library on SPI1 and [arduino-pico core](https://github.com/earlephilhower/arduino-pico)
+The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on RASPBERRY_PI_PICO with W5500 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library on SPI1 and [arduino-pico core](https://github.com/earlephilhower/arduino-pico)
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/raw/master/pics/AdvancedWebServer_RPi_Pico_SPI1.png">
@@ -2371,7 +2379,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 15
@@ -2399,7 +2407,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.104
 
 #### 23. AdvancedWebServer_RP2040_SPI1 on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI1
 
-The following are debug terminal output and screen shot when running example [AdvancedWebServer_RP2040_SPI1](examples/AdvancedWebServer_RP2040_SPI1) on **MBED RASPBERRY_PI_PICO** with W5500 using Ethernet_Generic Library on `SPI1` and [ArduinoCore-mbed](https://github.com/arduino/ArduinoCore-mbed)
+The following are debug terminal output and screen shot when running example [AdvancedWebServer_RP2040_SPI1](examples/AdvancedWebServer_RP2040_SPI1) on **MBED RASPBERRY_PI_PICO** with W5500 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library on `SPI1` and [ArduinoCore-mbed](https://github.com/arduino/ArduinoCore-mbed)
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/raw/master/pics/AdvancedWebServer_Mbed_RPi_Pico_SPI1.png">
@@ -2408,7 +2416,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer_RP2040_SPI1 on MBED RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library with Large Buffer
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 15
@@ -2434,7 +2442,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.97
 
 #### 24. AdvancedWebServer_Teensy4x_SPI1 on TEENSY 4.1 with W5x00 using Ethernet_Generic Library on SPI1
 
-The following are debug terminal output and screen shot when running example [AdvancedWebServer_Teensy4x_SPI1](examples/AdvancedWebServer_Teensy4x_SPI1) on **Teensy 4.1** with W5500 using Ethernet_Generic Library on SPI1
+The following are debug terminal output and screen shot when running example [AdvancedWebServer_Teensy4x_SPI1](examples/AdvancedWebServer_Teensy4x_SPI1) on **Teensy 4.1** with W5500 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library on SPI1
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/raw/master/pics/AdvancedWebServer_Teensy41_SPI1.png">
@@ -2446,7 +2454,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer_Teensy4x_SPI1 on TEENSY 4.1 with W5x00 using Ethernet_Generic Library with Large Buffer
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 26
@@ -2474,7 +2482,7 @@ HTTP EthernetWebServer is @ IP : 192.168.2.101
 
 #### 25. AdvancedWebServer on Curiosity AVR_AVR128DA48 with W5x00 using Ethernet_Generic Library on SPI
 
-The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on **Curiosity AVR_AVR128DA48** with W5500 using Ethernet_Generic Library on SPI
+The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on **Curiosity AVR_AVR128DA48** with W5500 using [**Ethernet_Generic**](https://github.com/khoih-prog/Ethernet_Generic) Library on SPI
 
 <p align="center">
     <img src="https://github.com/khoih-prog/EthernetWebServer/raw/master/pics/AdvancedWebServer_AVRDx.png">
@@ -2483,7 +2491,7 @@ The following are debug terminal output and screen shot when running example [Ad
 
 ```
 Starting AdvancedWebServer on Curiosity AVR_AVR128DA48 with W5x00 using Ethernet_Generic Library on SPI0/SPI
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [EWS] =========== USE_ETHERNET_GENERIC ===========
 [EWS] Default SPI pinout:
 [EWS] MOSI: 4
@@ -2520,7 +2528,7 @@ The following is debug terminal output when running example [EthernetWebServer_B
 
 ```
 Start EthernetWebServer_BigData on NRF52840_FEATHER with W5x00 using Ethernet_Generic Library on SPI0/SPI
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [ETG] W5100 init, using W5100Class::ss_pin =  5 , whereas new ss_pin =  10 , SS_PIN_DEFAULT = 10
 [ETG] Chip is W5500
 [ETG] W5100::init: W5500, SSIZE = 8192
@@ -2567,7 +2575,7 @@ The following is debug terminal output when running example [EthernetWebServer_B
 
 ```
 Start EthernetWebServer_BigData on RASPBERRY_PI_PICO with W5x00 using Ethernet_Generic Library on SPI0/SPI
-EthernetWebServer v2.4.0
+EthernetWebServer v2.4.1
 [ETG] W5100 init, using W5100Class::ss_pin =  17 , whereas new ss_pin =  10 , SS_PIN_DEFAULT = 17
 [ETG] Chip is W5100S
 [ETG] W5100::init: W5100S, SSIZE = 4096
@@ -2607,6 +2615,41 @@ String Len = 23714
 [ETG] EthernetClient::write: Partially Done, written =  4096 , bytesRemaining = 3234
 [ETG] EthernetClient::write: written =  3234 , totalBytesSent = 23714
 [ETG] EthernetClient::write: Done, written =  3234 , totalBytesSent = 23714
+```
+
+---
+
+
+#### 28. AdvancedWebServer on ESP32_DEV with W6100 using Ethernet_Generic Library on SPI
+
+The following are debug terminal output when running example [AdvancedWebServer](examples/AdvancedWebServer) on `ESP32_DEV` with WIZnet WIZ610MJ `W6100` using Ethernet_Generic Library
+
+```
+Starting AdvancedWebServer on ESP32_DEV with W5x00 using Ethernet_Generic Library on SPI
+EthernetWebServer v2.4.1
+[EWS] =========== USE_ETHERNET_GENERIC ===========
+[EWS] Default SPI pinout:
+[EWS] MOSI: 23
+[EWS] MISO: 19
+[EWS] SCK: 18
+[EWS] SS: 5
+[EWS] =========================
+[EWS] ESP32 setCsPin: 5
+[ETG] W5100 init, using W5100Class::ss_pin =  5 , whereas new ss_pin =  10 , SS_PIN_DEFAULT = 22
+[ETG] Chip is W6100
+[EWS] =========================
+[EWS] Currently Used SPI pinout:
+[EWS] MOSI: 23
+[EWS] MISO: 19
+[EWS] SCK: 18
+[EWS] SS: 5
+[EWS] =========================
+Using mac index = 1
+Connected! IP address: 192.168.2.107
+HTTP EthernetWebServer is @ IP : 192.168.2.107
+..[EWS] String Len = 0, extend to 8192
+[EWS] String Len =  7455
+[EWS] String Len =  7450
 ```
 
 
@@ -2692,7 +2735,7 @@ Submit issues to: [EthernetWebServer issues](https://github.com/khoih-prog/Ether
 40. Add examples [EthernetWebServer_BigData](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/EthernetWebServer_BigData) to demo how to send larger data than **2/4/8/16K** buffer
 41. Modify example [AdvancedWebServer](https://github.com/khoih-prog/EthernetWebServer/tree/master/examples/AdvancedWebServer) to demo how to send larger data than `2/4/8/16K` buffer
 42. Fix compile errors for new ESP32 core `v2.0.6`
-
+43. Add support to `WIZNet W6100` using IPv4
 
 ---
 ---
@@ -2739,6 +2782,7 @@ Sardar Azari</b></sub></a><br /></td>
 ### Contributing
 
 If you want to contribute to this project:
+
 - Report bugs and errors
 - Ask for enhancements
 - Create issues and pull requests

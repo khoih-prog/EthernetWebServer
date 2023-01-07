@@ -17,6 +17,7 @@
 
 
 * [Changelog](#changelog)
+  * [Releases v2.4.1](#releases-v241)
   * [Releases v2.4.0](#releases-v240)
   * [Releases v2.3.0](#releases-v230)
   * [Releases v2.2.4](#releases-v224)
@@ -63,6 +64,10 @@
 ---
 
 ## Changelog
+
+### Releases v2.4.1
+
+1. Add support to `WIZNet W6100` using IPv4
 
 ### Releases v2.4.0
 
