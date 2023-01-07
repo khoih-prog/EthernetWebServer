@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 2.4.0
+  Version: 2.4.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -25,6 +25,7 @@
   2.2.4   K Hoang      26/10/2022 Add support to Seeed XIAO_NRF52840 and XIAO_NRF52840_SENSE using `mbed` or `nRF52` core
   2.3.0   K Hoang      15/11/2022 Add new features, such as CORS. Update code and examples to send big data
   2.4.0   K Hoang      22/12/2022 Fix compile errors for new ESP32 core v2.0.6
+  2.4.1   K Hoang      06/01/2023 Add support to `WIZNet W6100` using IPv4
  *************************************************************************************************************************************/
 
 // Library to simplify HTTP fetching on Arduino
